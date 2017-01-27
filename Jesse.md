@@ -1,3 +1,4 @@
+Questionnaire:
 1. I expect that this team will accomplish high-quality work when working on assignments for this class.
 2. I hope to improve my teamwork and not be as much as a lone wolf. I hope to improve my promptness and preparedness when it comes to communication.
 3. Obstacles I might encounter include being busy and procrastination.
@@ -16,3 +17,5 @@
 16. If team members are unsatisfied with the team dynamic, they must speak up and we can talk about it.
 17. If I am overwhelmed, I will ask for help.
 18. It is easiest to reach me by text at any hour.
+
+Personality Type: ISTJ
