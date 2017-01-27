@@ -1,3 +1,4 @@
+ISFJ
 1. I expect us to work as a team to fully complete all assignments this semester
 
 2. Be able to communicate more effectively to provide help to the team as well as asking for assistance
