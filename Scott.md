@@ -1,4 +1,3 @@
-ESTP-A
 We will work together as a team and complete all assignments in an efficient, timely manner.
 I hope to be able to lead a team in developing a piece of software, valuing everyone's input and ideas.
 Teammates may be unresponsive when trying to be reached, internal conflict with which path to take in the project, scheduling time outside of class that will work for everyone.
