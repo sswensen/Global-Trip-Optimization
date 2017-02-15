@@ -22,7 +22,7 @@ import org.w3c.dom.DOMImplementation;
 
 public class View {
 	public DocumentBuilderFactory factory;
-	public DocumentBuilder docbuilder;
+	public DocumentBuilder docBuilder;
 	
 	// root elements
 	public Document XMLdoc;
@@ -30,10 +30,10 @@ public class View {
 	
 	public void initializeTrip(){
 		factory = DocumentBuilderFactory.newInstance(); 
-		docbuilder = factory.newDocumentBuilder();
+		docBuilder = factory.newDocumentBuilder();
 		XMLdoc = docBuilder.newDocument();
-		rootElement = doc.createElement("trip");
-		doc.appendChild(rootElement);
+		rootElement = XMLdoc.createElement("trip");
+		XMLdoc.appendChild(rootElement);
 	}
 	
 	public void addLeg(String sequence,String start, String finish, int mileage){
@@ -42,27 +42,27 @@ public class View {
 		rootElement.appendChild(leg);
 		
 		//Sequence element
-		Element sequence = XMLdoc.createElement("sequence");
-		sequence.appendChild(doc.createTextNode(sequence));
-		leg.appendChild(sequence);
+		Element sequenceElement = XMLdoc.createElement("sequence");
+		sequenceElement.appendChild(XMLdoc.createTextNode(sequence));
+		leg.appendChild(sequenceElement);
 		
 		//Start element
-		Element start = XMLdoc.createElement("start");
-		start.appendChild(doc.createTextNode(start));
-		leg.appendChild(start);
+		Element startElement = XMLdoc.createElement("start");
+		startElement.appendChild(XMLdoc.createTextNode(start));
+		leg.appendChild(startElement);
 		
 		//finish element
-		Element finish = XMLdoc.createElement("finish");
-		finish.appendChild(doc.createTextNode(finish));
-		leg.appendChild(finish);
+		Element finishElement = XMLdoc.createElement("finish");
+		finishElement.appendChild(XMLdoc.createTextNode(finish));
+		leg.appendChild(finishElement);
 				
 		//mileage element
-		Element mileage = XMLdoc.createElement("mileage");
-		mileage.appendChild(doc.createTextNode(mileage));
-		leg.appendChild(mileage);
+		Element mileageElement = XMLdoc.createElement("mileage");
+		mileageElement.appendChild(XMLdoc.createTextNode(mileage));
+		leg.appendChild(mileageElement);
 	}
 	
-	public void addLline(double longtitude1, latitude1, longitude2, latitude2){
+	public void addLline(double longtitude1, double latitude1, double longitude2, double latitude2){
 		
 	}
 	
@@ -79,11 +79,27 @@ public class View {
 	}
 	
 	public void finalizeTrip(){
-		
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source = new DOMSource(XMLdoc);
+		StreamResult result = new StreamResult(new File("testfile.xml"));
+		transformer.transform(source, result);
+		System.out.println("File saved!");
 	}
 	
 	public static void main(String argv[]) {
 		View map = new View();
 		map.initializeTrip();
+		String name1 = "name1";
+		String name2 = "name2";
+		String sequence = "1";
+		int mileage = 10;
+		map.addLeg(sequence, name1, name2, mileage);
+		try {
+			map.finalizeTrip();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
