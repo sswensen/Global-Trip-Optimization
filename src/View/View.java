@@ -25,21 +25,21 @@ public class View {
 	public DocumentBuilder docBuilder;
 	public Document XMLdoc;
 	public Document SVGdoc;
-	DOMImplementation impl;
+	public DOMImplementation impl;
 	public Element locations;
 	public String svgNS = "http://www.w3.org/2000/svg";
 
 	public void initializeTrip() throws ParserConfigurationException{
+	    //The document builders
 		factory = DocumentBuilderFactory.newInstance(); 
 		docBuilder = factory.newDocumentBuilder();
 
 		//Creating the SVG document
 		impl = docBuilder.getDOMImplementation();
-
 		SVGdoc = impl.createDocument(svgNS, "svg", null);
 		Element svgRoot = SVGdoc.getDocumentElement();
-		svgRoot.setAttributeNS(null, "width", "1280");
-		svgRoot.setAttributeNS(null, "height", "1024");
+		svgRoot.setAttribute("width", "1280");
+		svgRoot.setAttribute("height", "1024");
 		svgRoot.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg",svgNS);
 
 		//Creating the XML document
@@ -51,7 +51,6 @@ public class View {
 	}
 	
 	public static void convertCoordinates(double x, double y){
-		
 		double startX = 30;
 		double endX = 60;
 		double xPixels = 1066.6073;
@@ -62,7 +61,6 @@ public class View {
 		
 	}
 	public void addLocation(String name, double lat, double lng) {
-		//location grouping
 		Element location = XMLdoc.createElement("location");
 		location.setAttribute("name", name);
 		location.setAttribute("latitude", "" + lat);
@@ -119,22 +117,28 @@ public class View {
 	public void addFooter(String Footer){
 		
 	}
-	
+
+	public void addGrouping(){
+
+    }
+
+    public void addTitle(){
+
+    }
+
 	public void finalizeTrip() throws TransformerException{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
+
+		//XML document
 		DOMSource source = new DOMSource(XMLdoc);
-		StreamResult result = new StreamResult(new File("testfile.xml"));
+		StreamResult result = new StreamResult(new File("XMLfile.xml"));
 		transformer.transform(source, result);
 		System.out.println("File saved!");
 
-		// write the content into xml file
-		//TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		//Transformer transformer = transformerFactory.newTransformer();
+        //SVG document
 		DOMSource source2 = new DOMSource(SVGdoc);
-		StreamResult result2 = new StreamResult(new File("file.svg"));
-		//Output to console for testing
-		//StreamResult result = new StreamResult(System.out)
+		StreamResult result2 = new StreamResult(new File("SVGfile.svg"));
 		transformer.transform(source2, result2);
 		System.out.println("File saved!");
 	}
