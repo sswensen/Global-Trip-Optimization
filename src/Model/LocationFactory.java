@@ -16,7 +16,7 @@ public class LocationFactory {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '\"';
 
-    public ArrayList<Location> readFile(String in) throws FileNotFoundException {
+    ArrayList<Location> readFile(String in) throws FileNotFoundException {
         ArrayList<Location> ret = new ArrayList<Location>();
         Scanner scan = new Scanner(new File(in));
         while (scan.hasNext()) {
@@ -28,6 +28,10 @@ public class LocationFactory {
         scan.close();
         return ret;
     }
+
+    /* findNearest() {
+
+    }*/
 
     private static List<String> parseLine(String cvsLine) {
         return LocationFactory.parseLine(cvsLine, ',', '\"');
