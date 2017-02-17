@@ -1,6 +1,6 @@
 package Model;
 
-/**
+/*
  * Created by SummitDrift on 2/13/17.
  */
 
@@ -19,18 +19,17 @@ public class TestLocationFactory {
     }
 
     @Test
-    public void printTest() {
+    public void readTest() {
         LocationFactory lf = new LocationFactory();
         String expected = "Negro";
         try {
             ArrayList<Location> result = lf.readFile("./src/Model/test/test.csv");
-            Location one = new Location("anthonysuper", "Equinox Brewing Co", "Fort Collins", "40\u00b035'10.68\"N", "105\u00b04'32.51\" W", "1518");
-            result.get(0).toString();
-            one.toString();
-            Assert.assertEquals((Object)true, (Object)one.equals(result.get(0)));
+            Location one = new Location("anthonysuper", "Equinox Brewing Co", "Fort Collins",
+                    "40\u00b035'10.68\"N", "105\u00b04'32.51\"W", "1518");
+            Assert.assertTrue(one.equals(result.get(0)));
         }
         catch (FileNotFoundException a) {
-            System.out.println(a);
+            System.out.println("Error eccountered: " + a);
         }
     }
 }

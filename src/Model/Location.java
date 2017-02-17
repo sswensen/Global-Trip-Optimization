@@ -8,21 +8,61 @@ public class Location {
     String id;
     String name;
     String city;
-    String lat;
-    String lon;
-    String alt;
+    double lat;
+    double lon;
+    double alt;
 
     public Location(String id, String name, String city, String lat, String lon, String alt) {
         this.id = id;
         this.name = name;
         this.city = city;
-        this.lat = lat;
-        this.lon = lon;
-        this.alt = alt;
+        this.lat = convertCoordinates(lat);
+        this.lon = convertCoordinates(lon);
+        this.alt = Double.parseDouble(alt);
+    }
+
+    private static double convertCoordinates(String in) {
+        /*String tempLat = lat;
+        String tempLon = lon;
+
+        //40°35'10.68"N
+        int degLat = tempLat.indexOf('\u00b0');
+        int degLon = tempLon.indexOf('\u00b0');
+        int prLat = tempLat.indexOf('\'');
+        int prLon = tempLon.indexOf('\'');
+        int dprLat = tempLat.indexOf('\"');
+        int dprLon = tempLon.indexOf('\"');
+        String cardLat = tempLat.substring(tempLat.length()-1);
+        String cardLon = tempLat.substring(tempLat.length()-1);
+
+        String D = tempLat.substring(0, tempLat.indexOf('\u00b0')); //Index of °
+        */
+
+        int deg = in.indexOf('\u00b0');
+        int pr = in.indexOf('\'');
+        int dpr = in.indexOf('\"');
+        String card = in.substring(in.length()-1);
+
+        double d = Double.parseDouble(in.substring(0, deg));
+        double m = Double.parseDouble(in.substring(deg+1, pr));
+        double s = Double.parseDouble(in.substring(pr+1, dpr));
+        //do math
+        double ret = d + (m/60) + (s/3600);
+        switch(card) {
+            case "N":
+            case "E":
+                //do shit
+                break;
+            case "S":
+            case "W":
+                ret *= -1;
+                break;
+        }
+        return ret;
     }
 
     public String getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(String id) {
@@ -30,7 +70,7 @@ public class Location {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -38,34 +78,34 @@ public class Location {
     }
 
     public String getCity() {
-        return this.city;
+        return city;
     }
 
     public void setCity(String city) {
         this.city = city;
     }
 
-    public String getLat() {
-        return this.lat;
+    public double getLat() {
+        return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public String getLon() {
-        return this.lon;
+    public double getLon() {
+        return lon;
     }
 
-    public void setLon(String lon) {
+    public void setLon(double lon) {
         this.lon = lon;
     }
 
-    public String getAlt() {
-        return this.alt;
+    public double getAlt() {
+        return alt;
     }
 
-    public void setAlt(String alt) {
+    public void setAlt(double alt) {
         this.alt = alt;
     }
 
@@ -77,32 +117,17 @@ public class Location {
             return false;
         }
         Location location = (Location)o;
-        if (this.id != null ? !this.id.equals(location.id) : location.id != null) {
+        if(this.id.equals(location.id) &&
+                this.id.equals(location.id) &&
+                this.name.equals(location.name) &&
+                this.name.equals(location.name) &&
+                this.lat == (location.lat) &&
+                this.lon == (location.lon) &&
+                this.alt == (location.alt)) {
+            return true;
+        } else {
             return false;
         }
-        if (this.name != null ? !this.name.equals(location.name) : location.name != null) {
-            return false;
-        }
-        if (this.city != null ? !this.city.equals(location.city) : location.city != null) {
-            return false;
-        }
-        if (this.lat != null ? !this.lat.equals(location.lat) : location.lat != null) {
-            return false;
-        }
-        if (this.lon != null ? !this.lon.equals(location.lon) : location.lon != null) {
-            return false;
-        }
-        return this.alt != null ? this.alt.equals(location.alt) : location.alt == null;
-    }
-
-    public int hashCode() {
-        int result = this.id != null ? this.id.hashCode() : 0;
-        result = 31 * result + (this.name != null ? this.name.hashCode() : 0);
-        result = 31 * result + (this.city != null ? this.city.hashCode() : 0);
-        result = 31 * result + (this.lat != null ? this.lat.hashCode() : 0);
-        result = 31 * result + (this.lon != null ? this.lon.hashCode() : 0);
-        result = 31 * result + (this.alt != null ? this.alt.hashCode() : 0);
-        return result;
     }
 
     public String toString() {

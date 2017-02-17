@@ -21,8 +21,9 @@ public class LocationFactory {
         Scanner scan = new Scanner(new File(in));
         while (scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
-            System.out.println("[id= " + line[0] + ", name= " + line[1] + " , city=" + line[2] + " , lat=" + line[3] + " , lon=" + line[4] + " , alt=" + line[5] + "]");
-            Location temp = new Location(line[0], line[1], line[2], line[3], line[4], line[5]);
+            //System.out.println("[id= " + line[0] + ", name= " + line[1] + " , city=" + line[2] + " , lat=" + line[3] + " , lon=" + line[4] + " , alt=" + line[5] + "]");
+            Location temp = new Location(line[0], line[1], line[2], line[3].replaceAll("\\s+",""), line[4].replaceAll("\\s+",""), line[5]);
+            ret.add(temp);
         }
         scan.close();
         return ret;
