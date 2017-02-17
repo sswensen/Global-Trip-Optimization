@@ -16,6 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.DOMImplementation;
 
 public class View {
@@ -28,6 +29,7 @@ public class View {
 	public DOMImplementation impl;
 	public Element locations;
 	public String svgNS = "http://www.w3.org/2000/svg";
+	public int labelID = 1;
 
 	public void initializeTrip() throws ParserConfigurationException{
 	    //The document builders
@@ -46,8 +48,6 @@ public class View {
 		XMLdoc = docBuilder.newDocument();
 		Element rootElement = XMLdoc.createElement("trip");
 		XMLdoc.appendChild(rootElement);
-		locations = XMLdoc.createElement("locations");
-		rootElement.appendChild(locations);
 	}
 	
 	public static void convertCoordinates(double x, double y){
@@ -106,8 +106,15 @@ public class View {
 		SVGdoc.getDocumentElement().appendChild(line);
 	}
 	
-	public void addLabel(double longitude, double latitude, String c, String d){
-		
+	public void addLabel(double x, double y, String city){
+		Element label = SVGdoc.createElementNS(svgNS, "text");
+		label.setAttribute("font-family", "Sans-serif");
+		label.setAttribute("font-size", "16");
+		label.setAttribute("id", "id" + labelID);
+		label.setAttribute("x", Double.toString(x));
+		label.setAttribute("y", Double.toString(y));
+		label.setTextContent(city);
+		SVGdoc.getDocumentElement().appendChild(label);
 	}
 	
 	public void addHeader(String header){
@@ -145,16 +152,12 @@ public class View {
 	
 	public static void main(String argv[]) throws ParserConfigurationException {
 		View map = new View();
-		String name1 = "sandeep";
-		String name2 = "chundru";
-		String sequence = "1";
-		int mileage = 10;
-		
+
 		try {
 			map.initializeTrip();
-			map.addLocation("Denver", 10, 10);
-			map.addLocation("Somewhere in the ocean lul", 0, 0);
 			map.addLine(100,100,500,110);
+			map.addLabel(100, 100, "cityA");
+			map.addLabel(500,110, "cityB");
 			map.finalizeTrip();
 		} catch (TransformerException e) {
 			e.printStackTrace();
