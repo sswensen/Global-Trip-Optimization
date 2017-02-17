@@ -5,16 +5,18 @@ package Model;
  */
 
 public class Location {
+    private int ip;
     private String id;
     private String name;
     private String city;
     private double lat;
     private double lon;
     private double alt;
-    private int nearest;
-    private double nearestDistance;
+    private int nearest = -1;
+    private int nearestDistance = 9999999;
 
-    Location(String id, String name, String city, String lat, String lon, String alt) {
+    Location(int ip, String id, String name, String city, String lat, String lon, String alt) {
+        this.ip = ip;
         this.id = id;
         this.name = name;
         this.city = city;
@@ -80,6 +82,14 @@ public class Location {
         return (rad * 180 / Math.PI);
     }
 
+    public int getIp() {
+        return ip;
+    }
+
+    public void setIp(int ip) {
+        this.ip = ip;
+    }
+
     public String getId() {
         return id;
     }
@@ -136,11 +146,11 @@ public class Location {
         this.nearest = nearest;
     }
 
-    public double getNearestDistance() {
+    public int getNearestDistance() {
         return nearestDistance;
     }
 
-    public void setNearestDistance(double nearestDistance) {
+    public void setNearestDistance(int nearestDistance) {
         this.nearestDistance = nearestDistance;
     }
 
@@ -161,7 +171,18 @@ public class Location {
                 this.alt == (location.alt));
     }
 
+    @Override
     public String toString() {
-        return "Location{id='" + this.id + '\'' + ", name='" + this.name + '\'' + ", city='" + this.city + '\'' + ", lat='" + this.lat + '\'' + ", lon='" + this.lon + '\'' + ", alt='" + this.alt + '\'' + '}';
+        return "Location{" +
+                "ip=" + ip +
+                ", id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", alt=" + alt +
+                ", nearest=" + nearest +
+                ", nearestDistance=" + nearestDistance +
+                '}';
     }
 }

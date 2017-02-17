@@ -26,7 +26,7 @@ public class TestLocationFactory {
             lf.readFile("./src/Model/test/test.csv");
             lf.findNearest();
             ArrayList<Location> result = lf.getLocations();
-                    Location one = new Location("anthonysuper", "Equinox Brewing Co", "Fort Collins",
+            Location one = new Location(0, "anthonysuper", "Equinox Brewing Co", "Fort Collins",
                     "40\u00b035'10.68\"N", "105\u00b04'32.51\"W", "1518");
             Assert.assertTrue(one.equals(result.get(0)));
         }

@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
-        TestLocationFactory.class, TestLocation.class
+        TestLocationFactory.class
 })
 
 public class JunitTestSuite {
