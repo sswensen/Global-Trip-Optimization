@@ -1,3 +1,5 @@
+package View;
+
 import java.io.File;
 import java.io.StringWriter;
 
@@ -16,7 +18,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.DOMImplementation;
 
-public class View implements TripView {
+public class View {
 	
 	//Document builders
 	public DocumentBuilderFactory factory;
