@@ -24,14 +24,25 @@ public class View {
 	public DocumentBuilderFactory factory;
 	public DocumentBuilder docBuilder;
 	public Document XMLdoc;
+	public Document SVGdoc;
+	DOMImplementation impl;
 	public Element locations;
-	
-	//root element
-	
+	public String svgNS = "http://www.w3.org/2000/svg";
+
 	public void initializeTrip() throws ParserConfigurationException{
 		factory = DocumentBuilderFactory.newInstance(); 
 		docBuilder = factory.newDocumentBuilder();
-		//XMLdoc is the XML file
+
+		//Creating the SVG document
+		impl = docBuilder.getDOMImplementation();
+
+		SVGdoc = impl.createDocument(svgNS, "svg", null);
+		Element svgRoot = SVGdoc.getDocumentElement();
+		svgRoot.setAttributeNS(null, "width", "1280");
+		svgRoot.setAttributeNS(null, "height", "1024");
+		svgRoot.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg",svgNS);
+
+		//Creating the XML document
 		XMLdoc = docBuilder.newDocument();
 		Element rootElement = XMLdoc.createElement("trip");
 		XMLdoc.appendChild(rootElement);
@@ -85,8 +96,16 @@ public class View {
 		leg.appendChild(mileageElement);
 	}
 	
-	public void addLline(double longtitude1, double latitude1, double longitude2, double latitude2){
-		
+	public void addLine(double x1, double y1, double x2, double y2){
+		Element line = SVGdoc.createElementNS(svgNS, "line");
+		line.setAttribute( "id", ("leg1"));
+		line.setAttribute( "x1", Double.toString(x1));
+		line.setAttribute( "y1", Double.toString(y1));
+		line.setAttribute( "x2", Double.toString(x2));
+		line.setAttribute( "y2", Double.toString(y2));
+		line.setAttribute( "stroke-width", "3");
+		line.setAttribute("stroke", "#999999");
+		SVGdoc.getDocumentElement().appendChild(line);
 	}
 	
 	public void addLabel(double longitude, double latitude, String c, String d){
@@ -108,6 +127,16 @@ public class View {
 		StreamResult result = new StreamResult(new File("testfile.xml"));
 		transformer.transform(source, result);
 		System.out.println("File saved!");
+
+		// write the content into xml file
+		//TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		//Transformer transformer = transformerFactory.newTransformer();
+		DOMSource source2 = new DOMSource(SVGdoc);
+		StreamResult result2 = new StreamResult(new File("file.svg"));
+		//Output to console for testing
+		//StreamResult result = new StreamResult(System.out)
+		transformer.transform(source2, result2);
+		System.out.println("File saved!");
 	}
 	
 	public static void main(String argv[]) throws ParserConfigurationException {
@@ -121,6 +150,7 @@ public class View {
 			map.initializeTrip();
 			map.addLocation("Denver", 10, 10);
 			map.addLocation("Somewhere in the ocean lul", 0, 0);
+			map.addLine(100,100,500,110);
 			map.finalizeTrip();
 		} catch (TransformerException e) {
 			e.printStackTrace();
