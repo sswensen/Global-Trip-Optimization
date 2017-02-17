@@ -1,8 +1,3 @@
-package View;
-
-/**
- * Created by SummitDrift on 2/13/17.
- */
 import java.io.File;
 import java.io.StringWriter;
 
@@ -10,6 +5,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -20,26 +16,51 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.DOMImplementation;
 
-public class View {
+public class View implements TripView {
+	
+	//Document builders
 	public DocumentBuilderFactory factory;
 	public DocumentBuilder docBuilder;
-	
-	// root elements
 	public Document XMLdoc;
-	public Element  rootElement;
+	public Element locations;
 	
-	public void initializeTrip(){
+	//root element
+	
+	public void initializeTrip() throws ParserConfigurationException{
 		factory = DocumentBuilderFactory.newInstance(); 
 		docBuilder = factory.newDocumentBuilder();
+		//XMLdoc is the XML file
 		XMLdoc = docBuilder.newDocument();
-		rootElement = XMLdoc.createElement("trip");
+		Element rootElement = XMLdoc.createElement("trip");
 		XMLdoc.appendChild(rootElement);
+		locations = XMLdoc.createElement("locations");
+		rootElement.appendChild(locations);
+	}
+	
+	public static void convertCoordinates(double x, double y){
+		
+		double startX = 30;
+		double endX = 60;
+		double xPixels = 1066.6073;
+		double yPixels = 783.0824;
+		double stride = endX - startX;
+		double relativeX = (x - startX);
+		double realX = relativeX * (xPixels / stride);
+		
+	}
+	public void addLocation(String name, double lat, double lng) {
+		//location grouping
+		Element location = XMLdoc.createElement("location");
+		location.setAttribute("name", name);
+		location.setAttribute("latitude", "" + lat);
+		location.setAttribute("longitude", "" + lng);
+		locations.appendChild(location);
 	}
 	
 	public void addLeg(String sequence,String start, String finish, int mileage){
 		//leg grouping
 		Element leg = XMLdoc.createElement("leg");
-		rootElement.appendChild(leg);
+		XMLdoc.getDocumentElement().appendChild(leg);
 		
 		//Sequence element
 		Element sequenceElement = XMLdoc.createElement("sequence");
@@ -58,7 +79,7 @@ public class View {
 				
 		//mileage element
 		Element mileageElement = XMLdoc.createElement("mileage");
-		mileageElement.appendChild(XMLdoc.createTextNode(mileage));
+		mileageElement.appendChild(XMLdoc.createTextNode(Integer.toString(mileage)));
 		leg.appendChild(mileageElement);
 	}
 	
@@ -66,7 +87,7 @@ public class View {
 		
 	}
 	
-	public void addLabel(double a, double b, String c, String d){
+	public void addLabel(double longitude, double latitude, String c, String d){
 		
 	}
 	
@@ -78,7 +99,7 @@ public class View {
 		
 	}
 	
-	public void finalizeTrip(){
+	public void finalizeTrip() throws TransformerException{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
 		DOMSource source = new DOMSource(XMLdoc);
@@ -87,18 +108,19 @@ public class View {
 		System.out.println("File saved!");
 	}
 	
-	public static void main(String argv[]) {
+	public static void main(String argv[]) throws ParserConfigurationException {
 		View map = new View();
-		map.initializeTrip();
-		String name1 = "name1";
-		String name2 = "name2";
+		String name1 = "sandeep";
+		String name2 = "chundru";
 		String sequence = "1";
 		int mileage = 10;
-		map.addLeg(sequence, name1, name2, mileage);
+		
 		try {
+			map.initializeTrip();
+			map.addLocation("Denver", 10, 10);
+			map.addLocation("Somewhere in the ocean lul", 0, 0);
 			map.finalizeTrip();
 		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
