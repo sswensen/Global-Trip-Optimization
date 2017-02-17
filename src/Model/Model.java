@@ -10,7 +10,8 @@ public class Model {
     private ArrayList<Location> locations;
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
-        locations = lf.readFile(filename);
+        lf.readFile(filename);
+        lf.findNearest();
 
         return 1;
     }

@@ -11,6 +11,8 @@ public class Location {
     private double lat;
     private double lon;
     private double alt;
+    private int nearest;
+    private double nearestDistance;
 
     Location(String id, String name, String city, String lat, String lon, String alt) {
         this.id = id;
@@ -34,11 +36,11 @@ public class Location {
         double ret = d + (m/60) + (s/3600);
         switch(card) {
             case "N":
-            case "E":
+            case "W":
                 //do shit
                 break;
             case "S":
-            case "W":
+            case "E":
                 ret *= -1;
                 break;
         }
@@ -46,7 +48,7 @@ public class Location {
     }
 
     public double distance(Location in) {
-        String unit = "M";
+        String unit = "K";
         double lat1 = this.lat;
         double lon1 = this.lon;
         double lat2 = in.getLat();
@@ -124,6 +126,22 @@ public class Location {
 
     public void setAlt(double alt) {
         this.alt = alt;
+    }
+
+    public int getNearest() {
+        return nearest;
+    }
+
+    public void setNearest(int nearest) {
+        this.nearest = nearest;
+    }
+
+    public double getNearestDistance() {
+        return nearestDistance;
+    }
+
+    public void setNearestDistance(double nearestDistance) {
+        this.nearestDistance = nearestDistance;
     }
 
     public boolean equals(Object o) {
