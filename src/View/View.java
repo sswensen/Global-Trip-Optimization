@@ -16,6 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.DOMImplementation;
 
 public class View {
@@ -24,23 +25,32 @@ public class View {
 	public DocumentBuilderFactory factory;
 	public DocumentBuilder docBuilder;
 	public Document XMLdoc;
+	public Document SVGdoc;
+	public DOMImplementation impl;
 	public Element locations;
-	
-	//root element
-	
+	public String svgNS = "http://www.w3.org/2000/svg";
+	public int labelID = 1;
+
 	public void initializeTrip() throws ParserConfigurationException{
+	    //The document builders
 		factory = DocumentBuilderFactory.newInstance(); 
 		docBuilder = factory.newDocumentBuilder();
-		//XMLdoc is the XML file
+
+		//Creating the SVG document
+		impl = docBuilder.getDOMImplementation();
+		SVGdoc = impl.createDocument(svgNS, "svg", null);
+		Element svgRoot = SVGdoc.getDocumentElement();
+		svgRoot.setAttribute("width", "1280");
+		svgRoot.setAttribute("height", "1024");
+		svgRoot.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg",svgNS);
+
+		//Creating the XML document
 		XMLdoc = docBuilder.newDocument();
 		Element rootElement = XMLdoc.createElement("trip");
 		XMLdoc.appendChild(rootElement);
-		locations = XMLdoc.createElement("locations");
-		rootElement.appendChild(locations);
 	}
 	
 	public static void convertCoordinates(double x, double y){
-		
 		double startX = 30;
 		double endX = 60;
 		double xPixels = 1066.6073;
@@ -51,7 +61,6 @@ public class View {
 		
 	}
 	public void addLocation(String name, double lat, double lng) {
-		//location grouping
 		Element location = XMLdoc.createElement("location");
 		location.setAttribute("name", name);
 		location.setAttribute("latitude", "" + lat);
@@ -85,12 +94,27 @@ public class View {
 		leg.appendChild(mileageElement);
 	}
 	
-	public void addLline(double longtitude1, double latitude1, double longitude2, double latitude2){
-		
+	public void addLine(double x1, double y1, double x2, double y2){
+		Element line = SVGdoc.createElementNS(svgNS, "line");
+		line.setAttribute( "id", ("leg1"));
+		line.setAttribute( "x1", Double.toString(x1));
+		line.setAttribute( "y1", Double.toString(y1));
+		line.setAttribute( "x2", Double.toString(x2));
+		line.setAttribute( "y2", Double.toString(y2));
+		line.setAttribute( "stroke-width", "3");
+		line.setAttribute("stroke", "#999999");
+		SVGdoc.getDocumentElement().appendChild(line);
 	}
 	
-	public void addLabel(double longitude, double latitude, String c, String d){
-		
+	public void addLabel(double x, double y, String city){
+		Element label = SVGdoc.createElementNS(svgNS, "text");
+		label.setAttribute("font-family", "Sans-serif");
+		label.setAttribute("font-size", "16");
+		label.setAttribute("id", "id" + labelID);
+		label.setAttribute("x", Double.toString(x));
+		label.setAttribute("y", Double.toString(y));
+		label.setTextContent(city);
+		SVGdoc.getDocumentElement().appendChild(label);
 	}
 	
 	public void addHeader(String header){
@@ -100,27 +124,40 @@ public class View {
 	public void addFooter(String Footer){
 		
 	}
-	
+
+	public void addGrouping(){
+
+    }
+
+    public void addTitle(){
+
+    }
+
 	public void finalizeTrip() throws TransformerException{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
+
+		//XML document
 		DOMSource source = new DOMSource(XMLdoc);
-		StreamResult result = new StreamResult(new File("testfile.xml"));
+		StreamResult result = new StreamResult(new File("XMLfile.xml"));
 		transformer.transform(source, result);
+		System.out.println("File saved!");
+
+        //SVG document
+		DOMSource source2 = new DOMSource(SVGdoc);
+		StreamResult result2 = new StreamResult(new File("SVGfile.svg"));
+		transformer.transform(source2, result2);
 		System.out.println("File saved!");
 	}
 	
 	public static void main(String argv[]) throws ParserConfigurationException {
 		View map = new View();
-		String name1 = "sandeep";
-		String name2 = "chundru";
-		String sequence = "1";
-		int mileage = 10;
-		
+
 		try {
 			map.initializeTrip();
-			map.addLocation("Denver", 10, 10);
-			map.addLocation("Somewhere in the ocean lul", 0, 0);
+			map.addLine(100,100,500,110);
+			map.addLabel(100, 100, "cityA");
+			map.addLabel(500,110, "cityB");
 			map.finalizeTrip();
 		} catch (TransformerException e) {
 			e.printStackTrace();
