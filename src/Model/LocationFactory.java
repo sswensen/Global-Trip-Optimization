@@ -16,6 +16,7 @@ public class LocationFactory {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '\"';
     ArrayList<Location> locations = new ArrayList<Location>();
+    ArrayList<Pair> pairs = new ArrayList<>();
 
     boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
@@ -57,6 +58,7 @@ public class LocationFactory {
                     if (locations.get(s1).getNearestDistance() > distance) {
                         locations.get(s1).setNearest(locations.get(s2).getIp());
                         locations.get(s1).setNearestDistance((int) Math.round(distance));
+                        pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
                     } else {
                         System.out.println("UHHHHHHHHHHHHHHHHHHHHHHHHh");
                     }
@@ -66,17 +68,27 @@ public class LocationFactory {
                 } else {
                     locations.get(s1).setNearest(locations.get(s2).getIp());
                     locations.get(s1).setNearestDistance((int) Math.round(distance));
+                    pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
                 }
             } else {
                 locations.get(s1).setNearest(locations.get(s2).getIp());
                 locations.get(s1).setNearestDistance((int) Math.round(distance));
+                pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
             }
         }
         return ret;
     }
 
+    boolean makePairs() {
+        return true;
+    }
+
     ArrayList<Location> getLocations() {
         return locations;
+    }
+
+    ArrayList<Pair> getPairs() {
+        return pairs;
     }
 
     private static List<String> parseLine(String cvsLine) {

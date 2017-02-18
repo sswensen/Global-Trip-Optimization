@@ -8,11 +8,13 @@ import java.util.ArrayList;
  */
 public class Model {
     private ArrayList<Location> locations;
+    private ArrayList<Pair> pairs;
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
         lf.readFile(filename);
         lf.findNearest();
-
+        locations = lf.getLocations();
+        pairs = lf.getPairs();
         return 1;
     }
 

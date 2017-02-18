@@ -23,9 +23,10 @@ public class TestLocationFactory {
         LocationFactory lf = new LocationFactory();
         String expected = "Negro";
         try {
-            lf.readFile("./src/Model/test/test.csv");
+            lf.readFile("./src/Model/test/test copy.csv");
             lf.findNearest();
             ArrayList<Location> result = lf.getLocations();
+            ArrayList<Pair> pairs = lf.getPairs();
             Location one = new Location(0, "anthonysuper", "Equinox Brewing Co", "Fort Collins",
                     "40\u00b035'10.68\"N", "105\u00b04'32.51\"W", "1518");
             Assert.assertTrue(one.equals(result.get(0)));
