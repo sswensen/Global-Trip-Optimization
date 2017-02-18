@@ -15,18 +15,68 @@ import java.util.Scanner;
 public class LocationFactory {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '\"';
+    ArrayList<Location> locations = new ArrayList<Location>();
 
-    public ArrayList<Location> readFile(String in) throws FileNotFoundException {
-        ArrayList<Location> ret = new ArrayList<Location>();
+    boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
+        int ip = 0;
         while (scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
             //System.out.println("[id= " + line[0] + ", name= " + line[1] + " , city=" + line[2] + " , lat=" + line[3] + " , lon=" + line[4] + " , alt=" + line[5] + "]");
-            Location temp = new Location(line[0], line[1], line[2], line[3].replaceAll("\\s+",""), line[4].replaceAll("\\s+",""), line[5]);
-            ret.add(temp);
+            Location temp = new Location(ip, line[0], line[1], line[2], line[3].replaceAll("\\s+",""), line[4].replaceAll("\\s+",""), line[5]);
+            locations.add(temp);
+            ip++;
         }
         scan.close();
+        if(locations.size() > 0)
+            return true;
+        else
+            return false;
+    }
+    boolean findNearest() {
+        boolean ret = false;
+        double distance;
+        int s1 = -1;
+        int s2 = -1;
+        for(int i = 0; i < locations.size(); i++) {
+            distance = 9999999;
+            for(int j = 0; j < locations.size(); j++) {
+                if(i != j) {
+                    double temp = Math.abs(locations.get(i).distance(locations.get(j)));
+                    if(temp < distance) {
+                        distance = temp;
+                        s1 = i;
+                        s2 = j;
+                        ret = true;
+                    }
+                }
+            }
+            //add nearest to
+            if(s1 < locations.size()) {
+                if(locations.get(s2).getNearest() < 0) {
+                    if (locations.get(s1).getNearestDistance() > distance) {
+                        locations.get(s1).setNearest(locations.get(s2).getIp());
+                        locations.get(s1).setNearestDistance((int) Math.round(distance));
+                    } else {
+                        System.out.println("UHHHHHHHHHHHHHHHHHHHHHHHHh");
+                    }
+                    Location tempLoc = locations.get(s1 + 1);
+                    locations.set(s1 + 1, locations.get(s2));
+                    locations.set(s2, tempLoc);
+                } else {
+                    locations.get(s1).setNearest(locations.get(s2).getIp());
+                    locations.get(s1).setNearestDistance((int) Math.round(distance));
+                }
+            } else {
+                locations.get(s1).setNearest(locations.get(s2).getIp());
+                locations.get(s1).setNearestDistance((int) Math.round(distance));
+            }
+        }
         return ret;
+    }
+
+    ArrayList<Location> getLocations() {
+        return locations;
     }
 
     private static List<String> parseLine(String cvsLine) {

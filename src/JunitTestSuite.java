@@ -2,7 +2,7 @@
  * Created by SummitDrift on 2/13/17.
  */
 
-import Model.TestLocationFactory;
+import Model.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

@@ -5,14 +5,18 @@ package Model;
  */
 
 public class Location {
-    String id;
-    String name;
-    String city;
-    double lat;
-    double lon;
-    double alt;
+    private int ip;
+    private String id;
+    private String name;
+    private String city;
+    private double lat;
+    private double lon;
+    private double alt;
+    private int nearest = -1;
+    private int nearestDistance = 9999999;
 
-    public Location(String id, String name, String city, String lat, String lon, String alt) {
+    Location(int ip, String id, String name, String city, String lat, String lon, String alt) {
+        this.ip = ip;
         this.id = id;
         this.name = name;
         this.city = city;
@@ -22,22 +26,6 @@ public class Location {
     }
 
     private static double convertCoordinates(String in) {
-        /*String tempLat = lat;
-        String tempLon = lon;
-
-        //40°35'10.68"N
-        int degLat = tempLat.indexOf('\u00b0');
-        int degLon = tempLon.indexOf('\u00b0');
-        int prLat = tempLat.indexOf('\'');
-        int prLon = tempLon.indexOf('\'');
-        int dprLat = tempLat.indexOf('\"');
-        int dprLon = tempLon.indexOf('\"');
-        String cardLat = tempLat.substring(tempLat.length()-1);
-        String cardLon = tempLat.substring(tempLat.length()-1);
-
-        String D = tempLat.substring(0, tempLat.indexOf('\u00b0')); //Index of °
-        */
-
         int deg = in.indexOf('\u00b0');
         int pr = in.indexOf('\'');
         int dpr = in.indexOf('\"');
@@ -50,15 +38,56 @@ public class Location {
         double ret = d + (m/60) + (s/3600);
         switch(card) {
             case "N":
-            case "E":
+            case "W":
                 //do shit
                 break;
             case "S":
-            case "W":
+            case "E":
                 ret *= -1;
                 break;
         }
         return ret;
+    }
+
+    public double distance(Location in) {
+        String unit = "K";
+        double lat1 = this.lat;
+        double lon1 = this.lon;
+        double lat2 = in.getLat();
+        double lon2 = in.getLon();
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        if (unit == "K") {
+            dist = dist * 1.609344;
+        } else if (unit == "N") {
+            dist = dist * 0.8684;
+        }
+        return (dist);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	/*::	This function converts decimal degrees to radians			:*/
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	/*::	This function converts radians to decimal degrees			:*/
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
+
+    public int getIp() {
+        return ip;
+    }
+
+    public void setIp(int ip) {
+        this.ip = ip;
     }
 
     public String getId() {
@@ -109,6 +138,22 @@ public class Location {
         this.alt = alt;
     }
 
+    public int getNearest() {
+        return nearest;
+    }
+
+    public void setNearest(int nearest) {
+        this.nearest = nearest;
+    }
+
+    public int getNearestDistance() {
+        return nearestDistance;
+    }
+
+    public void setNearestDistance(int nearestDistance) {
+        this.nearestDistance = nearestDistance;
+    }
+
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -117,20 +162,27 @@ public class Location {
             return false;
         }
         Location location = (Location)o;
-        if(this.id.equals(location.id) &&
+        return (this.id.equals(location.id) &&
                 this.id.equals(location.id) &&
                 this.name.equals(location.name) &&
                 this.name.equals(location.name) &&
                 this.lat == (location.lat) &&
                 this.lon == (location.lon) &&
-                this.alt == (location.alt)) {
-            return true;
-        } else {
-            return false;
-        }
+                this.alt == (location.alt));
     }
 
+    @Override
     public String toString() {
-        return "Location{id='" + this.id + '\'' + ", name='" + this.name + '\'' + ", city='" + this.city + '\'' + ", lat='" + this.lat + '\'' + ", lon='" + this.lon + '\'' + ", alt='" + this.alt + '\'' + '}';
+        return "Location{" +
+                "ip=" + ip +
+                ", id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", alt=" + alt +
+                ", nearest=" + nearest +
+                ", nearestDistance=" + nearestDistance +
+                '}';
     }
 }
