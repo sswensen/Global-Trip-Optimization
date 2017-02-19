@@ -12,7 +12,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
+import javax.xml.transform.OutputKeys;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,8 +28,9 @@ public class View {
 	public Document SVGdoc;
 	public DOMImplementation impl;
 	public Element locations;
-	public String svgNS = "http://www.w3.org/2000/svg";
+
 	public int labelID = 1;
+	public int legID = 1;
 
 	public void initializeTrip() throws ParserConfigurationException{
 	    //The document builders
@@ -37,12 +38,14 @@ public class View {
 		docBuilder = factory.newDocumentBuilder();
 
 		//Creating the SVG document
+		String svgNS = "http://www.w3.org/2000/svg";
 		impl = docBuilder.getDOMImplementation();
 		SVGdoc = impl.createDocument(svgNS, "svg", null);
 		Element svgRoot = SVGdoc.getDocumentElement();
 		svgRoot.setAttribute("width", "1280");
 		svgRoot.setAttribute("height", "1024");
-		svgRoot.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:svg",svgNS);
+		svgRoot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
 
 		//Creating the XML document
 		XMLdoc = docBuilder.newDocument();
@@ -67,7 +70,7 @@ public class View {
 		location.setAttribute("longitude", "" + lng);
 		locations.appendChild(location);
 	}
-	
+
 	public void addLeg(String sequence,String start, String finish, int mileage){
 		//leg grouping
 		Element leg = XMLdoc.createElement("leg");
@@ -95,8 +98,9 @@ public class View {
 	}
 	
 	public void addLine(double x1, double y1, double x2, double y2){
-		Element line = SVGdoc.createElementNS(svgNS, "line");
-		line.setAttribute( "id", ("leg1"));
+		Element line = SVGdoc.createElement("line");
+		line.setAttribute( "id", ("leg" + legID));
+		legID++;
 		line.setAttribute( "x1", Double.toString(x1));
 		line.setAttribute( "y1", Double.toString(y1));
 		line.setAttribute( "x2", Double.toString(x2));
@@ -107,7 +111,7 @@ public class View {
 	}
 	
 	public void addLabel(double x, double y, String city){
-		Element label = SVGdoc.createElementNS(svgNS, "text");
+		Element label = SVGdoc.createElement("text");
 		label.setAttribute("font-family", "Sans-serif");
 		label.setAttribute("font-size", "16");
 		label.setAttribute("id", "id" + labelID);
@@ -117,14 +121,77 @@ public class View {
 		SVGdoc.getDocumentElement().appendChild(label);
 	}
 	
-	public void addHeader(String header){
-		
+	public void addHeader(String title){
+		//<text text-anchor="middle" font-family="Sans-serif" font-size="24" id="state" y="40" x="640">Colorado</text>
+		Element header = SVGdoc.createElement("text");
+		header.setAttribute("text-anchor", "middle");
+		header.setAttribute("font-family", "Sans-serif");
+		header.setAttribute("font-size", "24");
+		header.setAttribute("id", "state");
+		header.setAttribute("x", "640");
+		header.setAttribute("y", "40");
+		header.setTextContent(title);
+		SVGdoc.getDocumentElement().appendChild(header);
 	}
 	
-	public void addFooter(String Footer){
-		
+	public void addFooter(int totalDistance){
+		Element footer = SVGdoc.createElement("text");
+		footer.setAttribute("text-anchor", "middle");
+		footer.setAttribute("font-family", "Sans-serif");
+		footer.setAttribute("font-size", "24");
+		footer.setAttribute("id", "distance");
+		footer.setAttribute("x", "640");
+		footer.setAttribute("y", "1014");
+		footer.setTextContent(totalDistance + " miles");
+		SVGdoc.getDocumentElement().appendChild(footer);
 	}
 
+	public void addBorders(){
+		//North border
+		Element northBorder = SVGdoc.createElement("line");
+		northBorder.setAttribute("id", "north");
+		northBorder.setAttribute("x1", "50");
+		northBorder.setAttribute("y1", "50");
+		northBorder.setAttribute("x2", "1230");
+		northBorder.setAttribute("y2", "50");
+		northBorder.setAttribute("stroke-width", "5");
+		northBorder.setAttribute("stroke", "#666666");
+
+		//East border
+		Element eastBorder = SVGdoc.createElement("line");
+		eastBorder.setAttribute("id", "east");
+		eastBorder.setAttribute("x1", "1230");
+		eastBorder.setAttribute("y1", "50");
+		eastBorder.setAttribute("x2", "1230");
+		eastBorder.setAttribute("y2", "974");
+		eastBorder.setAttribute("stroke-width", "5");
+		eastBorder.setAttribute("stroke", "#666666");
+
+		//South border
+		Element southBorder = SVGdoc.createElement("line");
+		southBorder.setAttribute("id", "south");
+		southBorder.setAttribute("x1", "1230");
+		southBorder.setAttribute("y1", "974");
+		southBorder.setAttribute("x2", "50");
+		southBorder.setAttribute("y2", "974");
+		southBorder.setAttribute("stroke-width", "5");
+		southBorder.setAttribute("stroke", "#666666");
+
+		//West border
+		Element westBorder = SVGdoc.createElement("line");
+		westBorder.setAttribute("id", "west");
+		westBorder.setAttribute("x1", "50");
+		westBorder.setAttribute("y1", "974");
+		westBorder.setAttribute("x2", "50");
+		westBorder.setAttribute("y2", "50");
+		westBorder.setAttribute("stroke-width", "5");
+		westBorder.setAttribute("stroke", "#666666");
+
+		SVGdoc.getDocumentElement().appendChild(northBorder);
+		SVGdoc.getDocumentElement().appendChild(eastBorder);
+		SVGdoc.getDocumentElement().appendChild(southBorder);
+		SVGdoc.getDocumentElement().appendChild(westBorder);
+	}
 	public void addGrouping(){
 
     }
@@ -140,14 +207,19 @@ public class View {
 		//XML document
 		DOMSource source = new DOMSource(XMLdoc);
 		StreamResult result = new StreamResult(new File("XMLfile.xml"));
+		System.out.println("xml file saved!");
+		//use consoleResult if printing to console
+		StreamResult consoleResult = new StreamResult(System.out);
+		//transformer.transform(source, consoleResult);
 		transformer.transform(source, result);
-		System.out.println("File saved!");
-
         //SVG document
 		DOMSource source2 = new DOMSource(SVGdoc);
 		StreamResult result2 = new StreamResult(new File("SVGfile.svg"));
+		System.out.println("svg file saved!");
+		//use consoleResult2 if printing to console
+		StreamResult consoleResult2 = new StreamResult(System.out);
+		//transformer.transform(source, consoleResult2);
 		transformer.transform(source2, result2);
-		System.out.println("File saved!");
 	}
 	
 	public static void main(String argv[]) throws ParserConfigurationException {
@@ -155,9 +227,21 @@ public class View {
 
 		try {
 			map.initializeTrip();
+			map.addLeg("sequence 1", "Denver", "Fort Collins", 9999);
 			map.addLine(100,100,500,110);
-			map.addLabel(100, 100, "cityA");
+			map.addLine(500,110,1140,900);
+			map.addLine(1140,900,120,700);
+			map.addLine(120,700,200,400);
+			map.addLine(200,400,100,100);
+			map.addBorders();
+			map.addHeader("Colorado");
+			map.addFooter(9999);
+			map.addLabel(100,100, "cityA");
 			map.addLabel(500,110, "cityB");
+			map.addLabel(1140,900, "cityC");
+			map.addLabel(120,700, "cityD");
+			map.addLabel(200,400, "cityE");
+
 			map.finalizeTrip();
 		} catch (TransformerException e) {
 			e.printStackTrace();
