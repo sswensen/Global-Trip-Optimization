@@ -12,7 +12,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
+import javax.xml.transform.OutputKeys;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,7 +28,7 @@ public class View {
 	public Document SVGdoc;
 	public DOMImplementation impl;
 	public Element locations;
-	public String svgNS = "http://www.w3.org/2000/svg";
+
 	public int labelID = 1;
 	public int legID = 1;
 
@@ -38,6 +38,7 @@ public class View {
 		docBuilder = factory.newDocumentBuilder();
 
 		//Creating the SVG document
+		String svgNS = "http://www.w3.org/2000/svg";
 		impl = docBuilder.getDOMImplementation();
 		SVGdoc = impl.createDocument(svgNS, "svg", null);
 		Element svgRoot = SVGdoc.getDocumentElement();
@@ -97,7 +98,7 @@ public class View {
 	}
 	
 	public void addLine(double x1, double y1, double x2, double y2){
-		Element line = SVGdoc.createElementNS(svgNS, "line");
+		Element line = SVGdoc.createElement("line");
 		line.setAttribute( "id", ("leg" + legID));
 		legID++;
 		line.setAttribute( "x1", Double.toString(x1));
@@ -110,7 +111,7 @@ public class View {
 	}
 	
 	public void addLabel(double x, double y, String city){
-		Element label = SVGdoc.createElementNS(svgNS, "text");
+		Element label = SVGdoc.createElement("text");
 		label.setAttribute("font-family", "Sans-serif");
 		label.setAttribute("font-size", "16");
 		label.setAttribute("id", "id" + labelID);
@@ -206,14 +207,19 @@ public class View {
 		//XML document
 		DOMSource source = new DOMSource(XMLdoc);
 		StreamResult result = new StreamResult(new File("XMLfile.xml"));
+		System.out.println("xml file saved!");
+		//use consoleResult if printing to console
+		StreamResult consoleResult = new StreamResult(System.out);
+		//transformer.transform(source, consoleResult);
 		transformer.transform(source, result);
-		System.out.println("File saved!");
-
         //SVG document
 		DOMSource source2 = new DOMSource(SVGdoc);
 		StreamResult result2 = new StreamResult(new File("SVGfile.svg"));
+		System.out.println("svg file saved!");
+		//use consoleResult2 if printing to console
+		StreamResult consoleResult2 = new StreamResult(System.out);
+		//transformer.transform(source, consoleResult2);
 		transformer.transform(source2, result2);
-		System.out.println("File saved!");
 	}
 	
 	public static void main(String argv[]) throws ParserConfigurationException {
@@ -221,6 +227,7 @@ public class View {
 
 		try {
 			map.initializeTrip();
+			map.addLeg("sequence 1", "Denver", "Fort Collins", 9999);
 			map.addLine(100,100,500,110);
 			map.addLine(500,110,1140,900);
 			map.addLine(1140,900,120,700);
@@ -234,6 +241,7 @@ public class View {
 			map.addLabel(1140,900, "cityC");
 			map.addLabel(120,700, "cityD");
 			map.addLabel(200,400, "cityE");
+
 			map.finalizeTrip();
 		} catch (TransformerException e) {
 			e.printStackTrace();
