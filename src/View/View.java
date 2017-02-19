@@ -54,14 +54,24 @@ public class View {
 	}
 	
 	public static void convertCoordinates(double x, double y){
-		double startX = 30;
-		double endX = 60;
+		double startX = 41.0;
+		double endX = 37.0;
+		double startY = -109.0;
+		double endY = -102.0;
 		double xPixels = 1066.6073;
 		double yPixels = 783.0824;
-		double stride = endX - startX;
+
+		//Convert to SVG 'x' coordinate
+		double strideX = endX - startX;
 		double relativeX = (x - startX);
-		double realX = relativeX * (xPixels / stride);
-		
+		double realX = relativeX * (xPixels / strideX);
+
+		//Convert to SVG 'y' coordinate
+		double strideY = endY - startY;
+		double relativeY = (y - startY);
+		double realY = relativeY * (yPixels / strideY);
+
+		System.out.println(realX + " " + realY);
 	}
 	public void addLocation(String name, double lat, double lng) {
 		Element location = XMLdoc.createElement("location");
@@ -241,7 +251,7 @@ public class View {
 			map.addLabel(1140,900, "cityC");
 			map.addLabel(120,700, "cityD");
 			map.addLabel(200,400, "cityE");
-
+			map.convertCoordinates(37.0,-102.0);
 			map.finalizeTrip();
 		} catch (TransformerException e) {
 			e.printStackTrace();
