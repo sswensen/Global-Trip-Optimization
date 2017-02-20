@@ -2,7 +2,8 @@ package Presenter;
 
 import Model.*;
 import View.*;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+
+import java.io.FileNotFoundException;
 
 public class Presenter
 {
@@ -20,10 +21,14 @@ public class Presenter
 
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws FileNotFoundException
     {
+        String filename = args[0];
+        String option = args[1];
         Model model = new Model();
         View view = new View();
         Presenter presenter = new Presenter(model, view);
+        presenter.model.planTrip(filename);
+
     }
 }
