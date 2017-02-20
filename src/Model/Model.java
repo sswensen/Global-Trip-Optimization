@@ -18,7 +18,7 @@ public class Model {
         return 1;
     }
 
-    public int getLegStartLocation(int a) {
+    /*public int getLegStartLocation(int a) {
         return pairs.get(a).getOne().getId();
     }
 
@@ -28,7 +28,7 @@ public class Model {
 
     public int getLegDistance(Object o) {
         return -1;
-    }
+    }*/
 
     public int getLocationID(int index) {
         return locations.get(index).getId();

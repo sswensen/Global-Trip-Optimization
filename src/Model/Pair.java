@@ -7,8 +7,10 @@ public class Pair {
     private Location one;
     private Location two;
     private double distance;
+    private int id;
 
-    public Pair(Location one, Location two, double distance) {
+    public Pair(int id, Location one, Location two, double distance) {
+        this.id = id;
         this.one = one;
         this.two = two;
         this.distance = distance;
@@ -36,6 +38,14 @@ public class Pair {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
