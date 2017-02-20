@@ -20,25 +20,20 @@ import org.w3c.dom.Node;
 import org.w3c.dom.DOMImplementation;
 
 public class View {
-	
-	//Document builders
-	private DocumentBuilderFactory factory;
-	private DocumentBuilder docBuilder;
+
 	private Document XMLdoc;
 	private Document SVGdoc;
-	private DOMImplementation impl;
-	private Element locations;
 	private int labelID = 1;
 	private int legID = 1;
 
 	public void initializeTrip() throws ParserConfigurationException{
 	    //The document builders
-		factory = DocumentBuilderFactory.newInstance(); 
-		docBuilder = factory.newDocumentBuilder();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
 		//Creating the SVG document
 		String svgNS = "http://www.w3.org/2000/svg";
-		impl = docBuilder.getDOMImplementation();
+		DOMImplementation impl = docBuilder.getDOMImplementation();
 		SVGdoc = impl.createDocument(svgNS, "svg", null);
 		Element svgRoot = SVGdoc.getDocumentElement();
 		svgRoot.setAttribute("width", "1280");
@@ -94,13 +89,6 @@ public class View {
 
 		System.out.println((realX + 50) + " " + (realY + 133));
 	}
-	public void addLocation(String name, double lat, double lng) {
-		Element location = XMLdoc.createElement("location");
-		location.setAttribute("name", name);
-		location.setAttribute("latitude", "" + lat);
-		location.setAttribute("longitude", "" + lng);
-		locations.appendChild(location);
-	}
 
 	public void addLeg(String sequence,String start, String finish, int mileage){
 		//leg grouping
@@ -140,7 +128,17 @@ public class View {
 		line.setAttribute("stroke", "#999999");
 		SVGdoc.getDocumentElement().appendChild(line);
 	}
-	
+
+	public void addDistance(double x1, double y1, double x2, double y2, String distanceBetween){
+		Element distance = SVGdoc.createElement("text");
+		distance.setAttribute("font-family", "Sand-serif");
+		distance.setAttribute("font-size", "16");
+		distance.setAttribute("id", ("leg" + legID));
+		distance.setAttribute("x", Double.toString((convertXCoordinates(x1) + convertXCoordinates(x2))/2));
+		distance.setAttribute("y", Double.toString((convertYCoordinates(y1) + convertYCoordinates(y2))/2));
+		distance.setTextContent(distanceBetween);
+		SVGdoc.getDocumentElement().appendChild(distance);
+	}
 	public void addLabel(double x, double y, String city){
 		Element label = SVGdoc.createElement("text");
 		label.setAttribute("font-family", "Sans-serif");
@@ -160,7 +158,7 @@ public class View {
 		header.setAttribute("font-size", "24");
 		header.setAttribute("id", "state");
 		header.setAttribute("x", "640");
-		header.setAttribute("y", "40");
+		header.setAttribute("y", "120");
 		header.setTextContent(title);
 		SVGdoc.getDocumentElement().appendChild(header);
 	}
@@ -172,7 +170,7 @@ public class View {
 		footer.setAttribute("font-size", "24");
 		footer.setAttribute("id", "distance");
 		footer.setAttribute("x", "640");
-		footer.setAttribute("y", "1014");
+		footer.setAttribute("y", "931");
 		footer.setTextContent(totalDistance + " miles");
 		SVGdoc.getDocumentElement().appendChild(footer);
 	}
@@ -182,9 +180,9 @@ public class View {
 		Element northBorder = SVGdoc.createElement("line");
 		northBorder.setAttribute("id", "north");
 		northBorder.setAttribute("x1", "50");
-		northBorder.setAttribute("y1", "50");
+		northBorder.setAttribute("y1", "133");
 		northBorder.setAttribute("x2", "1230");
-		northBorder.setAttribute("y2", "50");
+		northBorder.setAttribute("y2", "133");
 		northBorder.setAttribute("stroke-width", "5");
 		northBorder.setAttribute("stroke", "#666666");
 
@@ -192,9 +190,9 @@ public class View {
 		Element eastBorder = SVGdoc.createElement("line");
 		eastBorder.setAttribute("id", "east");
 		eastBorder.setAttribute("x1", "1230");
-		eastBorder.setAttribute("y1", "50");
+		eastBorder.setAttribute("y1", "133");
 		eastBorder.setAttribute("x2", "1230");
-		eastBorder.setAttribute("y2", "974");
+		eastBorder.setAttribute("y2", "891");
 		eastBorder.setAttribute("stroke-width", "5");
 		eastBorder.setAttribute("stroke", "#666666");
 
@@ -202,9 +200,9 @@ public class View {
 		Element southBorder = SVGdoc.createElement("line");
 		southBorder.setAttribute("id", "south");
 		southBorder.setAttribute("x1", "1230");
-		southBorder.setAttribute("y1", "974");
+		southBorder.setAttribute("y1", "891");
 		southBorder.setAttribute("x2", "50");
-		southBorder.setAttribute("y2", "974");
+		southBorder.setAttribute("y2", "891");
 		southBorder.setAttribute("stroke-width", "5");
 		southBorder.setAttribute("stroke", "#666666");
 
@@ -212,9 +210,9 @@ public class View {
 		Element westBorder = SVGdoc.createElement("line");
 		westBorder.setAttribute("id", "west");
 		westBorder.setAttribute("x1", "50");
-		westBorder.setAttribute("y1", "974");
+		westBorder.setAttribute("y1", "891");
 		westBorder.setAttribute("x2", "50");
-		westBorder.setAttribute("y2", "50");
+		westBorder.setAttribute("y2", "133");
 		westBorder.setAttribute("stroke-width", "5");
 		westBorder.setAttribute("stroke", "#666666");
 
@@ -260,7 +258,8 @@ public class View {
 		try {
 			map.initializeTrip();
 			map.addLeg("sequence 1", "Denver", "Fort Collins", 9999);
-			map.addLine(41,-109,39.187,-106.4756);
+			map.addLine(38.9243,-106.3208,37.5774,-105.4857);
+			map.addDistance(37.5774,-105.4857,38.9243,-106.3208, "500");
 			map.addBorders();
 			map.addHeader("Colorado");
 			map.addFooter(9999);
@@ -269,7 +268,8 @@ public class View {
 			map.addLabel(38.9243,-106.3208, "3");
 			map.addLabel(37.5774,-105.4857, "4");
 			map.addLabel(39.0294,-106.4729, "5");
-			System.out.println(map.convertXCoordinates(41) + " " + map.convertYCoordinates(-109));
+
+			System.out.println(map.convertXCoordinates(41) + " " + map.convertYCoordinates(-102));
 			//System.out.println(map.SVGdoc.getDocumentElement().getFirstChild().getFirstChild());
 			map.finalizeTrip();
 		} catch (TransformerException e) {
