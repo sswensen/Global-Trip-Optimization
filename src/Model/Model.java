@@ -69,4 +69,12 @@ public class Model {
     public int getNumPairs() {
         return pairs.size();
     }
+
+    public String getFirstName(int i) {
+        return pairs.get(i).getOne().getName();
+    }
+
+    public String getSecondName(int i) {
+        return pairs.get(i).getTwo().getName();
+    }
 }
