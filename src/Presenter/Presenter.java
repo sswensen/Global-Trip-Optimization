@@ -4,6 +4,8 @@ import Model.*;
 import View.*;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.FileNotFoundException;
 
 public class Presenter
@@ -17,7 +19,7 @@ public class Presenter
         this.view = view;
     }
 
-    public void init(String filename) throws FileNotFoundException, ParserConfigurationException
+    public void init(String filename) throws FileNotFoundException, ParserConfigurationException, TransformerException
     {
         model.planTrip(filename);
         int numPairs = model.getNumPairs();
@@ -30,14 +32,17 @@ public class Presenter
             double secondLat = model.getSecondLat(i);
             int pairDistance = model.getPairDistance(i);
             int pairId = model.getPairId(i);
-           // view.addLeg(pairId, );
+            String firstName = model.getFirstName(i);
+            String secondName = model.getSecondName(i);
+            view.addLeg(pairId, firstName, secondName, pairDistance);
         }
+        view.finalizeTrip();
     }
 
-    public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException
+    public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, TransformerException
     {
         String filename = args[0];
-        String option = args[1];
+       //String option = args[1];
         Model model = new Model();
         View view = new View();
         Presenter presenter = new Presenter(model, view);
