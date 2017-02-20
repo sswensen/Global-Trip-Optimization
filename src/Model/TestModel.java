@@ -61,6 +61,11 @@ public class TestModel {
     }
 
     @Test
+    public void getPairId() throws Exception {
+
+    }
+
+    @Test
     public void getNumPairs() throws Exception {
 
     }
