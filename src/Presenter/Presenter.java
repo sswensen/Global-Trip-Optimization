@@ -17,10 +17,11 @@ public class Presenter
         this.view = view;
     }
 
-    public void init(String filename) throws FileNotFoundException
+    public void init(String filename) throws FileNotFoundException, ParserConfigurationException
     {
         model.planTrip(filename);
         int numPairs = model.getNumPairs();
+        view.initializeTrip();
         for(int i=0; i<numPairs; i++)
         {
             double firstLon = model.getFirstLon(i);
@@ -28,6 +29,8 @@ public class Presenter
             double secondLon = model.getSecondLon(i);
             double secondLat = model.getSecondLat(i);
             int pairDistance = model.getPairDistance(i);
+            int pairId = model.getPairId(i);
+           // view.addLeg(pairId, );
         }
     }
 
