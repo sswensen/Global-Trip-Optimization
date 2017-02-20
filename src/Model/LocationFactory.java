@@ -59,6 +59,7 @@ public class LocationFactory {
         double distance;
         int s1 = -1;
         int s2 = -1;
+        int ind = 0;
         for(int i = 0; i < locations.size(); i++) {
             distance = 9999999;
             for(int j = 0; j < locations.size(); j++) {
@@ -78,7 +79,7 @@ public class LocationFactory {
                     if (locations.get(s1).getNearestDistance() > distance) {
                         locations.get(s1).setNearest(locations.get(s2).getId());
                         locations.get(s1).setNearestDistance((int) Math.round(distance));
-                        pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
+                        pairs.add(new Pair(++ind, locations.get(s1), locations.get(s2), Math.round(distance)));
                     } else {
                         System.out.println("UHHHHHHHHHHHHHHHHHHHHHHHHh");
                     }
@@ -88,12 +89,12 @@ public class LocationFactory {
                 } else {
                     locations.get(s1).setNearest(locations.get(s2).getId());
                     locations.get(s1).setNearestDistance((int) Math.round(distance));
-                    pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
+                    pairs.add(new Pair(++ind, locations.get(s1), locations.get(s2), Math.round(distance)));
                 }
             } else {
                 locations.get(s1).setNearest(locations.get(s2).getId());
                 locations.get(s1).setNearestDistance((int) Math.round(distance));
-                pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
+                pairs.add(new Pair(++ind, locations.get(s1), locations.get(s2), Math.round(distance)));
             }
         }
         return ret;

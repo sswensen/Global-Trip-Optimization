@@ -138,6 +138,24 @@ public class Location {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Location location = (Location) o;
+
+        if (id != location.id) return false;
+        if (Double.compare(location.lat, lat) != 0) return false;
+        if (Double.compare(location.lon, lon) != 0) return false;
+        return name != null ? name.equals(location.name) : location.name == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         return "Location{" +
                 "id=" + id +
