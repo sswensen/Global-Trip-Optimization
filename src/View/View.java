@@ -46,8 +46,15 @@ public class View {
 		Element rootElement = XMLdoc.createElement("trip");
 		XMLdoc.appendChild(rootElement);
 	}
+	public void incLegId(){
+	    legID++;
+    }
+
+    public void incLabelId(){
+	    labelID++;
+    }
 	private double convertXCoordinates(double x){
-		double xPixels = 1180;
+		double xPixels = 1180; //Width of colorado map
 		double startX = 41;
 		double endX = 37;
 		//Convert to SVG 'x' coordinate
@@ -58,7 +65,7 @@ public class View {
 	}
 
 	private double convertYCoordinates(double y){
-		double yPixels = 758;
+		double yPixels = 758; //Height of colorado map
 		double startY = -109;
 		double endY = -102;
 		//Convert to SVG 'y' coordinate
@@ -88,14 +95,14 @@ public class View {
 		System.out.println((realX + 50) + " " + (realY + 133));
 	}
 
-	public void addLeg(String sequence,String start, String finish, int mileage){
+	public void addLeg(int id, String start, String finish, int mileage){
 		//leg grouping
 		Element leg = XMLdoc.createElement("leg");
 		XMLdoc.getDocumentElement().appendChild(leg);
 		
 		//Sequence element
 		Element sequenceElement = XMLdoc.createElement("sequence");
-		sequenceElement.appendChild(XMLdoc.createTextNode(sequence));
+		sequenceElement.appendChild(XMLdoc.createTextNode(Integer.toString(id)));
 		leg.appendChild(sequenceElement);
 		
 		//Start element
@@ -114,10 +121,9 @@ public class View {
 		leg.appendChild(mileageElement);
 	}
 	
-	public void addLine(double x1, double y1, double x2, double y2){
+	public void addLine(double x1, double y1, double x2, double y2, int id){
 		Element line = SVGdoc.createElement("line");
-		line.setAttribute( "id", ("leg" + legID));
-		legID++;
+		line.setAttribute( "id", ("leg" + id));
 		line.setAttribute( "x1", Double.toString(convertXCoordinates(x1)));
 		line.setAttribute( "y1", Double.toString(convertYCoordinates(y1)));
 		line.setAttribute( "x2", Double.toString(convertXCoordinates(x2)));
@@ -127,11 +133,11 @@ public class View {
 		SVGdoc.getDocumentElement().appendChild(line);
 	}
 
-	public void addDistance(double x1, double y1, double x2, double y2, int distanceBetween){
+	public void addDistance(double x1, double y1, double x2, double y2, int distanceBetween, int id){
 		Element distance = SVGdoc.createElement("text");
 		distance.setAttribute("font-family", "Sans-serif");
 		distance.setAttribute("font-size", "16");
-		distance.setAttribute("id", ("leg" + legID));
+		distance.setAttribute("id", ("leg" + id));
 		distance.setAttribute("x", Double.toString((convertXCoordinates(x1) + convertXCoordinates(x2))/2));
 		distance.setAttribute("y", Double.toString((convertYCoordinates(y1) + convertYCoordinates(y2))/2));
 		distance.setTextContent(Integer.toString(distanceBetween));
@@ -240,24 +246,20 @@ public class View {
 		transformer.transform(source2, result2);
 	}
 	
-	public static void main(String argv[]) throws ParserConfigurationException {
+	public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
 		View map = new View();
-		try {
-			map.initializeTrip();
-			map.addLeg("sequence 1", "Denver", "Fort Collins", 9999);
-			map.addLine(38.9243,-106.3208,37.5774,-105.4857);
-			map.addDistance(37.5774,-105.4857,38.9243,-106.3208, 500);
-			map.addBorders();
-			map.addHeader("Colorado");
-			map.addFooter(9999);
-			map.addLabel(37,-102, "1");
-			map.addLabel(39.1875,-106.4756, "2");
-			map.addLabel(38.9243,-106.3208, "3");
-			map.addLabel(37.5774,-105.4857, "4");
-			map.addLabel(39.0294,-106.4729, "5");
-			map.finalizeTrip();
-		} catch (TransformerException e) {
-			e.printStackTrace();
-		}
+        map.initializeTrip();
+        //map.addLeg("1", "Denver", "Fort Collins", 9999);
+        //map.addLine(38.9243,-106.3208,37.5774,-105.4857);
+        //map.addDistance(37.5774,-105.4857,38.9243,-106.3208, 500);
+        map.addBorders();
+        map.addHeader("Colorado");
+        map.addFooter(9999);
+        map.addLabel(37,-102, "1");
+        map.addLabel(39.1875,-106.4756, "2");
+        map.addLabel(38.9243,-106.3208, "3");
+        map.addLabel(37.5774,-105.4857, "4");
+        map.addLabel(39.0294,-106.4729, "5");
+        map.finalizeTrip();
 	}
 }
