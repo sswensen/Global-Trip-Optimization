@@ -61,6 +61,11 @@ public class Model {
     public int getPairDistance(int i) {
         return (int) pairs.get(i).getDistance();
     }
+
+    public int getPairId(int i) {
+        return pairs.get(i).getId();
+    }
+
     public int getNumPairs() {
         return pairs.size();
     }
