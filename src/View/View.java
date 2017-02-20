@@ -54,12 +54,13 @@ public class View {
 	}
 	
 	public static void convertCoordinates(double x, double y){
-		double startX = 41.0;
-		double endX = 37.0;
+
+        double xPixels = 1180;
+        double yPixels = 824;
+		double startX = 41;
+		double endX = 37;
 		double startY = -109.0;
 		double endY = -102.0;
-		double xPixels = 1066.6073;
-		double yPixels = 783.0824;
 
 		//Convert to SVG 'x' coordinate
 		double strideX = endX - startX;
@@ -71,7 +72,7 @@ public class View {
 		double relativeY = (y - startY);
 		double realY = relativeY * (yPixels / strideY);
 
-		System.out.println(realX + " " + realY);
+		System.out.println((realX + 50) + " " + (realY + 100));
 	}
 	public void addLocation(String name, double lat, double lng) {
 		Element location = XMLdoc.createElement("location");
@@ -202,12 +203,15 @@ public class View {
 		SVGdoc.getDocumentElement().appendChild(southBorder);
 		SVGdoc.getDocumentElement().appendChild(westBorder);
 	}
-	public void addGrouping(){
-
+	public void addSVGGrouping(String groupTitle){
+        Element grouping = SVGdoc.createElement("g");
+        SVGdoc.getDocumentElement().appendChild(grouping);
+        grouping.appendChild(addTitle(groupTitle));
     }
 
-    public void addTitle(){
-
+    public Element addTitle(String groupTitle){
+        Element title = SVGdoc.createElement(groupTitle);
+        return title;
     }
 
 	public void finalizeTrip() throws TransformerException{
@@ -251,7 +255,8 @@ public class View {
 			map.addLabel(1140,900, "cityC");
 			map.addLabel(120,700, "cityD");
 			map.addLabel(200,400, "cityE");
-			map.convertCoordinates(37.0,-102.0);
+			map.convertCoordinates(37,-102);
+			//System.out.println(map.SVGdoc.getDocumentElement().getFirstChild().getFirstChild());
 			map.finalizeTrip();
 		} catch (TransformerException e) {
 			e.printStackTrace();
