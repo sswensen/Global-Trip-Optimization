@@ -77,4 +77,12 @@ public class Model {
     public String getSecondName(int i) {
         return pairs.get(i).getTwo().getName();
     }
+
+    public int getTripDistance() {
+        int ret = 0;
+        for(int i = 0; i < pairs.size(); i++) {
+            ret += pairs.get(i).getDistance();
+        }
+        return ret;
+    }
 }
