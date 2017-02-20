@@ -8,35 +8,60 @@ import java.util.ArrayList;
  */
 public class Model {
     private ArrayList<Location> locations;
+    private ArrayList<Pair> pairs;
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
         lf.readFile(filename);
         lf.findNearest();
-
+        locations = lf.getLocations();
+        pairs = lf.getPairs();
         return 1;
     }
 
     public int getLegStartLocation(int a) {
-        return -1;
+        return pairs.get(a).getOne().getId();
     }
 
     public int getLegFinishLocation(int a) {
-        return -1;
+        return pairs.get(a).getTwo().getId();
     }
 
     public int getLegDistance(Object o) {
         return -1;
     }
 
-    public String getLocationID(int index) {
+    public int getLocationID(int index) {
         return locations.get(index).getId();
     }
 
     public double getLocationLattitude(int index) {
-        return -1.0;
+        return locations.get(index).getLat();
     }
 
     public double getLocationLongitude(int index) {
-        return -1.0;
+        return locations.get(index).getLon();
+    }
+
+    public double getFirstLon(int i) {
+        return pairs.get(i).getOne().getLon();
+    }
+
+    public double getFirstLat(int i) {
+        return pairs.get(i).getOne().getLat();
+    }
+
+    public double getSecondLon(int i) {
+        return pairs.get(i).getTwo().getLon();
+    }
+
+    public double getSecondLat(int i) {
+        return pairs.get(i).getTwo().getLat();
+    }
+
+    public int getPairDistance(int i) {
+        return (int) pairs.get(i).getDistance();
+    }
+    public int getNumPairs() {
+        return pairs.size();
     }
 }
