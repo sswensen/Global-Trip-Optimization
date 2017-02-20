@@ -21,14 +21,13 @@ public class TestLocationFactory {
     @Test
     public void readTest() {
         LocationFactory lf = new LocationFactory();
-        String expected = "Negro";
+        String expected = "Cracker";
         try {
-            lf.readFile("./src/Model/test/test copy.csv");
+            lf.readFile("./src/Model/test/ColoradoSkiResorts.csv");
             lf.findNearest();
             ArrayList<Location> result = lf.getLocations();
             ArrayList<Pair> pairs = lf.getPairs();
-            Location one = new Location(0, "anthonysuper", "Equinox Brewing Co", "Fort Collins",
-                    "40\u00b035'10.68\"N", "105\u00b04'32.51\"W", "1518");
+            Location one = new Location(0,"Equinox Brewing Co", "40\u00b035'10.68\"N", "105\u00b04'32.51\"W");
             Assert.assertTrue(one.equals(result.get(0)));
         }
         catch (FileNotFoundException a) {

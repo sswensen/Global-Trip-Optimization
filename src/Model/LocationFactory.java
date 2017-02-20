@@ -20,13 +20,33 @@ public class LocationFactory {
 
     boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
-        int ip = 0;
+        int id = -1;
+        int name = -1;
+        int latitude = -1;
+        int longitude = -1;
+        if(scan.hasNext()) {
+            String[] line = scan.nextLine().split(",");
+            for(int x = 0; x < line.length; x++) {
+                String temp = line[x];
+                if(temp.equalsIgnoreCase("id")) {
+                    id = x;
+                }
+                if(temp.equalsIgnoreCase("name")) {
+                    name = x;
+                }
+                if(temp.equalsIgnoreCase("latitude")) {
+                    latitude = x;
+                }
+                if(temp.equalsIgnoreCase("longitude")) {
+                    longitude = x;
+                }
+            }
+        }
         while (scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
             //System.out.println("[id= " + line[0] + ", name= " + line[1] + " , city=" + line[2] + " , lat=" + line[3] + " , lon=" + line[4] + " , alt=" + line[5] + "]");
-            Location temp = new Location(ip, line[0], line[1], line[2], line[3].replaceAll("\\s+",""), line[4].replaceAll("\\s+",""), line[5]);
+            Location temp = new Location(Integer.parseInt(line[id]), line[name], line[latitude].replaceAll("\\s+",""), line[longitude].replaceAll("\\s+",""));
             locations.add(temp);
-            ip++;
         }
         scan.close();
         if(locations.size() > 0)
@@ -56,7 +76,7 @@ public class LocationFactory {
             if(s1 < locations.size()) {
                 if(locations.get(s2).getNearest() < 0) {
                     if (locations.get(s1).getNearestDistance() > distance) {
-                        locations.get(s1).setNearest(locations.get(s2).getIp());
+                        locations.get(s1).setNearest(locations.get(s2).getId());
                         locations.get(s1).setNearestDistance((int) Math.round(distance));
                         pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
                     } else {
@@ -66,12 +86,12 @@ public class LocationFactory {
                     locations.set(s1 + 1, locations.get(s2));
                     locations.set(s2, tempLoc);
                 } else {
-                    locations.get(s1).setNearest(locations.get(s2).getIp());
+                    locations.get(s1).setNearest(locations.get(s2).getId());
                     locations.get(s1).setNearestDistance((int) Math.round(distance));
                     pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
                 }
             } else {
-                locations.get(s1).setNearest(locations.get(s2).getIp());
+                locations.get(s1).setNearest(locations.get(s2).getId());
                 locations.get(s1).setNearestDistance((int) Math.round(distance));
                 pairs.add(new Pair(locations.get(s1), locations.get(s2), Math.round(distance)));
             }
