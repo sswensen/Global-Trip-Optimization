@@ -22,15 +22,14 @@ import org.w3c.dom.DOMImplementation;
 public class View {
 	
 	//Document builders
-	public DocumentBuilderFactory factory;
-	public DocumentBuilder docBuilder;
-	public Document XMLdoc;
-	public Document SVGdoc;
-	public DOMImplementation impl;
-	public Element locations;
-
-	public int labelID = 1;
-	public int legID = 1;
+	private DocumentBuilderFactory factory;
+	private DocumentBuilder docBuilder;
+	private Document XMLdoc;
+	private Document SVGdoc;
+	private DOMImplementation impl;
+	private Element locations;
+	private int labelID = 1;
+	private int legID = 1;
 
 	public void initializeTrip() throws ParserConfigurationException{
 	    //The document builders
@@ -52,11 +51,32 @@ public class View {
 		Element rootElement = XMLdoc.createElement("trip");
 		XMLdoc.appendChild(rootElement);
 	}
-	
-	public static void convertCoordinates(double x, double y){
+	private double convertXCoordinates(double x){
+		double xPixels = 1180;
+		double startX = 41;
+		double endX = 37;
+		//Convert to SVG 'x' coordinate
+		double strideX = endX - startX;
+		double relativeX = (x - startX);
+		double realX = relativeX * (xPixels / strideX);
+		return (realX + 50);
+	}
+
+	private double convertYCoordinates(double y){
+		double yPixels = 758;
+		double startY = -109;
+		double endY = -102;
+		//Convert to SVG 'y' coordinate
+		double strideY = endY - startY;
+		double relativeY = (y - startY);
+		double realY = relativeY * (yPixels / strideY);
+		return (realY + 133);
+	}
+
+	private static void convertCoordinates(double x, double y){
 
         double xPixels = 1180;
-        double yPixels = 824;
+        double yPixels = 758;
 		double startX = 41;
 		double endX = 37;
 		double startY = -109.0;
@@ -72,7 +92,7 @@ public class View {
 		double relativeY = (y - startY);
 		double realY = relativeY * (yPixels / strideY);
 
-		System.out.println((realX + 50) + " " + (realY + 100));
+		System.out.println((realX + 50) + " " + (realY + 133));
 	}
 	public void addLocation(String name, double lat, double lng) {
 		Element location = XMLdoc.createElement("location");
@@ -112,10 +132,10 @@ public class View {
 		Element line = SVGdoc.createElement("line");
 		line.setAttribute( "id", ("leg" + legID));
 		legID++;
-		line.setAttribute( "x1", Double.toString(x1));
-		line.setAttribute( "y1", Double.toString(y1));
-		line.setAttribute( "x2", Double.toString(x2));
-		line.setAttribute( "y2", Double.toString(y2));
+		line.setAttribute( "x1", Double.toString(convertXCoordinates(x1)));
+		line.setAttribute( "y1", Double.toString(convertYCoordinates(y1)));
+		line.setAttribute( "x2", Double.toString(convertXCoordinates(x2)));
+		line.setAttribute( "y2", Double.toString(convertYCoordinates(y2)));
 		line.setAttribute( "stroke-width", "3");
 		line.setAttribute("stroke", "#999999");
 		SVGdoc.getDocumentElement().appendChild(line);
@@ -126,8 +146,8 @@ public class View {
 		label.setAttribute("font-family", "Sans-serif");
 		label.setAttribute("font-size", "16");
 		label.setAttribute("id", "id" + labelID);
-		label.setAttribute("x", Double.toString(x));
-		label.setAttribute("y", Double.toString(y));
+		label.setAttribute("x", Double.toString(convertXCoordinates(x)));
+		label.setAttribute("y", Double.toString(convertYCoordinates(y)));
 		label.setTextContent(city);
 		SVGdoc.getDocumentElement().appendChild(label);
 	}
@@ -217,7 +237,6 @@ public class View {
 	public void finalizeTrip() throws TransformerException{
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
-
 		//XML document
 		DOMSource source = new DOMSource(XMLdoc);
 		StreamResult result = new StreamResult(new File("XMLfile.xml"));
@@ -238,24 +257,19 @@ public class View {
 	
 	public static void main(String argv[]) throws ParserConfigurationException {
 		View map = new View();
-
 		try {
 			map.initializeTrip();
 			map.addLeg("sequence 1", "Denver", "Fort Collins", 9999);
-			map.addLine(100,100,500,110);
-			map.addLine(500,110,1140,900);
-			map.addLine(1140,900,120,700);
-			map.addLine(120,700,200,400);
-			map.addLine(200,400,100,100);
+			map.addLine(41,-109,39.187,-106.4756);
 			map.addBorders();
 			map.addHeader("Colorado");
 			map.addFooter(9999);
-			map.addLabel(100,100, "cityA");
-			map.addLabel(500,110, "cityB");
-			map.addLabel(1140,900, "cityC");
-			map.addLabel(120,700, "cityD");
-			map.addLabel(200,400, "cityE");
-			map.convertCoordinates(37,-102);
+			map.addLabel(37,-102, "1");
+			map.addLabel(39.1875,-106.4756, "2");
+			map.addLabel(38.9243,-106.3208, "3");
+			map.addLabel(37.5774,-105.4857, "4");
+			map.addLabel(39.0294,-106.4729, "5");
+			System.out.println(map.convertXCoordinates(41) + " " + map.convertYCoordinates(-109));
 			//System.out.println(map.SVGdoc.getDocumentElement().getFirstChild().getFirstChild());
 			map.finalizeTrip();
 		} catch (TransformerException e) {
