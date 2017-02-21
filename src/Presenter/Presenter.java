@@ -58,15 +58,15 @@ public class Presenter
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
-            view.addLine(firstLat, firstLon, secondLat, secondLon, pairId);
+            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
             if(displayName)
             {
-                view.addLabel(firstLat, firstLon, firstName);
-                view.addLabel(secondLat, secondLon, secondName);
+                view.addLabel(firstLon, firstLat, firstName);
+                view.addLabel(secondLon, secondLat, secondName);
             }
             if(displayMileage)
             {
-                view.addDistance(firstLat, firstLon, secondLat, secondLon, pairDistance, pairId);
+                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId);
             }
         }
         view.finalizeTrip();
