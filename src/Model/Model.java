@@ -25,7 +25,7 @@ public class Model {
     }
 
     public String getLegFinishLocation() {
-        return pairs.get(pairs.size()-1).getTwo().getName();
+        return pairs.get(pairs.size()-2).getTwo().getName();
     }
 
     /*public int getLegDistance(Object o) {
