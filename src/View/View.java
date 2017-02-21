@@ -1,22 +1,19 @@
 package View;
 
 import java.io.File;
-import java.io.StringWriter;
+
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.OutputKeys;
-import org.w3c.dom.Attr;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.DOMImplementation;
 
 public class View {
@@ -24,7 +21,6 @@ public class View {
 	private Document XMLdoc;
 	private Document SVGdoc;
 	private int labelID = 1;
-	private int legID = 1;
 
 	public void initializeTrip() throws ParserConfigurationException{
 	    //The document builders
@@ -46,13 +42,7 @@ public class View {
 		Element rootElement = XMLdoc.createElement("trip");
 		XMLdoc.appendChild(rootElement);
 	}
-	public void incLegId(){
-	    legID++;
-    }
 
-    public void incLabelId(){
-	    labelID++;
-    }
 	private double convertLongitudeCoordinates(double x){
 		double xPixels = 1180; //Width of colorado map
 		double startX = -109;
@@ -65,36 +55,40 @@ public class View {
 	}
 
 	private double convertLatitudeCoordinates(double y){
-		double yPixels = 758; //Height of colorado map
+		double yPixels = 674.2857143; //Height of colorado map
 		double startY = 41;
 		double endY = 37;
 		//Convert to SVG 'y' coordinate
 		double strideY = endY - startY;
 		double relativeY = (y - startY);
 		double realY = relativeY * (yPixels / strideY);
-		return (realY + 133);
+		return (realY + 174.8571429);
 	}
 
-	private static void convertCoordinates(double x, double y){
-        double xPixels = 1180;
-        double yPixels = 758;
-		double startX = 41;
-		double endX = 37;
-		double startY = -109.0;
-		double endY = -102.0;
-
+	/*
+	private void convertCoordinates(double x, double y){
+		double xPixels = 1180; //Width of colorado map
+		double startX = -109;
+		double endX = -102;
 		//Convert to SVG 'x' coordinate
 		double strideX = endX - startX;
 		double relativeX = (x - startX);
 		double realX = relativeX * (xPixels / strideX);
+		realX = (realX + 50);
 
+		//Convert to SVG 'y' coordinate
+		double yPixels = 674.2857143; //Height of colorado map
+		double startY = 41;
+		double endY = 37;
 		//Convert to SVG 'y' coordinate
 		double strideY = endY - startY;
 		double relativeY = (y - startY);
 		double realY = relativeY * (yPixels / strideY);
-		System.out.println((realX + 50) + " " + (realY + 133));
-	}
+		realY = (realY + 174.8571429);
 
+		System.out.println(realX + " " + realY);
+	}
+	*/
 	public void addLeg(int id, String start, String finish, int mileage){
 		//leg grouping
 		Element leg = XMLdoc.createElement("leg");
@@ -173,7 +167,7 @@ public class View {
 		header.setAttribute("font-size", "24");
 		header.setAttribute("id", "state");
 		header.setAttribute("x", "640");
-		header.setAttribute("y", "120");
+		header.setAttribute("y", "161.8571429");
 		header.setTextContent(title);
 		SVGdoc.getDocumentElement().appendChild(header);
 	}
@@ -185,7 +179,7 @@ public class View {
 		footer.setAttribute("font-size", "24");
 		footer.setAttribute("id", "distance");
 		footer.setAttribute("x", "640");
-		footer.setAttribute("y", "931");
+		footer.setAttribute("y", "889.1428572");
 		footer.setTextContent(totalDistance + " miles");
 		SVGdoc.getDocumentElement().appendChild(footer);
 	}
@@ -195,9 +189,9 @@ public class View {
 		Element northBorder = SVGdoc.createElement("line");
 		northBorder.setAttribute("id", "north");
 		northBorder.setAttribute("x1", "50");
-		northBorder.setAttribute("y1", "133");
+		northBorder.setAttribute("y1", "174.8571429");
 		northBorder.setAttribute("x2", "1230");
-		northBorder.setAttribute("y2", "133");
+		northBorder.setAttribute("y2", "174.8571429");
 		northBorder.setAttribute("stroke-width", "5");
 		northBorder.setAttribute("stroke", "#666666");
 
@@ -205,9 +199,9 @@ public class View {
 		Element eastBorder = SVGdoc.createElement("line");
 		eastBorder.setAttribute("id", "east");
 		eastBorder.setAttribute("x1", "1230");
-		eastBorder.setAttribute("y1", "133");
+		eastBorder.setAttribute("y1", "174.8571429");
 		eastBorder.setAttribute("x2", "1230");
-		eastBorder.setAttribute("y2", "891");
+		eastBorder.setAttribute("y2", "849.1428572");
 		eastBorder.setAttribute("stroke-width", "5");
 		eastBorder.setAttribute("stroke", "#666666");
 
@@ -215,9 +209,9 @@ public class View {
 		Element southBorder = SVGdoc.createElement("line");
 		southBorder.setAttribute("id", "south");
 		southBorder.setAttribute("x1", "1230");
-		southBorder.setAttribute("y1", "891");
+		southBorder.setAttribute("y1", "849.1428572");
 		southBorder.setAttribute("x2", "50");
-		southBorder.setAttribute("y2", "891");
+		southBorder.setAttribute("y2", "849.1428572");
 		southBorder.setAttribute("stroke-width", "5");
 		southBorder.setAttribute("stroke", "#666666");
 
@@ -225,9 +219,9 @@ public class View {
 		Element westBorder = SVGdoc.createElement("line");
 		westBorder.setAttribute("id", "west");
 		westBorder.setAttribute("x1", "50");
-		westBorder.setAttribute("y1", "891");
+		westBorder.setAttribute("y1", "849.1428572");
 		westBorder.setAttribute("x2", "50");
-		westBorder.setAttribute("y2", "133");
+		westBorder.setAttribute("y2", "174.8571429");
 		westBorder.setAttribute("stroke-width", "5");
 		westBorder.setAttribute("stroke", "#666666");
 
@@ -263,8 +257,6 @@ public class View {
         //map.addLine(38.9243,-106.3208,37.5774,-105.4857);
         //map.addDistance(37.5774,-105.4857,38.9243,-106.3208, 500);
         map.addBorders();
-        map.addHeader("Colorado");
-        map.addFooter(9999);
         //map.addLabel(-108.60,37.34, "Montezuma");
         map.finalizeTrip();
 	}
