@@ -114,7 +114,31 @@ public class View {
 		mileageElement.appendChild(XMLdoc.createTextNode(Integer.toString(mileage)));
 		leg.appendChild(mileageElement);
 	}
-	
+
+	public void addFinalLeg(int id, String start, String finish, int totalMileage){
+		Element leg = XMLdoc.createElement("leg");
+		XMLdoc.getDocumentElement().appendChild(leg);
+
+		//Sequence element
+		Element sequenceElement = XMLdoc.createElement("sequence");
+		sequenceElement.appendChild(XMLdoc.createTextNode(Integer.toString(id)));
+		leg.appendChild(sequenceElement);
+
+		//Start element
+		Element startElement = XMLdoc.createElement("start");
+		startElement.appendChild(XMLdoc.createTextNode(start));
+		leg.appendChild(startElement);
+
+		//finish element
+		Element finishElement = XMLdoc.createElement("finish");
+		finishElement.appendChild(XMLdoc.createTextNode(finish));
+		leg.appendChild(finishElement);
+
+		//mileage element
+		Element mileageElement = XMLdoc.createElement("mileage");
+		mileageElement.appendChild(XMLdoc.createTextNode(Integer.toString(totalMileage)));
+		leg.appendChild(mileageElement);
+	}
 	public void addLine(double x1, double y1, double x2, double y2, int id){
 		Element line = SVGdoc.createElement("line");
 		line.setAttribute( "id", ("leg" + id));
@@ -253,9 +277,8 @@ public class View {
 	public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
 		View map = new View();
         map.initializeTrip();
-        //map.addLeg("1", "Denver", "Fort Collins", 9999);
-        //map.addLine(38.9243,-106.3208,37.5774,-105.4857);
-        //map.addDistance(37.5774,-105.4857,38.9243,-106.3208, 500);
+        map.addLeg(1, "start","finish",9999);
+       // map.addTotalMileage(9999);
         map.addBorders();
         //map.addLabel(-108.60,37.34, "Montezuma");
         map.finalizeTrip();
