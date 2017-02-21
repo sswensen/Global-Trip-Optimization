@@ -143,7 +143,7 @@ public class View {
 		distance.setTextContent(Integer.toString(distanceBetween));
 		SVGdoc.getDocumentElement().appendChild(distance);
 	}
-	public void addLabel(double longitude, double latitude, String city){
+	public void addCityNameLabel(double longitude, double latitude, String city){
 		Element label = SVGdoc.createElement("text");
 		label.setAttribute("font-family", "Sans-serif");
 		label.setAttribute("font-size", "16");
@@ -154,7 +154,17 @@ public class View {
 		label.setTextContent(city);
 		SVGdoc.getDocumentElement().appendChild(label);
 	}
-	
+	public void addIDLabel(double longitude, double latitude, int id){
+		Element IDLabel = SVGdoc.createElement("text");
+		IDLabel.setAttribute("font-family", "Sans-serif");
+		IDLabel.setAttribute("font-size", "16");
+		IDLabel.setAttribute("id", "id" + labelID);
+		labelID++;
+		IDLabel.setAttribute("x", Double.toString(convertLongitudeCoordinates(longitude)));
+		IDLabel.setAttribute("y", Double.toString(convertLatitudeCoordinates(latitude)));
+		IDLabel.setTextContent(Integer.toString(id));
+		SVGdoc.getDocumentElement().appendChild(IDLabel);
+	}
 	public void addHeader(String title){
 		//<text text-anchor="middle" font-family="Sans-serif" font-size="24" id="state" y="40" x="640">Colorado</text>
 		Element header = SVGdoc.createElement("text");
