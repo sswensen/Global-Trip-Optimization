@@ -126,8 +126,8 @@ public class View {
 		line.setAttribute( "id", ("leg" + id));
 		line.setAttribute( "x1", Double.toString(convertLongitudeCoordinates(x1)));
 		line.setAttribute( "y1", Double.toString(convertLatitudeCoordinates(y1)));
-		line.setAttribute( "x2", Double.toString(convertLongitudeCoordinates(y2)));
-		line.setAttribute( "y2", Double.toString(convertLatitudeCoordinates(x2)));
+		line.setAttribute( "x2", Double.toString(convertLongitudeCoordinates(x2)));
+		line.setAttribute( "y2", Double.toString(convertLatitudeCoordinates(y2)));
 		line.setAttribute( "stroke-width", "3");
 		line.setAttribute("stroke", "#999999");
 		SVGdoc.getDocumentElement().appendChild(line);
