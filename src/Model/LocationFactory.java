@@ -54,6 +54,26 @@ public class LocationFactory {
         else
             return false;
     }
+
+    boolean secondTry() {
+        for(int x = 0; x < locations.size()-1; x++) {
+            double distance = 999999999;
+            int index = -1;
+            for(int y = x+1; y < locations.size(); y++) {
+                double temp = locations.get(x).distance(locations.get(y));
+                if(distance > temp) {
+                    distance = temp;
+                    index = y;
+                }
+            }
+            Location temploc = locations.get(x+1);
+            locations.set(x+1, locations.get(index));
+            locations.set(index, temploc);
+            pairs.add(new Pair(x, locations.get(x), locations.get(x+1), locations.get(x).distance(locations.get(x+1))));
+        }
+        return true;
+    }
+
     boolean findNearest() {
         boolean ret = false;
         double distance;

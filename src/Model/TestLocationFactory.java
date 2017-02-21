@@ -24,7 +24,8 @@ public class TestLocationFactory {
         String expected = "Cracker";
         try {
             lf.readFile("./src/Model/test/ColoradoSkiResorts.csv");
-            lf.findNearest();
+            //lf.findNearest();
+            lf.secondTry();
             ArrayList<Location> result = lf.getLocations();
             ArrayList<Pair> pairs = lf.getPairs();
             Location one = new Location(1,"Wolf Creek", "37°28'20\" N", "106°47'35\" W");
