@@ -264,13 +264,13 @@ public class View {
 		//XML document
 		DOMSource source = new DOMSource(XMLdoc);
 		StreamResult result = new StreamResult(new File("trip.xml"));
-		System.out.println("xml file saved!");
+		//System.out.println("xml file saved!");
 		transformer.transform(source, result);
 
         //SVG document
 		DOMSource source2 = new DOMSource(SVGdoc);
 		StreamResult result2 = new StreamResult(new File("trip.svg"));
-		System.out.println("svg file saved!");
+		//System.out.println("svg file saved!");
 		transformer.transform(source2, result2);
 	}
 	
