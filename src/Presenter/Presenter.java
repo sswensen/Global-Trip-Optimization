@@ -29,7 +29,7 @@ public class Presenter
         int numPairs = model.getNumPairs();
         view.addBorders();
         view.addHeader("Colorado");
-        view.addFooter(9999);
+        view.addFooter(model.getTripDistance());
         for(int i = 0; i < numPairs; i++)
         {
             double firstLon = model.getFirstLon(i);
