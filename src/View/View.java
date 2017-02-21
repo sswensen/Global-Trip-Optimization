@@ -265,7 +265,7 @@ public class View {
         map.addBorders();
         map.addHeader("Colorado");
         map.addFooter(9999);
-        map.addLabel(-108.60,37.34, "Montezuma");
+        //map.addLabel(-108.60,37.34, "Montezuma");
         map.finalizeTrip();
 	}
 }
