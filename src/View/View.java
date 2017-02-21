@@ -124,10 +124,10 @@ public class View {
 	public void addLine(double x1, double y1, double x2, double y2, int id){
 		Element line = SVGdoc.createElement("line");
 		line.setAttribute( "id", ("leg" + id));
-		line.setAttribute( "x1", Double.toString(convertXCoordinates(x1)));
-		line.setAttribute( "y1", Double.toString(convertYCoordinates(y1)));
-		line.setAttribute( "x2", Double.toString(convertXCoordinates(x2)));
-		line.setAttribute( "y2", Double.toString(convertYCoordinates(y2)));
+		line.setAttribute( "x1", Double.toString(convertYCoordinates(y1)));
+		line.setAttribute( "y1", Double.toString(convertXCoordinates(x1)));
+		line.setAttribute( "x2", Double.toString(convertYCoordinates(y2)));
+		line.setAttribute( "y2", Double.toString(convertXCoordinates(x2)));
 		line.setAttribute( "stroke-width", "3");
 		line.setAttribute("stroke", "#999999");
 		SVGdoc.getDocumentElement().appendChild(line);
