@@ -65,30 +65,6 @@ public class View {
 		return (realY + 174.8571429);
 	}
 
-	/*
-	private void convertCoordinates(double x, double y){
-		double xPixels = 1180; //Width of colorado map
-		double startX = -109;
-		double endX = -102;
-		//Convert to SVG 'x' coordinate
-		double strideX = endX - startX;
-		double relativeX = (x - startX);
-		double realX = relativeX * (xPixels / strideX);
-		realX = (realX + 50);
-
-		//Convert to SVG 'y' coordinate
-		double yPixels = 674.2857143; //Height of colorado map
-		double startY = 41;
-		double endY = 37;
-		//Convert to SVG 'y' coordinate
-		double strideY = endY - startY;
-		double relativeY = (y - startY);
-		double realY = relativeY * (yPixels / strideY);
-		realY = (realY + 174.8571429);
-
-		System.out.println(realX + " " + realY);
-	}
-	*/
 	public void addLeg(int id, String start, String finish, int mileage){
 		//leg grouping
 		Element leg = XMLdoc.createElement("leg");
