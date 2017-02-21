@@ -277,9 +277,10 @@ public class View {
 	public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
 		View map = new View();
         map.initializeTrip();
-        map.addLeg(1, "start","finish",9999);
-       // map.addTotalMileage(9999);
-        map.addBorders();
+        map.addLeg(1, "Sandeep","Denver",9999);
+        map.addLine(-109,41,-102,37,1);
+        System.out.println(map.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
+		map.addBorders();
         //map.addLabel(-108.60,37.34, "Montezuma");
         map.finalizeTrip();
 	}

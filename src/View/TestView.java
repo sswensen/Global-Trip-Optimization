@@ -13,121 +13,118 @@ import javax.xml.parsers.ParserConfigurationException;
 public class TestView {
     private View v = new View();
     @Before
-    public void initalize() throws ParserConfigurationException {
-        v.initializeTrip();
-        v.addLeg(1,"denver","fort collins", 9999);
-        /*
-        v.addFinalLeg(2,"denver","fort collins", 9999);
-        v.addLine(-109,41,-102,37,1);
-        v.addDistance(-109,41,-102,37,9999,1);
-        v.addCityNameLabel(-109,41,"denver");
-        v.addIDLabel();
-        v.addBorders();
-        v.addHeader("Colorado");
-        v.
-        */
+    public void initialize() throws ParserConfigurationException {
+
     }
-
-
 
     @Test
     public void initializeTrip() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addLeg(1,"denver","fort collins", 9999);
         View one = new View();
         one.initializeTrip();
         one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc(), v.getXMLdoc());
+        assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
 
     @Test
     public void addLeg() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addLeg(1,"denver","fort collins", 9999);
         View one = new View();
         one.initializeTrip();
         one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
 
     @Test
     public void addFinalLeg() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addLeg(1,"denver","fort collins", 9999);
         View one = new View();
         one.initializeTrip();
         one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
 
     @Test
     public void addLine() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addLine(-109,41,-102,37,1);
         View one = new View();
         one.initializeTrip();
-
-        one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        one.addLine(-109,41,-102,37,1);
+        assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
     @Test
     public void addDistance() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addDistance(-109,41,-102,37,1, 2);
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        one.addDistance(-109,41,-102,37,1, 2);
+        assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
     @Test
     public void addCityNameLabel() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addCityNameLabel(-109,41,"Denver");
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        one.addCityNameLabel(-109,41,"Denver");
+        assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
     @Test
     public void addIDLabel() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addCityNameLabel(-109, 41, "Denver");
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        one.addCityNameLabel(-109, 41, "Denver");
+        assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
     @Test
     public void addHeader() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addHeader("Denver");
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        one.addHeader("Denver");
+        assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
     @Test
     public void addFooter() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addFooter(9999);
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        one.addFooter(9999);
+        assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
     @Test
     public void addBorders() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addBorders();
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        one.addBorders();
+        assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
     @Test
     public void finalizeTrip() throws Exception {
-        //v.initializeTrip();
+        v.initializeTrip();
+        v.addLeg(1,"denver","fort collins", 9999);
         View one = new View();
         one.initializeTrip();
         one.addLeg(1,"denver","fort collins", 9999);
-        assertEquals(one.getXMLdoc().getFirstChild(), v.getXMLdoc().getFirstChild());
+        assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
 
 }
