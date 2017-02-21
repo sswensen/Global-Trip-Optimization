@@ -22,7 +22,7 @@ public class TestLocationFactory {
         try {
             lf.readFile("./src/Model/test/ColoradoSkiResorts.csv");
             //lf.findNearest();
-            lf.secondTry();
+            lf.thirdTry();
             ArrayList<Location> result = lf.getLocations();
             //ArrayList<Pair> pairs = lf.getPairs();
             Location one = new Location(1,"Wolf Creek", "37°28'20\" N", "106°47'35\" W");

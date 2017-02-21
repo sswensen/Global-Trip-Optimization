@@ -9,12 +9,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
 
 class LocationFactory {
     //private static final char DEFAULT_SEPARATOR = ',';
     //private static final char DEFAULT_QUOTE = '\"';
     private ArrayList<Location> locations = new ArrayList<Location>();
+    private ArrayList<Location> originalLocations;
     private ArrayList<Pair> pairs = new ArrayList<>();
+    private ArrayList<Pair> bestPairs = new ArrayList<>();
 
     boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
@@ -50,6 +53,7 @@ class LocationFactory {
         return locations.size() > 0;
     }
 
+    /*
     boolean secondTry() {
         for(int x = 0; x < locations.size()-1; x++) {
             double distance = 999999999;
@@ -67,6 +71,46 @@ class LocationFactory {
             pairs.add(new Pair(x, locations.get(x), locations.get(x+1), locations.get(x).distance(locations.get(x+1))));
         }
         pairs.add(new Pair(locations.size()-1, locations.get(locations.size()-1), locations.get(0), locations.get(locations.size()-1).distance(locations.get(0))));
+        return true;
+    }
+    */
+
+    boolean thirdTry() {
+        int bestDistance = 999999999;
+        int sizer = locations.size();
+        for(int i = 0; i < sizer; i++) {
+            originalLocations = new ArrayList<>(locations);
+            for (int x = 0; x < locations.size() - 1; x++) {
+                double distance = 999999999;
+                int index = -1;
+                for (int y = x + 1; y < locations.size(); y++) {
+                    double temp = locations.get(x).distance(locations.get(y));
+                    if (distance > temp) {
+                        distance = temp;
+                        index = y;
+                    }
+                }
+                Location temploc = locations.get(x + 1);
+                locations.set(x + 1, locations.get(index));
+                locations.set(index, temploc);
+                pairs.add(new Pair(x, locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1))));
+            }
+            pairs.add(new Pair(locations.size() - 1, locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
+            int total = 0;
+            for(Pair p : pairs) {
+                total += p.getDistance();
+            }
+            //System.out.println("[" + i + "]: " + total);
+            if(total < bestDistance) {
+                bestDistance = total;
+                bestPairs = new ArrayList<>(pairs);
+            }
+            pairs.clear();
+            locations = new ArrayList<>(originalLocations);
+            Location temp = locations.remove(0);
+            locations.add(temp);
+        }
+        pairs = new ArrayList<>(bestPairs);
         return true;
     }
 
