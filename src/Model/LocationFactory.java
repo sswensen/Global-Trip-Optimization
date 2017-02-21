@@ -1,22 +1,20 @@
 package Model;
 
-/**
+/*
  * Created by SummitDrift on 2/13/17.
+ * Factory for creation of locations and pairs
  */
 
-import Model.Location;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-public class LocationFactory {
-    private static final char DEFAULT_SEPARATOR = ',';
-    private static final char DEFAULT_QUOTE = '\"';
-    ArrayList<Location> locations = new ArrayList<Location>();
-    ArrayList<Pair> pairs = new ArrayList<>();
+class LocationFactory {
+    //private static final char DEFAULT_SEPARATOR = ',';
+    //private static final char DEFAULT_QUOTE = '\"';
+    private ArrayList<Location> locations = new ArrayList<Location>();
+    private ArrayList<Pair> pairs = new ArrayList<>();
 
     boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
@@ -49,10 +47,7 @@ public class LocationFactory {
             locations.add(temp);
         }
         scan.close();
-        if(locations.size() > 0)
-            return true;
-        else
-            return false;
+        return locations.size() > 0;
     }
 
     boolean secondTry() {
@@ -75,6 +70,7 @@ public class LocationFactory {
         return true;
     }
 
+    /*
     boolean findNearest() {
         boolean ret = false;
         double distance;
@@ -120,10 +116,7 @@ public class LocationFactory {
         }
         return ret;
     }
-
-    boolean makePairs() {
-        return true;
-    }
+    */
 
     ArrayList<Location> getLocations() {
         return locations;
@@ -133,6 +126,7 @@ public class LocationFactory {
         return pairs;
     }
 
+    /*
     private static List<String> parseLine(String cvsLine) {
         return LocationFactory.parseLine(cvsLine, ',', '\"');
     }
@@ -199,4 +193,5 @@ public class LocationFactory {
 
     public static void main(String[] args) throws Exception {
     }
+    */
 }

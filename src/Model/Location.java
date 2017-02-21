@@ -1,7 +1,8 @@
 package Model;
 
-/**
+/*
  * Created by SummitDrift on 2/13/17.
+ * Class for holding information on a single location
  */
 
 public class Location {
@@ -20,7 +21,7 @@ public class Location {
     }
 
     private static double convertCoordinates(String in) {
-        double ret = -1;
+        double ret;
         int deg = in.indexOf('\u00b0');
         int pr = in.indexOf('\'');
         int dpr = in.indexOf('\"');
@@ -36,11 +37,9 @@ public class Location {
             double m = Double.parseDouble(in.substring(deg + 1, pr));
             ret = d + (m / 60);
         } else if(deg > -1 && pr < 0 && dpr < 0) {
-            double d = Double.parseDouble(in.substring(0, deg));
-            ret = d;
+            ret = Double.parseDouble(in.substring(0, deg));
         } else {
-            double d = Double.parseDouble(in);
-            ret = d;
+            ret = Double.parseDouble(in);
         }
         switch (card) {
             case "N":
@@ -56,7 +55,7 @@ public class Location {
         return ret;
     }
 
-    public double distance(Location in) {
+    double distance(Location in) {
         String unit = "M";
         double lat1 = this.lat;
         double lon1 = this.lon;
@@ -67,9 +66,9 @@ public class Location {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-        if (unit == "K") {
+        if (unit.equals("K")) {
             dist = dist * 1.609344;
-        } else if (unit == "N") {
+        } else if (unit.equals("N")) {
             dist = dist * 0.8684;
         }
         return (dist);
@@ -97,43 +96,35 @@ public class Location {
         this.id = id;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
-    public double getLat() {
+    double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLon() {
+    double getLon() {
         return lon;
     }
 
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public int getNearest() {
+    int getNearest() {
         return nearest;
     }
 
-    public void setNearest(int nearest) {
+    void setNearest(int nearest) {
         this.nearest = nearest;
     }
 
-    public int getNearestDistance() {
+    int getNearestDistance() {
         return nearestDistance;
     }
 
-    public void setNearestDistance(int nearestDistance) {
+    void setNearestDistance(int nearestDistance) {
         this.nearestDistance = nearestDistance;
     }
 

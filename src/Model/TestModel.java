@@ -5,14 +5,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
+/*
  * Created by SummitDrift on 2/13/17.
+ * Testing file for Model.java
  */
 public class TestModel {
     @Before
     public void initialize() {
     }
-    Model m = new Model();
+    private Model m = new Model();
 
     @Test
     public void planTrip() throws Exception {

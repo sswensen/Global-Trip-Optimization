@@ -1,6 +1,6 @@
 package Model;
 
-/**
+/*
  * Created by SummitDrift on 2/17/17.
  */
 public class Pair {
@@ -9,35 +9,23 @@ public class Pair {
     private double distance;
     private int id;
 
-    public Pair(int id, Location one, Location two, double distance) {
+    Pair(int id, Location one, Location two, double distance) {
         this.id = id;
         this.one = one;
         this.two = two;
         this.distance = distance;
     }
 
-    public Location getOne() {
+    Location getOne() {
         return one;
     }
 
-    public void setOne(Location one) {
-        this.one = one;
-    }
-
-    public Location getTwo() {
+    Location getTwo() {
         return two;
     }
 
-    public void setTwo(Location two) {
-        this.two = two;
-    }
-
-    public double getDistance() {
+    double getDistance() {
         return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
     }
 
     public int getId() {

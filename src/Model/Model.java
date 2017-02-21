@@ -5,16 +5,17 @@ import java.util.ArrayList;
 
 /**
  * Created by SummitDrift on 2/13/17.
+ * Main class for Model Package
  */
 public class Model {
-    private ArrayList<Location> locations;
+    //private ArrayList<Location> locations;
     private ArrayList<Pair> pairs;
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
         lf.readFile(filename);
         //lf.findNearest();
         lf.secondTry();
-        locations = lf.getLocations();
+        //locations = lf.getLocations();
         pairs = lf.getPairs();
         return 1;
     }
@@ -81,8 +82,8 @@ public class Model {
 
     public int getTripDistance() {
         int ret = 0;
-        for(int i = 0; i < pairs.size(); i++) {
-            ret += pairs.get(i).getDistance();
+        for(Pair p : pairs) {
+            ret += p.getDistance();
         }
         return ret;
     }
