@@ -96,13 +96,13 @@ class LocationFactory {
                 pairs.add(new Pair(x, locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1))));
             }
             pairs.add(new Pair(locations.size() - 1, locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
-            int total = 0;
+            double total = 0;
             for(Pair p : pairs) {
                 total += p.getDistance();
             }
             //System.out.println("[" + i + "]: " + total);
             if(total < bestDistance) {
-                bestDistance = total;
+                bestDistance = Math.round(total);
                 bestPairs = new ArrayList<>(pairs);
             }
             pairs.clear();
