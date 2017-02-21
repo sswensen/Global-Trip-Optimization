@@ -53,10 +53,10 @@ public class View {
     public void incLabelId(){
 	    labelID++;
     }
-	private double convertXCoordinates(double x){
+	private double convertLongitudeCoordinates(double x){
 		double xPixels = 1180; //Width of colorado map
-		double startX = 41;
-		double endX = 37;
+		double startX = -109;
+		double endX = -102;
 		//Convert to SVG 'x' coordinate
 		double strideX = endX - startX;
 		double relativeX = (x - startX);
@@ -64,10 +64,10 @@ public class View {
 		return (realX + 50);
 	}
 
-	private double convertYCoordinates(double y){
+	private double convertLatitudeCoordinates(double y){
 		double yPixels = 758; //Height of colorado map
-		double startY = -109;
-		double endY = -102;
+		double startY = 41;
+		double endY = 37;
 		//Convert to SVG 'y' coordinate
 		double strideY = endY - startY;
 		double relativeY = (y - startY);
@@ -124,10 +124,10 @@ public class View {
 	public void addLine(double x1, double y1, double x2, double y2, int id){
 		Element line = SVGdoc.createElement("line");
 		line.setAttribute( "id", ("leg" + id));
-		line.setAttribute( "x1", Double.toString(convertXCoordinates(x1)));
-		line.setAttribute( "y1", Double.toString(convertYCoordinates(y1)));
-		line.setAttribute( "x2", Double.toString(convertXCoordinates(x2)));
-		line.setAttribute( "y2", Double.toString(convertYCoordinates(y2)));
+		line.setAttribute( "x1", Double.toString(convertLongitudeCoordinates(x1)));
+		line.setAttribute( "y1", Double.toString(convertLatitudeCoordinates(y1)));
+		line.setAttribute( "x2", Double.toString(convertLongitudeCoordinates(y2)));
+		line.setAttribute( "y2", Double.toString(convertLatitudeCoordinates(x2)));
 		line.setAttribute( "stroke-width", "3");
 		line.setAttribute("stroke", "#999999");
 		SVGdoc.getDocumentElement().appendChild(line);
@@ -138,19 +138,19 @@ public class View {
 		distance.setAttribute("font-family", "Sans-serif");
 		distance.setAttribute("font-size", "16");
 		distance.setAttribute("id", ("leg" + id));
-		distance.setAttribute("x", Double.toString((convertXCoordinates(x1) + convertXCoordinates(x2))/2));
-		distance.setAttribute("y", Double.toString((convertYCoordinates(y1) + convertYCoordinates(y2))/2));
+		distance.setAttribute("x", Double.toString((convertLongitudeCoordinates(x1) + convertLongitudeCoordinates(x2))/2));
+		distance.setAttribute("y", Double.toString((convertLatitudeCoordinates(y1) + convertLatitudeCoordinates(y2))/2));
 		distance.setTextContent(Integer.toString(distanceBetween));
 		SVGdoc.getDocumentElement().appendChild(distance);
 	}
-	public void addLabel(double x, double y, String city){
+	public void addLabel(double longitude, double latitude, String city){
 		Element label = SVGdoc.createElement("text");
 		label.setAttribute("font-family", "Sans-serif");
 		label.setAttribute("font-size", "16");
 		label.setAttribute("id", "id" + labelID);
 		labelID++;
-		label.setAttribute("x", Double.toString(convertXCoordinates(x)));
-		label.setAttribute("y", Double.toString(convertYCoordinates(y)));
+		label.setAttribute("x", Double.toString(convertLongitudeCoordinates(longitude)));
+		label.setAttribute("y", Double.toString(convertLatitudeCoordinates(latitude)));
 		label.setTextContent(city);
 		SVGdoc.getDocumentElement().appendChild(label);
 	}
@@ -255,11 +255,7 @@ public class View {
         map.addBorders();
         map.addHeader("Colorado");
         map.addFooter(9999);
-        map.addLabel(37,-102, "1");
-        map.addLabel(39.1875,-106.4756, "2");
-        map.addLabel(38.9243,-106.3208, "3");
-        map.addLabel(37.5774,-105.4857, "4");
-        map.addLabel(39.0294,-106.4729, "5");
+        map.addLabel(-108.60,37.34, "Montezuma");
         map.finalizeTrip();
 	}
 }
