@@ -3,8 +3,6 @@
  */
 
 import Model.*;
-import Presenter.*;
-import View.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -12,7 +10,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
-        TestModel.class, TestLocationFactory.class, TestLocation.class, TestPresenter.class, TestView.class, TestPair.class, TestTripCo.class
+        TestModel.class, TestLocationFactory.class, TestLocation.class
 })
 
 public class JunitTestSuite {

@@ -24,31 +24,31 @@ public class TestModel {
     @Test
     public void getFirstLon() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(-106.96472222222222, m.getFirstLon(0), 0);
+        assertEquals(-106.79305555555555, m.getFirstLon(0), 0);
     }
 
     @Test
     public void getFirstLat() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(38.89888888888889, m.getFirstLat(0), 0);
+        assertEquals(37.47222222222222, m.getFirstLat(0), 0);
     }
 
     @Test
     public void getSecondLon() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(-106.82944444444443, m.getSecondLon(0), 0);
+        assertEquals(-107.66722222222222, m.getSecondLon(0), 0);
     }
 
     @Test
     public void getSecondLat() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(39.19194444444444, m.getSecondLat(0), 0);
+        assertEquals(37.88361111111111, m.getSecondLat(0), 0);
     }
 
     @Test
     public void getPairDistance() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(21, m.getPairDistance(0));
+        assertEquals(55, m.getPairDistance(0));
     }
 
     @Test
@@ -66,18 +66,18 @@ public class TestModel {
     @Test
     public void getFirstName() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals("Crested Butte", m.getFirstName(0));
+        assertEquals("Wolf Creek", m.getFirstName(0));
     }
 
     @Test
     public void getSecondName() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals("Aspen mountain", m.getSecondName(0));
+        assertEquals("Silverton", m.getSecondName(0));
     }
 
     @Test
     public void getTripDistance() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(661, m.getTripDistance());
+        assertEquals(743, m.getTripDistance());
     }
 }
