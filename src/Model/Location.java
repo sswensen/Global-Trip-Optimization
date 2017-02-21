@@ -44,11 +44,11 @@ public class Location {
         }
         switch (card) {
             case "N":
-            case "W":
+            case "E":
                 //do shit
                 break;
             case "S":
-            case "E":
+            case "W":
                 ret *= -1;
                 break;
         }
