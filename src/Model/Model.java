@@ -14,21 +14,21 @@ public class Model {
         LocationFactory lf = new LocationFactory();
         lf.readFile(filename);
         //lf.findNearest();
-        lf.secondTry();
+        lf.thirdTry();
         //locations = lf.getLocations();
         pairs = lf.getPairs();
         return 1;
     }
 
-    /*public int getLegStartLocation(int a) {
-        return pairs.get(a).getOne().getId();
+    public String getLegStartLocation() {
+        return pairs.get(0).getOne().getName();
     }
 
-    public int getLegFinishLocation(int a) {
-        return pairs.get(a).getTwo().getId();
+    public String getLegFinishLocation() {
+        return pairs.get(pairs.size()-1).getTwo().getName();
     }
 
-    public int getLegDistance(Object o) {
+    /*public int getLegDistance(Object o) {
         return -1;
     }
 
