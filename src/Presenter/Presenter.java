@@ -10,17 +10,34 @@ public class Presenter
 {
     private Model model;
     private View view;
+    private boolean displayMileage;
+    private boolean displayId;
+    private boolean displayName;
 
     public Presenter(Model model, View view)
     {
         this.model = model;
         this.view = view;
+        this.displayMileage = false;
+        this.displayId = false;
+        this.displayName = false;
     }
 
-    public View getView()
+    public void setDisplayMileage(boolean x)
     {
-        return view;
+        displayMileage = x;
     }
+
+    public void setDisplayId(boolean x)
+    {
+        displayId = x;
+    }
+
+    public void setDisplayName(boolean x)
+    {
+        displayName = x;
+    }
+
 
     public void init(String filename) throws FileNotFoundException, ParserConfigurationException, TransformerException
     {
@@ -42,9 +59,15 @@ public class Presenter
             String secondName = model.getSecondName(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
             view.addLine(firstLat, firstLon, secondLat, secondLon, pairId);
-            view.addLabel(firstLat, firstLon, firstName);
-            view.addLabel(secondLat, secondLon, secondName);
-            view.addDistance(firstLat, firstLon, secondLat, secondLon, pairDistance, pairId);
+            if(displayName)
+            {
+                view.addLabel(firstLat, firstLon, firstName);
+                view.addLabel(secondLat, secondLon, secondName);
+            }
+            if(displayMileage)
+            {
+                view.addDistance(firstLat, firstLon, secondLat, secondLon, pairDistance, pairId);
+            }
         }
         view.finalizeTrip();
     }
