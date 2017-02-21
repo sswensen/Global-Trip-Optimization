@@ -54,6 +54,6 @@ public class TripCo
             }
         }
 
-        presenter.init(filename);
+        presenter.planTrip(filename);
     }
 }
