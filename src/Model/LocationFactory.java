@@ -102,7 +102,7 @@ class LocationFactory {
             }
             //System.out.println("[" + i + "]: " + total);
             if(total < bestDistance) {
-                bestDistance = Math.round(total);
+                bestDistance = (int)Math.round(total);
                 bestPairs = new ArrayList<>(pairs);
             }
             pairs.clear();
