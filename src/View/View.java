@@ -249,7 +249,31 @@ public class View {
 		//System.out.println("svg file saved!");
 		transformer.transform(source2, result2);
 	}
-	
+
+	public Document getXMLdoc() {
+		return XMLdoc;
+	}
+
+	public void setXMLdoc(Document XMLdoc) {
+		this.XMLdoc = XMLdoc;
+	}
+
+	public Document getSVGdoc() {
+		return SVGdoc;
+	}
+
+	public void setSVGdoc(Document SVGdoc) {
+		this.SVGdoc = SVGdoc;
+	}
+
+	public int getLabelID() {
+		return labelID;
+	}
+
+	public void setLabelID(int labelID) {
+		this.labelID = labelID;
+	}
+
 	public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
 		View map = new View();
         map.initializeTrip();
