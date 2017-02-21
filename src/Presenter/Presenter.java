@@ -38,8 +38,22 @@ public class Presenter
         displayName = x;
     }
 
+    public boolean getDisplayMileage()
+    {
+        return displayMileage;
+    }
 
-    public void init(String filename) throws FileNotFoundException, ParserConfigurationException, TransformerException
+    public boolean getDisplayId()
+    {
+        return displayId;
+    }
+
+    public boolean getDisplayName()
+    {
+        return displayName;
+    }
+
+    public void planTrip(String filename) throws FileNotFoundException, ParserConfigurationException, TransformerException
     {
         view.initializeTrip();
         model.planTrip(filename);

@@ -7,12 +7,7 @@ import java.io.FileNotFoundException;
 
 public class TripCo
 {
-    public static String printTest(String in)
-    {
-        return in;
-    }
-
-    public static void displayOptions(String option, Presenter presenter)
+    private static void displayOptions(String option, Presenter presenter)
     {
         switch(option)
         {
@@ -54,6 +49,6 @@ public class TripCo
             }
         }
 
-        presenter.init(filename);
+        presenter.planTrip(filename);
     }
 }
