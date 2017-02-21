@@ -47,6 +47,7 @@ public class Presenter
         view.addBorders();
         view.addHeader("Colorado");
         view.addFooter(model.getTripDistance());
+        int finalPairID = 0;
         for(int i = 0; i < numPairs; i++)
         {
             double firstLon = model.getFirstLon(i);
@@ -60,6 +61,7 @@ public class Presenter
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
+            finalPairID++;
             view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
             if(displayName)
             {
@@ -76,6 +78,7 @@ public class Presenter
                 view.addIDLabel(secondLon, secondLat, secondId);
             }
         }
+        view.addFinalLeg(finalPairID, model.getLegStartLocation(), model.getLegFinishLocation(),model.getTripDistance());
         view.finalizeTrip();
     }
 
