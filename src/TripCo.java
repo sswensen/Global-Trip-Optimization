@@ -19,11 +19,6 @@ public class TripCo
         Model model = new Model();
         View view = new View();
         Presenter presenter = new Presenter(model, view);
-        presenter.getView().initializeTrip();
-        presenter.getView().addBorders();
-        presenter.getView().addHeader("Colorado");
-        presenter.getView().addFooter(9999);
         presenter.init(filename);
-        presenter.getView().finalizeTrip();
     }
 }
