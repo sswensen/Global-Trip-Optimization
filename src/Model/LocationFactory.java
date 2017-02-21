@@ -9,13 +9,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Stack;
 
 class LocationFactory {
     //private static final char DEFAULT_SEPARATOR = ',';
     //private static final char DEFAULT_QUOTE = '\"';
     private ArrayList<Location> locations = new ArrayList<Location>();
-    private ArrayList<Location> originalLocations;
     private ArrayList<Pair> pairs = new ArrayList<>();
     private ArrayList<Pair> bestPairs = new ArrayList<>();
 
@@ -78,6 +76,7 @@ class LocationFactory {
     boolean thirdTry() {
         int bestDistance = 999999999;
         int sizer = locations.size();
+        ArrayList<Location> originalLocations;
         for(int i = 0; i < sizer; i++) {
             originalLocations = new ArrayList<>(locations);
             for (int x = 0; x < locations.size() - 1; x++) {
