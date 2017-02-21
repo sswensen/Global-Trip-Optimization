@@ -23,37 +23,37 @@ public class TestModel {
     @Test
     public void getFirstLon() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(37.88361111111111, m.getFirstLon(0), 0);
+        assertEquals(-106.79305555555555, m.getFirstLon(0), 0);
     }
 
     @Test
     public void getFirstLat() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(107.66722222222222, m.getFirstLat(0), 0);
+        assertEquals(37.47222222222222, m.getFirstLat(0), 0);
     }
 
     @Test
     public void getSecondLon() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(37.47222222222222, m.getSecondLon(0), 0);
+        assertEquals(-107.66722222222222, m.getSecondLon(0), 0);
     }
 
     @Test
     public void getSecondLat() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(106.79305555555555, m.getSecondLat(0), 0);
+        assertEquals(37.88361111111111, m.getSecondLat(0), 0);
     }
 
     @Test
     public void getPairDistance() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(56, m.getPairDistance(0));
+        assertEquals(55, m.getPairDistance(0));
     }
 
     @Test
     public void getPairId() throws Exception {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
-        assertEquals(1, m.getPairId(0));
+        assertEquals(0, m.getPairId(0));
     }
 
     @Test

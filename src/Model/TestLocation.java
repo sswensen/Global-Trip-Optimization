@@ -48,7 +48,7 @@ public class TestLocation {
 
     @Test
     public void getLon() throws Exception {
-        assertEquals(106.79305555555555, one.getLon(), 0);
+        assertEquals(-106.79305555555555, one.getLon(), 0);
     }
 
     @Test
