@@ -56,7 +56,7 @@ public class Presenter
             int pairDistance = model.getPairDistance(i);
             int pairId = model.getPairId(i);
             int firstId = model.getFirstId(i);
-            int secondId = model.getSecondId(i)
+            int secondId = model.getSecondId(i);
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
@@ -72,8 +72,8 @@ public class Presenter
             }
             if(displayId)
             {
-                view.addIDLabel(firstLon, firstLat, getFirstId);
-                view.addIDLabel(secondLon, secondLat, getSecondId);
+                view.addIDLabel(firstLon, firstLat, firstId);
+                view.addIDLabel(secondLon, secondLat, secondId);
             }
         }
         view.finalizeTrip();
