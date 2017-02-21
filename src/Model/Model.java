@@ -87,4 +87,12 @@ public class Model {
         }
         return ret;
     }
+
+    public int getFirstId(int i) {
+        return pairs.get(i).getOne().getId();
+    }
+
+    public int getSecondId(int i) {
+        return pairs.get(i).getTwo().getId();
+    }
 }
