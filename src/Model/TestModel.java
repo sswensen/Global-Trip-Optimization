@@ -61,4 +61,22 @@ public class TestModel {
         m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
         assertEquals(16, m.getNumPairs());
     }
+
+    @Test
+    public void getFirstName() throws Exception {
+        m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
+        assertEquals("Wolf Creek", m.getFirstName(0));
+    }
+
+    @Test
+    public void getSecondName() throws Exception {
+        m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
+        assertEquals("Silverton", m.getSecondName(0));
+    }
+
+    @Test
+    public void getTripDistance() throws Exception {
+        m.planTrip("./src/Testing/ColoradoSkiResorts.csv");
+        assertEquals(743, m.getTripDistance());
+    }
 }

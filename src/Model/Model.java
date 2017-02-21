@@ -29,7 +29,7 @@ public class Model {
 
     public int getLegDistance(Object o) {
         return -1;
-    }*/
+    }
 
     public int getLocationID(int index) {
         return locations.get(index).getId();
@@ -41,7 +41,7 @@ public class Model {
 
     public double getLocationLongitude(int index) {
         return locations.get(index).getLon();
-    }
+    }*/
 
     public double getFirstLon(int i) {
         return pairs.get(i).getOne().getLon();
