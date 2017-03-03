@@ -91,33 +91,10 @@ public class View {
 		leg.appendChild(mileageElement);
 	}
 	public void addFinalLeg(int id, String start, String finish, int totalMileage) {
-		//Condendes original addFinalLeg
+		//Condenses original addFinalLeg
 		addLeg(id, start, finish, totalMileage);
 	}
-	/*public void addFinalLeg(int id, String start, String finish, int totalMileage){
-		Element leg = XMLdoc.createElement("leg");
-		XMLdoc.getDocumentElement().appendChild(leg);
 
-		//Sequence element
-		Element sequenceElement = XMLdoc.createElement("sequence");
-		sequenceElement.appendChild(XMLdoc.createTextNode(Integer.toString(id)));
-		leg.appendChild(sequenceElement);
-
-		//Start element
-		Element startElement = XMLdoc.createElement("start");
-		startElement.appendChild(XMLdoc.createTextNode(start));
-		leg.appendChild(startElement);
-
-		//finish element
-		Element finishElement = XMLdoc.createElement("finish");
-		finishElement.appendChild(XMLdoc.createTextNode(finish));
-		leg.appendChild(finishElement);
-
-		//mileage element
-		Element mileageElement = XMLdoc.createElement("mileage");
-		mileageElement.appendChild(XMLdoc.createTextNode(Integer.toString(totalMileage)));
-		leg.appendChild(mileageElement);
-	}*/
 	public void addLine(double x1, double y1, double x2, double y2, int id){
 		Element line = SVGdoc.createElement("line");
 		line.setAttribute( "id", ("leg" + id));
