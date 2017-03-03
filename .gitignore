@@ -1,7 +1,10 @@
 .*
 !/.gitignore
 out/*
+target/*
 DTR-07.iml
 tripco.ipr
 tripco.iws
 tripco.iml
+*.svg
+*.xml

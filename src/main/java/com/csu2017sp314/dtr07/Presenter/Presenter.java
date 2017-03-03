@@ -94,7 +94,7 @@ public class Presenter
             }
         }
         view.addFinalLeg(finalPairID, model.getLegStartLocation(), model.getLegFinishLocation(),model.getTripDistance());
-        view.finalizeTrip();
+        view.finalizeTrip(filename);
     }
 
     public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, TransformerException
