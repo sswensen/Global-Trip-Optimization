@@ -232,20 +232,21 @@ public class View {
 		SVGdoc.getDocumentElement().appendChild(westBorder);
 	}
 
-	public void finalizeTrip() throws TransformerException{
+	public void finalizeTrip(String filename) throws TransformerException{
 
 		TransformerFactory transformerFactory = TransformerFactory.newInstance();
 		Transformer transformer = transformerFactory.newTransformer();
-
+		String[] cut = filename.split("/");
+		filename = cut[cut.length-1].substring(0, cut[cut.length-1].length()-4);
 		//XML document
 		DOMSource source = new DOMSource(XMLdoc);
-		StreamResult result = new StreamResult(new File("trip.xml"));
+		StreamResult result = new StreamResult(new File(filename + ".xml"));
 		//System.out.println("xml file saved!");
 		transformer.transform(source, result);
 
         //SVG document
 		DOMSource source2 = new DOMSource(SVGdoc);
-		StreamResult result2 = new StreamResult(new File("trip.svg"));
+		StreamResult result2 = new StreamResult(new File(filename + ".svg"));
 		//System.out.println("svg file saved!");
 		transformer.transform(source2, result2);
 	}
@@ -282,6 +283,6 @@ public class View {
         System.out.println(map.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
 		map.addBorders();
         //map.addLabel(-108.60,37.34, "Montezuma");
-        map.finalizeTrip();
+        map.finalizeTrip("./src/test/resources/Testing/ColoradoCountySeats.csv");
 	}
 }
