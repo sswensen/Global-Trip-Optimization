@@ -2,7 +2,6 @@
 !/.gitignore
 out/*
 target/*
-target
 DTR-07.iml
 tripco.ipr
 tripco.iws
