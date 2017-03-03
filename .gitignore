@@ -2,3 +2,6 @@
 !/.gitignore
 out/*
 DTR-07.iml
+tripco.ipr
+trip.iws
+tripco.iml
