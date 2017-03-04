@@ -70,9 +70,9 @@ public class Presenter
             double secondLon = model.getSecondLon(i);
             double secondLat = model.getSecondLat(i);
             int pairDistance = model.getPairDistance(i);
-            int pairId = model.getPairId(i);
-            int firstId = model.getFirstId(i);
-            int secondId = model.getSecondId(i);
+            String pairId = model.getPairId(i);
+            String firstId = model.getFirstId(i);
+            String secondId = model.getSecondId(i);
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
@@ -93,7 +93,7 @@ public class Presenter
                 view.addIDLabel(secondLon, secondLat, secondId);
             }
         }
-        view.addFinalLeg(finalPairID, model.getLegStartLocation(), model.getLegFinishLocation(),model.getTripDistance());
+        view.addFinalLeg(Integer.toString(finalPairID), model.getLegStartLocation(), model.getLegFinishLocation(),model.getTripDistance());
         view.finalizeTrip(filename);
     }
 

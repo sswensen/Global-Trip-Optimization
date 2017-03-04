@@ -25,7 +25,7 @@ public class TestLocationFactory {
             lf.thirdTry();
             ArrayList<Location> result = lf.getLocations();
             //ArrayList<Pair> pairs = lf.getPairs();
-            Location one = new Location(1,"Wolf Creek", "37°28'20\" N", "106°47'35\" W");
+            Location one = new Location("1","Wolf Creek", "37°28'20\" N", "106°47'35\" W");
             Assert.assertTrue(one.equals(result.get(0)));
         }
         catch (FileNotFoundException a) {

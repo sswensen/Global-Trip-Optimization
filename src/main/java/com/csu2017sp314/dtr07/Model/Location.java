@@ -6,14 +6,14 @@ package com.csu2017sp314.dtr07.Model;
  */
 
 public class Location {
-    private int id;
+    private String id;
     private String name;
     private double lat;
     private double lon;
     private int nearest = -1;
     private int nearestDistance = 9999999;
 
-    Location(int id, String name, String lat, String lon) {
+    Location(String id, String name, String lat, String lon) {
         this.id = id;
         this.name = name;
         this.lat = convertCoordinates(lat);
@@ -88,11 +88,11 @@ public class Location {
         return (rad * 180 / Math.PI);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

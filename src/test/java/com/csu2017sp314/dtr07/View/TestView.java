@@ -20,50 +20,50 @@ public class TestView {
     @Test
     public void initializeTrip() throws Exception {
         v.initializeTrip();
-        v.addLeg(1,"denver","fort collins", 9999);
+        v.addLeg("1","denver","fort collins", 9999);
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
+        one.addLeg("1","denver","fort collins", 9999);
         assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
 
     @Test
     public void addLeg() throws Exception {
         v.initializeTrip();
-        v.addLeg(1,"denver","fort collins", 9999);
+        v.addLeg("1","denver","fort collins", 9999);
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
+        one.addLeg("1","denver","fort collins", 9999);
         assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
 
     @Test
     public void addFinalLeg() throws Exception {
         v.initializeTrip();
-        v.addLeg(1,"denver","fort collins", 9999);
+        v.addLeg("1","denver","fort collins", 9999);
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
+        one.addLeg("1","denver","fort collins", 9999);
         assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
 
     @Test
     public void addLine() throws Exception {
         v.initializeTrip();
-        v.addLine(-109,41,-102,37,1);
+        v.addLine(-109,41,-102,37,"1");
         View one = new View();
         one.initializeTrip();
-        one.addLine(-109,41,-102,37,1);
+        one.addLine(-109,41,-102,37,"1");
         assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
     @Test
     public void addDistance() throws Exception {
         v.initializeTrip();
-        v.addDistance(-109,41,-102,37,1, 2);
+        v.addDistance(-109,41,-102,37,1, "2");
         View one = new View();
         one.initializeTrip();
-        one.addDistance(-109,41,-102,37,1, 2);
+        one.addDistance(-109,41,-102,37,1, "2");
         assertEquals(one.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), v.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
 
@@ -120,10 +120,10 @@ public class TestView {
     @Test
     public void finalizeTrip() throws Exception {
         v.initializeTrip();
-        v.addLeg(1,"denver","fort collins", 9999);
+        v.addLeg("1","denver","fort collins", 9999);
         View one = new View();
         one.initializeTrip();
-        one.addLeg(1,"denver","fort collins", 9999);
+        one.addLeg("1","denver","fort collins", 9999);
         assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
 
