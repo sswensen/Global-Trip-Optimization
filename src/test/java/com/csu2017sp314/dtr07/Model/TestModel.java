@@ -54,7 +54,7 @@ public class TestModel {
     @Test
     public void getPairId() throws Exception {
         m.planTrip("./src/test/resources/Testing/ColoradoSkiResorts.csv");
-        assertEquals(0, m.getPairId(0));
+        assertEquals("0", m.getPairId(0));
     }
 
     @Test

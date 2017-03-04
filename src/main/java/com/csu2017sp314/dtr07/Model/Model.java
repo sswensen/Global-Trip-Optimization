@@ -64,7 +64,7 @@ public class Model {
         return (int) pairs.get(i).getDistance();
     }
 
-    public int getPairId(int i) {
+    public String getPairId(int i) {
         return pairs.get(i).getId();
     }
 
@@ -88,11 +88,11 @@ public class Model {
         return ret;
     }
 
-    public int getFirstId(int i) {
+    public String getFirstId(int i) {
         return pairs.get(i).getOne().getId();
     }
 
-    public int getSecondId(int i) {
+    public String getSecondId(int i) {
         return pairs.get(i).getTwo().getId();
     }
 }

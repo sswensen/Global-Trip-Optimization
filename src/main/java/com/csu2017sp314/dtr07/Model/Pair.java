@@ -7,9 +7,9 @@ public class Pair {
     private Location one;
     private Location two;
     private double distance;
-    private int id;
+    private String id;
 
-    Pair(int id, Location one, Location two, double distance) {
+    Pair(String id, Location one, Location two, double distance) {
         this.id = id;
         this.one = one;
         this.two = two;
@@ -28,11 +28,11 @@ public class Pair {
         return distance;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

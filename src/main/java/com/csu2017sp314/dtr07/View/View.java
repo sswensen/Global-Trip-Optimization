@@ -65,14 +65,14 @@ public class View {
 		return (realY + 174.8571429);
 	}
 
-	public void addLeg(int id, String start, String finish, int mileage){
+	public void addLeg(String id, String start, String finish, int mileage){
 		//leg grouping
 		Element leg = XMLdoc.createElement("leg");
 		XMLdoc.getDocumentElement().appendChild(leg);
 		
 		//Sequence element
 		Element sequenceElement = XMLdoc.createElement("sequence");
-		sequenceElement.appendChild(XMLdoc.createTextNode(Integer.toString(id)));
+		sequenceElement.appendChild(XMLdoc.createTextNode(id));
 		leg.appendChild(sequenceElement);
 		
 		//Start element
@@ -90,12 +90,12 @@ public class View {
 		mileageElement.appendChild(XMLdoc.createTextNode(Integer.toString(mileage)));
 		leg.appendChild(mileageElement);
 	}
-	public void addFinalLeg(int id, String start, String finish, int totalMileage) {
+	public void addFinalLeg(String id, String start, String finish, int totalMileage) {
 		//Condenses original addFinalLeg
 		addLeg(id, start, finish, totalMileage);
 	}
 
-	public void addLine(double x1, double y1, double x2, double y2, int id){
+	public void addLine(double x1, double y1, double x2, double y2, String id){
 		Element line = SVGdoc.createElement("line");
 		line.setAttribute( "id", ("leg" + id));
 		line.setAttribute( "x1", Double.toString(convertLongitudeCoordinates(x1)));
@@ -107,7 +107,7 @@ public class View {
 		SVGdoc.getDocumentElement().appendChild(line);
 	}
 
-	public void addDistance(double x1, double y1, double x2, double y2, int distanceBetween, int id){
+	public void addDistance(double x1, double y1, double x2, double y2, int distanceBetween, String id){
 		Element distance = SVGdoc.createElement("text");
 		distance.setAttribute("font-family", "Sans-serif");
 		distance.setAttribute("font-size", "16");
@@ -128,7 +128,7 @@ public class View {
 		label.setTextContent(city);
 		SVGdoc.getDocumentElement().appendChild(label);
 	}
-	public void addIDLabel(double longitude, double latitude, int id){
+	public void addIDLabel(double longitude, double latitude, String id){
 		Element IDLabel = SVGdoc.createElement("text");
 		IDLabel.setAttribute("font-family", "Sans-serif");
 		IDLabel.setAttribute("font-size", "16");
@@ -136,7 +136,7 @@ public class View {
 		labelID++;
 		IDLabel.setAttribute("x", Double.toString(convertLongitudeCoordinates(longitude)));
 		IDLabel.setAttribute("y", Double.toString(convertLatitudeCoordinates(latitude)));
-		IDLabel.setTextContent(Integer.toString(id));
+		IDLabel.setTextContent(id);
 		SVGdoc.getDocumentElement().appendChild(IDLabel);
 	}
 	public void addHeader(String title){
@@ -258,8 +258,8 @@ public class View {
 	public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
 		View map = new View();
         map.initializeTrip();
-        map.addLeg(1, "Sandeep","Denver",9999);
-        map.addLine(-109,41,-102,37,1);
+        map.addLeg("1", "Sandeep","Denver",9999);
+        map.addLine(-109,41,-102,37,"1");
         System.out.println(map.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
 		map.addBorders();
         //map.addLabel(-108.60,37.34, "Montezuma");

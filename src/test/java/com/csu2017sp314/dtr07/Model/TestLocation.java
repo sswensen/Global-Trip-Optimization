@@ -13,17 +13,17 @@ public class TestLocation {
     @Before
     public void initialize() {
     }
-    private Location one = new Location(0, "A", "37°28'20\"N","106°47'35\"W");
+    private Location one = new Location("0", "A", "37°28'20\"N","106°47'35\"W");
 
     @Test
     public void getId() throws Exception {
-        assertEquals(0, one.getId());
+        assertEquals("0", one.getId());
     }
 
     @Test
     public void setId() throws Exception {
-        one.setId(1);
-        assertEquals(1, one.getId());
+        one.setId("1");
+        assertEquals("1", one.getId());
     }
 
     @Test

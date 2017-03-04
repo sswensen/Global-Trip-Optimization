@@ -44,7 +44,7 @@ class LocationFactory {
         while (scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
             //System.out.println("[id= " + line[0] + ", name= " + line[1] + " , city=" + line[2] + " , lat=" + line[3] + " , lon=" + line[4] + " , alt=" + line[5] + "]");
-            Location temp = new Location(Integer.parseInt(line[id]), line[name], line[latitude].replaceAll("\\s+",""), line[longitude].replaceAll("\\s+",""));
+            Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+",""), line[longitude].replaceAll("\\s+",""));
             locations.add(temp);
         }
         scan.close();
@@ -92,9 +92,9 @@ class LocationFactory {
                 Location temploc = locations.get(x + 1);
                 locations.set(x + 1, locations.get(index));
                 locations.set(index, temploc);
-                pairs.add(new Pair(x, locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1))));
+                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1))));
             }
-            pairs.add(new Pair(locations.size() - 1, locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
+            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
             double total = 0;
             for(Pair p : pairs) {
                 total += p.getDistance();
