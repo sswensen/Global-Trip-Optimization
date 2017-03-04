@@ -135,9 +135,11 @@ public class Location {
 
         Location location = (Location) o;
 
-        if (!id.equals(location.id)) return false;
         if (Double.compare(location.lat, lat) != 0) return false;
         if (Double.compare(location.lon, lon) != 0) return false;
+        if (nearest != location.nearest) return false;
+        if (nearestDistance != location.nearestDistance) return false;
+        if (id != null ? !id.equals(location.id) : location.id != null) return false;
         return name != null ? name.equals(location.name) : location.name == null;
     }
 
