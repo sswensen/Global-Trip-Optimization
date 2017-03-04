@@ -17,13 +17,13 @@ public class TestLocation {
 
     @Test
     public void getId() throws Exception {
-        assertEquals(0, one.getId());
+        assertEquals("0", one.getId());
     }
 
     @Test
     public void setId() throws Exception {
         one.setId("1");
-        assertEquals(1, one.getId());
+        assertEquals("1", one.getId());
     }
 
     @Test
