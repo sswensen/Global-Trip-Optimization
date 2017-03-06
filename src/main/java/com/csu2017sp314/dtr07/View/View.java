@@ -55,7 +55,7 @@ public class View {
 		double strideX = endX - startX;
 		double relativeX = (x - startX);
 		double realX = relativeX * (xPixels / strideX);
-		return (realX + 50);
+		return (realX + 34.72952);
 	}
 
 	private double convertLatitudeCoordinates(double y){
@@ -66,7 +66,7 @@ public class View {
 		double strideY = endY - startY;
 		double relativeY = (y - startY);
 		double realY = relativeY * (yPixels / strideY);
-		return (realY + 174.8571429);
+		return (realY + 34.76269);
 	}
 
 	public void addLeg(String id, String start, String finish, int mileage){
