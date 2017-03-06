@@ -3,7 +3,7 @@ package com.csu2017sp314.dtr07;
 import com.csu2017sp314.dtr07.Presenter.*;
 import com.csu2017sp314.dtr07.Model.*;
 import com.csu2017sp314.dtr07.View.*;
-import jdk.internal.org.xml.sax.SAXException;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -30,7 +30,7 @@ public class TripCo
         }
     }
 
-    public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, TransformerException
+    public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, TransformerException, SAXException, IOException
     {
         if(args.length == 0) {
             System.out.println("Usage: tripco.jar [filename.csv] [-m|-n|-i]");
