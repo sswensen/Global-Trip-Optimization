@@ -30,7 +30,7 @@ public class TripCo
         }
     }
 
-    public static void main(String[] args) throws ParserConfigurationException, TransformerException, org.xml.sax.SAXException, IOException
+    public static void main(String[] args) throws ParserConfigurationException, TransformerException, SAXException, IOException
     {
         if(args.length == 0) {
             System.out.println("Usage: tripco.jar [filename.csv] [-m|-n|-i]");

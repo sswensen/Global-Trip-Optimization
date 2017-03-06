@@ -24,7 +24,7 @@ public class View {
 	private Document SVGdoc;
 	private int labelID = 1;
 
-	public void initializeTrip() throws org.xml.sax.SAXException, IOException, ParserConfigurationException{
+	public void initializeTrip() throws SAXException, IOException, ParserConfigurationException{
 	    //The document builders
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = factory.newDocumentBuilder();
