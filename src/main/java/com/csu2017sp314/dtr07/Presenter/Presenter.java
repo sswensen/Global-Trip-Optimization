@@ -57,7 +57,7 @@ public class Presenter
         return displayName;
     }
 
-    public void planTrip(String filename) throws SAXException, IOException, ParserConfigurationException, TransformerException
+    public void planTrip(String filename) throws jdk.internal.org.xml.sax.SAXException, org.xml.sax.SAXException, IOException, ParserConfigurationException, TransformerException
     {
         view.initializeTrip();
         model.planTrip(filename);
