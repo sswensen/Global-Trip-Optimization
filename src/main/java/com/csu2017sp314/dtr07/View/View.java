@@ -2,6 +2,7 @@ package com.csu2017sp314.dtr07.View;
 
 import java.io.File;
 import java.io.IOException;
+import org.xml.sax.SAXException;
 
 
 import javax.xml.parsers.DocumentBuilder;
@@ -24,7 +25,7 @@ public class View {
 	private Document SVGdoc;
 	private int labelID = 1;
 
-	public void initializeTrip() throws org.xml.sax.SAXException,SAXException, IOException, ParserConfigurationException{
+	public void initializeTrip() throws org.xml.sax.SAXException, IOException, ParserConfigurationException{
 	    //The document builders
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = factory.newDocumentBuilder();
