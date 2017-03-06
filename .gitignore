@@ -1,10 +1,11 @@
 .*
 !/.gitignore
+!/.css
 out/*
 target/*
 DTR-07.iml
-tripco.ipr
-tripco.iws
-tripco.iml
+*.ipr
+*.iws
+*.iml
 *.svg
 *.xml
