@@ -59,8 +59,8 @@ public class Presenter
         view.initializeTrip();
         model.planTrip(filename);
         int numPairs = model.getNumPairs();
-        view.addBorders();
-        view.addHeader("Colorado");
+        //view.addBorders();
+        //view.addHeader("Colorado");
         view.addFooter(model.getTripDistance());
         int finalPairID = 0;
         for(int i = 0; i < numPairs; i++)
