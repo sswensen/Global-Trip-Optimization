@@ -1,6 +1,8 @@
 package com.csu2017sp314.dtr07.View;
 
 import java.io.File;
+import java.io.IOException;
+import org.xml.sax.SAXException;
 
 
 import javax.xml.parsers.DocumentBuilder;
@@ -22,20 +24,22 @@ public class View {
 	private Document SVGdoc;
 	private int labelID = 1;
 
-	public void initializeTrip() throws ParserConfigurationException{
+	public void initializeTrip() throws SAXException, IOException, ParserConfigurationException{
 	    //The document builders
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
 		//Creating the SVG document
-		String svgNS = "http://www.w3.org/2000/svg";
+		String filepath = "src/test/resources/coloradoMap.svg";
+		SVGdoc = docBuilder.parse(filepath);
+		/*String svgNS = "http://www.w3.org/2000/svg";
 		DOMImplementation impl = docBuilder.getDOMImplementation();
 		SVGdoc = impl.createDocument(svgNS, "svg", null);
 		Element svgRoot = SVGdoc.getDocumentElement();
 		svgRoot.setAttribute("width", "1280");
 		svgRoot.setAttribute("height", "1024");
 		svgRoot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
+		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");*/
 
 		//Creating the XML document
 		XMLdoc = docBuilder.newDocument();
@@ -44,25 +48,25 @@ public class View {
 	}
 
 	private double convertLongitudeCoordinates(double x){
-		double xPixels = 1180; //Width of colorado map
+		double xPixels = 993.54946; //Width of colorado map
 		double startX = -109;
 		double endX = -102;
 		//Convert to SVG 'x' coordinate
 		double strideX = endX - startX;
 		double relativeX = (x - startX);
 		double realX = relativeX * (xPixels / strideX);
-		return (realX + 50);
+		return (realX + 34.72952);
 	}
 
 	private double convertLatitudeCoordinates(double y){
-		double yPixels = 674.2857143; //Height of colorado map
+		double yPixels = 709.98902; //Height of colorado map
 		double startY = 41;
 		double endY = 37;
 		//Convert to SVG 'y' coordinate
 		double strideY = endY - startY;
 		double relativeY = (y - startY);
 		double realY = relativeY * (yPixels / strideY);
-		return (realY + 174.8571429);
+		return (realY + 34.76269);
 	}
 
 	public void addLeg(String id, String start, String finish, int mileage){
@@ -257,7 +261,7 @@ public class View {
 
 	public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
 		View map = new View();
-        map.initializeTrip();
+        //map.initializeTrip();
         map.addLeg("1", "Sandeep","Denver",9999);
         map.addLine(-109,41,-102,37,"1");
         System.out.println(map.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
