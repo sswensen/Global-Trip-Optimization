@@ -3,9 +3,12 @@ package com.csu2017sp314.dtr07.Presenter;
 
 import com.csu2017sp314.dtr07.Model.*;
 import com.csu2017sp314.dtr07.View.*;
+import jdk.internal.org.xml.sax.SAXException;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Presenter
 {
@@ -54,7 +57,7 @@ public class Presenter
         return displayName;
     }
 
-    public void planTrip(String filename) throws FileNotFoundException, ParserConfigurationException, TransformerException
+    public void planTrip(String filename) throws SAXException, IOException, ParserConfigurationException, TransformerException
     {
         view.initializeTrip();
         model.planTrip(filename);

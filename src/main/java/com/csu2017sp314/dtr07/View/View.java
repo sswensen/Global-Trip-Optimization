@@ -1,6 +1,7 @@
 package com.csu2017sp314.dtr07.View;
 
 import java.io.File;
+import java.io.IOException;
 
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,6 +13,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import jdk.internal.org.xml.sax.SAXException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.DOMImplementation;
@@ -22,20 +24,22 @@ public class View {
 	private Document SVGdoc;
 	private int labelID = 1;
 
-	public void initializeTrip() throws ParserConfigurationException{
+	public void initializeTrip() throws SAXException, IOException, ParserConfigurationException{
 	    //The document builders
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
 		//Creating the SVG document
-		String svgNS = "http://www.w3.org/2000/svg";
+		String filepath = "coloradoMapTest.svg";
+		SVGdoc = docBuilder.parse(filepath);
+		/*String svgNS = "http://www.w3.org/2000/svg";
 		DOMImplementation impl = docBuilder.getDOMImplementation();
 		SVGdoc = impl.createDocument(svgNS, "svg", null);
 		Element svgRoot = SVGdoc.getDocumentElement();
 		svgRoot.setAttribute("width", "1280");
 		svgRoot.setAttribute("height", "1024");
 		svgRoot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");
+		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");*/
 
 		//Creating the XML document
 		XMLdoc = docBuilder.newDocument();
