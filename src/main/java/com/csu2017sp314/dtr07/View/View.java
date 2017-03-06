@@ -48,7 +48,7 @@ public class View {
 	}
 
 	private double convertLongitudeCoordinates(double x){
-		double xPixels = 1063.0085; //Width of colorado map
+		double xPixels = 993.54946; //Width of colorado map
 		double startX = -109;
 		double endX = -102;
 		//Convert to SVG 'x' coordinate
@@ -59,7 +59,7 @@ public class View {
 	}
 
 	private double convertLatitudeCoordinates(double y){
-		double yPixels = 779.5144; //Height of colorado map
+		double yPixels = 709.98902; //Height of colorado map
 		double startY = 41;
 		double endY = 37;
 		//Convert to SVG 'y' coordinate
