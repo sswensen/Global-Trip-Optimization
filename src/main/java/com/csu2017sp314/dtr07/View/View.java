@@ -30,7 +30,7 @@ public class View {
 		DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
 		//Creating the SVG document
-		String filepath = "coloradoMapTest.svg";
+		String filepath = "src/test/resources/coloradoMap.svg";
 		SVGdoc = docBuilder.parse(filepath);
 		/*String svgNS = "http://www.w3.org/2000/svg";
 		DOMImplementation impl = docBuilder.getDOMImplementation();
