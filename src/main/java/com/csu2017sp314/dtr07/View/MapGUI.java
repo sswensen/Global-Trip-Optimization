@@ -29,7 +29,6 @@ public class MapGUI {
         JButton b = new JButton("click"); //creating instance of JButton
         b.setBounds(964, 0, 100, 40); //x axis, y axis, width, height
         f.add(b); //adding button in JFrame
-        f.setTitle("Background Color for JFrame");
         f.setSize(400,400);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
@@ -51,7 +50,6 @@ public class MapGUI {
         JButton b = new JButton("click"); //creating instance of JButton
         b.setBounds(964, 0, 100, 40); //x axis, y axis, width, height
         f.add(b); //adding button in JFrame
-        f.setTitle("Background Color for JFrame");
         f.setSize(400,400);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
