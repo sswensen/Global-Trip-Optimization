@@ -83,6 +83,11 @@ public class View implements MapView {
 
     public void gui() {
         MapGUI gui = new MapGUI(f);
+        try {
+            gui.init();
+        } catch(Exception e) {
+            System.err.println(e);
+        }
     }
     Document getXMLdoc() {
         return xml.getXMLdoc();
