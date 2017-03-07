@@ -33,7 +33,7 @@ public class MapGUI {
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         f.setLayout(new BorderLayout());
-        f.setContentPane(new JLabel(new ImageIcon(filename)));
+        f.setContentPane(new JLabel(new ImageIcon("png/" + filename + ".png")));
         f.setLayout(new FlowLayout());
         f.setSize(1063,779); //Refreshes window, needed or image doesn't appear
         f.setSize(1064,780);
