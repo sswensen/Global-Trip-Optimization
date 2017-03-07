@@ -3,12 +3,12 @@ package com.csu2017sp314.dtr07.Presenter;
 
 import com.csu2017sp314.dtr07.Model.*;
 import com.csu2017sp314.dtr07.View.*;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.xml.sax.SAXException;
 
 public class Presenter
 {
@@ -65,7 +65,7 @@ public class Presenter
         //view.addBorders();
         //view.addHeader("Colorado");
         view.addFooter(model.getTripDistance());
-        int finalPairID = 0;
+        int finalPairId = 0;
         for(int i = 0; i < numPairs; i++)
         {
             double firstLon = model.getFirstLon(i);
@@ -79,7 +79,7 @@ public class Presenter
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
-            finalPairID++;
+            finalPairId++;
             view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
             if(displayName)
             {
@@ -96,11 +96,7 @@ public class Presenter
                 view.addIDLabel(secondLon, secondLat, secondId);
             }
         }
-        view.addFinalLeg(Integer.toString(finalPairID), model.getLegStartLocation(), model.getLegFinishLocation(),model.getTripDistance());
+        view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(),model.getTripDistance());
         view.finalizeTrip(filename);
-    }
-
-    public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, TransformerException
-    {
     }
 }
