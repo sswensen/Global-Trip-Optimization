@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Model {
     //private ArrayList<Location> locations;
     private ArrayList<Pair> pairs;
+
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
         lf.readFile(filename);
@@ -44,27 +45,27 @@ public class Model {
         return locations.get(index).getLon();
     }*/
 
-    public double getFirstLon(int i) {
+    public double getFirstLon(final int i) {
         return pairs.get(i).getOne().getLon();
     }
 
-    public double getFirstLat(int i) {
+    public double getFirstLat(final int i) {
         return pairs.get(i).getOne().getLat();
     }
 
-    public double getSecondLon(int i) {
+    public double getSecondLon(final int i) {
         return pairs.get(i).getTwo().getLon();
     }
 
-    public double getSecondLat(int i) {
+    public double getSecondLat(final int i) {
         return pairs.get(i).getTwo().getLat();
     }
 
-    public int getPairDistance(int i) {
+    public int getPairDistance(final int i) {
         return (int) pairs.get(i).getDistance();
     }
 
-    public String getPairId(int i) {
+    public String getPairId(final int i) {
         return pairs.get(i).getId();
     }
 
@@ -72,11 +73,11 @@ public class Model {
         return pairs.size();
     }
 
-    public String getFirstName(int i) {
+    public String getFirstName(final int i) {
         return pairs.get(i).getOne().getName();
     }
 
-    public String getSecondName(int i) {
+    public String getSecondName(final int i) {
         return pairs.get(i).getTwo().getName();
     }
 
@@ -88,11 +89,11 @@ public class Model {
         return ret;
     }
 
-    public String getFirstId(int i) {
+    public String getFirstId(final int i) {
         return pairs.get(i).getOne().getId();
     }
 
-    public String getSecondId(int i) {
+    public String getSecondId(final int i) {
         return pairs.get(i).getTwo().getId();
     }
 }

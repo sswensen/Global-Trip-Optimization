@@ -38,10 +38,10 @@ public class Pair {
 
     @Override
     public String toString() {
-        return "Pair{" +
-                "one=" + one +
-                ", two=" + two +
-                ", distance=" + distance +
-                '}';
+        return "Pair{"
+                + "one=" + one
+                + ", two=" + two
+                + ", distance=" + distance
+                + '}';
     }
 }
