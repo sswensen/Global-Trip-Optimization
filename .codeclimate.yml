@@ -1,0 +1,9 @@
+engines:
+  checkstyle:
+    enabled: false
+    channel: "beta"
+exclude_paths:
+- "png/"
+- "target`/"
+- "src/test/coverage"
+- "src/test/resources/lib/"
