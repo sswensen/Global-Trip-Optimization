@@ -29,14 +29,13 @@ public class MapGUI {
         JButton b = new JButton("click"); //creating instance of JButton
         b.setBounds(964, 0, 100, 40); //x axis, y axis, width, height
         f.add(b); //adding button in JFrame
-        f.setSize(400,400);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         f.setLayout(new BorderLayout());
         f.setContentPane(new JLabel(new ImageIcon("png/" + filename + ".png")));
         f.setLayout(new FlowLayout());
-        f.setSize(1063,779); //Refreshes window, needed or image doesn't appear
-        f.setSize(1064,780);
+        f.setSize(1063,801); //Refreshes window, needed or image doesn't appear
+        f.setSize(1064,802);
         //f.pack(); //Will make everything MASSIVE
         f.setLayout(null); //using no layout managers
         f.setVisible(true); //making the frame visible
@@ -50,7 +49,6 @@ public class MapGUI {
         JButton b = new JButton("click"); //creating instance of JButton
         b.setBounds(964, 0, 100, 40); //x axis, y axis, width, height
         f.add(b); //adding button in JFrame
-        f.setSize(400,400);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         f.setLayout(new BorderLayout());
