@@ -111,7 +111,7 @@ class SVGBuilder {
         header.setAttribute("font-size", "24");
         header.setAttribute("id", "state");
         header.setAttribute("x", "532");
-        header.setAttribute("y", "32");
+        header.setAttribute("y", "28");
         header.setTextContent(title);
         SVGdoc.getDocumentElement().appendChild(header);
     }
@@ -123,7 +123,7 @@ class SVGBuilder {
         footer.setAttribute("font-size", "24");
         footer.setAttribute("id", "distance");
         footer.setAttribute("x", "532");
-        footer.setAttribute("y", "767");
+        footer.setAttribute("y", "773");
         footer.setTextContent(totalDistance + " miles");
         SVGdoc.getDocumentElement().appendChild(footer);
     }
