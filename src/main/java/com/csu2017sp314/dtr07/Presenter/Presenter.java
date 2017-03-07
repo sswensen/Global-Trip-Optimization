@@ -96,8 +96,12 @@ public class Presenter
                 view.addIDLabel(secondLon, secondLat, secondId);
             }
         }
+        view.addFooter(model.getTripDistance());
+        view.addHeader("Colorado");
         view.addFinalLeg(Integer.toString(finalPairID), model.getLegStartLocation(), model.getLegFinishLocation(),model.getTripDistance());
         view.finalizeTrip(filename);
+
+        view.gui();
     }
 
     public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, TransformerException
