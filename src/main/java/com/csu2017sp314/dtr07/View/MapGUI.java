@@ -45,7 +45,7 @@ public class MapGUI {
     }
 
     public static void main(String[] args) throws Exception {
-        new Convert("ColoradoSkiResorts");
+        new Convert("Colorado14ers");
         JFrame f = new JFrame("TripCo"); //creating instance of JFrame
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Closes app if window closes
         JButton b = new JButton("click"); //creating instance of JButton
@@ -56,7 +56,7 @@ public class MapGUI {
         f.setLocationRelativeTo(null);
         f.setVisible(true);
         f.setLayout(new BorderLayout());
-        f.setContentPane(new JLabel(new ImageIcon("Colorado14ers.png")));
+        f.setContentPane(new JLabel(new ImageIcon("png/Colorado14ers.png")));
         f.setLayout(new FlowLayout());
         f.setSize(1063,779); //Refreshes window, needed or image doesn't appear
         f.setSize(1064,780);
