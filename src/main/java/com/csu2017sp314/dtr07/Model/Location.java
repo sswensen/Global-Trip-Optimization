@@ -27,14 +27,14 @@ public class Location {
         int dpr = in.indexOf('\"');
         String card = in.substring(in.length()-1);
         if(deg > -1 && pr > -1 && dpr > -1) {
-            double d = Double.parseDouble(in.substring(0, deg));
-            double m = Double.parseDouble(in.substring(deg + 1, pr));
-            double s = Double.parseDouble(in.substring(pr + 1, dpr));
+            final double d = Double.parseDouble(in.substring(0, deg));
+            final double m = Double.parseDouble(in.substring(deg + 1, pr));
+            final double s = Double.parseDouble(in.substring(pr + 1, dpr));
             //do math
             ret = d + (m / 60) + (s / 3600);
         } else if(deg > -1 && pr > -1 && dpr < 0) {
-            double d = Double.parseDouble(in.substring(0, deg));
-            double m = Double.parseDouble(in.substring(deg + 1, pr));
+            final double d = Double.parseDouble(in.substring(0, deg));
+            final double m = Double.parseDouble(in.substring(deg + 1, pr));
             ret = d + (m / 60);
         } else if(deg > -1 && pr < 0 && dpr < 0) {
             ret = Double.parseDouble(in.substring(0, deg));
@@ -50,19 +50,22 @@ public class Location {
             case "W":
                 ret *= -1;
                 break;
+            default:
+                System.out.println("Error in location");
         }
 
         return ret;
     }
 
     double distance(Location in) {
-        String unit = "M";
+        final String unit = "M";
         double lat1 = this.lat;
         double lon1 = this.lon;
         double lat2 = in.getLat();
         double lon2 = in.getLon();
         double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
@@ -129,17 +132,17 @@ public class Location {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Location location = (Location) o;
 
-        if (Double.compare(location.lat, lat) != 0) return false;
-        if (Double.compare(location.lon, lon) != 0) return false;
-        if (nearest != location.nearest) return false;
-        if (nearestDistance != location.nearestDistance) return false;
-        if (id != null ? !id.equals(location.id) : location.id != null) return false;
+        if (Double.compare(location.lat, lat) != 0) { return false; }
+        if (Double.compare(location.lon, lon) != 0) { return false; }
+        if (nearest != location.nearest) { return false; }
+        if (nearestDistance != location.nearestDistance) { return false; }
+        if (id != null ? !id.equals(location.id) : location.id != null) { return false; }
         return name != null ? name.equals(location.name) : location.name == null;
     }
 
@@ -150,13 +153,13 @@ public class Location {
 
     @Override
     public String toString() {
-        return "Location{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lat=" + lat +
-                ", lon=" + lon +
-                ", nearest=" + nearest +
-                ", nearestDistance=" + nearestDistance +
-                '}';
+        return "Location{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", lat=" + lat
+                + ", lon=" + lon
+                + ", nearest=" + nearest
+                + ", nearestDistance=" + nearestDistance
+                + '}';
     }
 }
