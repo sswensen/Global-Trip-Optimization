@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 public class View implements MapView {
     private SVGBuilder svg;
     private XMLBuilder xml;
+    private String f;
 
     public void initializeTrip() throws SAXException, IOException, ParserConfigurationException {
         svg = new SVGBuilder();
@@ -68,18 +69,21 @@ public class View implements MapView {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         String[] cut = filename.split("/");
-        filename = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
+        f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
         //XML document
         DOMSource source = new DOMSource(xml.getXMLdoc());
-        StreamResult result = new StreamResult(new File(filename + ".xml"));
+        StreamResult result = new StreamResult(new File(f + ".xml"));
         transformer.transform(source, result);
 
         //SVG document
         DOMSource source2 = new DOMSource(svg.getSVGdoc());
-        StreamResult result2 = new StreamResult(new File(filename + ".svg"));
+        StreamResult result2 = new StreamResult(new File(f + ".svg"));
         transformer.transform(source2, result2);
     }
 
+    public void gui() {
+        MapGUI gui = new MapGUI(f);
+    }
     Document getXMLdoc() {
         return xml.getXMLdoc();
     }
