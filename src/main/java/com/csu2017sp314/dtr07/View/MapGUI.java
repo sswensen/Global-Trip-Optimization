@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,8 +22,30 @@ public class MapGUI {
         this.filename = filename;
     }
 
+    public int init() throws Exception {
+        new Convert(filename);
+        JFrame f = new JFrame("TripCo"); //creating instance of JFrame
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
+        JButton b = new JButton("click"); //creating instance of JButton
+        b.setBounds(964, 0, 100, 40); //x axis, y axis, width, height
+        f.add(b); //adding button in JFrame
+        f.setTitle("Background Color for JFrame");
+        f.setSize(400,400);
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+        f.setLayout(new BorderLayout());
+        f.setContentPane(new JLabel(new ImageIcon(filename)));
+        f.setLayout(new FlowLayout());
+        f.setSize(1063,779); //Refreshes window, needed or image doesn't appear
+        f.setSize(1064,780);
+        //f.pack(); //Will make everything MASSIVE
+        f.setLayout(null); //using no layout managers
+        f.setVisible(true); //making the frame visible
+        return 1;
+    }
+
     public static void main(String[] args) throws Exception {
-        Convert c = new Convert("ColoradoSkiResorts");
+        new Convert("ColoradoSkiResorts");
         JFrame f = new JFrame("TripCo"); //creating instance of JFrame
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Closes app if window closes
         JButton b = new JButton("click"); //creating instance of JButton

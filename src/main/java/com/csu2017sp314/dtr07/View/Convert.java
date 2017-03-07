@@ -20,7 +20,7 @@ public class Convert {
         String svg_URI_input = Paths.get(filename + ".svg").toUri().toURL().toString();
         TranscoderInput input_svg_image = new TranscoderInput(svg_URI_input);
         //Step-2: Define OutputStream to PNG Image and attach to TranscoderOutput
-        OutputStream png_ostream = new FileOutputStream(filename + ".png");
+        OutputStream png_ostream = new FileOutputStream("png/" + filename + ".png");
         TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
         // Step-3: Create PNGTranscoder and define hints if required
         PNGTranscoder my_converter = new PNGTranscoder();
