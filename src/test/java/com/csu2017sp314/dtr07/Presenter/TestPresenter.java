@@ -4,14 +4,12 @@ import com.csu2017sp314.dtr07.Model.*;
 import com.csu2017sp314.dtr07.View.*;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
-public class TestPresenter
-{
+public class TestPresenter {
     @Before
-    public void initialize()
-    {
-
+    public void initialize() {
     }
 
     private Presenter presenter = new Presenter(new Model(), new View());

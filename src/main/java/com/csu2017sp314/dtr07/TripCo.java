@@ -3,12 +3,12 @@ package com.csu2017sp314.dtr07;
 import com.csu2017sp314.dtr07.Presenter.*;
 import com.csu2017sp314.dtr07.Model.*;
 import com.csu2017sp314.dtr07.View.*;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import org.xml.sax.SAXException;
+
 
 public class TripCo
 {

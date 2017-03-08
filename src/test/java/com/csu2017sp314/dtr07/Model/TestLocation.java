@@ -1,18 +1,19 @@
 package com.csu2017sp314.dtr07.Model;
 
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /*
  * Created by SummitDrift on 2/16/17.
  * Testing file for Location.java
  */
+
 public class TestLocation {
     @Before
     public void initialize() {
     }
+
     private Location one = new Location("0", "A", "37°28'20\"N","106°47'35\"W");
 
     @Test
