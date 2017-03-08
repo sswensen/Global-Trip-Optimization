@@ -1,9 +1,8 @@
 package com.csu2017sp314.dtr07.Model;
 
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /*
  * Created by SummitDrift on 2/16/17.

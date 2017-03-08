@@ -1,0 +1,35 @@
+engines:
+  # ... CONFIG CONTENT ...
+  checkstyle:
+    enabled: true
+    channel: "beta"
+    checks:
+      com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck:
+        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck:
+        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck:
+        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck:
+        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck:
+        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck:
+        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
+        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck:
+        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck:
+        enabled: false
+  csslint:
+    enabled: false
+# ... CONFIG CONTENT ...
+ratings:
+  paths:
+  - "**.java"
+exclude_paths:
+- "png/*"
+- "target/*"
+- "src/test/coverage/*"
+- "src/test/resources/lib/*"
