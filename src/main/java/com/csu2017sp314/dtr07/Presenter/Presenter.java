@@ -61,9 +61,9 @@ public class Presenter
         return displayName;
     }
 
-    public void planTrip(String filename) throws SAXException, IOException, ParserConfigurationException, TransformerException
+    public void planTrip(String filename, String selectionXml) throws SAXException, IOException, ParserConfigurationException, TransformerException
     {
-        view.initializeTrip();
+        view.initializeTrip(selectionXml);
         model.planTrip(filename);
         int numPairs = model.getNumPairs();
         //view.addBorders();
