@@ -51,7 +51,7 @@ public class Location {
                 ret *= -1;
                 break;
             default:
-                System.out.println("Error in location");
+                break;
         }
 
         return ret;

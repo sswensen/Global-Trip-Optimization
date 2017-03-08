@@ -27,6 +27,10 @@ public class Presenter
         this.displayName = false;
     }
 
+    public void eventLocSelect() {
+
+    }
+
     public void setDisplayMileage(boolean x)
     {
         displayMileage = x;
