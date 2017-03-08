@@ -25,6 +25,7 @@ public class View implements MapView {
     private SVGBuilder svg;
     private XMLBuilder xml;
     private String f;
+    MapGUI gui;
 
     public void initializeTrip() throws SAXException, IOException, ParserConfigurationException {
         svg = new SVGBuilder();
@@ -88,12 +89,16 @@ public class View implements MapView {
     }
 
     public void gui() {
-        MapGUI gui = new MapGUI(f);
+        gui = new MapGUI(f);
         try {
             gui.init();
         } catch(Exception e) {
             System.err.println(e);
         }
+    }
+
+    public void refresh() throws Exception {
+        gui.refresh();
     }
 
     Document getXMLdoc() {

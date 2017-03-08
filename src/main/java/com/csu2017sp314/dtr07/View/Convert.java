@@ -14,13 +14,18 @@ import java.nio.file.Path;
  * File for converting svg to png
  */
 public class Convert {
-    public Convert(String filename) throws Exception {
+    public Convert(String filename, int dix) throws Exception {
         //Step -1: We read the input SVG document into Transcoder Input
         //We use Java NIO for this purpose
         String svg_URI_input = Paths.get(filename + ".svg").toUri().toURL().toString();
         TranscoderInput input_svg_image = new TranscoderInput(svg_URI_input);
         //Step-2: Define OutputStream to PNG Image and attach to TranscoderOutput
-        OutputStream png_ostream = new FileOutputStream("png/" + filename + ".png");
+        OutputStream png_ostream;
+        if(dix == 0) {
+            png_ostream = new FileOutputStream("png/" + filename + ".png");
+        } else {
+            png_ostream = new FileOutputStream("png/" + filename + "_User.png");
+        }
         TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
         // Step-3: Create PNGTranscoder and define hints if required
         PNGTranscoder my_converter = new PNGTranscoder();
