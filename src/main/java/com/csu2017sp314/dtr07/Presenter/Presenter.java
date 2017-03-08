@@ -145,7 +145,7 @@ public class Presenter {
         view.finalizeTrip(filename);
 
         view.gui();
-        TimeUnit.SECONDS.sleep(3);
+        //TimeUnit.SECONDS.sleep(3);
         eventUserAddLoc("3");
         eventUserAddLoc("10");
         eventUserAddLoc("17");
