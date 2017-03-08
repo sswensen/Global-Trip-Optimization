@@ -89,6 +89,7 @@ public class View implements MapView {
             System.err.println(e);
         }
     }
+
     Document getXMLdoc() {
         return xml.getXMLdoc();
     }
@@ -97,7 +98,7 @@ public class View implements MapView {
         return svg.getSVGdoc();
     }
 
-    public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
+    public static void main(String[] argv) throws ParserConfigurationException, TransformerException {
         View map = new View();
         //map.initializeTrip();
         map.addLeg("1", "Sandeep", "Denver", 9999);
