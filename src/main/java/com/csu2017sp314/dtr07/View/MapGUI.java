@@ -1,27 +1,21 @@
 package com.csu2017sp314.dtr07.View;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Dimension;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
 
 /*
  * Created by SummitDrift on 3/6/17.
  * File for displaying map with interactive stuff
  */
-public class MapGUI {
-    String filename;
 
-    public MapGUI(String filename) {
+public class MapGUI {
+    private String filename;
+
+    MapGUI(String filename) {
         this.filename = filename;
     }
 
-    public int init() throws Exception {
+    int init() throws Exception {
         new Convert(filename);
         JFrame f = new JFrame("TripCo"); //creating instance of JFrame
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
