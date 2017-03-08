@@ -10,13 +10,14 @@ import java.util.ArrayList;
 public class Model {
     //private ArrayList<Location> locations;
     private ArrayList<Pair> pairs;
+    private ArrayList<Location> locations;
 
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
         lf.readFile(filename);
         //lf.findNearest();
         lf.thirdTry();
-        //locations = lf.getLocations();
+        locations = lf.getLocations();
         pairs = lf.getPairs();
         return 1;
     }

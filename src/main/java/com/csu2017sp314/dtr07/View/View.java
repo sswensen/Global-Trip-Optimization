@@ -2,6 +2,7 @@ package com.csu2017sp314.dtr07.View;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.xml.sax.SAXException;
 
@@ -20,6 +21,7 @@ import org.w3c.dom.Document;
 //import org.w3c.dom.DOMImplementation;
 
 public class View implements MapView {
+    private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
     private String f;
@@ -27,6 +29,10 @@ public class View implements MapView {
     public void initializeTrip() throws SAXException, IOException, ParserConfigurationException {
         svg = new SVGBuilder();
         xml = new XMLBuilder();
+    }
+
+    public void readXML(String filename) {
+
     }
 
     public void addLeg(String id, String start, String finish, int mileage) {
