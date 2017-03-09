@@ -3,6 +3,7 @@ package com.csu2017sp314.dtr07.View;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import org.xml.sax.SAXException;
 
@@ -21,6 +22,7 @@ import org.w3c.dom.Document;
 //import org.w3c.dom.DOMImplementation;
 
 public class View implements MapView {
+    public Consumer<String> callback;
     private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
@@ -30,6 +32,14 @@ public class View implements MapView {
     public void initializeTrip() throws SAXException, IOException, ParserConfigurationException {
         svg = new SVGBuilder();
         xml = new XMLBuilder();
+    }
+
+    public void setCallback(Consumer<String> callback) {
+        this.callback = callback;
+    }
+
+    public void userAddLoc(String id) {
+        callback.accept(id);
     }
 
     public void readXML(String filename) {
@@ -107,16 +117,5 @@ public class View implements MapView {
 
     Document getSVGdoc() {
         return svg.getSVGdoc();
-    }
-
-    public static void main(String[] argv) throws ParserConfigurationException, TransformerException {
-        View map = new View();
-        //map.initializeTrip();
-        map.addLeg("1", "Sandeep", "Denver", 9999);
-        map.addLine(-109, 41, -102, 37, "1");
-        System.out.println(map.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
-        map.addBorders();
-        //map.addLabel(-108.60,37.34, "Montezuma");
-        map.finalizeTrip("./src/test/resources/Testing/ColoradoCountySeats.csv");
     }
 }

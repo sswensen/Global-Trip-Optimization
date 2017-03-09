@@ -28,6 +28,9 @@ public class Presenter {
         this.displayMileage = false;
         this.displayId = false;
         this.displayName = false;
+        view.setCallback((String s) -> {
+            this.eventUserAddLoc(s);
+        });
     }
 
     public int eventUserAddLoc(String id) {
