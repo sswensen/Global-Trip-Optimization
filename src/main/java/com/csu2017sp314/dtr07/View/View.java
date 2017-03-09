@@ -149,6 +149,7 @@ public class View {
     ArrayList<Integer> getIdArrayList(){
         return ids;
     }
+
     public static void main(String[] argv) throws ParserConfigurationException, TransformerException {
 
     }
