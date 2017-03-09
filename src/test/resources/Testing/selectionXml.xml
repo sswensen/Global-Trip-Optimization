@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xml>
+    <selection>
+        <title>name</title>
+        <filename>file.csv</filename>
+        <destinations>
+            <id>1</id>
+            <id>2</id>
+            <id>10</id>
+            <id>22</id>
+            <id>29</id>
+        </destinations>
+    </selection>
+</xml>
