@@ -38,7 +38,8 @@ public class View {
         svg = new SVGBuilder();
         xml = new XMLBuilder();
         readXML(selectionXml);
-
+    }
+    
     public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
         File xmlFile = new File(selectionXml);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
