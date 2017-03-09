@@ -16,7 +16,7 @@ public class TestView {
     public void initialize() throws ParserConfigurationException {
 
     }
-
+    /*
     @Test
     public void initializeTrip() throws Exception {
         v.initializeTrip();
@@ -126,5 +126,5 @@ public class TestView {
         one.addLeg("1","denver","fort collins", 9999);
         assertEquals(one.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue(), v.getXMLdoc().getDocumentElement().getFirstChild().getFirstChild().getNextSibling().getFirstChild().getNodeValue());
     }
-
+    */
 }

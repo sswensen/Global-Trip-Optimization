@@ -21,6 +21,7 @@ public class Presenter {
     private boolean displayId;
     private boolean displayName;
     private String fname;
+    private String selectionXml;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -38,7 +39,7 @@ public class Presenter {
     }
 
     public int eventLoadLoc() throws SAXException, IOException, ParserConfigurationException, TransformerException {
-        view.initializeTrip();
+        view.initializeTrip(selectionXml);
 
         int numPairs = model.getUserPairs().size();
 
@@ -106,9 +107,10 @@ public class Presenter {
         return displayName;
     }
 
-    public void planTrip(String filename) throws Exception {
+    public void planTrip(String filename, String selectionXml) throws Exception {
         fname = filename;
-        view.initializeTrip();
+        this.selectionXml = selectionXml;
+        view.initializeTrip(selectionXml);
         model.planTrip(filename);
         int numPairs = model.getNumPairs();
         //view.addBorders();
