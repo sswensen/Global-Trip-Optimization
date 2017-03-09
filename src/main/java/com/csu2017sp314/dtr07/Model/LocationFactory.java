@@ -48,6 +48,16 @@ class LocationFactory {
         return locations.size() > 0;
     }
 
+    boolean readUserLocations(ArrayList<Location> userLoc) {
+        for(int i = 0; i < userLoc.size(); i++) {
+            locations.add(userLoc.get(i));
+        }
+        if(locations.size() == userLoc.size()) {
+            return true;
+        }
+        return false;
+    }
+
     boolean thirdTry() {
         int bestDistance = 999999999;
         int sizer = locations.size();
