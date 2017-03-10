@@ -17,7 +17,6 @@ public class Model {
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
         lf.readFile(filename);
-        //lf.findNearest();
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
