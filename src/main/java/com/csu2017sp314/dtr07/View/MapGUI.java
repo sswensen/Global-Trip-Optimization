@@ -72,7 +72,7 @@ public class MapGUI {
         map.setSize(w-1, h-1);
         map.setSize(w,h);
         map.setSize(1063,801); //Refreshes window, needed or image doesn't appear
-        map.setSize(1064,802);
+        map.setSize(1064,802); //Second part for refreshing the window
 
         map.setVisible(true); //making the frame visible
     }
