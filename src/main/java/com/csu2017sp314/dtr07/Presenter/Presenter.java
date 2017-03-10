@@ -151,10 +151,10 @@ public class Presenter {
 
         view.gui();
         //TimeUnit.SECONDS.sleep(3);
-        eventUserAddLoc("3");
+        /*eventUserAddLoc("3");
         eventUserAddLoc("10");
         eventUserAddLoc("17");
         eventLoadLoc();
-        view.refresh();
+        view.refresh();*/
     }
 }
