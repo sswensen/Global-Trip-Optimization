@@ -30,17 +30,16 @@ public class TripCo
         }
     }
 
-    public static void main(String[] args) throws SAXException, IOException, ParserConfigurationException, TransformerException
-    {
+    public static void main(String[] args) throws Exception {
         if(args.length == 0) {
             System.out.println("Usage: tripco.jar [filename.csv] [-m|-n|-i]");
         } else {
             String filename = args[0];
-
+            String selectionXml = args[1];
             Model model = new Model();
             View view = new View();
             Presenter presenter = new Presenter(model, view);
-
+            /*
             if (args.length > 1) {
                 String option1 = args[1];
                 displayOptions(option1, presenter);
@@ -53,8 +52,8 @@ public class TripCo
                     }
                 }
             }
-
-            presenter.planTrip(filename);
+            */
+            presenter.planTrip(filename, selectionXml);
         }
     }
 }

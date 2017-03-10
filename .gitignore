@@ -3,6 +3,7 @@
 !/.css
 out/*
 target/*
+coverage/*
 DTR-07.iml
 *.ipr
 *.iws

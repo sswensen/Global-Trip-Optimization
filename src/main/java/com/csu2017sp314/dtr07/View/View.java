@@ -2,12 +2,15 @@ package com.csu2017sp314.dtr07.View;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 
-//import javax.xml.parsers.DocumentBuilder;
-//import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -16,17 +19,58 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-//import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 //import org.w3c.dom.DOMImplementation;
 
-public class View implements MapView {
+public class View {
+    public Consumer<String> callback;
+    private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
+    private Document readXml;
+    private ArrayList<Integer> ids = new ArrayList<>();
     private String f;
+    MapGUI gui;
 
-    public void initializeTrip() throws SAXException, IOException, ParserConfigurationException {
+    public void initializeTrip(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
         svg = new SVGBuilder();
         xml = new XMLBuilder();
+        readXML(selectionXml);
+    }
+    
+    public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+        File xmlFile = new File(selectionXml);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        readXml = dBuilder.parse(xmlFile);
+        readXml.getDocumentElement().normalize();
+        System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        NodeList nList = readXml.getElementsByTagName("destinations");
+        for(int temp = 0; temp < nList.getLength(); temp++){
+            Node nNode = nList.item(temp);
+            System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+                Element eElement = (Element) nNode;
+                int i = 0;
+                while(eElement.getElementsByTagName("id").item(i) != null){
+                    ids.add(Integer.parseInt(eElement.getElementsByTagName("id").item(i).getTextContent()));
+                    i++;
+                }
+            }
+        }
+        for(int i  = 0; i < ids.size();i++){
+            System.out.println("id at index " + i + " = " + ids.get(i));
+        }
+    }
+
+    public void setCallback(Consumer<String> callback) {
+        this.callback = callback;
+    }
+
+    public void userAddLoc(String id) {
+        callback.accept(id);
     }
 
     public void addLeg(String id, String start, String finish, int mileage) {
@@ -82,13 +126,18 @@ public class View implements MapView {
     }
 
     public void gui() {
-        MapGUI gui = new MapGUI(f);
+        gui = new MapGUI(f);
         try {
             gui.init();
         } catch(Exception e) {
             System.err.println(e);
         }
     }
+
+    public void refresh() throws Exception {
+        gui.refresh();
+    }
+
     Document getXMLdoc() {
         return xml.getXMLdoc();
     }
@@ -97,14 +146,11 @@ public class View implements MapView {
         return svg.getSVGdoc();
     }
 
-    public static void main(String argv[]) throws ParserConfigurationException, TransformerException {
-        View map = new View();
-        //map.initializeTrip();
-        map.addLeg("1", "Sandeep", "Denver", 9999);
-        map.addLine(-109, 41, -102, 37, "1");
-        System.out.println(map.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
-        map.addBorders();
-        //map.addLabel(-108.60,37.34, "Montezuma");
-        map.finalizeTrip("./src/test/resources/Testing/ColoradoCountySeats.csv");
+    ArrayList<Integer> getIdArrayList(){
+        return ids;
+    }
+
+    public static void main(String[] argv) throws ParserConfigurationException, TransformerException {
+
     }
 }
