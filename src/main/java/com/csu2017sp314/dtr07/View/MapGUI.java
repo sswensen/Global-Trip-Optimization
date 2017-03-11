@@ -1,14 +1,9 @@
 package com.csu2017sp314.dtr07.View;
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -20,23 +15,23 @@ import java.io.File;
  */
 
 public class MapGUI {
-    public Consumer<String> callback;
-    public Consumer<ArrayList<String>> callback2;
+    private Consumer<String> callback;
+    private Consumer<ArrayList<String>> callback2;
     private String filename;
     private JFrame map; //Map that displays locations
     private JFrame face; //User interface with locations
-    private boolean tick = false;
+    //private boolean tick = false;
     private int killmenow = 1;
 
     MapGUI() {
 
     }
 
-    public void setCallback(Consumer<String> callback) {
+    void setCallback(Consumer<String> callback) {
         this.callback = callback;
     }
 
-    public void setCallback2(Consumer<ArrayList<String>> callback2) {
+    void setCallback2(Consumer<ArrayList<String>> callback2) {
         this.callback2 = callback2;
     }
 
@@ -44,7 +39,7 @@ public class MapGUI {
         callback.accept(id);
     }
 
-    public void userAddLocList(ArrayList<String> ids) {
+    private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
     }
 
@@ -94,7 +89,7 @@ public class MapGUI {
         return 1;
     }
 
-    public void displayXML(ArrayList<String> ids) {
+    void displayXML(ArrayList<String> ids) {
         ArrayList<String> tempLoc = new ArrayList<>();
         /*System.out.println("Printing tempLoc");
         for(int i = 0; i < ids.size(); i++) {
@@ -204,14 +199,16 @@ public class MapGUI {
         map.setVisible(true); //making the frame visible
     }
 
-    void cleanup() {
+    boolean cleanup() {
+        boolean ret = false;
         for (int i = 0; i < killmenow; i++) {
             File temp = new File("png/" + filename + i + "_User.png");
-            temp.delete();
+            ret = temp.delete();
         }
         File temp = new File("png/" + filename + ".png");
-        temp.delete();
+        Boolean ret2 = temp.delete();
         killmenow = 0;
+        return ret & ret2;
     }
 
     public static void main(String[] args) throws Exception {

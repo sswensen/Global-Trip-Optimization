@@ -26,15 +26,14 @@ import org.w3c.dom.Element;
 //import org.w3c.dom.DOMImplementation;
 
 public class View {
-    public Consumer<String> callback;
-    public Consumer<ArrayList<String>> callback2;
+    private Consumer<String> callback;
+    private Consumer<ArrayList<String>> callback2;
     private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
-    private Document readXml;
     private ArrayList<String> ids = new ArrayList<>();
     private String f;
-    MapGUI gui;
+    private MapGUI gui;
 
     public void initializeTrip(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
         gui = new MapGUI();
@@ -49,6 +48,7 @@ public class View {
     }
     
     public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+        Document readXml;
         File xmlFile = new File(selectionXml);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -81,11 +81,11 @@ public class View {
         this.callback2 = callback2;
     }
 
-    public void userAddLoc(String id) {
+    private void userAddLoc(String id) {
         callback.accept(id);
     }
 
-    public void userAddLocList(ArrayList<String> ids) {
+    private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
     }
 
@@ -161,20 +161,8 @@ public class View {
         gui.refresh();
     }
 
-    Document getXMLdoc() {
-        return xml.getXMLdoc();
-    }
-
-    Document getSVGdoc() {
-        return svg.getSVGdoc();
-    }
-
-    ArrayList<String> getIdArrayList(){
-        return ids;
-    }
-
-    public void cleanup() {
-        gui.cleanup();
+    public boolean cleanup() {
+        return gui.cleanup();
     }
 
     public static void main(String[] argv) throws ParserConfigurationException, TransformerException {

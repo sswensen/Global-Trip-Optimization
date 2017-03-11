@@ -59,7 +59,7 @@ public class Model {
         return -1;
     }
 
-    public int searchLocations(String identifier, String field) {
+    private int searchLocations(String identifier, String field) {
         if(field.equalsIgnoreCase("name")) {
             for(int x = 0; x < locations.size(); x++) {
                 if(locations.get(x).getName().equals(identifier)) {
@@ -83,22 +83,6 @@ public class Model {
     public String getLegFinishLocation() {
         return pairs.get(pairs.size()-2).getTwo().getName();
     }
-
-    /*public int getLegDistance(Object o) {
-        return -1;
-    }
-
-    public int getLocationID(int index) {
-        return locations.get(index).getId();
-    }
-
-    public double getLocationLattitude(int index) {
-        return locations.get(index).getLat();
-    }
-
-    public double getLocationLongitude(int index) {
-        return locations.get(index).getLon();
-    }*/
 
     public double getFirstLon(final int i) {
         return pairs.get(i).getOne().getLon();

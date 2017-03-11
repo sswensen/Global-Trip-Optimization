@@ -6,12 +6,8 @@ import com.csu2017sp314.dtr07.View.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.function.Function;
-import java.util.concurrent.TimeUnit;
-
 
 import org.xml.sax.SAXException;
 
@@ -38,11 +34,11 @@ public class Presenter {
         });
     }
 
-    public int eventUserAddLoc(String id) {
+    private int eventUserAddLoc(String id) {
         return model.toggleLocations(id);
     }
 
-    public int eventUserAddLocList(ArrayList<String> ids) {
+    private int eventUserAddLocList(ArrayList<String> ids) {
         model.toggleListLocations(ids);
         model.printUserLoc();
         try {
@@ -130,11 +126,6 @@ public class Presenter {
         return -1;
     }
 
-
-    public void clearUserLoc() {
-        model.resetUserLoc();
-    }
-
     public void setDisplayMileage(boolean x) {
         displayMileage = x;
     }
@@ -147,15 +138,15 @@ public class Presenter {
         displayName = x;
     }
 
-    public boolean getDisplayMileage() {
+    boolean getDisplayMileage() {
         return displayMileage;
     }
 
-    public boolean getDisplayId() {
+    boolean getDisplayId() {
         return displayId;
     }
 
-    public boolean getDisplayName() {
+    boolean getDisplayName() {
         return displayName;
     }
 
@@ -210,7 +201,7 @@ public class Presenter {
         view.refresh();*/
     }
 
-    public void cleanup() {
-        view.cleanup();
+    public boolean cleanup() {
+        return view.cleanup();
     }
 }

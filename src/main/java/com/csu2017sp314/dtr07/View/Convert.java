@@ -7,7 +7,6 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 
 import java.nio.file.Paths;
-import java.nio.file.Path;
 
 /*
  * Created by SummitDrift on 3/6/17.
