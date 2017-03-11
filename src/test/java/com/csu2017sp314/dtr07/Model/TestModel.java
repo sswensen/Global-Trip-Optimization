@@ -13,6 +13,7 @@ public class TestModel {
     @Before
     public void initialize() {
     }
+
     private Model m = new Model();
 
     @Test
