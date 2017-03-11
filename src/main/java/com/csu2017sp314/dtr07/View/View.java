@@ -2,6 +2,7 @@ package com.csu2017sp314.dtr07.View;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -26,18 +27,25 @@ import org.w3c.dom.Element;
 
 public class View {
     public Consumer<String> callback;
+    public Consumer<ArrayList<String>> callback2;
     private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
     private Document readXml;
-    private ArrayList<Integer> ids = new ArrayList<>();
+    private ArrayList<String> ids = new ArrayList<>();
     private String f;
     MapGUI gui;
 
     public void initializeTrip(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+        gui = new MapGUI();
         svg = new SVGBuilder();
         xml = new XMLBuilder();
         readXML(selectionXml);
+    }
+
+    public void resetTrip() throws SAXException, IOException, ParserConfigurationException {
+        svg = new SVGBuilder();
+        xml = new XMLBuilder();
     }
     
     public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
@@ -55,7 +63,7 @@ public class View {
                 Element eElement = (Element) nNode;
                 int i = 0;
                 while(eElement.getElementsByTagName("id").item(i) != null){
-                    ids.add(Integer.parseInt(eElement.getElementsByTagName("id").item(i).getTextContent()));
+                    ids.add(eElement.getElementsByTagName("id").item(i).getTextContent());
                     i++;
                 }
             }
@@ -69,8 +77,16 @@ public class View {
         this.callback = callback;
     }
 
+    public void setCallback2(Consumer<ArrayList<String>> callback2) {
+        this.callback2 = callback2;
+    }
+
     public void userAddLoc(String id) {
         callback.accept(id);
+    }
+
+    public void userAddLocList(ArrayList<String> ids) {
+        callback2.accept(ids);
     }
 
     public void addLeg(String id, String start, String finish, int mileage) {
@@ -126,12 +142,19 @@ public class View {
     }
 
     public void gui() {
-        gui = new MapGUI(f);
+        gui.setCallback((String s) -> {
+            this.userAddLoc(s);
+        });
+
+        gui.setCallback2((ArrayList<String> s) -> {
+            this.userAddLocList(s);
+        });
         try {
-            gui.init();
+            gui.init(f);
         } catch(Exception e) {
             System.err.println(e);
         }
+        gui.displayXML(ids);
     }
 
     public void refresh() throws Exception {
@@ -146,7 +169,7 @@ public class View {
         return svg.getSVGdoc();
     }
 
-    ArrayList<Integer> getIdArrayList(){
+    ArrayList<String> getIdArrayList(){
         return ids;
     }
 

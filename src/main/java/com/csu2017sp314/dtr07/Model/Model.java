@@ -39,10 +39,24 @@ public class Model {
         int index = searchLocations(id, "id");
         if(index >= 0) {
             userLocations.add(locations.get(index));
+            System.out.println("Adding " + id + " to locations");
             return 1;
         } else {
             return -1;
         }
+    }
+
+    public int toggleListLocations(ArrayList<String> ids) {
+        for(String id : ids) {
+            userLocations.add(locations.get(searchLocations(id, "id")));
+        }
+        if(userLocations.size() > 0) {
+            return 1;
+        }
+        for(Location loc : userLocations) {
+            System.out.println("Array: " + loc.getId());
+        }
+        return -1;
     }
 
     public int searchLocations(String identifier, String field) {
@@ -191,5 +205,11 @@ public class Model {
 
     public String getUserSecondId(int i) {
         return userPairs.get(i).getTwo().getId();
+    }
+
+    public void printUserLoc() {
+        for(int i = 0; i < userLocations.size(); i++) {
+            System.out.println("ID at index " + i + " = "+ userLocations.get(i).getId());
+        }
     }
 }

@@ -8,6 +8,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.concurrent.TimeUnit;
 
@@ -32,10 +33,61 @@ public class Presenter {
         view.setCallback((String s) -> {
             this.eventUserAddLoc(s);
         });
+        view.setCallback2((ArrayList<String> s) -> {
+            this.eventUserAddLocList(s);
+        });
     }
 
     public int eventUserAddLoc(String id) {
         return model.toggleLocations(id);
+    }
+
+    public int eventUserAddLocList(ArrayList<String> ids) {
+        model.toggleListLocations(ids);
+        model.printUserLoc();
+        try {
+            view.resetTrip();
+            int numPairs = model.getUserPairs().size();
+
+            view.addFooter(model.getTripDistance());
+            int finalPairId = 0;
+            for (int i = 0; i < numPairs; i++) {
+                double firstLon = model.getUserFirstLon(i);
+                double firstLat = model.getUserFirstLat(i);
+                double secondLon = model.getUserSecondLon(i);
+                double secondLat = model.getUserSecondLat(i);
+                int pairDistance = model.getUserPairDistance(i);
+                String pairId = model.getUserPairId(i);
+                String firstId = model.getUserFirstId(i);
+                String secondId = model.getUserSecondId(i);
+                String firstName = model.getUserFirstName(i);
+                String secondName = model.getUserSecondName(i);
+                view.addLeg(pairId, firstName, secondName, pairDistance);
+                finalPairId++;
+                view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
+                if (displayName) {
+                    view.addCityNameLabel(firstLon, firstLat, firstName);
+                    view.addCityNameLabel(secondLon, secondLat, secondName);
+                }
+                if (displayMileage) {
+                    view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId);
+                }
+                if (displayId) {
+                    view.addIDLabel(firstLon, firstLat, firstId);
+                    view.addIDLabel(secondLon, secondLat, secondId);
+                }
+            }
+            view.addFooter(model.getTripDistance());
+            view.addHeader("Colorado");
+            view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
+            view.finalizeTrip(fname);
+            model.resetUserLoc();
+            view.refresh();
+        } catch (Exception e) {
+            System.out.println("Exception encountered in Presenter.java");
+            return -1;
+        }
+        return 1;
     }
 
     public int eventLoadLoc() throws SAXException, IOException, ParserConfigurationException, TransformerException {

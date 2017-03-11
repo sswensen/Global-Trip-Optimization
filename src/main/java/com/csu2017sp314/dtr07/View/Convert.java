@@ -23,8 +23,10 @@ public class Convert {
         OutputStream png_ostream;
         if(dix == 0) {
             png_ostream = new FileOutputStream("png/" + filename + ".png");
-        } else {
+        } else if(dix == 1){
             png_ostream = new FileOutputStream("png/" + filename + "_User.png");
+        } else {
+            png_ostream = new FileOutputStream("png/" + filename + "_User2.png");
         }
         TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
         // Step-3: Create PNGTranscoder and define hints if required

@@ -1,8 +1,15 @@
 package com.csu2017sp314.dtr07.View;
 
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /*
  * Created by SummitDrift on 3/6/17.
@@ -10,15 +17,35 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class MapGUI {
+    public Consumer<String> callback;
+    public Consumer<ArrayList<String>> callback2;
     private String filename;
     private JFrame map; //Map that displays locations
     private JFrame face; //User interface with locations
+    private boolean tick = false;
 
-    MapGUI(String filename) {
-        this.filename = filename;
+    MapGUI() {
+
     }
 
-    int init() throws Exception {
+    public void setCallback(Consumer<String> callback) {
+        this.callback = callback;
+    }
+
+    public void setCallback2(Consumer<ArrayList<String>> callback2) {
+        this.callback2 = callback2;
+    }
+
+    public void userAddLoc(String id) {
+        callback.accept(id);
+    }
+
+    public void userAddLocList(ArrayList<String> ids) {
+        callback2.accept(ids);
+    }
+
+    int init(String filename) throws Exception {
+        this.filename = filename;
         new Convert(filename, 0);
         map = new JFrame("TripCo"); //creating instance of JFrame
 
@@ -40,11 +67,6 @@ public class MapGUI {
         map.setContentPane(new JLabel(new ImageIcon("png/" + filename + ".png")));
         map.setLayout(new FlowLayout());
 
-
-        JButton b = new JButton("click"); //creating instance of JButton
-        b.setBounds(964, 0, 100, 40); //x axis, y axis, width, height
-        map.add(b); //adding button in JFrame
-
         map.setLocation(0,0);
         map.setSize(1063,801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064,802);
@@ -61,13 +83,84 @@ public class MapGUI {
         return 1;
     }
 
+    public void displayXML(ArrayList<String> ids) {
+        ArrayList<String> tempLoc = new ArrayList<>();
+        /*System.out.println("Printing tempLoc");
+        for(int i = 0; i < ids.size(); i++) {
+            System.out.println("[GUI] ID at index " + i + " = "+ ids.get(i));
+        }
+        System.out.println("End printing tempLoc");*/
+        int index = 35;
+        for(String id : ids) {
+            JButton b = new JButton("[ ]");
+            b.addActionListener(new ActionListener() { //This fires when button b is pressed, unique for each instance!
+                @Override //Bish
+                public void actionPerformed(ActionEvent e) {
+                    /*
+                        We can use the following method to run the call back each time a location is clicked (don't know about efficiency here)
+                        Or we can do one where the callback is only initiated when the user clicks the button that loads the map after selecting locations
+                        I'm going to implement the second method as the first one already is.
+                        To use the first method, uncomment the line below.
+                     */
+                    //userAddLoc(id); //This is a callback to View
+                    if(b.getText().equals("[ ]")) { //Checks if button has already been pressed
+                        tempLoc.add(id);
+                        System.out.println("Added " + id + "to array");
+                        //b.setBackground(Color.BLACK);
+                        //b.setOpaque(true); //Doesnt work for some unknown reason
+                        b.setText("[X]"); //If not pressed, toggle text and add
+                    } else if(b.getText().equals("[X]")) {
+                        tempLoc.remove(id);
+                        System.out.println("Removed " + id + "to array");
+                        b.setText("[ ]"); //If already pressed, toggle text and remove
+                    }
+                }
+            } );
+            JButton t = new JButton(id);
+            t.setEnabled(false);
+            b.setBounds(5, index, 30, 30);
+            t.setBounds(35, index, 260, 30);
+            face.add(b);
+            b.setVisible(true);
+            face.add(t);
+            t.setVisible(true);
+            index += 35;
+        }
+        //Adding button to load tempLocs
+        JButton q = new JButton("Display");
+        q.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                /*for(int i = 0; i < ids.size(); i++) {
+                    System.out.println("[GUI] ID at index " + i + " = "+ ids.get(i));
+                }*/
+                userAddLocList(tempLoc);
+            }
+        } );
+        q.setBounds(5, 5, 290, 30);
+        face.add(q);
+        //--This does background stuff to attempt to get rid of the buttons forming incorrectly--
+        JButton a = new JButton();
+        a.setEnabled(false);
+        face.add(a);
+        a.setVisible(true);
+        //---------------------------------------------------------------------------------------
+    }
+
     void refresh() throws Exception {
         map.setVisible(false);
-        new Convert(filename, 1);
         int w = map.getWidth();
         int h = map.getHeight();
         //TimeUnit.SECONDS.sleep(5);
-        map.setContentPane(new JLabel(new ImageIcon("png/" + filename + "_User.png")));
+        if(tick) {
+            new Convert(filename, 1);
+            map.setContentPane(new JLabel(new ImageIcon("png/" + filename + "_User.png")));
+            tick = true;
+        } else {
+            new Convert(filename, 2);
+            map.setContentPane(new JLabel(new ImageIcon("png/" + filename + "_User2.png")));
+            tick = false;
+        }
 
         map.setSize(w-1, h-1);
         map.setSize(w,h);
