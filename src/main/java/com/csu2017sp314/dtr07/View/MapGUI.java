@@ -52,13 +52,11 @@ public class MapGUI {
         this.filename = filename;
         new Convert(filename, -1);
         map = new JFrame("TripCo"); //creating instance of JFrame
-        map.addWindowListener(new WindowAdapter()
-        {
-            public void windowClosing(WindowEvent e)
-            {
+        /*map.addWindowListener(new WindowAdapter() { //This looks for the 'x' to be pressed on the window, better solution in TripCo.java
+            public void windowClosing(WindowEvent e) {
                 cleanup();
             }
-        });
+        });*/
 
         //Code for aligning to left side of screen
         /* GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -80,15 +78,15 @@ public class MapGUI {
         background.setLayout( new BorderLayout() );
         map.setContentPane( background );*/
 
-        map.setLocation(0,0);
-        map.setSize(1063,801); //Refreshes window, needed or image doesn't appear
-        map.setSize(1064,802);
+        map.setLocation(0, 0);
+        map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
+        map.setSize(1064, 802);
 
         //f.pack(); //Will make everything MASSIVE
 
         face = new JFrame("User Options");
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        face.setLocation(1063,0);
+        face.setLocation(1063, 0);
         face.setSize(300, 802);
 
         map.setVisible(true); //making the frame visible
@@ -104,7 +102,7 @@ public class MapGUI {
         }
         System.out.println("End printing tempLoc");*/
         int index = 35;
-        for(String id : ids) {
+        for (String id : ids) {
             JButton b = new JButton("[ ]");
             b.addActionListener(new ActionListener() { //This fires when button b is pressed, unique for each instance!
                 @Override //Bish
@@ -116,19 +114,19 @@ public class MapGUI {
                         To use the first method, uncomment the line below.
                      */
                     //userAddLoc(id); //This is a callback to View
-                    if(b.getText().equals("[ ]")) { //Checks if button has already been pressed
+                    if (b.getText().equals("[ ]")) { //Checks if button has already been pressed
                         tempLoc.add(id);
                         System.out.println("Added " + id + "to array");
                         //b.setBackground(Color.BLACK);
                         //b.setOpaque(true); //Doesnt work for some unknown reason
                         b.setText("[X]"); //If not pressed, toggle text and add
-                    } else if(b.getText().equals("[X]")) {
+                    } else if (b.getText().equals("[X]")) {
                         tempLoc.remove(id);
                         System.out.println("Removed " + id + "to array");
                         b.setText("[ ]"); //If already pressed, toggle text and remove
                     }
                 }
-            } );
+            });
             JButton t = new JButton(id);
             t.setEnabled(false);
             b.setBounds(5, index, 30, 30);
@@ -149,7 +147,7 @@ public class MapGUI {
                 }*/
                 userAddLocList(tempLoc);
             }
-        } );
+        });
         q.setBounds(5, 5, 290, 30);
         face.add(q);
         //--This does background stuff to attempt to get rid of the buttons forming incorrectly--
@@ -164,8 +162,8 @@ public class MapGUI {
 
     void refresh() throws Exception {
         map.setVisible(false);
-        int w = map.getWidth();
-        int h = map.getHeight();
+        //int w = map.getWidth();
+        //int h = map.getHeight();
         //TimeUnit.SECONDS.sleep(5);
         /*if(tick) {
             new Convert(filename, 1);
@@ -194,30 +192,26 @@ public class MapGUI {
         }*/
         new Convert(filename, killmenow);
         JLabel background = new JLabel(new ImageIcon("png/" + filename + killmenow + "_User.png"));
-        background.setLayout( new BorderLayout() );
-        map.setContentPane( background );
+        background.setLayout(new BorderLayout());
+        map.setContentPane(background);
         killmenow++;
 
-        map.setSize(w-1, h-1);
-        map.setSize(w,h);
-        map.setSize(1063,801); //Refreshes window, needed or image doesn't appear
-        map.setSize(1064,802); //Second part for refreshing the window
+        //map.setSize(w - 1, h - 1);
+        //map.setSize(w, h);
+        map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
+        map.setSize(1064, 802); //Second part for refreshing the window
 
         map.setVisible(true); //making the frame visible
     }
 
-    public void cleanup() {
-        try {
-            for (int i = 0; i < killmenow; i++) {
-                File temp = new File("png/" + filename + i + "_User.png");
-                temp.delete();
-            }
-            File temp = new File("png/" + filename + ".png");
+    void cleanup() {
+        for (int i = 0; i < killmenow; i++) {
+            File temp = new File("png/" + filename + i + "_User.png");
             temp.delete();
-            killmenow = 0;
-        } catch (Exception e) {
-
         }
+        File temp = new File("png/" + filename + ".png");
+        temp.delete();
+        killmenow = 0;
     }
 
     public static void main(String[] args) throws Exception {
@@ -232,8 +226,8 @@ public class MapGUI {
         f.setLayout(new BorderLayout());
         f.setContentPane(new JLabel(new ImageIcon("png/Colorado14ers.png")));
         f.setLayout(new FlowLayout());
-        f.setSize(1063,779); //Refreshes window, needed or image doesn't appear
-        f.setSize(1064,780);
+        f.setSize(1063, 779); //Refreshes window, needed or image doesn't appear
+        f.setSize(1064, 780);
         //f.pack(); //Will make everything MASSIVE
         f.setLayout(null); //using no layout managers
         f.setVisible(true); //making the frame visible
