@@ -10,6 +10,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.io.File;
 
 /*
  * Created by SummitDrift on 3/6/17.
@@ -145,6 +146,8 @@ public class MapGUI {
         face.add(a);
         a.setVisible(true);
         //---------------------------------------------------------------------------------------
+        face.setSize(299, 801);
+        face.setSize(300, 802);
     }
 
     void refresh() throws Exception {
@@ -154,12 +157,30 @@ public class MapGUI {
         //TimeUnit.SECONDS.sleep(5);
         if(tick) {
             new Convert(filename, 1);
+            map.getContentPane().removeAll();
+            map.setLayout(new BorderLayout());
             map.setContentPane(new JLabel(new ImageIcon("png/" + filename + "_User.png")));
-            tick = true;
+            map.setLayout(new FlowLayout());
+            tick = false;
+            try {
+                File temp = new File("png/" + filename + "_User2.png");
+                temp.delete();
+            } catch (Exception e) {
+
+            }
         } else {
             new Convert(filename, 2);
+            map.getContentPane().removeAll();
+            map.setLayout(new BorderLayout());
             map.setContentPane(new JLabel(new ImageIcon("png/" + filename + "_User2.png")));
-            tick = false;
+            map.setLayout(new FlowLayout());
+            tick = true;
+            try {
+                File temp = new File("png/" + filename + "_User.png");
+                temp.delete();
+            } catch (Exception e) {
+
+            }
         }
 
         map.setSize(w-1, h-1);
