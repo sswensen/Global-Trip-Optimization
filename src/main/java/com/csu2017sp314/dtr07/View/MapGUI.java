@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +26,7 @@ public class MapGUI {
     private JFrame map; //Map that displays locations
     private JFrame face; //User interface with locations
     private boolean tick = false;
+    private int killmenow = 1;
 
     MapGUI() {
 
@@ -47,9 +50,15 @@ public class MapGUI {
 
     int init(String filename) throws Exception {
         this.filename = filename;
-        new Convert(filename, 0);
+        new Convert(filename, -1);
         map = new JFrame("TripCo"); //creating instance of JFrame
-
+        map.addWindowListener(new WindowAdapter()
+        {
+            public void windowClosing(WindowEvent e)
+            {
+                cleanup();
+            }
+        });
 
         //Code for aligning to left side of screen
         /* GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -67,6 +76,9 @@ public class MapGUI {
         map.setLayout(new BorderLayout());
         map.setContentPane(new JLabel(new ImageIcon("png/" + filename + ".png")));
         map.setLayout(new FlowLayout());
+        /*JLabel background = new JLabel(new ImageIcon("png/" + filename + ".png"));
+        background.setLayout( new BorderLayout() );
+        map.setContentPane( background );*/
 
         map.setLocation(0,0);
         map.setSize(1063,801); //Refreshes window, needed or image doesn't appear
@@ -155,12 +167,11 @@ public class MapGUI {
         int w = map.getWidth();
         int h = map.getHeight();
         //TimeUnit.SECONDS.sleep(5);
-        if(tick) {
+        /*if(tick) {
             new Convert(filename, 1);
-            map.getContentPane().removeAll();
-            map.setLayout(new BorderLayout());
-            map.setContentPane(new JLabel(new ImageIcon("png/" + filename + "_User.png")));
-            map.setLayout(new FlowLayout());
+            JLabel background = new JLabel(new ImageIcon("png/" + filename + "_User.png"));
+            background.setLayout( new BorderLayout() );
+            map.setContentPane( background );
             tick = false;
             try {
                 File temp = new File("png/" + filename + "_User2.png");
@@ -170,10 +181,9 @@ public class MapGUI {
             }
         } else {
             new Convert(filename, 2);
-            map.getContentPane().removeAll();
-            map.setLayout(new BorderLayout());
-            map.setContentPane(new JLabel(new ImageIcon("png/" + filename + "_User2.png")));
-            map.setLayout(new FlowLayout());
+            JLabel background = new JLabel(new ImageIcon("png/" + filename + "_User2.png"));
+            background.setLayout( new BorderLayout() );
+            map.setContentPane( background );
             tick = true;
             try {
                 File temp = new File("png/" + filename + "_User.png");
@@ -181,7 +191,12 @@ public class MapGUI {
             } catch (Exception e) {
 
             }
-        }
+        }*/
+        new Convert(filename, killmenow);
+        JLabel background = new JLabel(new ImageIcon("png/" + filename + killmenow + "_User.png"));
+        background.setLayout( new BorderLayout() );
+        map.setContentPane( background );
+        killmenow++;
 
         map.setSize(w-1, h-1);
         map.setSize(w,h);
@@ -189,6 +204,20 @@ public class MapGUI {
         map.setSize(1064,802); //Second part for refreshing the window
 
         map.setVisible(true); //making the frame visible
+    }
+
+    public void cleanup() {
+        try {
+            for (int i = 0; i < killmenow; i++) {
+                File temp = new File("png/" + filename + i + "_User.png");
+                temp.delete();
+            }
+            File temp = new File("png/" + filename + ".png");
+            temp.delete();
+            killmenow = 0;
+        } catch (Exception e) {
+
+        }
     }
 
     public static void main(String[] args) throws Exception {

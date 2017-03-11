@@ -21,12 +21,11 @@ public class Convert {
         TranscoderInput input_svg_image = new TranscoderInput(svg_URI_input);
         //Step-2: Define OutputStream to PNG Image and attach to TranscoderOutput
         OutputStream png_ostream;
-        if(dix == 0) {
+
+        if(dix < 0) {
             png_ostream = new FileOutputStream("png/" + filename + ".png");
-        } else if(dix == 1){
-            png_ostream = new FileOutputStream("png/" + filename + "_User.png");
         } else {
-            png_ostream = new FileOutputStream("png/" + filename + "_User2.png");
+            png_ostream = new FileOutputStream("png/" + filename + dix + "_User.png");
         }
         TranscoderOutput output_png_image = new TranscoderOutput(png_ostream);
         // Step-3: Create PNGTranscoder and define hints if required

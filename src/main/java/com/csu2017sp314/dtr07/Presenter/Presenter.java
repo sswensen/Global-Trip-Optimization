@@ -209,4 +209,8 @@ public class Presenter {
         eventLoadLoc();
         view.refresh();*/
     }
+
+    public void cleanup() {
+        view.cleanup();
+    }
 }

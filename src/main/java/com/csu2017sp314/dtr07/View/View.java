@@ -173,6 +173,10 @@ public class View {
         return ids;
     }
 
+    public void cleanup() {
+        gui.cleanup();
+    }
+
     public static void main(String[] argv) throws ParserConfigurationException, TransformerException {
 
     }

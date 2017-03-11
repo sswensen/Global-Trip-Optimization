@@ -54,6 +54,11 @@ public class TripCo
             }
             */
             presenter.planTrip(filename, selectionXml);
+            Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+                public void run() {
+                    presenter.cleanup();
+                }
+            }, "Shutdown-thread"));
         }
     }
 }
