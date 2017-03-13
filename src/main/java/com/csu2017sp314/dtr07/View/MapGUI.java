@@ -98,7 +98,7 @@ public class MapGUI {
         System.out.println("End printing tempLoc");*/
         int index = 35;
         for (String id : ids) {
-            JButton b = new JButton("[ ]");
+            JButton b = new JButton("Add");
             b.addActionListener(new ActionListener() { //This fires when button b is pressed, unique for each instance!
                 @Override //Bish
                 public void actionPerformed(ActionEvent e) {
@@ -109,23 +109,23 @@ public class MapGUI {
                         To use the first method, uncomment the line below.
                      */
                     //userAddLoc(id); //This is a callback to View
-                    if (b.getText().equals("[ ]")) { //Checks if button has already been pressed
+                    if (b.getText().equals("Add")) { //Checks if button has already been pressed
                         tempLoc.add(id);
                         System.out.println("Added " + id + "to array");
                         //b.setBackground(Color.BLACK);
                         //b.setOpaque(true); //Doesnt work for some unknown reason
-                        b.setText("[X]"); //If not pressed, toggle text and add
-                    } else if (b.getText().equals("[X]")) {
+                        b.setText("Remove"); //If not pressed, toggle text and add
+                    } else if (b.getText().equals("Remove")) {
                         tempLoc.remove(id);
                         System.out.println("Removed " + id + "to array");
-                        b.setText("[ ]"); //If already pressed, toggle text and remove
+                        b.setText("Add"); //If already pressed, toggle text and remove
                     }
                 }
             });
             JButton t = new JButton(id);
             t.setEnabled(false);
-            b.setBounds(5, index, 30, 30);
-            t.setBounds(35, index, 260, 30);
+            b.setBounds(5, index, 90, 30);
+            t.setBounds(95, index, 200, 30);
             face.add(b);
             b.setVisible(true);
             face.add(t);
@@ -143,7 +143,7 @@ public class MapGUI {
                 userAddLocList(tempLoc);
             }
         });
-        q.setBounds(5, 5, 290, 30);
+        q.setBounds(5, 5, 90, 30);
         face.add(q);
         //--This does background stuff to attempt to get rid of the buttons forming incorrectly--
         JButton a = new JButton();
