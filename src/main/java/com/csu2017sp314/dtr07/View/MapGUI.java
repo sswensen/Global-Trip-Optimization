@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -19,6 +21,7 @@ public class MapGUI {
     private Consumer<ArrayList<String>> callback2;
     private String filename;
     private JFrame map; //Map that displays locations
+    private JTabbedPane options;
     private JFrame face; //User interface with locations
     //private boolean tick = false;
     private int killmenow = 1;
@@ -46,24 +49,25 @@ public class MapGUI {
     int init(String filename) throws Exception {
         this.filename = filename;
         new Convert(filename, -1);
+        options = new JTabbedPane();
+        ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
+        createMapGUI(filename);
+        createFaceGUI();
+
+        JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
+		options.addTab("One", icon, jplInnerPanel1, "Tab 1");
+        options.setSelectedIndex(0);
+		JPanel jplInnerPanel2 = createInnerPanel("Tab 2 Contains Icon only");
+        options.addTab("Two", icon, jplInnerPanel2);
+
+
+        createOptionsGUI();
+        map.setVisible(true); //making the frame visible
+        return 1;
+    }
+
+    int createMapGUI(String filename) {
         map = new JFrame("TripCo"); //creating instance of JFrame
-        /*map.addWindowListener(new WindowAdapter() { //This looks for the 'x' to be pressed on the window, better solution in TripCo.java
-            public void windowClosing(WindowEvent e) {
-                cleanup();
-            }
-        });*/
-
-        //Code for aligning to left side of screen
-        /* GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
-        Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
-        int x = (int) rect.getMaxX() - f.getWidth();
-        */
-        /*map.setVisible(false);
-        map.removeAll();
-        map.revalidate();
-        map.repaint();*/
-
         map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         map.setLocationRelativeTo(null);
         map.setLayout(new BorderLayout());
@@ -76,21 +80,39 @@ public class MapGUI {
         map.setLocation(0, 0);
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802);
+        return 1;
+    }
 
-        //f.pack(); //Will make everything MASSIVE
-
+    int createFaceGUI() {
         face = new JFrame("User Options");
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setLocation(1063, 0);
         face.setSize(300, 802);
-
-        map.setVisible(true); //making the frame visible
         face.setVisible(true);
         return 1;
     }
 
+    int createOptionsGUI() {
+        JFrame frame = new JFrame("TabbedPane Source Demo");
+        frame.getContentPane().add(options, BorderLayout.CENTER);
+        frame.setSize(300, 802);
+        frame.setLocation(1063, 0);
+        frame.setVisible(true);
+        return 1;
+    }
+
+    protected JPanel createInnerPanel(String text) {
+        JPanel jplPanel = new JPanel();
+        JLabel jlbDisplay = new JLabel(text);
+        jlbDisplay.setHorizontalAlignment(JLabel.CENTER);
+        jplPanel.setLayout(new GridLayout(1, 1));
+        jplPanel.add(jlbDisplay);
+        return jplPanel;
+    }
+
     void displayXML(ArrayList<String> ids) {
         ArrayList<String> tempLoc = new ArrayList<>();
+        JPanel fTemp = createInnerPanel("One");
         /*System.out.println("Printing tempLoc");
         for(int i = 0; i < ids.size(); i++) {
             System.out.println("[GUI] ID at index " + i + " = "+ ids.get(i));
@@ -109,13 +131,13 @@ public class MapGUI {
                         To use the first method, uncomment the line below.
                      */
                     //userAddLoc(id); //This is a callback to View
-                    if (b.getText().equals("Add")) { //Checks if button has already been pressed
+                    if(b.getText().equals("Add")) { //Checks if button has already been pressed
                         tempLoc.add(id);
                         System.out.println("Added " + id + "to array");
                         //b.setBackground(Color.BLACK);
-                        //b.setOpaque(true); //Doesnt work for some unknown reason
+                        //b.setOpaque(true); //Doesn't work for some unknown reason
                         b.setText("Remove"); //If not pressed, toggle text and add
-                    } else if (b.getText().equals("Remove")) {
+                    } else if(b.getText().equals("Remove")) {
                         tempLoc.remove(id);
                         System.out.println("Removed " + id + "to array");
                         b.setText("Add"); //If already pressed, toggle text and remove
@@ -127,8 +149,10 @@ public class MapGUI {
             b.setBounds(5, index, 90, 30);
             t.setBounds(95, index, 200, 30);
             face.add(b);
+            fTemp.add(b);
             b.setVisible(true);
             face.add(t);
+            fTemp.add(t);
             t.setVisible(true);
             index += 35;
         }
@@ -145,14 +169,18 @@ public class MapGUI {
         });
         q.setBounds(5, 5, 90, 30);
         face.add(q);
+        fTemp.add(q);
         //--This does background stuff to attempt to get rid of the buttons forming incorrectly--
         JButton a = new JButton();
         a.setEnabled(false);
         face.add(a);
+        fTemp.add(a);
         a.setVisible(true);
         //---------------------------------------------------------------------------------------
         face.setSize(299, 801);
         face.setSize(300, 802);
+        ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
+        options.addTab("Three", icon, fTemp, "Tab 3");
     }
 
     void refresh() throws Exception {
@@ -187,6 +215,10 @@ public class MapGUI {
         }*/
         new Convert(filename, killmenow);
         JLabel background = new JLabel(new ImageIcon("png/" + filename + killmenow + "_User.png"));
+        File temp = new File("png/" + filename + (killmenow-1) + "_User.png");
+        if(!temp.delete()) {
+            System.out.println("Error deleting " + temp.getPath());
+        }
         background.setLayout(new BorderLayout());
         map.setContentPane(background);
         killmenow++;
@@ -200,11 +232,13 @@ public class MapGUI {
     }
 
     boolean cleanup() {
-        boolean ret = false;
-        for (int i = 0; i < killmenow; i++) {
+        boolean ret;
+        /*for (int i = 0; i < killmenow; i++) {
             File temp = new File("png/" + filename + i + "_User.png");
             ret = temp.delete();
-        }
+        }*/
+        File t = new File("png/" + filename + (killmenow-1) + "_User.png");
+        ret = t.delete();
         File temp = new File("png/" + filename + ".png");
         Boolean ret2 = temp.delete();
         killmenow = 0;
