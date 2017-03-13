@@ -50,15 +50,15 @@ public class MapGUI {
         this.filename = filename;
         new Convert(filename, -1);
         options = new JTabbedPane();
-        ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
+        //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
         createMapGUI(filename);
         createFaceGUI();
 
-        JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
+        /*JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
 		options.addTab("One", icon, jplInnerPanel1, "Tab 1");
         options.setSelectedIndex(0);
 		JPanel jplInnerPanel2 = createInnerPanel("Tab 2 Contains Icon only");
-        options.addTab("Two", icon, jplInnerPanel2);
+        options.addTab("Two", icon, jplInnerPanel2);*/
 
 
         createOptionsGUI();
@@ -103,60 +103,26 @@ public class MapGUI {
 
     protected JPanel createInnerPanel(String text) {
         JPanel jplPanel = new JPanel();
-        JLabel jlbDisplay = new JLabel(text);
-        jlbDisplay.setHorizontalAlignment(JLabel.CENTER);
-        jplPanel.setLayout(new GridLayout(1, 1));
-        jplPanel.add(jlbDisplay);
+        jplPanel.setLayout(new GridBagLayout());
         return jplPanel;
     }
 
     void displayXML(ArrayList<String> ids) {
         ArrayList<String> tempLoc = new ArrayList<>();
-        JPanel fTemp = createInnerPanel("One");
+        JPanel fTemp = createInnerPanel("");
         /*System.out.println("Printing tempLoc");
         for(int i = 0; i < ids.size(); i++) {
             System.out.println("[GUI] ID at index " + i + " = "+ ids.get(i));
         }
         System.out.println("End printing tempLoc");*/
-        int index = 35;
-        for (String id : ids) {
-            JButton b = new JButton("Add");
-            b.addActionListener(new ActionListener() { //This fires when button b is pressed, unique for each instance!
-                @Override //Bish
-                public void actionPerformed(ActionEvent e) {
-                    /*
-                        We can use the following method to run the call back each time a location is clicked (don't know about efficiency here)
-                        Or we can do one where the callback is only initiated when the user clicks the button that loads the map after selecting locations
-                        I'm going to implement the second method as the first one already is.
-                        To use the first method, uncomment the line below.
-                     */
-                    //userAddLoc(id); //This is a callback to View
-                    if(b.getText().equals("Add")) { //Checks if button has already been pressed
-                        tempLoc.add(id);
-                        System.out.println("Added " + id + "to array");
-                        //b.setBackground(Color.BLACK);
-                        //b.setOpaque(true); //Doesn't work for some unknown reason
-                        b.setText("Remove"); //If not pressed, toggle text and add
-                    } else if(b.getText().equals("Remove")) {
-                        tempLoc.remove(id);
-                        System.out.println("Removed " + id + "to array");
-                        b.setText("Add"); //If already pressed, toggle text and remove
-                    }
-                }
-            });
-            JButton t = new JButton(id);
-            t.setEnabled(false);
-            b.setBounds(5, index, 90, 30);
-            t.setBounds(95, index, 200, 30);
-            face.add(b);
-            fTemp.add(b);
-            b.setVisible(true);
-            face.add(t);
-            fTemp.add(t);
-            t.setVisible(true);
-            index += 35;
-        }
+
         //Adding button to load tempLocs
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 3;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
         JButton q = new JButton("Display");
         q.addActionListener(new ActionListener() {
             @Override
@@ -169,18 +135,68 @@ public class MapGUI {
         });
         q.setBounds(5, 5, 90, 30);
         face.add(q);
-        fTemp.add(q);
-        //--This does background stuff to attempt to get rid of the buttons forming incorrectly--
-        JButton a = new JButton();
-        a.setEnabled(false);
-        face.add(a);
-        fTemp.add(a);
-        a.setVisible(true);
-        //---------------------------------------------------------------------------------------
+        //fTemp.add(q);
+        fTemp.add(q, gbc);
+
+        int index = 35;
+        int i = 0;
+        for (String id : ids) {
+            JButton b = new JButton("   Add   ");
+            b.addActionListener(new ActionListener() { //This fires when button b is pressed, unique for each instance!
+                @Override //Bish
+                public void actionPerformed(ActionEvent e) {
+                    /*
+                        We can use the following method to run the call back each time a location is clicked (don't know about efficiency here)
+                        Or we can do one where the callback is only initiated when the user clicks the button that loads the map after selecting locations
+                        I'm going to implement the second method as the first one already is.
+                        To use the first method, uncomment the line below.
+                     */
+                    //userAddLoc(id); //This is a callback to View
+                    if(b.getText().equals("   Add   ")) { //Checks if button has already been pressed
+                        tempLoc.add(id);
+                        System.out.println("Added " + id + "to array");
+                        //b.setBackground(Color.BLACK);
+                        //b.setOpaque(true); //Doesn't work for some unknown reason
+                        b.setText("Remove"); //If not pressed, toggle text and add
+                    } else if(b.getText().equals("Remove")) {
+                        tempLoc.remove(id);
+                        System.out.println("Removed " + id + "to array");
+                        b.setText("   Add   "); //If already pressed, toggle text and remove
+                    }
+                }
+            });
+
+            gbc.fill = GridBagConstraints.NONE;
+            JButton t = new JButton(id);
+            t.setEnabled(false);
+            //b.setBounds(5, index, 90, 30);
+            //t.setBounds(95, index, 200, 30);
+            face.add(b);
+            fTemp.add(b);
+            b.setVisible(true);
+            //face.add(t);
+            //fTemp.add(t);
+            t.setVisible(true);
+            index += 35;
+
+            gbc.gridwidth = 1;
+            gbc.gridx = 0;
+            gbc.gridy = i+1;
+            i++;
+            fTemp.add(b, gbc);
+
+            gbc.gridwidth = 2;
+            gbc.gridx = 1;
+            fTemp.add(t, gbc);
+        }
+
         face.setSize(299, 801);
         face.setSize(300, 802);
         ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
-        options.addTab("Three", icon, fTemp, "Tab 3");
+        //fTemp.setLayout(new GridLayout(20, 2));
+        options.addTab("Locations", icon, fTemp, "Locations");
+        //options.addTab("Four", face.getContentPane());
+
     }
 
     void refresh() throws Exception {
