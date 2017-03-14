@@ -23,6 +23,7 @@ public class MapGUI {
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
     private JFrame face; //User interface with locations
+    private JFrame uOp;
     //private boolean tick = false;
     private int killmenow = 1;
 
@@ -52,7 +53,7 @@ public class MapGUI {
         options = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
         createMapGUI(filename);
-        createFaceGUI();
+        //createFaceGUI();
 
         /*JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
 		options.addTab("One", icon, jplInnerPanel1, "Tab 1");
@@ -93,11 +94,12 @@ public class MapGUI {
     }
 
     int createOptionsGUI() {
-        JFrame frame = new JFrame("TabbedPane Source Demo");
-        frame.getContentPane().add(options, BorderLayout.CENTER);
-        frame.setSize(300, 802);
-        frame.setLocation(1063, 0);
-        frame.setVisible(true);
+        uOp = new JFrame("User Options");
+        uOp.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
+        uOp.getContentPane().add(options, BorderLayout.CENTER);
+        uOp.setSize(300, 802);
+        uOp.setLocation(1063, 0);
+        uOp.setVisible(true);
         return 1;
     }
 
@@ -134,7 +136,7 @@ public class MapGUI {
             }
         });
         q.setBounds(5, 5, 90, 30);
-        face.add(q);
+        //face.add(q);
         //fTemp.add(q);
         fTemp.add(q, gbc);
 
@@ -169,9 +171,11 @@ public class MapGUI {
             gbc.fill = GridBagConstraints.NONE;
             JButton t = new JButton(id);
             t.setEnabled(false);
-            //b.setBounds(5, index, 90, 30);
+            //t.setPreferredSize(new Dimension(150,t.getHeight()));
+
+            //b.setBounds(5, index, 90, 3560);
             //t.setBounds(95, index, 200, 30);
-            face.add(b);
+            //face.add(b);
             fTemp.add(b);
             b.setVisible(true);
             //face.add(t);
@@ -190,13 +194,15 @@ public class MapGUI {
             fTemp.add(t, gbc);
         }
 
-        face.setSize(299, 801);
-        face.setSize(300, 802);
+        //face.setSize(299, 801);
+        //face.setSize(300, 802);
         ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
         //fTemp.setLayout(new GridLayout(20, 2));
         options.addTab("Locations", icon, fTemp, "Locations");
         //options.addTab("Four", face.getContentPane());
-
+        uOp.pack();
+        //uOp.setVisible(true);
+        //uOp.setMinimumSize(uOp.getSize());
     }
 
     void refresh() throws Exception {
