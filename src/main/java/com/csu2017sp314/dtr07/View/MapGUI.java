@@ -22,18 +22,6 @@ public class MapGUI {
         new Convert(filename, 0);
         map = new JFrame("TripCo"); //creating instance of JFrame
 
-
-        //Code for aligning to left side of screen
-        /* GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice defaultScreen = ge.getDefaultScreenDevice();
-        Rectangle rect = defaultScreen.getDefaultConfiguration().getBounds();
-        int x = (int) rect.getMaxX() - f.getWidth();
-        */
-        /*map.setVisible(false);
-        map.removeAll();
-        map.revalidate();
-        map.repaint();*/
-
         map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         map.setLocationRelativeTo(null);
         map.setLayout(new BorderLayout());
