@@ -52,7 +52,7 @@ public class MapGUI {
 
     int init(String filename) throws Exception {
         this.filename = filename;
-        this.workingDirectoryFilePath = System.getProperty("user.dir");
+        this.workingDirectoryFilePath = System.getProperty("user.dir") + "/";
         new Convert(filename, -1);
         options = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
@@ -76,7 +76,7 @@ public class MapGUI {
         map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         map.setLocationRelativeTo(null);
         map.setLayout(new BorderLayout());
-        map.setContentPane(new JLabel(new ImageIcon("png/" + filename + ".png")));
+        map.setContentPane(new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + ".png")));
         map.setLayout(new FlowLayout());
         /*JLabel background = new JLabel(new ImageIcon("png/" + filename + ".png"));
         background.setLayout( new BorderLayout() );
@@ -202,9 +202,9 @@ public class MapGUI {
     void refresh() throws Exception {
         map.setVisible(false);
         new Convert(filename, killmenow);
-        JLabel background = new JLabel(new ImageIcon( "png/" + filename + killmenow + "_User.png"));
-        File temp = new File( "png/" + filename + (killmenow-1) + "_User.png");
-        if(!temp.delete()) {
+        JLabel background = new JLabel(new ImageIcon( workingDirectoryFilePath + "png/" + filename + killmenow + "_User.png"));
+        File temp = new File( workingDirectoryFilePath + "png/" + filename + (killmenow-1) + "_User.png");
+        if(!temp.delete() && killmenow != 1) {
             System.out.println("Error deleting " + temp.getPath());
         }
         background.setLayout(new BorderLayout());
@@ -218,9 +218,9 @@ public class MapGUI {
 
     boolean cleanup() {
         boolean ret;
-        File t = new File("png/" + filename + (killmenow-1) + "_User.png");
+        File t = new File(workingDirectoryFilePath + "png/" + filename + (killmenow-1) + "_User.png");
         ret = t.delete();
-        File temp = new File("png/" + filename + ".png");
+        File temp = new File(workingDirectoryFilePath + "png/" + filename + ".png");
         Boolean ret2 = temp.delete();
         killmenow = 0;
         return ret & ret2;
