@@ -24,6 +24,7 @@ public class MapGUI {
     private JTabbedPane options;
     private JFrame face; //User interface with locations
     private JFrame uOp;
+    private GridBagConstraints gbc;
     //private boolean tick = false;
     private int killmenow = 1;
 
@@ -97,7 +98,7 @@ public class MapGUI {
         uOp = new JFrame("User Options");
         uOp.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         uOp.getContentPane().add(options, BorderLayout.CENTER);
-        uOp.setSize(300, 802);
+        //uOp.setSize(300, 802);
         uOp.setLocation(1063, 0);
         uOp.setVisible(true);
         return 1;
@@ -109,21 +110,18 @@ public class MapGUI {
         return jplPanel;
     }
 
+    void setGBC(int gridx, int gridy, int gridwidth) {
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        gbc.gridwidth = gridwidth;
+    }
+
     void displayXML(ArrayList<String> ids) {
         ArrayList<String> tempLoc = new ArrayList<>();
         JPanel fTemp = createInnerPanel("");
-        /*System.out.println("Printing tempLoc");
-        for(int i = 0; i < ids.size(); i++) {
-            System.out.println("[GUI] ID at index " + i + " = "+ ids.get(i));
-        }
-        System.out.println("End printing tempLoc");*/
-
-        //Adding button to load tempLocs
-        GridBagConstraints gbc = new GridBagConstraints();
+        gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = 3;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        setGBC(0, 0, 4);
 
         JButton q = new JButton("Display");
         q.addActionListener(new ActionListener() {
@@ -135,12 +133,9 @@ public class MapGUI {
                 userAddLocList(tempLoc);
             }
         });
-        q.setBounds(5, 5, 90, 30);
-        //face.add(q);
-        //fTemp.add(q);
+        //q.setBounds(5, 5, 90, 30);
         fTemp.add(q, gbc);
 
-        int index = 35;
         int i = 0;
         for (String id : ids) {
             JButton b = new JButton("   Add   ");
@@ -162,7 +157,7 @@ public class MapGUI {
                         b.setText("Remove"); //If not pressed, toggle text and add
                     } else if(b.getText().equals("Remove")) {
                         tempLoc.remove(id);
-                        System.out.println("Removed " + id + "to array");
+                        System.out.println("Removed " + id + "from array");
                         b.setText("   Add   "); //If already pressed, toggle text and remove
                     }
                 }
@@ -170,71 +165,30 @@ public class MapGUI {
 
             gbc.fill = GridBagConstraints.NONE;
             JButton t = new JButton(id);
+            JLabel t2 = new JLabel(id);
             t.setEnabled(false);
-            //t.setPreferredSize(new Dimension(150,t.getHeight()));
 
-            //b.setBounds(5, index, 90, 3560);
-            //t.setBounds(95, index, 200, 30);
-            //face.add(b);
             fTemp.add(b);
             b.setVisible(true);
-            //face.add(t);
-            //fTemp.add(t);
             t.setVisible(true);
-            index += 35;
 
-            gbc.gridwidth = 1;
-            gbc.gridx = 0;
-            gbc.gridy = i+1;
             i++;
+            setGBC(0, i, 1);
             fTemp.add(b, gbc);
-
-            gbc.gridwidth = 2;
-            gbc.gridx = 1;
-            fTemp.add(t, gbc);
+            setGBC(1, i, 3);
+            fTemp.add(t2, gbc);
         }
 
-        //face.setSize(299, 801);
-        //face.setSize(300, 802);
         ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
-        //fTemp.setLayout(new GridLayout(20, 2));
         options.addTab("Locations", icon, fTemp, "Locations");
         //options.addTab("Four", face.getContentPane());
+
+        //uOp.setMinimumSize(new Dimension(500, 500));
         uOp.pack();
-        //uOp.setVisible(true);
-        //uOp.setMinimumSize(uOp.getSize());
     }
 
     void refresh() throws Exception {
         map.setVisible(false);
-        //int w = map.getWidth();
-        //int h = map.getHeight();
-        //TimeUnit.SECONDS.sleep(5);
-        /*if(tick) {
-            new Convert(filename, 1);
-            JLabel background = new JLabel(new ImageIcon("png/" + filename + "_User.png"));
-            background.setLayout( new BorderLayout() );
-            map.setContentPane( background );
-            tick = false;
-            try {
-                File temp = new File("png/" + filename + "_User2.png");
-                temp.delete();
-            } catch (Exception e) {
-
-            }
-        } else {
-            new Convert(filename, 2);
-            JLabel background = new JLabel(new ImageIcon("png/" + filename + "_User2.png"));
-            background.setLayout( new BorderLayout() );
-            map.setContentPane( background );
-            tick = true;
-            try {
-                File temp = new File("png/" + filename + "_User.png");
-                temp.delete();
-            } catch (Exception e) {
-
-            }
-        }*/
         new Convert(filename, killmenow);
         JLabel background = new JLabel(new ImageIcon("png/" + filename + killmenow + "_User.png"));
         File temp = new File("png/" + filename + (killmenow-1) + "_User.png");
@@ -245,20 +199,13 @@ public class MapGUI {
         map.setContentPane(background);
         killmenow++;
 
-        //map.setSize(w - 1, h - 1);
-        //map.setSize(w, h);
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802); //Second part for refreshing the window
-
         map.setVisible(true); //making the frame visible
     }
 
     boolean cleanup() {
         boolean ret;
-        /*for (int i = 0; i < killmenow; i++) {
-            File temp = new File("png/" + filename + i + "_User.png");
-            ret = temp.delete();
-        }*/
         File t = new File("png/" + filename + (killmenow-1) + "_User.png");
         ret = t.delete();
         File temp = new File("png/" + filename + ".png");
