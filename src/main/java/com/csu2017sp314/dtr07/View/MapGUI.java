@@ -23,6 +23,8 @@ public class MapGUI {
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
     private JFrame face; //User interface with locations
+    private ArrayList<ArrayList<String>> trips = new ArrayList<>();
+    private String workingDirectoryFilePath;
     //private boolean tick = false;
     private int killmenow = 1;
 
@@ -48,6 +50,7 @@ public class MapGUI {
 
     int init(String filename) throws Exception {
         this.filename = filename;
+        this.workingDirectoryFilePath = System.getProperty("user.dir");
         new Convert(filename, -1);
         options = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
@@ -131,6 +134,16 @@ public class MapGUI {
                     System.out.println("[GUI] ID at index " + i + " = "+ ids.get(i));
                 }*/
                 userAddLocList(tempLoc);
+                ArrayList<String> trip = new ArrayList<>(tempLoc);
+                trips.add(trip);
+                /*
+                for(int i = 0; i < trips.size();i++){
+                    for(int j = 0; j < trips.get(i).size();j++){
+                        System.out.print(trips.get(i).get(j) + " ");
+                    }
+                    System.out.println();
+                }
+                */
             }
         });
         q.setBounds(5, 5, 90, 30);
@@ -192,7 +205,7 @@ public class MapGUI {
 
         face.setSize(299, 801);
         face.setSize(300, 802);
-        ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
+        ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "favicon.ico", "HELP2");
         //fTemp.setLayout(new GridLayout(20, 2));
         options.addTab("Locations", icon, fTemp, "Locations");
         //options.addTab("Four", face.getContentPane());
@@ -230,8 +243,8 @@ public class MapGUI {
             }
         }*/
         new Convert(filename, killmenow);
-        JLabel background = new JLabel(new ImageIcon("png/" + filename + killmenow + "_User.png"));
-        File temp = new File("png/" + filename + (killmenow-1) + "_User.png");
+        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "/" + filename + killmenow + "_User.png"));
+        File temp = new File(workingDirectoryFilePath + "/" + filename + (killmenow-1) + "_User.png");
         if(!temp.delete()) {
             System.out.println("Error deleting " + temp.getPath());
         }
