@@ -243,8 +243,8 @@ public class MapGUI {
             }
         }*/
         new Convert(filename, killmenow);
-        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "/" + filename + killmenow + "_User.png"));
-        File temp = new File(workingDirectoryFilePath + "/" + filename + (killmenow-1) + "_User.png");
+        JLabel background = new JLabel(new ImageIcon( "png/" + filename + killmenow + "_User.png"));
+        File temp = new File( "png/" + filename + (killmenow-1) + "_User.png");
         if(!temp.delete()) {
             System.out.println("Error deleting " + temp.getPath());
         }
