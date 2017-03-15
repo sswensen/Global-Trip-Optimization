@@ -89,8 +89,8 @@ public class MapGUI {
         f.setLayout(new BorderLayout());
         f.setContentPane(new JLabel(new ImageIcon("png/Colorado14ers.png")));
         f.setLayout(new FlowLayout());
-        f.setSize(1063,779); //Refreshes window, needed or image doesn't appear
-        f.setSize(1064,780);
+        f.setSize(1063, 779); //Refreshes window, needed or image doesn't appear
+        f.setSize(1064, 780);
         f.setLayout(null); //using no layout managers
         f.setVisible(true); //making the frame visible
     }
