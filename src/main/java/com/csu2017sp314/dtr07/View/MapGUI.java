@@ -24,11 +24,13 @@ public class MapGUI {
     private JTabbedPane options;
     private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
+    ArrayList<String> tempLoc;
     private String workingDirectoryFilePath;
     private JFrame uOp;
     private GridBagConstraints gbc;
     //private boolean tick = false;
     private int killmenow = 1;
+    private int z = 0;
 
     MapGUI() {
 
@@ -71,12 +73,12 @@ public class MapGUI {
         return 1;
     }
 
-    int createMapGUI(String filename) {
+    private int createMapGUI(String filename) {
         map = new JFrame("TripCo"); //creating instance of JFrame
         map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         map.setLocationRelativeTo(null);
         map.setLayout(new BorderLayout());
-        map.setContentPane(new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + ".png")));
+        map.setContentPane(new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + ".png"))); //Creates png background
         map.setLayout(new FlowLayout());
         /*JLabel background = new JLabel(new ImageIcon("png/" + filename + ".png"));
         background.setLayout( new BorderLayout() );
@@ -97,7 +99,7 @@ public class MapGUI {
         return 1;
     }
 
-    int createOptionsGUI() {
+    private int createOptionsGUI() {
         uOp = new JFrame("User Options");
         uOp.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         uOp.getContentPane().add(options, BorderLayout.CENTER);
@@ -107,7 +109,7 @@ public class MapGUI {
         return 1;
     }
 
-    protected JPanel createInnerPanel(String text) {
+    private JPanel createInnerPanel(String text) {
         JPanel jplPanel = new JPanel();
         jplPanel.setLayout(new GridBagLayout());
         return jplPanel;
@@ -120,8 +122,9 @@ public class MapGUI {
     }
 
     void displayXML(ArrayList<String> ids) {
-        ArrayList<String> tempLoc = new ArrayList<>();
+        tempLoc = new ArrayList<>();
         JPanel fTemp = createInnerPanel("");
+        JPanel loadPanel = createInnerPanel("Load Trips");
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 1);
@@ -152,9 +155,19 @@ public class MapGUI {
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> trip = new ArrayList<>(tempLoc);
                 trips.add(trip);
+
+                setGBC(0, z, 1);
+                JButton load = new JButton("Load Trip " + trips.indexOf(trip));
+                loadPanel.add(load, gbc);
+                load.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tempLoc = trip;
+                    }
+                });
+                z++;
             }
         });
-        fTemp.add(s, gbc);
 
         int i = 0;
         for (String id : ids) {
@@ -201,8 +214,10 @@ public class MapGUI {
       
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
+        options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
         //options.addTab("Four", face.getContentPane());
         //uOp.setMinimumSize(new Dimension(500, 500));
+
         uOp.pack();
     }
 
