@@ -179,7 +179,7 @@ public class MapGUI {
                     deleteTrip.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            trips.remove(z-1);
+                            trips.remove(z-1); //TODO fix this
                             loadPanel.remove(load);
                             loadPanel.remove(deleteTrip);
                             uOp.pack();
@@ -224,7 +224,7 @@ public class MapGUI {
                 deleteTrip.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        trips.remove(z-1);
+                        trips.remove(z-1); //TODO fix this
                         loadPanel.remove(load);
                         loadPanel.remove(deleteTrip);
                         uOp.pack();
