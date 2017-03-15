@@ -28,7 +28,7 @@ public class MapGUI {
     private String workingDirectoryFilePath;
     private JFrame uOp;
     private GridBagConstraints gbc;
-    //private boolean tick = false;
+    private boolean tick = false;
     private int killmenow = 1;
     private int z = 0; //Number of saved trips
     private int numButtons = 0; //Number of id buttons
@@ -167,8 +167,9 @@ public class MapGUI {
                         tempLoc = trip;
                         userAddLocList(tempLoc);
                         for(int i = 0; i < buttons.size(); i++) {
+                            tick = true;
                             buttons.get(i).doClick();
-                            buttons.get(i).doClick();
+                            //buttons.get(i).doClick();
                         }
                     }
                 });
@@ -191,16 +192,31 @@ public class MapGUI {
                         To use the first method, uncomment the line below.
                      */
                     //userAddLoc(id); //This is a callback to View
-                    if(b.getText().equals("      Add      ") && !tempLoc.contains(id)) { //Checks if button has already been pressed
-                        tempLoc.add(id);
-                        System.out.println("Added " + id + "to array");
-                        //b.setBackground(Color.BLACK);
-                        //b.setOpaque(true); //Doesn't work for some unknown reason
-                        b.setText("   Remove   "); //If not pressed, toggle text and add
-                    } else if(b.getText().equals("   Remove   ") && tempLoc.contains(id)) {
-                        tempLoc.remove(id);
-                        System.out.println("Removed " + id + "from array");
-                        b.setText("      Add      "); //If already pressed, toggle text and remove
+                    if(tick) {
+                        for(int i = 0; i < tempLoc.size(); i++) {
+                            if(tempLoc.contains(id) && b.getText().equals("      Add      ")) {
+                                b.setText("   Remove   ");
+                            } else if(!tempLoc.contains(id) && b.getText().equals("   Remove   ")) {
+                                b.setText("      Add      ");
+                            }
+                        }
+                    }
+                    tick = false;
+
+                    if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
+                        if(!tempLoc.contains(id)) {
+                            tempLoc.add(id);
+                            System.out.println("Added " + id + "to array");
+                            b.setText("   Remove   "); //If not pressed, toggle text and add
+                        }
+
+                    } else if(b.getText().equals("   Remove   ")) {
+                        if(tempLoc.contains(id)) {
+                            tempLoc.remove(id);
+                            System.out.println("Removed " + id + "from array");
+                            b.setText("      Add      ");
+                        }
+                         //If already pressed, toggle text and remove
                     } else {
                         //System.out.println("Error adding/removing " + id + " into/from tempLoc");
                     }
