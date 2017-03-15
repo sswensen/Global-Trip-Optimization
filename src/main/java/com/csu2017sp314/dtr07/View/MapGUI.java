@@ -4,10 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.io.File;
 
@@ -31,7 +28,6 @@ public class MapGUI {
     private boolean tick = false;
     private int killmenow = 1;
     private int z = 0; //Number of saved trips
-    private int numButtons = 0; //Number of id buttons
     private ArrayList<JButton> buttons = new ArrayList<>();
 
     MapGUI() {
@@ -216,9 +212,6 @@ public class MapGUI {
                             System.out.println("Removed " + id + "from array");
                             b.setText("      Add      ");
                         }
-                         //If already pressed, toggle text and remove
-                    } else {
-                        //System.out.println("Error adding/removing " + id + " into/from tempLoc");
                     }
                 }
             });
