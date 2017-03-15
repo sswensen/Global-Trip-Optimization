@@ -124,9 +124,9 @@ public class MapGUI {
         JPanel fTemp = createInnerPanel("");
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        setGBC(0, 0, 2);
+        setGBC(0, 0, 1);
 
-        JButton q = new JButton("Display");
+        JButton q = new JButton("  Display  ");
         q.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -146,7 +146,7 @@ public class MapGUI {
         });
         fTemp.add(q, gbc);
         setGBC(1, 0, 2);
-        JButton s = new JButton("Save");
+        JButton s = new JButton("  Save  ");
         s.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -158,7 +158,7 @@ public class MapGUI {
 
         int i = 0;
         for (String id : ids) {
-            JButton b = new JButton("   Add   ");
+            JButton b = new JButton("     Add     ");
             b.addActionListener(new ActionListener() { //This fires when button b is pressed, unique for each instance!
                 @Override //Bish
                 public void actionPerformed(ActionEvent e) {
@@ -169,16 +169,16 @@ public class MapGUI {
                         To use the first method, uncomment the line below.
                      */
                     //userAddLoc(id); //This is a callback to View
-                    if(b.getText().equals("   Add   ")) { //Checks if button has already been pressed
+                    if(b.getText().equals("     Add     ")) { //Checks if button has already been pressed
                         tempLoc.add(id);
                         System.out.println("Added " + id + "to array");
                         //b.setBackground(Color.BLACK);
                         //b.setOpaque(true); //Doesn't work for some unknown reason
-                        b.setText("Remove"); //If not pressed, toggle text and add
-                    } else if(b.getText().equals("Remove")) {
+                        b.setText("  Remove  "); //If not pressed, toggle text and add
+                    } else if(b.getText().equals("  Remove  ")) {
                         tempLoc.remove(id);
                         System.out.println("Removed " + id + "from array");
-                        b.setText("   Add   "); //If already pressed, toggle text and remove
+                        b.setText("     Add     "); //If already pressed, toggle text and remove
                     }
                 }
             });
