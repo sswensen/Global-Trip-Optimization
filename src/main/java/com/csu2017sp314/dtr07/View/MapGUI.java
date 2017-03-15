@@ -134,8 +134,6 @@ public class MapGUI {
                     System.out.println("[GUI] ID at index " + i + " = "+ ids.get(i));
                 }*/
                 userAddLocList(tempLoc);
-                ArrayList<String> trip = new ArrayList<>(tempLoc);
-                trips.add(trip);
                 /*
                 for(int i = 0; i < trips.size();i++){
                     for(int j = 0; j < trips.get(i).size();j++){
@@ -147,13 +145,13 @@ public class MapGUI {
             }
         });
         fTemp.add(q, gbc);
-
         setGBC(1, 0, 2);
         JButton s = new JButton("Save");
         s.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                ArrayList<String> trip = new ArrayList<>(tempLoc);
+                trips.add(trip);
             }
         });
         fTemp.add(s, gbc);
