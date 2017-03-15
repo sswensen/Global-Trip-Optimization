@@ -169,7 +169,7 @@ public class MapGUI {
                         for(int i = 0; i < buttons.size(); i++) {
                             tick = true;
                             buttons.get(i).doClick();
-                            //buttons.get(i).doClick();
+                            buttons.get(i).doClick();
                         }
                     }
                 });
