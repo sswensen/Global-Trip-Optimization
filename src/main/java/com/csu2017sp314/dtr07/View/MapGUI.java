@@ -61,7 +61,7 @@ public class MapGUI {
         //createFaceGUI();
 
         /*JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
-		options.addTab("One", icon, jplInnerPanel1, "Tab 1");
+        options.addTab("One", icon, jplInnerPanel1, "Tab 1");
         options.setSelectedIndex(0);
 		JPanel jplInnerPanel2 = createInnerPanel("Tab 2 Contains Icon only");
         options.addTab("Two", icon, jplInnerPanel2);*/
@@ -147,13 +147,13 @@ public class MapGUI {
             }
         });
         fTemp.add(q, gbc);
-        setGBC(1, 0, 2);
+        setGBC(2, 0, 1);
         JButton s = new JButton(" Save Trip ");
         s.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> trip = new ArrayList<>(tempLoc);
-                if(savedTrip < 0) {
+                if (savedTrip < 0 || trips.size() == 0) {
                     trips.add(trip);
 
                     setGBC(0, z, 1);
@@ -179,7 +179,7 @@ public class MapGUI {
                     deleteTrip.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            trips.remove(z);
+                            trips.remove(z-1);
                             loadPanel.remove(load);
                             loadPanel.remove(deleteTrip);
                             uOp.pack();
@@ -192,6 +192,48 @@ public class MapGUI {
             }
         });
         fTemp.add(s, gbc);
+
+        setGBC(3, 0, 1);
+        JButton sa = new JButton(" Save As ");
+        sa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<String> trip = new ArrayList<>(tempLoc);
+                trips.add(trip);
+
+                setGBC(0, z, 1);
+                JButton load = new JButton("Load Trip " + z);
+                loadPanel.add(load, gbc);
+                load.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tempLoc = trip;
+                        userAddLocList(tempLoc);
+                        for (int i = 0; i < buttons.size(); i++) {
+                            tick = true;
+                            buttons.get(i).doClick();
+                            buttons.get(i).doClick();
+                        }
+                        savedTrip = z;
+                    }
+                });
+
+                setGBC(1, z, 1);
+                JButton deleteTrip = new JButton("Delete");
+                loadPanel.add(deleteTrip, gbc);
+                deleteTrip.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        trips.remove(z-1);
+                        loadPanel.remove(load);
+                        loadPanel.remove(deleteTrip);
+                        uOp.pack();
+                    }
+                });
+                z++;
+            }
+        });
+        fTemp.add(sa, gbc);
 
         int numButtons = 0;
         for (String id : ids) {
@@ -207,26 +249,26 @@ public class MapGUI {
                         To use the first method, uncomment the line below.
                      */
                     //userAddLoc(id); //This is a callback to View
-                    if(tick) {
-                        for(int i = 0; i < tempLoc.size(); i++) {
-                            if(tempLoc.contains(id) && b.getText().equals("      Add      ")) {
+                    if (tick) {
+                        for (int i = 0; i < tempLoc.size(); i++) {
+                            if (tempLoc.contains(id) && b.getText().equals("      Add      ")) {
                                 b.setText("   Remove   ");
-                            } else if(!tempLoc.contains(id) && b.getText().equals("   Remove   ")) {
+                            } else if (!tempLoc.contains(id) && b.getText().equals("   Remove   ")) {
                                 b.setText("      Add      ");
                             }
                         }
                     }
                     tick = false;
 
-                    if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
-                        if(!tempLoc.contains(id)) {
+                    if (b.getText().equals("      Add      ")) { //Checks if button has already been pressed
+                        if (!tempLoc.contains(id)) {
                             tempLoc.add(id);
                             System.out.println("Added " + id + "to array");
                             b.setText("   Remove   "); //If not pressed, toggle text and add
                         }
 
-                    } else if(b.getText().equals("   Remove   ")) {
-                        if(tempLoc.contains(id)) {
+                    } else if (b.getText().equals("   Remove   ")) {
+                        if (tempLoc.contains(id)) {
                             tempLoc.remove(id);
                             System.out.println("Removed " + id + "from array");
                             b.setText("      Add      ");
@@ -250,7 +292,7 @@ public class MapGUI {
             setGBC(1, numButtons, 3);
             fTemp.add(t2, gbc);
         }
-      
+
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
         options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
@@ -263,9 +305,9 @@ public class MapGUI {
     void refresh() throws Exception {
         map.setVisible(false);
         new Convert(filename, killmenow);
-        JLabel background = new JLabel(new ImageIcon( workingDirectoryFilePath + "png/" + filename + killmenow + "_User.png"));
-        File temp = new File( workingDirectoryFilePath + "png/" + filename + (killmenow-1) + "_User.png");
-        if(!temp.delete() && killmenow != 1) {
+        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + killmenow + "_User.png"));
+        File temp = new File(workingDirectoryFilePath + "png/" + filename + (killmenow - 1) + "_User.png");
+        if (!temp.delete() && killmenow != 1) {
             System.out.println("Error deleting " + temp.getPath());
         }
         background.setLayout(new BorderLayout());
@@ -279,7 +321,7 @@ public class MapGUI {
 
     boolean cleanup() {
         boolean ret;
-        File t = new File(workingDirectoryFilePath + "png/" + filename + (killmenow-1) + "_User.png");
+        File t = new File(workingDirectoryFilePath + "png/" + filename + (killmenow - 1) + "_User.png");
         ret = t.delete();
         File temp = new File(workingDirectoryFilePath + "png/" + filename + ".png");
         Boolean ret2 = temp.delete();
