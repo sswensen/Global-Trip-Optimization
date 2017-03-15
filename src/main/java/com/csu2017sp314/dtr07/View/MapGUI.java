@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.io.File;
 
@@ -28,7 +29,7 @@ public class MapGUI {
     private boolean tick = false;
     private int savedTrip = -1;
     private int killmenow = 1;
-    private int z = 0; //Number of saved trips
+    private int z = 1; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
 
     MapGUI() {
@@ -126,8 +127,13 @@ public class MapGUI {
         JPanel loadPanel = createInnerPanel("Load Trips");
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        setGBC(0, 0, 2);
 
+        setGBC(0, 0, 4);
+        JLabel title = new JLabel("Unsaved Trip");
+        title.setHorizontalAlignment(JLabel.CENTER);
+        fTemp.add(title, gbc);
+
+        setGBC(0, 1, 2);
         JButton q = new JButton("  Display  ");
         q.addActionListener(new ActionListener() {
             @Override
@@ -147,7 +153,7 @@ public class MapGUI {
             }
         });
         fTemp.add(q, gbc);
-        setGBC(1, 0, 2);
+        setGBC(1, 1, 2);
         JButton s = new JButton(" Save Trip ");
         s.addActionListener(new ActionListener() {
             @Override
@@ -162,6 +168,7 @@ public class MapGUI {
                     load.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            title.setText("Editing Trip " + (z-1));
                             tempLoc = trip;
                             userAddLocList(tempLoc);
                             for (int i = 0; i < buttons.size(); i++) {
@@ -192,6 +199,22 @@ public class MapGUI {
             }
         });
         fTemp.add(s, gbc);
+
+        setGBC(3, 1, 1);
+        JButton newTrip = new JButton("New Trip");
+        s.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                title.setText("Unsaved Trip");
+                tempLoc = new ArrayList<>();
+                for (int i = 0; i < buttons.size(); i++) {
+                    tick = true;
+                    buttons.get(i).doClick();
+                    buttons.get(i).doClick();
+                }
+            }
+        });
+                fTemp.add(newTrip, gbc);
 
         int numButtons = 0;
         for (String id : ids) {
@@ -230,6 +253,8 @@ public class MapGUI {
                             tempLoc.remove(id);
                             System.out.println("Removed " + id + "from array");
                             b.setText("      Add      ");
+                        } else {
+                            b.setText("      Add      ");
                         }
                     }
                 }
@@ -245,9 +270,9 @@ public class MapGUI {
             t.setVisible(true);
 
             numButtons++;
-            setGBC(0, numButtons, 1);
+            setGBC(0, numButtons+1, 1);
             fTemp.add(b, gbc);
-            setGBC(1, numButtons, 3);
+            setGBC(1, numButtons+1, 3);
             fTemp.add(t2, gbc);
         }
       
