@@ -30,7 +30,9 @@ public class MapGUI {
     private GridBagConstraints gbc;
     //private boolean tick = false;
     private int killmenow = 1;
-    private int z = 0;
+    private int z = 0; //Number of saved trips
+    private int numButtons = 0; //Number of id buttons
+    private ArrayList<JButton> buttons = new ArrayList<>();
 
     MapGUI() {
 
@@ -157,13 +159,17 @@ public class MapGUI {
                 trips.add(trip);
 
                 setGBC(0, z, 1);
-                JButton load = new JButton("Load Trip " + trips.indexOf(trip));
+                JButton load = new JButton("Load Trip " + z);
                 loadPanel.add(load, gbc);
                 load.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         tempLoc = trip;
                         userAddLocList(tempLoc);
+                        for(int i = 0; i < buttons.size(); i++) {
+                            buttons.get(i).doClick();
+                            buttons.get(i).doClick();
+                        }
                     }
                 });
                 z++;
@@ -171,9 +177,10 @@ public class MapGUI {
         });
         fTemp.add(s, gbc);
 
-        int i = 0;
+        int numButtons = 0;
         for (String id : ids) {
             JButton b = new JButton("      Add      ");
+            buttons.add(b);
             b.addActionListener(new ActionListener() { //This fires when button b is pressed, unique for each instance!
                 @Override //Bish
                 public void actionPerformed(ActionEvent e) {
@@ -184,16 +191,18 @@ public class MapGUI {
                         To use the first method, uncomment the line below.
                      */
                     //userAddLoc(id); //This is a callback to View
-                    if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
+                    if(b.getText().equals("      Add      ") && !tempLoc.contains(id)) { //Checks if button has already been pressed
                         tempLoc.add(id);
                         System.out.println("Added " + id + "to array");
                         //b.setBackground(Color.BLACK);
                         //b.setOpaque(true); //Doesn't work for some unknown reason
                         b.setText("   Remove   "); //If not pressed, toggle text and add
-                    } else if(b.getText().equals("  Remove  ")) {
+                    } else if(b.getText().equals("   Remove   ") && tempLoc.contains(id)) {
                         tempLoc.remove(id);
                         System.out.println("Removed " + id + "from array");
                         b.setText("      Add      "); //If already pressed, toggle text and remove
+                    } else {
+                        //System.out.println("Error adding/removing " + id + " into/from tempLoc");
                     }
                 }
             });
@@ -207,10 +216,10 @@ public class MapGUI {
             b.setVisible(true);
             t.setVisible(true);
 
-            i++;
-            setGBC(0, i, 1);
+            numButtons++;
+            setGBC(0, numButtons, 1);
             fTemp.add(b, gbc);
-            setGBC(1, i, 3);
+            setGBC(1, numButtons, 3);
             fTemp.add(t2, gbc);
         }
       
