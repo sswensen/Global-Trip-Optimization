@@ -124,7 +124,7 @@ public class MapGUI {
         JPanel fTemp = createInnerPanel("");
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        setGBC(0, 0, 4);
+        setGBC(0, 0, 2);
 
         JButton q = new JButton("Display");
         q.addActionListener(new ActionListener() {
@@ -146,8 +146,17 @@ public class MapGUI {
                 */
             }
         });
-        //q.setBounds(5, 5, 90, 30);
         fTemp.add(q, gbc);
+
+        setGBC(1, 0, 2);
+        JButton s = new JButton("Save");
+        s.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        fTemp.add(s, gbc);
 
         int i = 0;
         for (String id : ids) {
