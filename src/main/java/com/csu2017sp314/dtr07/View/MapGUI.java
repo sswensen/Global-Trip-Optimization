@@ -127,7 +127,7 @@ public class MapGUI {
         JPanel loadPanel = createInnerPanel("Load Trips");
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        setGBC(0, 0, 1);
+        setGBC(0, 0, 2);
 
         JButton q = new JButton("  Display  ");
         q.addActionListener(new ActionListener() {
@@ -163,11 +163,13 @@ public class MapGUI {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         tempLoc = trip;
+                        userAddLocList(tempLoc);
                     }
                 });
                 z++;
             }
         });
+        fTemp.add(s, gbc);
 
         int i = 0;
         for (String id : ids) {
