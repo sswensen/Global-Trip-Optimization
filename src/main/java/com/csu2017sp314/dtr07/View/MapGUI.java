@@ -26,6 +26,7 @@ public class MapGUI {
     private JFrame uOp;
     private GridBagConstraints gbc;
     private boolean tick = false;
+    private int savedTrip = -1;
     private int killmenow = 1;
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
@@ -147,29 +148,47 @@ public class MapGUI {
         });
         fTemp.add(q, gbc);
         setGBC(1, 0, 2);
-        JButton s = new JButton("   Save   ");
+        JButton s = new JButton(" Save Trip ");
         s.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> trip = new ArrayList<>(tempLoc);
-                trips.add(trip);
+                if(savedTrip < 0) {
+                    trips.add(trip);
 
-                setGBC(0, z, 1);
-                JButton load = new JButton("Load Trip " + z);
-                loadPanel.add(load, gbc);
-                load.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        tempLoc = trip;
-                        userAddLocList(tempLoc);
-                        for(int i = 0; i < buttons.size(); i++) {
-                            tick = true;
-                            buttons.get(i).doClick();
-                            buttons.get(i).doClick();
+                    setGBC(0, z, 1);
+                    JButton load = new JButton("Load Trip " + z);
+                    loadPanel.add(load, gbc);
+                    load.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            tempLoc = trip;
+                            userAddLocList(tempLoc);
+                            for (int i = 0; i < buttons.size(); i++) {
+                                tick = true;
+                                buttons.get(i).doClick();
+                                buttons.get(i).doClick();
+                            }
+                            savedTrip = z;
                         }
-                    }
-                });
-                z++;
+                    });
+
+                    setGBC(1, z, 1);
+                    JButton deleteTrip = new JButton("Delete");
+                    loadPanel.add(deleteTrip, gbc);
+                    deleteTrip.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            trips.remove(z);
+                            loadPanel.remove(load);
+                            loadPanel.remove(deleteTrip);
+                            uOp.pack();
+                        }
+                    });
+                    z++;
+                } else {
+                    trips.add(z, trip);
+                }
             }
         });
         fTemp.add(s, gbc);
