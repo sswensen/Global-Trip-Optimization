@@ -3,6 +3,7 @@ package com.csu2017sp314.dtr07.View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -123,8 +124,8 @@ public class MapGUI {
     }
 
     private void nameTrip() {
-        JFrame nameThisTrip = new JFrame("Enter a name for this trip");
         JFrame holding = new JFrame("");
+        /*JFrame nameThisTrip = new JFrame("Enter a name for this trip");
         JButton inputButton = new JButton("Send");
         JTextArea editTextArea = new JTextArea("Type Here!");
         JTextArea uneditTextArea = new JTextArea();
@@ -147,8 +148,28 @@ public class MapGUI {
             System.out.println("Adding " + editTextArea.getText() + " to array at " + tripNames.indexOf(editTextArea.getText()));
             editTextArea.setText("");
             holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-        });
+        });*/
 
+
+
+        JTextField  textField = new JTextField(20);
+        JTextArea textArea = new JTextArea(5, 20);
+        textArea.setEditable(false);
+        holding.add(textField);
+        textField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = textField.getText();
+                textArea.append(text + "\n");
+                textField.selectAll();
+                //Make sure the new text is visible, even if there
+                //was a selection in the text area.
+                textArea.setCaretPosition(textArea.getDocument().getLength());
+                tempFname = text;
+                tripNames.add(text);
+                holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
+            }
+        });
         holding.setLocation(1063, 0);
         holding.setSize(200, 50);
         holding.setVisible(true);
@@ -173,39 +194,7 @@ public class MapGUI {
         s.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
             if(savedTrip < 0 || trips.size() == 0) {
-                /*-------------------------------------------------------
-
-                 */
-                JFrame nameThisTrip = new JFrame("Enter a name for this trip");
-                JFrame holding = new JFrame("");
-                JButton inputButton = new JButton("Send");
-                JTextArea editTextArea = new JTextArea("Type Here!");
-                JTextArea uneditTextArea = new JTextArea();
-                holding.setLayout(new BorderLayout());
-                uneditTextArea.setEditable(false);
-                //INPUT TEXT AREA
-                editTextArea.setBackground(Color.BLUE);
-                editTextArea.setForeground(Color.WHITE);
-                //SET CONTENT PANE
-                Container c = holding.getContentPane();
-                //ADD COMPONENTS TO CONTENT PANE
-                c.add(uneditTextArea, BorderLayout.CENTER);
-                c.add(editTextArea, BorderLayout.WEST);
-                c.add(inputButton, BorderLayout.EAST);
-                inputButton.addActionListener((ActionEvent eee) -> {
-                    tripNames.add(editTextArea.getText());
-
-                    tempFname = editTextArea.getText();
-
-                    System.out.println("Adding " + editTextArea.getText() + " to array at " + tripNames.indexOf(editTextArea.getText()));
-                    editTextArea.setText("");
-                    holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                });
-
-                holding.setLocation(1063, 0);
-                holding.setSize(200, 50);
-                holding.setVisible(true);
-                //-------------------------------------------------------
+                nameTrip();
                 trips.add(trip);
                 setGBC(0, z, 1);
                 System.out.println("Loading trip at index " + z);
@@ -242,39 +231,8 @@ public class MapGUI {
         JButton sa = new JButton(" Save As ");
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
-            /*-------------------------------------------------------
-
-                 */
-            JFrame nameThisTrip = new JFrame("Enter a name for this trip");
-            JFrame holding = new JFrame("");
-            JButton inputButton = new JButton("Send");
-            JTextArea editTextArea = new JTextArea("Type Here!");
-            JTextArea uneditTextArea = new JTextArea();
-            holding.setLayout(new BorderLayout());
-            uneditTextArea.setEditable(false);
-            //INPUT TEXT AREA
-            editTextArea.setBackground(Color.BLUE);
-            editTextArea.setForeground(Color.WHITE);
-            //SET CONTENT PANE
-            Container c = holding.getContentPane();
-            //ADD COMPONENTS TO CONTENT PANE
-            c.add(uneditTextArea, BorderLayout.CENTER);
-            c.add(editTextArea, BorderLayout.WEST);
-            c.add(inputButton, BorderLayout.EAST);
-            inputButton.addActionListener((ActionEvent eee) -> {
-                tripNames.add(editTextArea.getText());
-
-                tempFname = editTextArea.getText();
-
-                System.out.println("Adding " + editTextArea.getText() + " to array at " + tripNames.indexOf(editTextArea.getText()));
-                editTextArea.setText("");
-                holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-            });
-
-            holding.setLocation(1063, 0);
-            holding.setSize(200, 50);
-            holding.setVisible(true);
-            //-------------------------------------------------------            trips.add(trip);
+            nameTrip();
+            trips.add(trip);
             setGBC(0, z, 1);
             System.out.println("Loading trip at index " + z);
             JButton load = new JButton("Load Trip " + tripNames.get(z));
