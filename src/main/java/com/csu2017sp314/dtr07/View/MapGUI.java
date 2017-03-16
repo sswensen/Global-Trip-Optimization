@@ -114,7 +114,7 @@ public class MapGUI {
         return jplPanel;
     }
 
-    void setGBC(int gridx, int gridy, int gridwidth) {
+    private void setGBC(int gridx, int gridy, int gridwidth) {
         gbc.gridx = gridx;
         gbc.gridy = gridy;
         gbc.gridwidth = gridwidth;
@@ -153,7 +153,7 @@ public class MapGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> trip = new ArrayList<>(tempLoc);
-                if (savedTrip < 0 || trips.size() == 0) {
+                if(savedTrip < 0 || trips.size() == 0) {
                     trips.add(trip);
 
                     setGBC(0, z, 1);
@@ -164,7 +164,7 @@ public class MapGUI {
                         public void actionPerformed(ActionEvent e) {
                             tempLoc = trip;
                             userAddLocList(tempLoc);
-                            for (int i = 0; i < buttons.size(); i++) {
+                            for(int i = 0; i < buttons.size(); i++) {
                                 tick = true;
                                 buttons.get(i).doClick();
                                 buttons.get(i).doClick();
@@ -209,7 +209,7 @@ public class MapGUI {
                     public void actionPerformed(ActionEvent e) {
                         tempLoc = trip;
                         userAddLocList(tempLoc);
-                        for (int i = 0; i < buttons.size(); i++) {
+                        for(int i = 0; i < buttons.size(); i++) {
                             tick = true;
                             buttons.get(i).doClick();
                             buttons.get(i).doClick();
@@ -249,8 +249,8 @@ public class MapGUI {
                         To use the first method, uncomment the line below.
                      */
                     //userAddLoc(id); //This is a callback to View
-                    if (tick) {
-                        for (int i = 0; i < tempLoc.size(); i++) {
+                    if(tick) {
+                        for(int i = 0; i < tempLoc.size(); i++) {
                             if (tempLoc.contains(id) && b.getText().equals("      Add      ")) {
                                 b.setText("   Remove   ");
                             } else if (!tempLoc.contains(id) && b.getText().equals("   Remove   ")) {
