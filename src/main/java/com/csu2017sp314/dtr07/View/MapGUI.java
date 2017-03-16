@@ -29,6 +29,7 @@ public class MapGUI {
     private int filenameIncrementer = 1;
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
+    private ArrayList<String> tripNames = new ArrayList<>();
 
     MapGUI() {
 
@@ -139,9 +140,9 @@ public class MapGUI {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
             if(savedTrip < 0 || trips.size() == 0) {
                 trips.add(trip);
-
+                tripNames.add("STRING FROM INPUT"); //TODO
                 setGBC(0, z, 1);
-                JButton load = new JButton("Load Trip " + z);
+                JButton load = new JButton("Load Trip " + tripNames.get(z));
                 loadPanel.add(load, gbc);
                 load.addActionListener((ActionEvent ee) -> {
                     tempLoc = trip;
