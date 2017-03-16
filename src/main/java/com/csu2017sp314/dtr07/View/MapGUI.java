@@ -30,6 +30,7 @@ public class MapGUI {
     private int killmenow = 1;
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
+    private ArrayList<String> tripNames = new ArrayList<>();
 
     MapGUI() {
 
@@ -153,11 +154,12 @@ public class MapGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> trip = new ArrayList<>(tempLoc);
+                tripNames.add("STRING FROM INPUT"); //TODO
                 if(savedTrip < 0 || trips.size() == 0) {
                     trips.add(trip);
 
                     setGBC(0, z, 1);
-                    JButton load = new JButton("Load Trip " + z);
+                    JButton load = new JButton("Load Trip " + tripNames.get(z));
                     loadPanel.add(load, gbc);
                     load.addActionListener(new ActionListener() {
                         @Override
@@ -200,9 +202,9 @@ public class MapGUI {
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> trip = new ArrayList<>(tempLoc);
                 trips.add(trip);
-
+                tripNames.add("STRING FROM INPUT"); //TODO
                 setGBC(0, z, 1);
-                JButton load = new JButton("Load Trip " + z);
+                JButton load = new JButton("Load Trip " + tripNames.get(z));
                 loadPanel.add(load, gbc);
                 load.addActionListener(new ActionListener() {
                     @Override
