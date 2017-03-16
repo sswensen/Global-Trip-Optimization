@@ -13,12 +13,12 @@ import java.io.File;
  */
 
 public class MapGUI {
-    private Consumer<String> callback;
+    private Consumer<String> callback; //Used if other callback method is used
     private Consumer<ArrayList<String>> callback2;
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
-    private JFrame face; //User interface with locations
+    //private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
     private ArrayList<String> tempLoc;
     private String workingDirectoryFilePath;
@@ -26,7 +26,7 @@ public class MapGUI {
     private GridBagConstraints gbc;
     private boolean tick = false;
     private int savedTrip = -1;
-    private int killmenow = 1;
+    private int filenameIncrementer = 1;
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
 
@@ -42,9 +42,9 @@ public class MapGUI {
         this.callback2 = callback2;
     }
 
-    public void userAddLoc(String id) {
+    /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);
-    }
+    }*/
 
     private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
@@ -88,14 +88,14 @@ public class MapGUI {
         return 1;
     }
 
-    int createFaceGUI() {
+    /*int createFaceGUI() {
         face = new JFrame("User Options");
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setLocation(1063, 0);
         face.setSize(300, 802);
         face.setVisible(true);
         return 1;
-    }
+    }*/
 
     private int createOptionsGUI() {
         uOp = new JFrame("User Options");
@@ -113,10 +113,10 @@ public class MapGUI {
         return jplPanel;
     }
 
-    private void setGBC(int gridx, int gridy, int gridwidth) {
-        gbc.gridx = gridx;
-        gbc.gridy = gridy;
-        gbc.gridwidth = gridwidth;
+    private void setGBC(int gridX, int gridY, int gridWidth) {
+        gbc.gridx = gridX;
+        gbc.gridy = gridY;
+        gbc.gridwidth = gridWidth;
     }
 
     void displayXML(ArrayList<String> ids) {
@@ -269,15 +269,15 @@ public class MapGUI {
 
     void refresh() throws Exception {
         map.setVisible(false);
-        new Convert(filename, killmenow);
-        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + killmenow + "_User.png"));
-        File temp = new File(workingDirectoryFilePath + "png/" + filename + (killmenow - 1) + "_User.png");
-        if(!temp.delete() && killmenow != 1) {
+        new Convert(filename, filenameIncrementer);
+        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + filenameIncrementer + "_User.png"));
+        File temp = new File(workingDirectoryFilePath + "png/" + filename + (filenameIncrementer - 1) + "_User.png");
+        if(!temp.delete() && filenameIncrementer != 1) {
             System.out.println("Error deleting " + temp.getPath());
         }
         background.setLayout(new BorderLayout());
         map.setContentPane(background);
-        killmenow++;
+        filenameIncrementer++;
 
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802); //Second part for refreshing the window
@@ -286,11 +286,11 @@ public class MapGUI {
 
     boolean cleanup() {
         boolean ret;
-        File t = new File(workingDirectoryFilePath + "png/" + filename + (killmenow - 1) + "_User.png");
+        File t = new File(workingDirectoryFilePath + "png/" + filename + (filenameIncrementer - 1) + "_User.png");
         ret = t.delete();
         File temp = new File(workingDirectoryFilePath + "png/" + filename + ".png");
         Boolean ret2 = temp.delete();
-        killmenow = 0;
+        filenameIncrementer = 0;
         return ret & ret2;
     }
 
