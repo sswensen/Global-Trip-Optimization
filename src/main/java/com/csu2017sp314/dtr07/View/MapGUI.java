@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.io.File;
@@ -30,6 +31,7 @@ public class MapGUI {
     private int killmenow = 1;
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
+    private String textEntry = "";
 
     MapGUI() {
 
@@ -65,7 +67,6 @@ public class MapGUI {
         options.setSelectedIndex(0);
 		JPanel jplInnerPanel2 = createInnerPanel("Tab 2 Contains Icon only");
         options.addTab("Two", icon, jplInnerPanel2);*/
-
 
         createOptionsGUI();
         map.setVisible(true); //making the frame visible
@@ -201,6 +202,7 @@ public class MapGUI {
                 ArrayList<String> trip = new ArrayList<>(tempLoc);
                 trips.add(trip);
 
+
                 setGBC(0, z, 1);
                 JButton load = new JButton("Load Trip " + z);
                 loadPanel.add(load, gbc);
@@ -301,6 +303,28 @@ public class MapGUI {
 
         uOp.pack();
     }
+    String createTextField(JFrame j) throws Exception{
+
+        JTextField  textField = new JTextField(20);
+        JTextArea textArea = new JTextArea(5, 20);
+        textArea.setEditable(false);
+        j.add(textField);
+        textField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = textField.getText();
+                textArea.append(text + "\n");
+                textField.selectAll();
+                //Make sure the new text is visible, even if there
+                //was a selection in the text area.
+                textArea.setCaretPosition(textArea.getDocument().getLength());
+                textEntry = text;
+                j.dispatchEvent(new WindowEvent(j, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+        return textEntry;
+    }
+
 
     void refresh() throws Exception {
         map.setVisible(false);
@@ -330,21 +354,13 @@ public class MapGUI {
     }
 
     public static void main(String[] args) throws Exception {
-        new Convert("Colorado14ers", 0);
-        JFrame f = new JFrame("TripCo"); //creating instance of JFrame
-        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
-        JButton b = new JButton("click"); //creating instance of JButton
-        b.setBounds(964, 0, 100, 40); //x axis, y axis, width, height
-        f.add(b); //adding button in JFrame
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setLayout(new BorderLayout());
-        f.setContentPane(new JLabel(new ImageIcon("png/Colorado14ers.png")));
-        f.setLayout(new FlowLayout());
-        f.setSize(1063, 779); //Refreshes window, needed or image doesn't appear
-        f.setSize(1064, 780);
-        //f.pack(); //Will make everything MASSIVE
-        f.setLayout(null); //using no layout managers
-        f.setVisible(true); //making the frame visible
+        MapGUI map = new MapGUI();
+        JFrame frame = new JFrame("TextDemo");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        String text = map.createTextField(frame);
+        frame.pack();
+        frame.setVisible(true);
+        System.out.println(text);
+
     }
 }
