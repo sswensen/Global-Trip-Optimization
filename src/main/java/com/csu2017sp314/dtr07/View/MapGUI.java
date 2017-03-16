@@ -32,7 +32,7 @@ public class MapGUI {
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<String> tripNames = new ArrayList<>();
-    String tempFname = "";
+    String tempFname = "NOT INITED";
 
     MapGUI() {
 
@@ -124,8 +124,8 @@ public class MapGUI {
     }
 
     private void nameTrip() {
-        JFrame holding = new JFrame("");
         /*JFrame nameThisTrip = new JFrame("Enter a name for this trip");
+        JFrame holding = new JFrame("");
         JButton inputButton = new JButton("Send");
         JTextArea editTextArea = new JTextArea("Type Here!");
         JTextArea uneditTextArea = new JTextArea();
@@ -151,7 +151,7 @@ public class MapGUI {
         });*/
 
 
-
+        JFrame holding = new JFrame("Enter name for trip");
         JTextField  textField = new JTextField(20);
         JTextArea textArea = new JTextArea(5, 20);
         textArea.setEditable(false);
@@ -168,6 +168,7 @@ public class MapGUI {
                 tempFname = text;
                 tripNames.add(text);
                 holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
+
             }
         });
         holding.setLocation(1063, 0);
@@ -194,22 +195,47 @@ public class MapGUI {
         s.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
             if(savedTrip < 0 || trips.size() == 0) {
-                nameTrip();
-                trips.add(trip);
-                setGBC(0, z, 1);
-                System.out.println("Loading trip at index " + z);
-                JButton load = new JButton("Load Trip " + tripNames.get(z));
-                loadPanel.add(load, gbc);
-                load.addActionListener((ActionEvent ee) -> {
-                    tempLoc = trip;
-                    userAddLocList(tempLoc);
-                    for(int i = 0; i < buttons.size(); i++) {
-                        tick = true;
-                        buttons.get(i).doClick();
-                        buttons.get(i).doClick();
+                //--------
+                JFrame holding = new JFrame("Enter name for trip");
+                JTextField  textField = new JTextField(20);
+                JTextArea textArea = new JTextArea(5, 20);
+                textArea.setEditable(false);
+                holding.add(textField);
+                textField.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String text = textField.getText();
+                        textArea.append(text + "\n");
+                        textField.selectAll();
+                        //Make sure the new text is visible, even if there
+                        //was a selection in the text area.
+                        textArea.setCaretPosition(textArea.getDocument().getLength());
+                        tempFname = text;
+                        tripNames.add(text);
+                        holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
+                        System.out.println("User entered " + tempFname);
+                        trips.add(trip);
+                        setGBC(0, z, 1);
+                        System.out.println("Loading trip at index " + z);
+                        JButton load = new JButton("Load Trip " + tempFname);
+                        loadPanel.add(load, gbc);
+                        load.addActionListener((ActionEvent ee) -> {
+                            tempLoc = trip;
+                            userAddLocList(tempLoc);
+                            for(int i = 0; i < buttons.size(); i++) {
+                                tick = true;
+                                buttons.get(i).doClick();
+                                buttons.get(i).doClick();
+                            }
+                            savedTrip = z;
+                        });
                     }
-                    savedTrip = z;
                 });
+                holding.setLocation(1063, 0);
+                holding.setSize(200, 50);
+                holding.setVisible(true);
+                //--------
+
 
                 /*setGBC(1, z, 1);
                 JButton deleteTrip = new JButton("Delete");
@@ -231,23 +257,46 @@ public class MapGUI {
         JButton sa = new JButton(" Save As ");
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
-            nameTrip();
-            trips.add(trip);
-            setGBC(0, z, 1);
-            System.out.println("Loading trip at index " + z);
-            JButton load = new JButton("Load Trip " + tripNames.get(z));
-            loadPanel.add(load, gbc);
-            load.addActionListener((ActionEvent ee) -> {
-                tempLoc = trip;
-                userAddLocList(tempLoc);
-                for(JButton a : buttons) {
-                    tick = true;
-                    a.doClick();
-                    a.doClick();
+            //-----
+            JFrame holding = new JFrame("Enter name for trip");
+            JTextField  textField = new JTextField(20);
+            JTextArea textArea = new JTextArea(5, 20);
+            textArea.setEditable(false);
+            holding.add(textField);
+            textField.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String text = textField.getText();
+                    textArea.append(text + "\n");
+                    textField.selectAll();
+                    //Make sure the new text is visible, even if there
+                    //was a selection in the text area.
+                    textArea.setCaretPosition(textArea.getDocument().getLength());
+                    tempFname = text;
+                    tripNames.add(text);
+                    holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
+                    System.out.println("User entered " + tempFname);
+                    trips.add(trip);
+                    setGBC(0, z, 1);
+                    System.out.println("Loading trip at index " + z);
+                    JButton load = new JButton("Load Trip " + tempFname);
+                    loadPanel.add(load, gbc);
+                    load.addActionListener((ActionEvent ee) -> {
+                        tempLoc = trip;
+                        userAddLocList(tempLoc);
+                        for(JButton a : buttons) {
+                            tick = true;
+                            a.doClick();
+                            a.doClick();
+                        }
+                        savedTrip = z;
+                    });
                 }
-                savedTrip = z;
             });
-
+            holding.setLocation(1063, 0);
+            holding.setSize(200, 50);
+            holding.setVisible(true);
+            //--------
             /*setGBC(1, z, 1);
             JButton deleteTrip = new JButton("Delete");
             loadPanel.add(deleteTrip, gbc);
@@ -287,14 +336,14 @@ public class MapGUI {
                 if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
                     if(!tempLoc.contains(id)) {
                         tempLoc.add(id);
-                        System.out.println("Added " + id + "to array");
+                        System.out.println("Added " + id + " to array");
                         b.setText("   Remove   "); //If not pressed, toggle text and add
                     }
 
                 } else if(b.getText().equals("   Remove   ")) {
                     if(tempLoc.contains(id)) {
                         tempLoc.remove(id);
-                        System.out.println("Removed " + id + "from array");
+                        System.out.println("Removed " + id + " from array");
                         b.setText("      Add      ");
                     }
                 }
