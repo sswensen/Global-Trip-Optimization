@@ -3,7 +3,6 @@ package com.csu2017sp314.dtr07.View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.io.File;
@@ -14,20 +13,20 @@ import java.io.File;
  */
 
 public class MapGUI {
-    private Consumer<String> callback;
+    private Consumer<String> callback; //Used if other callback method is used
     private Consumer<ArrayList<String>> callback2;
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
-    private JFrame face; //User interface with locations
+    //private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
-    ArrayList<String> tempLoc;
+    private ArrayList<String> tempLoc;
     private String workingDirectoryFilePath;
     private JFrame uOp;
     private GridBagConstraints gbc;
     private boolean tick = false;
     private int savedTrip = -1;
-    private int killmenow = 1;
+    private int filenameIncrementer = 1;
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
     private ArrayList<String> tripNames = new ArrayList<>();
@@ -44,9 +43,9 @@ public class MapGUI {
         this.callback2 = callback2;
     }
 
-    public void userAddLoc(String id) {
+    /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);
-    }
+    }*/
 
     private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
@@ -90,14 +89,14 @@ public class MapGUI {
         return 1;
     }
 
-    int createFaceGUI() {
+    /*int createFaceGUI() {
         face = new JFrame("User Options");
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setLocation(1063, 0);
         face.setSize(300, 802);
         face.setVisible(true);
         return 1;
-    }
+    }*/
 
     private int createOptionsGUI() {
         uOp = new JFrame("User Options");
@@ -109,172 +108,137 @@ public class MapGUI {
         return 1;
     }
 
-    private JPanel createInnerPanel(String text) {
+    private JPanel createInnerPanel() {
         JPanel jplPanel = new JPanel();
         jplPanel.setLayout(new GridBagLayout());
         return jplPanel;
     }
 
-    private void setGBC(int gridx, int gridy, int gridwidth) {
-        gbc.gridx = gridx;
-        gbc.gridy = gridy;
-        gbc.gridwidth = gridwidth;
+    private void setGBC(int gridX, int gridY, int gridWidth) {
+        gbc.gridx = gridX;
+        gbc.gridy = gridY;
+        gbc.gridwidth = gridWidth;
     }
 
     void displayXML(ArrayList<String> ids) {
         tempLoc = new ArrayList<>();
-        JPanel fTemp = createInnerPanel("");
-        JPanel loadPanel = createInnerPanel("Load Trips");
+        JPanel fTemp = createInnerPanel();
+        JPanel loadPanel = createInnerPanel();
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 2);
 
         JButton q = new JButton("  Display  ");
-        q.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                /*for(int i = 0; i < ids.size(); i++) {
-                    System.out.println("[GUI] ID at index " + i + " = "+ ids.get(i));
-                }*/
-                userAddLocList(tempLoc);
-                /*
-                for(int i = 0; i < trips.size();i++){
-                    for(int j = 0; j < trips.get(i).size();j++){
-                        System.out.print(trips.get(i).get(j) + " ");
-                    }
-                    System.out.println();
-                }
-                */
-            }
+        q.addActionListener((ActionEvent e) -> {
+            userAddLocList(tempLoc);
         });
         fTemp.add(q, gbc);
+
         setGBC(2, 0, 1);
         JButton s = new JButton(" Save Trip ");
-        s.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ArrayList<String> trip = new ArrayList<>(tempLoc);
+        s.addActionListener((ActionEvent e) -> {
+            ArrayList<String> trip = new ArrayList<>(tempLoc);
+            if(savedTrip < 0 || trips.size() == 0) {
+                trips.add(trip);
                 tripNames.add("STRING FROM INPUT"); //TODO
-                if(savedTrip < 0 || trips.size() == 0) {
-                    trips.add(trip);
+                setGBC(0, z, 1);
+                JButton load = new JButton("Load Trip " + tripNames.get(z));
+                loadPanel.add(load, gbc);
+                load.addActionListener((ActionEvent ee) -> {
+                    tempLoc = trip;
+                    userAddLocList(tempLoc);
+                    for(int i = 0; i < buttons.size(); i++) {
+                        tick = true;
+                        buttons.get(i).doClick();
+                        buttons.get(i).doClick();
+                    }
+                    savedTrip = z;
+                });
 
-                    setGBC(0, z, 1);
-                    JButton load = new JButton("Load Trip " + tripNames.get(z));
-                    loadPanel.add(load, gbc);
-                    load.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            tempLoc = trip;
-                            userAddLocList(tempLoc);
-                            for(int i = 0; i < buttons.size(); i++) {
-                                tick = true;
-                                buttons.get(i).doClick();
-                                buttons.get(i).doClick();
-                            }
-                            savedTrip = z;
-                        }
-                    });
-
-                    setGBC(1, z, 1);
-                    JButton deleteTrip = new JButton("Delete");
-                    loadPanel.add(deleteTrip, gbc);
-                    deleteTrip.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            trips.remove(z-1); //TODO fix this
-                            loadPanel.remove(load);
-                            loadPanel.remove(deleteTrip);
-                            uOp.pack();
-                        }
-                    });
-                    z++;
-                } else {
-                    trips.add(z, trip);
-                }
+                /*setGBC(1, z, 1);
+                JButton deleteTrip = new JButton("Delete");
+                loadPanel.add(deleteTrip, gbc);
+                deleteTrip.addActionListener((ActionEvent ee) -> {
+                    trips.remove(z - 1);
+                    loadPanel.remove(load);
+                    loadPanel.remove(deleteTrip);
+                    uOp.pack();
+                });*/
+                z++;
+            } else {
+                trips.add(z, trip);
             }
         });
         fTemp.add(s, gbc);
 
         setGBC(3, 0, 1);
         JButton sa = new JButton(" Save As ");
-        sa.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ArrayList<String> trip = new ArrayList<>(tempLoc);
-                trips.add(trip);
-                tripNames.add("STRING FROM INPUT"); //TODO
-                setGBC(0, z, 1);
-                JButton load = new JButton("Load Trip " + tripNames.get(z));
-                loadPanel.add(load, gbc);
-                load.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        tempLoc = trip;
-                        userAddLocList(tempLoc);
-                        for(int i = 0; i < buttons.size(); i++) {
-                            tick = true;
-                            buttons.get(i).doClick();
-                            buttons.get(i).doClick();
-                        }
-                        savedTrip = z;
-                    }
-                });
+        sa.addActionListener((ActionEvent e) -> {
+            ArrayList<String> trip = new ArrayList<>(tempLoc);
+            trips.add(trip);
 
-                setGBC(1, z, 1);
-                JButton deleteTrip = new JButton("Delete");
-                loadPanel.add(deleteTrip, gbc);
-                deleteTrip.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        trips.remove(z-1); //TODO fix this
-                        loadPanel.remove(load);
-                        loadPanel.remove(deleteTrip);
-                        uOp.pack();
-                    }
-                });
-                z++;
-            }
+            setGBC(0, z, 1);
+            JButton load = new JButton("Load Trip " + z);
+            loadPanel.add(load, gbc);
+            load.addActionListener((ActionEvent ee) -> {
+                tempLoc = trip;
+                userAddLocList(tempLoc);
+                for(JButton a : buttons) {
+                    tick = true;
+                    a.doClick();
+                    a.doClick();
+                }
+                savedTrip = z;
+            });
+
+            /*setGBC(1, z, 1);
+            JButton deleteTrip = new JButton("Delete");
+            loadPanel.add(deleteTrip, gbc);
+            deleteTrip.addActionListener((ActionEvent ee) -> {
+                trips.remove(z - 1);
+                loadPanel.remove(load);
+                loadPanel.remove(deleteTrip);
+                uOp.pack();
+            });*/
+            z++;
         });
         fTemp.add(sa, gbc);
 
         int numButtons = 0;
-        for (String id : ids) {
+        for(String id : ids) {
             JButton b = new JButton("      Add      ");
             buttons.add(b);
-            b.addActionListener(new ActionListener() { //This fires when button b is pressed, unique for each instance!
-                @Override //Bish
-                public void actionPerformed(ActionEvent e) {
+            b.addActionListener((ActionEvent e) -> { //This fires when button b is pressed, unique for each instance!
                     /*
                         We can use the following method to run the call back each time a location is clicked (don't know about efficiency here)
                         Or we can do one where the callback is only initiated when the user clicks the button that loads the map after selecting locations
                         I'm going to implement the second method as the first one already is.
                         To use the first method, uncomment the line below.
                      */
-                    //userAddLoc(id); //This is a callback to View
-                    if(tick) {
-                        for(int i = 0; i < tempLoc.size(); i++) {
-                            if (tempLoc.contains(id) && b.getText().equals("      Add      ")) {
-                                b.setText("   Remove   ");
-                            } else if (!tempLoc.contains(id) && b.getText().equals("   Remove   ")) {
-                                b.setText("      Add      ");
-                            }
-                        }
-                    }
-                    tick = false;
-
-                    if (b.getText().equals("      Add      ")) { //Checks if button has already been pressed
-                        if (!tempLoc.contains(id)) {
-                            tempLoc.add(id);
-                            System.out.println("Added " + id + "to array");
-                            b.setText("   Remove   "); //If not pressed, toggle text and add
-                        }
-
-                    } else if (b.getText().equals("   Remove   ")) {
-                        if (tempLoc.contains(id)) {
-                            tempLoc.remove(id);
-                            System.out.println("Removed " + id + "from array");
+                //userAddLoc(id); //This is a callback to View
+                if(tick) {
+                    for(int i = 0; i < tempLoc.size(); i++) {
+                        if(tempLoc.contains(id) && b.getText().equals("      Add      ")) {
+                            b.setText("   Remove   ");
+                        } else if(!tempLoc.contains(id) && b.getText().equals("   Remove   ")) {
                             b.setText("      Add      ");
                         }
+                    }
+                }
+                tick = false;
+
+                if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
+                    if(!tempLoc.contains(id)) {
+                        tempLoc.add(id);
+                        System.out.println("Added " + id + "to array");
+                        b.setText("   Remove   "); //If not pressed, toggle text and add
+                    }
+
+                } else if(b.getText().equals("   Remove   ")) {
+                    if(tempLoc.contains(id)) {
+                        tempLoc.remove(id);
+                        System.out.println("Removed " + id + "from array");
+                        b.setText("      Add      ");
                     }
                 }
             });
@@ -306,15 +270,15 @@ public class MapGUI {
 
     void refresh() throws Exception {
         map.setVisible(false);
-        new Convert(filename, killmenow);
-        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + killmenow + "_User.png"));
-        File temp = new File(workingDirectoryFilePath + "png/" + filename + (killmenow - 1) + "_User.png");
-        if (!temp.delete() && killmenow != 1) {
+        new Convert(filename, filenameIncrementer);
+        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + filenameIncrementer + "_User.png"));
+        File temp = new File(workingDirectoryFilePath + "png/" + filename + (filenameIncrementer - 1) + "_User.png");
+        if(!temp.delete() && filenameIncrementer != 1) {
             System.out.println("Error deleting " + temp.getPath());
         }
         background.setLayout(new BorderLayout());
         map.setContentPane(background);
-        killmenow++;
+        filenameIncrementer++;
 
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802); //Second part for refreshing the window
@@ -323,11 +287,11 @@ public class MapGUI {
 
     boolean cleanup() {
         boolean ret;
-        File t = new File(workingDirectoryFilePath + "png/" + filename + (killmenow - 1) + "_User.png");
+        File t = new File(workingDirectoryFilePath + "png/" + filename + (filenameIncrementer - 1) + "_User.png");
         ret = t.delete();
         File temp = new File(workingDirectoryFilePath + "png/" + filename + ".png");
         Boolean ret2 = temp.delete();
-        killmenow = 0;
+        filenameIncrementer = 0;
         return ret & ret2;
     }
 
