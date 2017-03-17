@@ -19,6 +19,7 @@ public class Presenter {
     private boolean displayName;
     private String fname;
     private String selectionXml;
+    private boolean displayGui;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -134,16 +135,24 @@ public class Presenter {
         displayName = x;
     }
 
-    boolean getDisplayMileage() {
+    public boolean getDisplayMileage() {
         return displayMileage;
     }
 
-    boolean getDisplayId() {
+    public boolean getDisplayId() {
         return displayId;
     }
 
-    boolean getDisplayName() {
+    public boolean getDisplayName() {
         return displayName;
+    }
+
+    public boolean displayGui(boolean x){
+        return (displayGui = x);
+    }
+
+    public boolean getDisplayGui(){
+        return displayGui;
     }
 
     public void planTrip(String filename, String selectionXml) throws Exception {
@@ -188,7 +197,10 @@ public class Presenter {
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
         view.finalizeTrip(filename);
 
-        view.gui();
+        if(displayGui){
+            view.gui();
+        }
+        //view.gui();
         //TimeUnit.SECONDS.sleep(3);
         /*eventUserAddLoc("3");
         eventUserAddLoc("10");
