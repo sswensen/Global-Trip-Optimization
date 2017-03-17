@@ -199,24 +199,20 @@ public class MapGUI {
                     String text = textField.getText();
                     textArea.append(text + "\n");
                     textField.selectAll();
-                    //Make sure the new text is visible, even if there
-                    //was a selection in the text area.
                     textArea.setCaretPosition(textArea.getDocument().getLength());
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                    System.out.println("User entered " + tripName);
                     trips.add(trip);
                     setGBC(0, z, 1);
-                    System.out.println("Loading trip at index " + z);
                     JButton load = new JButton("Load Trip " + tripName);
                     loadPanel.add(load, gbc);
                     load.addActionListener((ActionEvent eee) -> {
                         tempLoc = trip;
                         userAddLocList(tempLoc);
-                        for(int i = 0; i < buttons.size(); i++) {
+                        for(JButton a : buttons) {
                             tick = true;
-                            buttons.get(i).doClick();
-                            buttons.get(i).doClick();
+                            a.doClick();
+                            a.doClick();
                         }
                         savedTrip = z;
                     });
@@ -257,15 +253,11 @@ public class MapGUI {
                 String text = textField.getText();
                 textArea.append(text + "\n");
                 textField.selectAll();
-                //Make sure the new text is visible, even if there
-                //was a selection in the text area.
                 textArea.setCaretPosition(textArea.getDocument().getLength());
                 tripName = text;
                 holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                System.out.println("User entered " + tripName);
                 trips.add(trip);
                 setGBC(0, z, 1);
-                System.out.println("Loading trip at index " + z);
                 JButton load = new JButton("Load Trip " + tripName);
                 loadPanel.add(load, gbc);
                 load.addActionListener((ActionEvent eee) -> {
