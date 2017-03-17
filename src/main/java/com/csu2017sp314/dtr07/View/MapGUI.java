@@ -47,6 +47,7 @@ public class MapGUI {
     private Group root;
     private JPanel fTemp;
     private JLabel currentTrip;
+    private ArrayList<String> lastTrip = new ArrayList<>();
 
     MapGUI() {
 
@@ -237,6 +238,7 @@ public class MapGUI {
                         System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
                         tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
                         userAddLocList(tempLoc);
+                        lastTrip = new ArrayList<>(tempLoc);
                         updateTripLabel(load.getText().substring(10));
                         for(JButton a : buttons) {
                             tick = true;
@@ -293,12 +295,13 @@ public class MapGUI {
     private JButton mapDisplayButtons(String name) {
         JButton b = new JButton("Add " + name);
         b.addActionListener((ActionEvent e) -> {
-            mapOptions(name);
             if(b.getText().equals("Add " + name)) { //Checks if button has already been pressed
                 b.setText("Remove " + name); //If not pressed, toggle text and add
             } else if(b.getText().equals("Remove " + name)) {
                 b.setText("Add " + name);
             }
+            mapOptions(name);
+            userAddLocList(lastTrip);
         });
         return b;
     }
@@ -335,6 +338,7 @@ public class MapGUI {
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
             userAddLocList(tempLoc);
+            lastTrip = new ArrayList<>(tempLoc);
         });
         fTemp.add(q, gbc);
 
