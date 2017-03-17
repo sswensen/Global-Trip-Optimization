@@ -1,8 +1,10 @@
 package com.csu2017sp314.dtr07.Model;
 
-/*
+/**
  * Created by SummitDrift on 2/17/17.
+ * @author Scott Swensen
  */
+
 public class Pair {
     private Location one;
     private Location two;

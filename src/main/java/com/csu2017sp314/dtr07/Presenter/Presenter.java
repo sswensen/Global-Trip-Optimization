@@ -1,6 +1,5 @@
 package com.csu2017sp314.dtr07.Presenter;
 
-
 import com.csu2017sp314.dtr07.Model.*;
 import com.csu2017sp314.dtr07.View.*;
 
@@ -10,6 +9,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.xml.sax.SAXException;
+
+/**
+ * Created by SummitDrift on 2/13/17.
+ * Main class for Presenter Package
+ */
 
 public class Presenter {
     private Model model;

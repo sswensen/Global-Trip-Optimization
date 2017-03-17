@@ -5,8 +5,10 @@ import java.util.ArrayList;
 
 /**
  * Created by SummitDrift on 2/13/17.
+ * @author Scott Swensen
  * Main class for Model Package
  */
+
 public class Model {
     //private ArrayList<Location> locations;
     private ArrayList<Pair> pairs;

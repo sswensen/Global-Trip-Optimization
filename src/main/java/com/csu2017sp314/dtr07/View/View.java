@@ -2,7 +2,6 @@ package com.csu2017sp314.dtr07.View;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -24,6 +23,11 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 //import org.w3c.dom.DOMImplementation;
+
+/**
+ * Created by SummitDrift on 2/13/17.
+ * Main class for View Package
+ */
 
 public class View {
     private Consumer<String> callback;
@@ -49,7 +53,7 @@ public class View {
         svg = new SVGBuilder(svgMap);
         xml = new XMLBuilder();
     }
-    
+
     public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
         Document readXml;
         File xmlFile = new File(selectionXml);
@@ -59,19 +63,19 @@ public class View {
         readXml.getDocumentElement().normalize();
         //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
         NodeList nList = readXml.getElementsByTagName("destinations");
-        for(int temp = 0; temp < nList.getLength(); temp++){
+        for(int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
             //System.out.println("\nCurrent Element :" + nNode.getNodeName());
-            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+            if(nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 int i = 0;
-                while(eElement.getElementsByTagName("id").item(i) != null){
+                while(eElement.getElementsByTagName("id").item(i) != null) {
                     ids.add(eElement.getElementsByTagName("id").item(i).getTextContent());
                     i++;
                 }
             }
         }
-        for(int i  = 0; i < ids.size();i++){
+        for(int i = 0; i < ids.size(); i++) {
             //System.out.println("id at index " + i + " = " + ids.get(i));
         }
     }

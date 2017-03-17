@@ -1,7 +1,8 @@
 package com.csu2017sp314.dtr07.Model;
 
-/*
+/**
  * Created by SummitDrift on 2/13/17.
+ * @author Scott Swensen
  * Class for holding information on a single location
  */
 

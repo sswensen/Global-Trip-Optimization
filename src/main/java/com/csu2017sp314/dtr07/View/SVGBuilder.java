@@ -9,10 +9,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-/*
+/**
  * Created by SummitDrift on 3/6/17.
+ * @author Scott Swensen
  * All code for creating SVG doc
  */
+
 class SVGBuilder {
     private Document SVGdoc;
     private int labelID = 1;

@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.io.File;
 
-/*
+/**
  * Created by SummitDrift on 3/6/17.
+ * @author Scott Swensen
  * File for displaying map with interactive stuff
  */
 

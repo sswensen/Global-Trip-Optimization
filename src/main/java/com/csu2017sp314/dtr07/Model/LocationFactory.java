@@ -1,14 +1,15 @@
 package com.csu2017sp314.dtr07.Model;
 
-/*
- * Created by SummitDrift on 2/13/17.
- * Factory for creation of locations and pairs
- */
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+/**
+ * Created by SummitDrift on 2/13/17.
+ * @author Scott Swensen
+ * Factory for creation of locations and pairs
+ */
 
 class LocationFactory {
     private ArrayList<Location> locations = new ArrayList<Location>();

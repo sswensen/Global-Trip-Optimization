@@ -7,10 +7,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-/*
+/**
  * Created by SummitDrift on 3/6/17.
+ * @author Scott Swensen
  * All code for creating XML doc
  */
+
 class XMLBuilder {
     private Document XMLdoc;
 
