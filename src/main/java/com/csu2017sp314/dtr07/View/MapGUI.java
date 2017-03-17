@@ -7,6 +7,9 @@ import java.util.concurrent.TimeUnit;
 /*
  * Created by SummitDrift on 3/6/17.
  * File for displaying map with interactive stuff
+ * This file is going to be really complicated
+ * Prepare yourself
+ * Winter is coming...
  */
 
 public class MapGUI {
