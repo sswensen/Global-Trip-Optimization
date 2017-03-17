@@ -3,7 +3,6 @@ package com.csu2017sp314.dtr07.View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -121,54 +120,6 @@ public class MapGUI {
         gbc.gridx = gridX;
         gbc.gridy = gridY;
         gbc.gridwidth = gridWidth;
-    }
-
-    private void nameTrip() {
-        /*JFrame nameThisTrip = new JFrame("Enter a name for this trip");
-        JFrame holding = new JFrame("");
-        JButton inputButton = new JButton("Send");
-        JTextArea editTextArea = new JTextArea("Type Here!");
-        JTextArea uneditTextArea = new JTextArea();
-        holding.setLayout(new BorderLayout());
-        uneditTextArea.setEditable(false);
-        //INPUT TEXT AREA
-        editTextArea.setBackground(Color.BLUE);
-        editTextArea.setForeground(Color.WHITE);
-        //SET CONTENT PANE
-        Container c = holding.getContentPane();
-        //ADD COMPONENTS TO CONTENT PANE
-        c.add(uneditTextArea, BorderLayout.CENTER);
-        c.add(editTextArea, BorderLayout.WEST);
-        c.add(inputButton, BorderLayout.EAST);
-        inputButton.addActionListener((ActionEvent e) -> {
-            tripNames.add(editTextArea.getText());
-
-            tempFname = editTextArea.getText();
-
-            System.out.println("Adding " + editTextArea.getText() + " to array at " + tripNames.indexOf(editTextArea.getText()));
-            editTextArea.setText("");
-            holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-        });*/
-
-
-        JFrame holding = new JFrame("Enter name for trip");
-        JTextField textField = new JTextField(20);
-        JTextArea textArea = new JTextArea(5, 20);
-        textArea.setEditable(false);
-        holding.add(textField);
-        textField.addActionListener((ActionEvent e) -> {
-                String text = textField.getText();
-                textArea.append(text + "\n");
-                textField.selectAll();
-                //Make sure the new text is visible, even if there
-                //was a selection in the text area.
-                textArea.setCaretPosition(textArea.getDocument().getLength());
-                tripName = text;
-                holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-        });
-        holding.setLocation(1063, 0);
-        holding.setSize(200, 50);
-        holding.setVisible(true);
     }
 
     private JButton addSaveButton(String name) {
