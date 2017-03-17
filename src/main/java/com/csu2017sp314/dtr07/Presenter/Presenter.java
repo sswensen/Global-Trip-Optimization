@@ -23,6 +23,7 @@ public class Presenter {
     private String selectionXml;
     private ArrayList<String> currentIds = new ArrayList<>();
     private boolean displayGui;
+    private String svgMap;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -160,7 +161,7 @@ public class Presenter {
     }
 
     public int eventLoadLoc() throws SAXException, IOException, ParserConfigurationException, TransformerException {
-        view.initializeTrip(selectionXml);
+        view.initializeTrip(selectionXml, svgMap);
 
         int numPairs = model.getUserPairs().size();
 
@@ -252,7 +253,8 @@ public class Presenter {
     public void planTrip(String filename, String selectionXml, String svgMap) throws Exception {
         fname = filename;
         this.selectionXml = selectionXml;
-        view.initializeTrip(selectionXml);
+        this.svgMap = svgMap;
+        view.initializeTrip(selectionXml, svgMap);
         model.planTrip(filename);
         int numPairs = model.getNumPairs();
         //view.addBorders();
