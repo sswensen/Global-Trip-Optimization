@@ -38,7 +38,7 @@ public class MapGUI {
     private boolean rightTick = false;
     private int savedTrip = -1;
     private int filenameIncrementer = 1;
-    private int z = 0; //Number of saved trips
+    private int z = -1; //Number of saved trips
     private int z2 = 0; //You'll figure it out
     private ArrayList<JButton> buttons = new ArrayList<>();
     private String tripName = "ERROR";
@@ -193,6 +193,7 @@ public class MapGUI {
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
             if((savedTrip < 0 || trips.size() == 0 || name.equals(" Save As "))) {
+                z++;
                 //-----
                 JFrame holding = new JFrame("Enter name for trip");
                 JTextField textField = new JTextField(20);
@@ -206,7 +207,8 @@ public class MapGUI {
                     textArea.setCaretPosition(textArea.getDocument().getLength());
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                    trips.add(trip);
+                    trips.add(new ArrayList<>(trip));
+                    System.out.println("Adding " + trip + " to trips at index " + (trips.size()-1));
                     tripNames.add(tripName);
                     if(rightTick) {
                         setGBC(1, z2, 1);
@@ -223,18 +225,22 @@ public class MapGUI {
                     loadPanel.add(load, gbc);
                     System.out.println("Added button " + load.getText());
                     load.addActionListener((ActionEvent eee) -> {
-                        System.out.println("Attempting to load trip " + tripNames.get(trips.indexOf(trip)));
-                        tempLoc = trip;
+                        System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+                        tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
                         userAddLocList(tempLoc);
-                        updateTripLabel(tripNames.get(trips.indexOf(trip))); //TODO fix this shit
+                        updateTripLabel(load.getText().substring(10)); //TODO fix this shit
                         for(JButton a : buttons) {
                             tick = true;
                             a.doClick();
                             a.doClick();
                         }
-                        savedTrip = z;
+
+                        savedTrip = tripNames.indexOf(load.getText().substring(10));
+
                     });
-                    updateTripLabel(tripName);
+                    updateTripLabel(load.getText().substring(10));
+                    savedTrip = tripNames.indexOf(load.getText().substring(10));
+                    System.out.println("Setting savedTrip to " + tripNames.indexOf(load.getText().substring(10)));
                 });
                 holding.setLocation(1063, 0);
                 holding.setSize(200, 50);
@@ -249,14 +255,21 @@ public class MapGUI {
                 loadPanel.remove(deleteTrip);
                 uOp.pack();
             });*/
-                z++;
             } else {
-                if(trips.size() == 1) {
+                /*if(trips.size() == 1) {
+                    trips.remove(0);
                     trips.add(0, trip);
-                } else{
-                    trips.add(z, trip);
-                }
+                    System.out.println("Adding " + trip + " to trips at index 0");
+                } else{*/
+                    trips.remove(savedTrip);
+                    trips.add(savedTrip, new ArrayList<>(trip));
+                    System.out.println("Adding " + trip + " to trips at index " + savedTrip);
+                //}
             }
+            System.out.println("savedTrip is " + savedTrip);
+            System.out.println("Z is " + z);
+            printAll();
+            System.out.println("--------------------------------");
         });
         return sa;
     }
@@ -393,6 +406,15 @@ public class MapGUI {
         Boolean ret2 = temp.delete();
         filenameIncrementer = 0;
         return ret & ret2;
+    }
+
+    private void printAll() {
+        for(int i = 0; i < trips.size(); i++) {
+            System.out.println("Trips at " + i + " is " + trips.get(i).toString());
+        }
+        for(int i = 0; i < tripNames.size(); i++) {
+            System.out.println("Trip Names at " + i + " is " + tripNames.get(i));
+        }
     }
 
     public static void main(String[] args) throws Exception {
