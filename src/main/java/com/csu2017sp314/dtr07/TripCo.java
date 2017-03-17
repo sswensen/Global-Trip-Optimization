@@ -38,7 +38,7 @@ public class TripCo {
             for(int i = 0; i < args.length;i++){
                 arguments.add(args[i]);
             }
-            String filename = args[0];
+            String filename = "";
             System.out.println(filename);
             String selectionXml = "";
             System.out.println(selectionXml.substring(selectionXml.lastIndexOf(".") + 1, selectionXml.length()));
@@ -57,21 +57,33 @@ public class TripCo {
             }
 
             for(int i = 0;i < arguments.size();i++){
-                String file = arguments.get(i);
+                String xmlFile = arguments.get(i);
+                String csvFile = arguments.get(i);
                 try{
-                    String xmlExtension = file.substring(file.lastIndexOf(".") + 1, file.length());
+                    String xmlExtension = xmlFile.substring(xmlFile.lastIndexOf(".") + 1, xmlFile.length());
+                    String csvExtension = csvFile.substring(csvFile.lastIndexOf(".") + 1, csvFile.length());
                     String xml = "xml";
-                    if(!xml.equals(xmlExtension)){
+                    String csv = "csv";
+                    if(!xml.equals(xmlExtension) && !csv.equals(csvExtension)){ //both checks are false
                         continue;
                     }
-                    else{
-                        selectionXml = file;
-                        System.out.println(selectionXml);
+                    else{ //one file matches
+                        if(xml.equals(xmlExtension)){
+                            selectionXml = xmlFile;
+                            System.out.println("Found selectionXml: " + selectionXml);
+                        }
+                        if(csv.equals(csvExtension)){
+                            filename = csvFile;
+                            System.out.println("Found csv file: " + filename);
+                        }
+
                     }
-               } catch(IndexOutOfBoundsException e){
-                   continue;
-               }
+                } catch(IndexOutOfBoundsException e){
+                    continue;
+                }
             }
+
+
             presenter.planTrip(filename, selectionXml);
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                 public void run() {
