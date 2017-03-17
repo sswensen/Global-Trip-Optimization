@@ -274,7 +274,7 @@ public class MapGUI {
         return sa;
     }
 
-    void updateTripLabel(String name) {
+    private void updateTripLabel(String name) {
         fTemp.remove(currentTrip);
         setGBC(0, 0, 4);
         currentTrip = new JLabel("Editing \"" + name + "\"", SwingConstants.CENTER);
