@@ -1,9 +1,17 @@
 package com.csu2017sp314.dtr07.View;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.io.File;
@@ -16,11 +24,13 @@ import java.io.File;
 public class MapGUI {
     private Consumer<String> callback; //Used if other callback method is used
     private Consumer<ArrayList<String>> callback2;
+    private Consumer<String> callback3; //Used if other callback method is used
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
-    //private JFrame face; //User interface with locations
+    private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
+    private ArrayList<String> tripNames = new ArrayList<>();
     private ArrayList<String> tempLoc;
     private String workingDirectoryFilePath;
     private JFrame uOp;
@@ -29,11 +39,15 @@ public class MapGUI {
     private boolean rightTick = false;
     private int savedTrip = -1;
     private int filenameIncrementer = 1;
-    private int z = 0; //Number of saved trips
+    private int z = -1; //Number of saved trips
     private int z2 = 0; //You'll figure it out
     private ArrayList<JButton> buttons = new ArrayList<>();
     private String tripName = "ERROR";
     private JPanel loadPanel;
+    private Group root;
+    private JPanel fTemp;
+    private JLabel currentTrip;
+    private ArrayList<String> lastTrip = new ArrayList<>();
 
     MapGUI() {
 
@@ -47,6 +61,10 @@ public class MapGUI {
         this.callback2 = callback2;
     }
 
+    void setCallback3(Consumer<String> callback3) {
+        this.callback3 = callback3;
+    }
+
     /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);
     }*/
@@ -55,13 +73,23 @@ public class MapGUI {
         callback2.accept(ids);
     }
 
+    private void mapOptions(String option) {
+        callback3.accept(option);
+    }
+
     int init(String filename) throws Exception {
         this.filename = filename;
         this.workingDirectoryFilePath = System.getProperty("user.dir") + "/";
-        new Convert(filename, -1);
+        //new Convert(filename, -1);
         options = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
-        createMapGUI(filename);
+        //createMapGUI(filename);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                background(filename);
+            }
+        });
         //createFaceGUI();
 
         /*JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
@@ -74,6 +102,52 @@ public class MapGUI {
         createOptionsGUI();
         map.setVisible(true); //making the frame visible
         return 1;
+    }
+
+    private void background(String filename) {
+        map = new JFrame("TripCo");
+        final JFXPanel fxPanel = new JFXPanel();
+        map.add(fxPanel);
+        map.setLocation(0, 0);
+        map.setSize(1064, 802);
+        map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                fxPanel.setScene(createBGScene(filename));
+            }
+        });
+    }
+
+    private Scene createBGScene(String filename) {
+        root = new Group();
+        Scene scene = new Scene(root);
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+        browser.setPrefSize(1064, 802);
+        try {
+            URL bgURL = new File(workingDirectoryFilePath + filename + ".svg").toURI().toURL();
+            webEngine.load(bgURL.toString());
+        } catch(Exception e) {
+            System.err.println("Error reading URL of background image");
+        }
+        //webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
+        System.out.println("Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
+        root.getChildren().add(browser);
+        return (scene);
+    }
+
+    private void updateBG() {
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+        browser.setPrefSize(1064, 802);
+        try {
+            URL bgURL = new File(workingDirectoryFilePath + filename + ".svg").toURI().toURL();
+            webEngine.load(bgURL.toString());
+        } catch(Exception e) {
+            System.err.println("Error reading URL of background image [2]");
+        }
+        root.getChildren().add(browser);
     }
 
     private int createMapGUI(String filename) {
@@ -93,14 +167,14 @@ public class MapGUI {
         return 1;
     }
 
-    /*int createFaceGUI() {
+    int createFaceGUI() {
         face = new JFrame("User Options");
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setLocation(1063, 0);
         face.setSize(300, 802);
         face.setVisible(true);
         return 1;
-    }*/
+    }
 
     private int createOptionsGUI() {
         uOp = new JFrame("User Options");
@@ -129,6 +203,7 @@ public class MapGUI {
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
             if((savedTrip < 0 || trips.size() == 0 || name.equals(" Save As "))) {
+                z++;
                 //-----
                 JFrame holding = new JFrame("Enter name for trip");
                 JTextField textField = new JTextField(20);
@@ -142,7 +217,9 @@ public class MapGUI {
                     textArea.setCaretPosition(textArea.getDocument().getLength());
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                    trips.add(trip);
+                    trips.add(new ArrayList<>(trip));
+                    System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
+                    tripNames.add(tripName);
                     if(rightTick) {
                         setGBC(1, z2, 1);
                         rightTick = false;
@@ -151,18 +228,30 @@ public class MapGUI {
                         setGBC(0, z2, 1);
                         rightTick = true;
                     }
+                    if(trips.size() == 0 || name.equals(" Save Trip "))
+                        savedTrip = z;
+                    System.out.println("Trip name is " + tripName);
                     JButton load = new JButton("Load Trip " + tripName);
                     loadPanel.add(load, gbc);
+                    System.out.println("Added button " + load.getText());
                     load.addActionListener((ActionEvent eee) -> {
-                        tempLoc = trip;
+                        System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+                        tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
                         userAddLocList(tempLoc);
+                        lastTrip = new ArrayList<>(tempLoc);
+                        updateTripLabel(load.getText().substring(10));
                         for(JButton a : buttons) {
                             tick = true;
                             a.doClick();
                             a.doClick();
                         }
-                        savedTrip = z;
+
+                        savedTrip = tripNames.indexOf(load.getText().substring(10));
+
                     });
+                    updateTripLabel(load.getText().substring(10));
+                    savedTrip = tripNames.indexOf(load.getText().substring(10));
+                    System.out.println("Setting savedTrip to " + tripNames.indexOf(load.getText().substring(10)));
                 });
                 holding.setLocation(1063, 0);
                 holding.setSize(200, 50);
@@ -177,32 +266,86 @@ public class MapGUI {
                 loadPanel.remove(deleteTrip);
                 uOp.pack();
             });*/
-                z++;
             } else {
-                trips.add(z, trip);
+                /*if(trips.size() == 1) {
+                    trips.remove(0);
+                    trips.add(0, trip);
+                    System.out.println("Adding " + trip + " to trips at index 0");
+                } else{*/
+                trips.remove(savedTrip);
+                trips.add(savedTrip, new ArrayList<>(trip));
+                System.out.println("Adding " + trip + " to trips at index " + savedTrip);
+                //}
             }
+            System.out.println("savedTrip is " + savedTrip);
+            System.out.println("Z is " + z);
+            printAll();
+            System.out.println("--------------------------------");
         });
         return sa;
     }
 
+    private void updateTripLabel(String name) {
+        fTemp.remove(currentTrip);
+        setGBC(0, 0, 4);
+        currentTrip = new JLabel("Editing \"" + name + "\"", SwingConstants.CENTER);
+        fTemp.add(currentTrip);
+    }
+
+    private JButton mapDisplayButtons(String name) {
+        JButton b = new JButton("Add " + name);
+        b.addActionListener((ActionEvent e) -> {
+            if(b.getText().equals("Add " + name)) { //Checks if button has already been pressed
+                b.setText("Remove " + name); //If not pressed, toggle text and add
+            } else if(b.getText().equals("Remove " + name)) {
+                b.setText("Add " + name);
+            }
+            mapOptions(name);
+            userAddLocList(lastTrip);
+        });
+        return b;
+    }
+
+    private JPanel generateMapDisplayOptions() {
+        JPanel panel = createInnerPanel();
+
+        setGBC(0, 0, 1);
+        panel.add(mapDisplayButtons("Names"), gbc);
+        setGBC(1, 0, 1);
+        panel.add(mapDisplayButtons("IDs"), gbc);
+        setGBC(0, 1, 2);
+        panel.add(mapDisplayButtons("Mileage"), gbc);
+        setGBC(0, 2, 1);
+        panel.add(mapDisplayButtons("2-opt"), gbc);
+        setGBC(1, 2, 1);
+        panel.add(mapDisplayButtons("3-opt"), gbc);
+        return panel;
+    }
+
     void displayXML(ArrayList<String> ids) {
         tempLoc = new ArrayList<>();
-        JPanel fTemp = createInnerPanel();
+        fTemp = createInnerPanel();
         loadPanel = createInnerPanel();
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        setGBC(0, 0, 2);
+        setGBC(0, 0, 4);
+        currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
+        currentTrip.setPreferredSize(new Dimension(30, 30));
+        fTemp.add(currentTrip, gbc);
+
+        setGBC(0, 1, 2);
 
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
             userAddLocList(tempLoc);
+            lastTrip = new ArrayList<>(tempLoc);
         });
         fTemp.add(q, gbc);
 
-        setGBC(2, 0, 1);
+        setGBC(2, 1, 1);
         fTemp.add(addSaveButton(" Save Trip "), gbc);
 
-        setGBC(3, 0, 1);
+        setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
         int numButtons = 0;
@@ -231,14 +374,14 @@ public class MapGUI {
                 if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
                     if(!tempLoc.contains(id)) {
                         tempLoc.add(id);
-                        System.out.println("Added " + id + " to array");
+                        //System.out.println("Added " + id + " to array");
                         b.setText("   Remove   "); //If not pressed, toggle text and add
                     }
 
                 } else if(b.getText().equals("   Remove   ")) {
                     if(tempLoc.contains(id)) {
                         tempLoc.remove(id);
-                        System.out.println("Removed " + id + " from array");
+                        //System.out.println("Removed " + id + " from array");
                         b.setText("      Add      ");
                     }
                 }
@@ -254,15 +397,17 @@ public class MapGUI {
             t.setVisible(true);
 
             numButtons++;
-            setGBC(0, numButtons, 1);
+            setGBC(0, numButtons + 1, 1);
             fTemp.add(b, gbc);
-            setGBC(1, numButtons, 3);
+            setGBC(1, numButtons + 1, 3);
             fTemp.add(t2, gbc);
         }
 
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
         options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
+
+        options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
         //options.addTab("Four", face.getContentPane());
         //uOp.setMinimumSize(new Dimension(500, 500));
 
@@ -270,7 +415,18 @@ public class MapGUI {
     }
 
     void refresh() throws Exception {
-        map.setVisible(false);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateBG();
+                    }
+                });
+            }
+        });
+        /*map.setVisible(false);
         new Convert(filename, filenameIncrementer);
         JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + filenameIncrementer + "_User.png"));
         File temp = new File(workingDirectoryFilePath + "png/" + filename + (filenameIncrementer - 1) + "_User.png");
@@ -283,7 +439,7 @@ public class MapGUI {
 
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802); //Second part for refreshing the window
-        map.setVisible(true); //making the frame visible
+        map.setVisible(true); //making the frame visible*/
     }
 
     boolean cleanup() {
@@ -296,8 +452,16 @@ public class MapGUI {
         return ret & ret2;
     }
 
+    private void printAll() {
+        for(int i = 0; i < trips.size(); i++) {
+            System.out.println("Trips at " + i + " is " + trips.get(i).toString());
+        }
+        for(int i = 0; i < tripNames.size(); i++) {
+            System.out.println("Trip Names at " + i + " is " + tripNames.get(i));
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        new Convert("Colorado14ers", 0);
         JFrame f = new JFrame("TripCo"); //creating instance of JFrame
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         JButton b = new JButton("click"); //creating instance of JButton

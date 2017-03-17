@@ -28,6 +28,7 @@ import org.w3c.dom.Element;
 public class View {
     private Consumer<String> callback;
     private Consumer<ArrayList<String>> callback2;
+    private Consumer<String> callback3;
     private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
@@ -54,11 +55,11 @@ public class View {
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         readXml = dBuilder.parse(xmlFile);
         readXml.getDocumentElement().normalize();
-        System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
         NodeList nList = readXml.getElementsByTagName("destinations");
         for(int temp = 0; temp < nList.getLength(); temp++){
             Node nNode = nList.item(temp);
-            System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
             if(nNode.getNodeType() == Node.ELEMENT_NODE){
                 Element eElement = (Element) nNode;
                 int i = 0;
@@ -69,7 +70,7 @@ public class View {
             }
         }
         for(int i  = 0; i < ids.size();i++){
-            System.out.println("id at index " + i + " = " + ids.get(i));
+            //System.out.println("id at index " + i + " = " + ids.get(i));
         }
     }
 
@@ -81,12 +82,20 @@ public class View {
         this.callback2 = callback2;
     }
 
+    public void setCallback3(Consumer<String> callback3) {
+        this.callback3 = callback3;
+    }
+
     private void userAddLoc(String id) {
         callback.accept(id);
     }
 
     private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
+    }
+
+    private void mapOptions(String option) {
+        callback3.accept(option);
     }
 
     public void addLeg(String id, String start, String finish, int mileage) {
@@ -148,6 +157,10 @@ public class View {
 
         gui.setCallback2((ArrayList<String> s) -> {
             this.userAddLocList(s);
+        });
+
+        gui.setCallback3((String s) -> {
+            this.mapOptions(s);
         });
         try {
             gui.init(f);
