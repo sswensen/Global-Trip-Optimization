@@ -8,10 +8,10 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import javax.swing.*;
-import javax.xml.soap.Text;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.io.File;
@@ -112,7 +112,13 @@ public class MapGUI {
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
         browser.setPrefSize(1064, 802);
-        webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
+        try {
+            URL bgURL = new File(workingDirectoryFilePath + filename + ".svg").toURI().toURL();
+            webEngine.load(bgURL.toString());
+        } catch(Exception e) {
+            System.err.println("Error reading URL of background image");
+        }
+        //webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
         System.out.println("Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
         root.getChildren().add(browser);
         return (scene);
@@ -122,7 +128,12 @@ public class MapGUI {
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
         browser.setPrefSize(1064, 802);
-        webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
+        try {
+            URL bgURL = new File(workingDirectoryFilePath + filename + ".svg").toURI().toURL();
+            webEngine.load(bgURL.toString());
+        } catch(Exception e) {
+            System.err.println("Error reading URL of background image [2]");
+        }
         root.getChildren().add(browser);
     }
 
