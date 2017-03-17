@@ -50,6 +50,7 @@ public class TripCo {
             }
             String filename = "";
             String selectionXml = "";
+            String svgMap = "";
             Model model = new Model();
             View view = new View();
             Presenter presenter = new Presenter(model, view);
@@ -57,12 +58,15 @@ public class TripCo {
             for(int i = 0;i < arguments.size();i++){
                 String xmlFile = arguments.get(i);
                 String csvFile = arguments.get(i);
+                String svgFile = arguments.get(i);
                 try{
                     String xmlExtension = xmlFile.substring(xmlFile.lastIndexOf(".") + 1, xmlFile.length());
                     String csvExtension = csvFile.substring(csvFile.lastIndexOf(".") + 1, csvFile.length());
+                    String svgExtension = svgFile.substring(svgFile.lastIndexOf(".") + 1, svgFile.length());
                     String xml = "xml";
                     String csv = "csv";
-                    if(!xml.equals(xmlExtension) && !csv.equals(csvExtension)){ //both checks are false
+                    String svg = "";
+                    if(!xml.equals(xmlExtension) && !csv.equals(csvExtension) && !svg.equals(svgExtension)){ //both checks are false
                         continue;
                     }
                     else{ //one file matches the extension
@@ -73,6 +77,9 @@ public class TripCo {
                         if(csv.equals(csvExtension)){
                             filename = csvFile;
                             System.out.println("Found csv file: " + filename);
+                        }
+                        if(svg.equals(svgExtension)){
+                            svgMap = svgFile;
                         }
                     }
                 } catch(IndexOutOfBoundsException e){
@@ -99,7 +106,7 @@ public class TripCo {
                     displayOptions("-3", presenter);
                 }
             }
-            presenter.planTrip(filename, selectionXml);
+            presenter.planTrip(filename, selectionXml, svgMap);
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                 public void run() {
                     //presenter.cleanup();

@@ -249,7 +249,7 @@ public class Presenter {
         return displayGui;
     }
 
-    public void planTrip(String filename, String selectionXml) throws Exception {
+    public void planTrip(String filename, String selectionXml, String svgMap) throws Exception {
         fname = filename;
         this.selectionXml = selectionXml;
         view.initializeTrip(selectionXml);
