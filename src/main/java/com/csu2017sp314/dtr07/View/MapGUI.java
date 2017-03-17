@@ -91,13 +91,13 @@ public class MapGUI {
         return 1;
     }
 
-    void background(String filename) {
+    private void background(String filename) {
         map = new JFrame("TripCo");
         final JFXPanel fxPanel = new JFXPanel();
         map.add(fxPanel);
         map.setLocation(0, 0);
         map.setSize(1064, 802);
-        map.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
