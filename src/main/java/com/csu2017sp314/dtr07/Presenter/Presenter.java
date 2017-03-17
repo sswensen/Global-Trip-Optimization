@@ -199,7 +199,7 @@ public class Presenter {
         return -1;
     }
 
-    public boolean isTwoOpt() {
+    public boolean getTwoOpt() {
         return twoOpt;
     }
 
@@ -207,7 +207,7 @@ public class Presenter {
         this.twoOpt = twoOpt;
     }
 
-    public boolean isThreeOpt() {
+    public boolean getThreeOpt() {
         return threeOpt;
     }
 
