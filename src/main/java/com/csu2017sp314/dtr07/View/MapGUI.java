@@ -462,7 +462,6 @@ public class MapGUI {
     }
 
     public static void main(String[] args) throws Exception {
-        new Convert("Colorado14ers", 0);
         JFrame f = new JFrame("TripCo"); //creating instance of JFrame
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         JButton b = new JButton("click"); //creating instance of JButton
