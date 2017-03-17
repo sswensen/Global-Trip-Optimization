@@ -27,6 +27,15 @@ public class TripCo {
                 break;
             case "-g":
                 presenter.displayGui(true);
+                break;
+            case "-2":
+                presenter.setTwoOpt(true);
+                presenter.getTwoOpt();
+                break;
+            case "-3":
+                presenter.setThreeOpt(true);
+                presenter.getThreeOpt();
+                break;
             default:
                 break;
         }
@@ -82,6 +91,12 @@ public class TripCo {
                 }
                 if(arguments.contains("-i")){
                     displayOptions("-i", presenter);
+                }
+                if(arguments.contains("-2")){
+                    displayOptions("-2", presenter);
+                }
+                if(arguments.contains("-3")){
+                    displayOptions("-3", presenter);
                 }
             }
             presenter.planTrip(filename, selectionXml);
