@@ -42,6 +42,9 @@ public class TripCo {
     }
 
     public static void main(String[] args) throws Exception {
+        String xmlFile = "";
+        String csvFile = "";
+        String svgFile = "";
         if(args.length == 0) {
             System.out.println("Usage: TripCo [options] file.csv [map.svg] [selection.xml]");
         } else {
@@ -56,9 +59,9 @@ public class TripCo {
             Presenter presenter = new Presenter(model, view);
 
             for(int i = 0;i < arguments.size();i++){
-                String xmlFile = arguments.get(i);
-                String csvFile = arguments.get(i);
-                String svgFile = arguments.get(i);
+                xmlFile = arguments.get(i);
+                csvFile = arguments.get(i);
+                svgFile = arguments.get(i);
                 try{
                     String xmlExtension = xmlFile.substring(xmlFile.lastIndexOf(".") + 1, xmlFile.length());
                     String csvExtension = csvFile.substring(csvFile.lastIndexOf(".") + 1, csvFile.length());
@@ -86,6 +89,7 @@ public class TripCo {
                     continue;
                 }
             }
+
             if(arguments.contains("-g")){
                 displayOptions("-g", presenter);
             }
