@@ -31,8 +31,7 @@ public class MapGUI {
     private int filenameIncrementer = 1;
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
-    private ArrayList<String> tripNames = new ArrayList<>();
-    String tempFname = "NOT INITED";
+    private String tripName = "ERROR";
 
     MapGUI() {
 
@@ -152,24 +151,19 @@ public class MapGUI {
 
 
         JFrame holding = new JFrame("Enter name for trip");
-        JTextField  textField = new JTextField(20);
+        JTextField textField = new JTextField(20);
         JTextArea textArea = new JTextArea(5, 20);
         textArea.setEditable(false);
         holding.add(textField);
-        textField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        textField.addActionListener((ActionEvent e) -> {
                 String text = textField.getText();
                 textArea.append(text + "\n");
                 textField.selectAll();
                 //Make sure the new text is visible, even if there
                 //was a selection in the text area.
                 textArea.setCaretPosition(textArea.getDocument().getLength());
-                tempFname = text;
-                tripNames.add(text);
+                tripName = text;
                 holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-
-            }
         });
         holding.setLocation(1063, 0);
         holding.setSize(200, 50);
@@ -197,39 +191,35 @@ public class MapGUI {
             if(savedTrip < 0 || trips.size() == 0) {
                 //--------
                 JFrame holding = new JFrame("Enter name for trip");
-                JTextField  textField = new JTextField(20);
+                JTextField textField = new JTextField(20);
                 JTextArea textArea = new JTextArea(5, 20);
                 textArea.setEditable(false);
                 holding.add(textField);
-                textField.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        String text = textField.getText();
-                        textArea.append(text + "\n");
-                        textField.selectAll();
-                        //Make sure the new text is visible, even if there
-                        //was a selection in the text area.
-                        textArea.setCaretPosition(textArea.getDocument().getLength());
-                        tempFname = text;
-                        tripNames.add(text);
-                        holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                        System.out.println("User entered " + tempFname);
-                        trips.add(trip);
-                        setGBC(0, z, 1);
-                        System.out.println("Loading trip at index " + z);
-                        JButton load = new JButton("Load Trip " + tempFname);
-                        loadPanel.add(load, gbc);
-                        load.addActionListener((ActionEvent ee) -> {
-                            tempLoc = trip;
-                            userAddLocList(tempLoc);
-                            for(int i = 0; i < buttons.size(); i++) {
-                                tick = true;
-                                buttons.get(i).doClick();
-                                buttons.get(i).doClick();
-                            }
-                            savedTrip = z;
-                        });
-                    }
+                textField.addActionListener((ActionEvent ee) -> {
+                    String text = textField.getText();
+                    textArea.append(text + "\n");
+                    textField.selectAll();
+                    //Make sure the new text is visible, even if there
+                    //was a selection in the text area.
+                    textArea.setCaretPosition(textArea.getDocument().getLength());
+                    tripName = text;
+                    holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
+                    System.out.println("User entered " + tripName);
+                    trips.add(trip);
+                    setGBC(0, z, 1);
+                    System.out.println("Loading trip at index " + z);
+                    JButton load = new JButton("Load Trip " + tripName);
+                    loadPanel.add(load, gbc);
+                    load.addActionListener((ActionEvent eee) -> {
+                        tempLoc = trip;
+                        userAddLocList(tempLoc);
+                        for(int i = 0; i < buttons.size(); i++) {
+                            tick = true;
+                            buttons.get(i).doClick();
+                            buttons.get(i).doClick();
+                        }
+                        savedTrip = z;
+                    });
                 });
                 holding.setLocation(1063, 0);
                 holding.setSize(200, 50);
@@ -259,39 +249,35 @@ public class MapGUI {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
             //-----
             JFrame holding = new JFrame("Enter name for trip");
-            JTextField  textField = new JTextField(20);
+            JTextField textField = new JTextField(20);
             JTextArea textArea = new JTextArea(5, 20);
             textArea.setEditable(false);
             holding.add(textField);
-            textField.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    String text = textField.getText();
-                    textArea.append(text + "\n");
-                    textField.selectAll();
-                    //Make sure the new text is visible, even if there
-                    //was a selection in the text area.
-                    textArea.setCaretPosition(textArea.getDocument().getLength());
-                    tempFname = text;
-                    tripNames.add(text);
-                    holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                    System.out.println("User entered " + tempFname);
-                    trips.add(trip);
-                    setGBC(0, z, 1);
-                    System.out.println("Loading trip at index " + z);
-                    JButton load = new JButton("Load Trip " + tempFname);
-                    loadPanel.add(load, gbc);
-                    load.addActionListener((ActionEvent ee) -> {
-                        tempLoc = trip;
-                        userAddLocList(tempLoc);
-                        for(JButton a : buttons) {
-                            tick = true;
-                            a.doClick();
-                            a.doClick();
-                        }
-                        savedTrip = z;
-                    });
-                }
+            textField.addActionListener((ActionEvent ee) -> {
+                String text = textField.getText();
+                textArea.append(text + "\n");
+                textField.selectAll();
+                //Make sure the new text is visible, even if there
+                //was a selection in the text area.
+                textArea.setCaretPosition(textArea.getDocument().getLength());
+                tripName = text;
+                holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
+                System.out.println("User entered " + tripName);
+                trips.add(trip);
+                setGBC(0, z, 1);
+                System.out.println("Loading trip at index " + z);
+                JButton load = new JButton("Load Trip " + tripName);
+                loadPanel.add(load, gbc);
+                load.addActionListener((ActionEvent eee) -> {
+                    tempLoc = trip;
+                    userAddLocList(tempLoc);
+                    for(JButton a : buttons) {
+                        tick = true;
+                        a.doClick();
+                        a.doClick();
+                    }
+                    savedTrip = z;
+                });
             });
             holding.setLocation(1063, 0);
             holding.setSize(200, 50);
