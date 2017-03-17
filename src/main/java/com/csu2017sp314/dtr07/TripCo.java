@@ -65,7 +65,7 @@ public class TripCo {
                     String svgExtension = svgFile.substring(svgFile.lastIndexOf(".") + 1, svgFile.length());
                     String xml = "xml";
                     String csv = "csv";
-                    String svg = "";
+                    String svg = "svg";
                     if(!xml.equals(xmlExtension) && !csv.equals(csvExtension) && !svg.equals(svgExtension)){ //both checks are false
                         continue;
                     }
