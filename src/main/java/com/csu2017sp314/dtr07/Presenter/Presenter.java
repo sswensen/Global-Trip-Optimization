@@ -40,7 +40,7 @@ public class Presenter {
 
     private int eventUserAddLocList(ArrayList<String> ids) {
         model.toggleListLocations(ids);
-        model.printUserLoc();
+        //model.printUserLoc();
         try {
             view.resetTrip();
             int numPairs = model.getUserPairs().size();
@@ -48,29 +48,24 @@ public class Presenter {
             view.addFooter(model.getTripDistance());
             int finalPairId = 0;
             for (int i = 0; i < numPairs; i++) {
-                double firstLon = model.getUserFirstLon(i);
-                double firstLat = model.getUserFirstLat(i);
-                double secondLon = model.getUserSecondLon(i);
-                double secondLat = model.getUserSecondLat(i);
-                int pairDistance = model.getUserPairDistance(i);
                 String pairId = model.getUserPairId(i);
                 String firstId = model.getUserFirstId(i);
                 String secondId = model.getUserSecondId(i);
                 String firstName = model.getUserFirstName(i);
                 String secondName = model.getUserSecondName(i);
-                view.addLeg(pairId, firstName, secondName, pairDistance);
+                view.addLeg(pairId, firstName, secondName, model.getUserPairDistance(i));
                 finalPairId++;
-                view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
+                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId);
                 if (displayName) {
-                    view.addCityNameLabel(firstLon, firstLat, firstName);
-                    view.addCityNameLabel(secondLon, secondLat, secondName);
+                    view.addCityNameLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstName);
+                    view.addCityNameLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondName);
                 }
                 if (displayMileage) {
-                    view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId);
+                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId);
                 }
                 if (displayId) {
-                    view.addIDLabel(firstLon, firstLat, firstId);
-                    view.addIDLabel(secondLon, secondLat, secondId);
+                    view.addIDLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstId);
+                    view.addIDLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondId);
                 }
             }
             view.addFooter(model.getTripDistance());

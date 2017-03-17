@@ -39,7 +39,7 @@ public class Model {
         int index = searchLocations(id, "id");
         if(index >= 0) {
             userLocations.add(locations.get(index));
-            System.out.println("Adding " + id + " to locations");
+            //System.out.println("Adding " + id + " to locations");
             return 1;
         } else {
             return -1;
@@ -54,7 +54,7 @@ public class Model {
             return 1;
         }
         for(Location loc : userLocations) {
-            System.out.println("Array: " + loc.getId());
+            //System.out.println("Array: " + loc.getId());
         }
         return -1;
     }
