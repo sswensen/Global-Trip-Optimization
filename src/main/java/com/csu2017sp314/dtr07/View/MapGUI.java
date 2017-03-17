@@ -228,7 +228,7 @@ public class MapGUI {
                         System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
                         tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
                         userAddLocList(tempLoc);
-                        updateTripLabel(load.getText().substring(10)); //TODO fix this shit
+                        updateTripLabel(load.getText().substring(10));
                         for(JButton a : buttons) {
                             tick = true;
                             a.doClick();
