@@ -35,16 +35,18 @@ public class View {
     private ArrayList<String> ids = new ArrayList<>();
     private String f;
     private MapGUI gui;
+    private String svgMap;
 
-    public void initializeTrip(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+    public void initializeTrip(String selectionXml, String svgMap) throws SAXException, IOException, ParserConfigurationException {
+        this.svgMap = svgMap;
         gui = new MapGUI();
-        svg = new SVGBuilder();
+        svg = new SVGBuilder(svgMap);
         xml = new XMLBuilder();
         readXML(selectionXml);
     }
 
     public void resetTrip() throws SAXException, IOException, ParserConfigurationException {
-        svg = new SVGBuilder();
+        svg = new SVGBuilder(svgMap);
         xml = new XMLBuilder();
     }
     

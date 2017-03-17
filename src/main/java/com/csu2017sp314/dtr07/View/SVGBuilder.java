@@ -17,12 +17,17 @@ class SVGBuilder {
     private Document SVGdoc;
     private int labelID = 1;
 
-    SVGBuilder() throws ParserConfigurationException, SAXException, IOException {
+    SVGBuilder(String svgMap) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
         //Creating the SVG document
-        String filepath = "src/test/resources/coloradoMap.svg";
+        String filepath = "";
+        if(!svgMap.isEmpty()) {
+             filepath = svgMap;
+        } else {
+            filepath = "src/test/resources/coloradoMap.svg";
+        }
         SVGdoc = docBuilder.parse(filepath);
         /*String svgNS = "http://www.w3.org/2000/svg";
 		DOMImplementation impl = docBuilder.getDOMImplementation();
