@@ -24,6 +24,7 @@ import java.io.File;
 public class MapGUI {
     private Consumer<String> callback; //Used if other callback method is used
     private Consumer<ArrayList<String>> callback2;
+    private Consumer<String> callback3; //Used if other callback method is used
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
@@ -46,6 +47,7 @@ public class MapGUI {
     private Group root;
     private JPanel fTemp;
     private JLabel currentTrip;
+    private ArrayList<String> lastTrip = new ArrayList<>();
 
     MapGUI() {
 
@@ -59,12 +61,20 @@ public class MapGUI {
         this.callback2 = callback2;
     }
 
+    void setCallback3(Consumer<String> callback3) {
+        this.callback3 = callback3;
+    }
+
     /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);
     }*/
 
     private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
+    }
+
+    private void mapOptions(String option) {
+        callback3.accept(option);
     }
 
     int init(String filename) throws Exception {
@@ -208,7 +218,7 @@ public class MapGUI {
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(new ArrayList<>(trip));
-                    System.out.println("Adding " + trip + " to trips at index " + (trips.size()-1));
+                    System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
                     if(rightTick) {
                         setGBC(1, z2, 1);
@@ -228,6 +238,7 @@ public class MapGUI {
                         System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
                         tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
                         userAddLocList(tempLoc);
+                        lastTrip = new ArrayList<>(tempLoc);
                         updateTripLabel(load.getText().substring(10));
                         for(JButton a : buttons) {
                             tick = true;
@@ -261,9 +272,9 @@ public class MapGUI {
                     trips.add(0, trip);
                     System.out.println("Adding " + trip + " to trips at index 0");
                 } else{*/
-                    trips.remove(savedTrip);
-                    trips.add(savedTrip, new ArrayList<>(trip));
-                    System.out.println("Adding " + trip + " to trips at index " + savedTrip);
+                trips.remove(savedTrip);
+                trips.add(savedTrip, new ArrayList<>(trip));
+                System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
             System.out.println("savedTrip is " + savedTrip);
@@ -281,6 +292,36 @@ public class MapGUI {
         fTemp.add(currentTrip);
     }
 
+    private JButton mapDisplayButtons(String name) {
+        JButton b = new JButton("Add " + name);
+        b.addActionListener((ActionEvent e) -> {
+            if(b.getText().equals("Add " + name)) { //Checks if button has already been pressed
+                b.setText("Remove " + name); //If not pressed, toggle text and add
+            } else if(b.getText().equals("Remove " + name)) {
+                b.setText("Add " + name);
+            }
+            mapOptions(name);
+            userAddLocList(lastTrip);
+        });
+        return b;
+    }
+
+    private JPanel generateMapDisplayOptions() {
+        JPanel panel = createInnerPanel();
+
+        setGBC(0, 0, 1);
+        panel.add(mapDisplayButtons("Names"), gbc);
+        setGBC(1, 0, 1);
+        panel.add(mapDisplayButtons("IDs"), gbc);
+        setGBC(0, 1, 2);
+        panel.add(mapDisplayButtons("Mileage"), gbc);
+        setGBC(0, 2, 1);
+        panel.add(mapDisplayButtons("2-opt"), gbc);
+        setGBC(1, 2, 1);
+        panel.add(mapDisplayButtons("3-opt"), gbc);
+        return panel;
+    }
+
     void displayXML(ArrayList<String> ids) {
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
@@ -289,7 +330,7 @@ public class MapGUI {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
         currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
-        currentTrip.setPreferredSize(new Dimension(30,30));
+        currentTrip.setPreferredSize(new Dimension(30, 30));
         fTemp.add(currentTrip, gbc);
 
         setGBC(0, 1, 2);
@@ -297,6 +338,7 @@ public class MapGUI {
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
             userAddLocList(tempLoc);
+            lastTrip = new ArrayList<>(tempLoc);
         });
         fTemp.add(q, gbc);
 
@@ -355,15 +397,17 @@ public class MapGUI {
             t.setVisible(true);
 
             numButtons++;
-            setGBC(0, numButtons+1, 1);
+            setGBC(0, numButtons + 1, 1);
             fTemp.add(b, gbc);
-            setGBC(1, numButtons+1, 3);
+            setGBC(1, numButtons + 1, 3);
             fTemp.add(t2, gbc);
         }
 
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
         options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
+
+        options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
         //options.addTab("Four", face.getContentPane());
         //uOp.setMinimumSize(new Dimension(500, 500));
 

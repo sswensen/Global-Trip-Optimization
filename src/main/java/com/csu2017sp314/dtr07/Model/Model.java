@@ -47,16 +47,20 @@ public class Model {
     }
 
     public int toggleListLocations(ArrayList<String> ids) {
-        for(String id : ids) {
-            userLocations.add(locations.get(searchLocations(id, "id")));
+        if(!ids.isEmpty()) {
+            for(String id : ids) {
+                userLocations.add(locations.get(searchLocations(id, "id")));
+            }
+            if(userLocations.size() > 0) {
+                return 1;
+            }
+            for(Location loc : userLocations) {
+                //System.out.println("Array: " + loc.getId());
+            }
+        } else {
+
         }
-        if(userLocations.size() > 0) {
-            return 1;
-        }
-        for(Location loc : userLocations) {
-            //System.out.println("Array: " + loc.getId());
-        }
-        return -1;
+        return 1;
     }
 
     private int searchLocations(String identifier, String field) {
