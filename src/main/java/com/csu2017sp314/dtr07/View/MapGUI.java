@@ -29,6 +29,7 @@ public class MapGUI {
     private JTabbedPane options;
     private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
+    private ArrayList<String> tripNames = new ArrayList<>();
     private ArrayList<String> tempLoc;
     private String workingDirectoryFilePath;
     private JFrame uOp;
@@ -204,6 +205,7 @@ public class MapGUI {
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(trip);
+                    tripNames.add(tripName);
                     if(rightTick) {
                         setGBC(1, z2, 1);
                         rightTick = false;
@@ -252,7 +254,12 @@ public class MapGUI {
         loadPanel = createInnerPanel();
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        setGBC(0, 0, 2);
+        setGBC(0, 0, 4);
+        JLabel currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
+        currentTrip.setPreferredSize(new Dimension(30,30));
+        fTemp.add(currentTrip, gbc);
+
+        setGBC(0, 1, 2);
 
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
@@ -260,10 +267,10 @@ public class MapGUI {
         });
         fTemp.add(q, gbc);
 
-        setGBC(2, 0, 1);
+        setGBC(2, 1, 1);
         fTemp.add(addSaveButton(" Save Trip "), gbc);
 
-        setGBC(3, 0, 1);
+        setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
         int numButtons = 0;
@@ -315,9 +322,9 @@ public class MapGUI {
             t.setVisible(true);
 
             numButtons++;
-            setGBC(0, numButtons, 1);
+            setGBC(0, numButtons+1, 1);
             fTemp.add(b, gbc);
-            setGBC(1, numButtons, 3);
+            setGBC(1, numButtons+1, 3);
             fTemp.add(t2, gbc);
         }
 
