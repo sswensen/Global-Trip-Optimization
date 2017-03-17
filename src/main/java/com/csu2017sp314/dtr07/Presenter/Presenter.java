@@ -9,7 +9,6 @@ import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import org.xml.sax.SAXException;
 
 public class Presenter {
