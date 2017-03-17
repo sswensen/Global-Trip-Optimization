@@ -281,6 +281,16 @@ public class MapGUI {
         fTemp.add(currentTrip);
     }
 
+    private JPanel generateMapDisplayOptions() {
+        JPanel panel = createInnerPanel();
+        setGBC(0, 0, 2);
+        JButton a = new JButton("");
+
+
+        panel.add(a, gbc);
+        return panel;
+    }
+
     void displayXML(ArrayList<String> ids) {
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
@@ -364,6 +374,8 @@ public class MapGUI {
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
         options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
+
+        options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
         //options.addTab("Four", face.getContentPane());
         //uOp.setMinimumSize(new Dimension(500, 500));
 
