@@ -217,7 +217,7 @@ public class MapGUI {
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(new ArrayList<>(trip));
-                    System.out.println("Adding " + trip + " to trips at index " + (trips.size()-1));
+                    System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
                     if(rightTick) {
                         setGBC(1, z2, 1);
@@ -270,9 +270,9 @@ public class MapGUI {
                     trips.add(0, trip);
                     System.out.println("Adding " + trip + " to trips at index 0");
                 } else{*/
-                    trips.remove(savedTrip);
-                    trips.add(savedTrip, new ArrayList<>(trip));
-                    System.out.println("Adding " + trip + " to trips at index " + savedTrip);
+                trips.remove(savedTrip);
+                trips.add(savedTrip, new ArrayList<>(trip));
+                System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
             System.out.println("savedTrip is " + savedTrip);
@@ -290,28 +290,32 @@ public class MapGUI {
         fTemp.add(currentTrip);
     }
 
+    private JButton mapDisplayButtons(String name) {
+        JButton b = new JButton("Add " + name);
+        b.addActionListener((ActionEvent e) -> {
+            mapOptions(name);
+            if(b.getText().equals("Add " + name)) { //Checks if button has already been pressed
+                b.setText("Remove " + name); //If not pressed, toggle text and add
+            } else if(b.getText().equals("Remove " + name)) {
+                b.setText("Add " + name);
+            }
+        });
+        return b;
+    }
+
     private JPanel generateMapDisplayOptions() {
         JPanel panel = createInnerPanel();
-        JButton names = new JButton("Toggle Names");
-        JButton ids = new JButton("Toggle IDs");
-        JButton mileage = new JButton("Toggle Mileage");
-        JButton twoOpt = new JButton("Toggle 2-opt");
-        JButton threeOpt = new JButton("Toggle 3-opt");
-
-        names.addActionListener((ActionEvent e) -> {
-            mapOptions("HAY");
-        });
 
         setGBC(0, 0, 1);
-        panel.add(names, gbc);
+        panel.add(mapDisplayButtons("Names"), gbc);
         setGBC(1, 0, 1);
-        panel.add(ids, gbc);
+        panel.add(mapDisplayButtons("IDs"), gbc);
         setGBC(0, 1, 2);
-        panel.add(mileage, gbc);
+        panel.add(mapDisplayButtons("Mileage"), gbc);
         setGBC(0, 2, 1);
-        panel.add(twoOpt, gbc);
+        panel.add(mapDisplayButtons("2-opt"), gbc);
         setGBC(1, 2, 1);
-        panel.add(threeOpt, gbc);
+        panel.add(mapDisplayButtons("3-opt"), gbc);
         return panel;
     }
 
@@ -323,7 +327,7 @@ public class MapGUI {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
         currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
-        currentTrip.setPreferredSize(new Dimension(30,30));
+        currentTrip.setPreferredSize(new Dimension(30, 30));
         fTemp.add(currentTrip, gbc);
 
         setGBC(0, 1, 2);
@@ -389,9 +393,9 @@ public class MapGUI {
             t.setVisible(true);
 
             numButtons++;
-            setGBC(0, numButtons+1, 1);
+            setGBC(0, numButtons + 1, 1);
             fTemp.add(b, gbc);
-            setGBC(1, numButtons+1, 3);
+            setGBC(1, numButtons + 1, 3);
             fTemp.add(t2, gbc);
         }
 

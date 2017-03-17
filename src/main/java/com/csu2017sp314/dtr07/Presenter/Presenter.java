@@ -36,7 +36,6 @@ public class Presenter {
             if(s.equals("")) {
                 this.displayId = true;
             }
-            System.out.println("CONFIRMED");
         });
     }
 
