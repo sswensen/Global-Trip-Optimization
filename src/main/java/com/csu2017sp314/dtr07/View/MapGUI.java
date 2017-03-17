@@ -26,9 +26,11 @@ public class MapGUI {
     private JFrame uOp;
     private GridBagConstraints gbc;
     private boolean tick = false;
+    private boolean rightTick = false;
     private int savedTrip = -1;
     private int filenameIncrementer = 1;
     private int z = 0; //Number of saved trips
+    private int z2 = 0; //You'll figure it out
     private ArrayList<JButton> buttons = new ArrayList<>();
     private String tripName = "ERROR";
     private JPanel loadPanel;
@@ -141,7 +143,14 @@ public class MapGUI {
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(trip);
-                    setGBC(0, z, 1);
+                    if(rightTick) {
+                        setGBC(1, z2, 1);
+                        rightTick = false;
+                        z2++;
+                    } else {
+                        setGBC(0, z2, 1);
+                        rightTick = true;
+                    }
                     JButton load = new JButton("Load Trip " + tripName);
                     loadPanel.add(load, gbc);
                     load.addActionListener((ActionEvent eee) -> {
