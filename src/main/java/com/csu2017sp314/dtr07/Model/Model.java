@@ -58,7 +58,7 @@ public class Model {
                 //System.out.println("Array: " + loc.getId());
             }
         } else {
-
+            userLocations = new ArrayList<>(locations);
         }
         return 1;
     }
