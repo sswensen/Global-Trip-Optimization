@@ -40,7 +40,7 @@ public class Presenter {
 
     private int eventUserAddLocList(ArrayList<String> ids) {
         model.toggleListLocations(ids);
-        model.printUserLoc();
+        //model.printUserLoc();
         try {
             view.resetTrip();
             int numPairs = model.getUserPairs().size();

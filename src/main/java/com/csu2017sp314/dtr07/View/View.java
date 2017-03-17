@@ -54,11 +54,11 @@ public class View {
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         readXml = dBuilder.parse(xmlFile);
         readXml.getDocumentElement().normalize();
-        System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
         NodeList nList = readXml.getElementsByTagName("destinations");
         for(int temp = 0; temp < nList.getLength(); temp++){
             Node nNode = nList.item(temp);
-            System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
             if(nNode.getNodeType() == Node.ELEMENT_NODE){
                 Element eElement = (Element) nNode;
                 int i = 0;
@@ -69,7 +69,7 @@ public class View {
             }
         }
         for(int i  = 0; i < ids.size();i++){
-            System.out.println("id at index " + i + " = " + ids.get(i));
+            //System.out.println("id at index " + i + " = " + ids.get(i));
         }
     }
 

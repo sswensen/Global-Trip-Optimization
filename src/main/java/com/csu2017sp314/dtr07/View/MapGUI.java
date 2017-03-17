@@ -44,6 +44,8 @@ public class MapGUI {
     private String tripName = "ERROR";
     private JPanel loadPanel;
     private Group root;
+    private JPanel fTemp;
+    private JLabel currentTrip;
 
     MapGUI() {
 
@@ -214,11 +216,17 @@ public class MapGUI {
                         setGBC(0, z2, 1);
                         rightTick = true;
                     }
+                    if(trips.size() == 0 || name.equals(" Save Trip "))
+                        savedTrip = z;
+                    System.out.println("Trip name is " + tripName);
                     JButton load = new JButton("Load Trip " + tripName);
                     loadPanel.add(load, gbc);
+                    System.out.println("Added button " + load.getText());
                     load.addActionListener((ActionEvent eee) -> {
+                        System.out.println("Attempting to load trip " + tripNames.get(trips.indexOf(trip)));
                         tempLoc = trip;
                         userAddLocList(tempLoc);
+                        updateTripLabel(tripNames.get(trips.indexOf(trip))); //TODO fix this shit
                         for(JButton a : buttons) {
                             tick = true;
                             a.doClick();
@@ -226,6 +234,7 @@ public class MapGUI {
                         }
                         savedTrip = z;
                     });
+                    updateTripLabel(tripName);
                 });
                 holding.setLocation(1063, 0);
                 holding.setSize(200, 50);
@@ -242,20 +251,31 @@ public class MapGUI {
             });*/
                 z++;
             } else {
-                trips.add(z, trip);
+                if(trips.size() == 1) {
+                    trips.add(0, trip);
+                } else{
+                    trips.add(z, trip);
+                }
             }
         });
         return sa;
     }
 
+    void updateTripLabel(String name) {
+        fTemp.remove(currentTrip);
+        setGBC(0, 0, 4);
+        currentTrip = new JLabel("Editing \"" + name + "\"", SwingConstants.CENTER);
+        fTemp.add(currentTrip);
+    }
+
     void displayXML(ArrayList<String> ids) {
         tempLoc = new ArrayList<>();
-        JPanel fTemp = createInnerPanel();
+        fTemp = createInnerPanel();
         loadPanel = createInnerPanel();
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
-        JLabel currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
+        currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
         currentTrip.setPreferredSize(new Dimension(30,30));
         fTemp.add(currentTrip, gbc);
 
@@ -299,14 +319,14 @@ public class MapGUI {
                 if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
                     if(!tempLoc.contains(id)) {
                         tempLoc.add(id);
-                        System.out.println("Added " + id + " to array");
+                        //System.out.println("Added " + id + " to array");
                         b.setText("   Remove   "); //If not pressed, toggle text and add
                     }
 
                 } else if(b.getText().equals("   Remove   ")) {
                     if(tempLoc.contains(id)) {
                         tempLoc.remove(id);
-                        System.out.println("Removed " + id + " from array");
+                        //System.out.println("Removed " + id + " from array");
                         b.setText("      Add      ");
                     }
                 }
