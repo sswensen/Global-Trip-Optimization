@@ -27,7 +27,7 @@ public class MapGUI {
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
-    //private JFrame face; //User interface with locations
+    private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
     private ArrayList<String> tempLoc;
     private String workingDirectoryFilePath;
@@ -67,7 +67,7 @@ public class MapGUI {
     int init(String filename) throws Exception {
         this.filename = filename;
         this.workingDirectoryFilePath = System.getProperty("user.dir") + "/";
-        new Convert(filename, -1);
+        //new Convert(filename, -1);
         options = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
         //createMapGUI(filename);
@@ -143,14 +143,14 @@ public class MapGUI {
         return 1;
     }
 
-    /*int createFaceGUI() {
+    int createFaceGUI() {
         face = new JFrame("User Options");
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setLocation(1063, 0);
         face.setSize(300, 802);
         face.setVisible(true);
         return 1;
-    }*/
+    }
 
     private int createOptionsGUI() {
         uOp = new JFrame("User Options");
@@ -331,7 +331,7 @@ public class MapGUI {
                 });
             }
         });
-        map.setVisible(false);
+        /*map.setVisible(false);
         new Convert(filename, filenameIncrementer);
         JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + filenameIncrementer + "_User.png"));
         File temp = new File(workingDirectoryFilePath + "png/" + filename + (filenameIncrementer - 1) + "_User.png");
@@ -344,7 +344,7 @@ public class MapGUI {
 
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802); //Second part for refreshing the window
-        map.setVisible(true); //making the frame visible
+        map.setVisible(true); //making the frame visible*/
     }
 
     boolean cleanup() {
