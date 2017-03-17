@@ -139,15 +139,15 @@ public class Presenter {
         displayName = x;
     }
 
-    boolean getDisplayMileage() {
+    public boolean getDisplayMileage() {
         return displayMileage;
     }
 
-    boolean getDisplayId() {
+    public boolean getDisplayId() {
         return displayId;
     }
 
-    boolean getDisplayName() {
+    public boolean getDisplayName() {
         return displayName;
     }
 
