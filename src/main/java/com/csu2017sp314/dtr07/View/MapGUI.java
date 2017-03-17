@@ -32,6 +32,7 @@ public class MapGUI {
     private int z = 0; //Number of saved trips
     private ArrayList<JButton> buttons = new ArrayList<>();
     private String tripName = "ERROR";
+    private JPanel loadPanel;
 
     MapGUI() {
 
@@ -170,26 +171,12 @@ public class MapGUI {
         holding.setVisible(true);
     }
 
-    void displayXML(ArrayList<String> ids) {
-        tempLoc = new ArrayList<>();
-        JPanel fTemp = createInnerPanel();
-        JPanel loadPanel = createInnerPanel();
-        gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        setGBC(0, 0, 2);
-
-        JButton q = new JButton("  Display  ");
-        q.addActionListener((ActionEvent e) -> {
-            userAddLocList(tempLoc);
-        });
-        fTemp.add(q, gbc);
-
-        setGBC(2, 0, 1);
-        JButton s = new JButton(" Save Trip ");
-        s.addActionListener((ActionEvent e) -> {
+    private JButton addSaveButton(String name) {
+        JButton sa = new JButton(name);
+        sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
-            if(savedTrip < 0 || trips.size() == 0) {
-                //--------
+            if((savedTrip < 0 || trips.size() == 0 || name.equals(" Save As "))) {
+                //-----
                 JFrame holding = new JFrame("Enter name for trip");
                 JTextField textField = new JTextField(20);
                 JTextArea textArea = new JTextArea(5, 20);
@@ -221,60 +208,6 @@ public class MapGUI {
                 holding.setSize(200, 50);
                 holding.setVisible(true);
                 //--------
-
-
-                /*setGBC(1, z, 1);
-                JButton deleteTrip = new JButton("Delete");
-                loadPanel.add(deleteTrip, gbc);
-                deleteTrip.addActionListener((ActionEvent ee) -> {
-                    trips.remove(z - 1);
-                    loadPanel.remove(load);
-                    loadPanel.remove(deleteTrip);
-                    uOp.pack();
-                });*/
-                z++;
-            } else {
-                trips.add(z, trip);
-            }
-        });
-        fTemp.add(s, gbc);
-
-        setGBC(3, 0, 1);
-        JButton sa = new JButton(" Save As ");
-        sa.addActionListener((ActionEvent e) -> {
-            ArrayList<String> trip = new ArrayList<>(tempLoc);
-            //-----
-            JFrame holding = new JFrame("Enter name for trip");
-            JTextField textField = new JTextField(20);
-            JTextArea textArea = new JTextArea(5, 20);
-            textArea.setEditable(false);
-            holding.add(textField);
-            textField.addActionListener((ActionEvent ee) -> {
-                String text = textField.getText();
-                textArea.append(text + "\n");
-                textField.selectAll();
-                textArea.setCaretPosition(textArea.getDocument().getLength());
-                tripName = text;
-                holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                trips.add(trip);
-                setGBC(0, z, 1);
-                JButton load = new JButton("Load Trip " + tripName);
-                loadPanel.add(load, gbc);
-                load.addActionListener((ActionEvent eee) -> {
-                    tempLoc = trip;
-                    userAddLocList(tempLoc);
-                    for(JButton a : buttons) {
-                        tick = true;
-                        a.doClick();
-                        a.doClick();
-                    }
-                    savedTrip = z;
-                });
-            });
-            holding.setLocation(1063, 0);
-            holding.setSize(200, 50);
-            holding.setVisible(true);
-            //--------
             /*setGBC(1, z, 1);
             JButton deleteTrip = new JButton("Delete");
             loadPanel.add(deleteTrip, gbc);
@@ -284,9 +217,33 @@ public class MapGUI {
                 loadPanel.remove(deleteTrip);
                 uOp.pack();
             });*/
-            z++;
+                z++;
+            } else {
+                trips.add(z, trip);
+            }
         });
-        fTemp.add(sa, gbc);
+        return sa;
+    }
+
+    void displayXML(ArrayList<String> ids) {
+        tempLoc = new ArrayList<>();
+        JPanel fTemp = createInnerPanel();
+        loadPanel = createInnerPanel();
+        gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        setGBC(0, 0, 2);
+
+        JButton q = new JButton("  Display  ");
+        q.addActionListener((ActionEvent e) -> {
+            userAddLocList(tempLoc);
+        });
+        fTemp.add(q, gbc);
+
+        setGBC(2, 0, 1);
+        fTemp.add(addSaveButton(" Save Trip "), gbc);
+
+        setGBC(3, 0, 1);
+        fTemp.add(addSaveButton(" Save As "), gbc);
 
         int numButtons = 0;
         for(String id : ids) {
