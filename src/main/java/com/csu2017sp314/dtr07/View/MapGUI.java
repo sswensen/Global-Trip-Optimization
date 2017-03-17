@@ -24,6 +24,7 @@ import java.io.File;
 public class MapGUI {
     private Consumer<String> callback; //Used if other callback method is used
     private Consumer<ArrayList<String>> callback2;
+    private Consumer<String> callback3; //Used if other callback method is used
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
@@ -59,12 +60,20 @@ public class MapGUI {
         this.callback2 = callback2;
     }
 
+    void setCallback3(Consumer<String> callback3) {
+        this.callback3 = callback3;
+    }
+
     /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);
     }*/
 
     private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
+    }
+
+    private void mapOptions(String option) {
+        callback3.accept(option);
     }
 
     int init(String filename) throws Exception {
@@ -289,6 +298,9 @@ public class MapGUI {
         JButton twoOpt = new JButton("Toggle 2-opt");
         JButton threeOpt = new JButton("Toggle 3-opt");
 
+        names.addActionListener((ActionEvent e) -> {
+            mapOptions("HAY");
+        });
 
         setGBC(0, 0, 1);
         panel.add(names, gbc);

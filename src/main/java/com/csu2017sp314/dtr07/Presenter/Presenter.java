@@ -32,6 +32,12 @@ public class Presenter {
         view.setCallback2((ArrayList<String> s) -> {
             this.eventUserAddLocList(s);
         });
+        view.setCallback3((String s) -> {
+            if(s.equals("")) {
+                this.displayId = true;
+            }
+            System.out.println("CONFIRMED");
+        });
     }
 
     private int eventUserAddLoc(String id) {
