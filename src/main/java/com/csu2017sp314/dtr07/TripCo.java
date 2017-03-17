@@ -25,6 +25,8 @@ public class TripCo {
             case "-n":
                 presenter.setDisplayName(true);
                 break;
+            case "-g":
+                presenter.displayGui(true);
             default:
                 break;
         }
@@ -32,29 +34,16 @@ public class TripCo {
 
     public static void main(String[] args) throws Exception {
         if(args.length == 0) {
-            System.out.println("Usage: TripCo [options] file.csv");
+            System.out.println("Usage: TripCo [options] file.csv [map.svg] [selection.xml]");
         } else {
-
             for(int i = 0; i < args.length;i++){
                 arguments.add(args[i]);
             }
             String filename = "";
-            System.out.println(filename);
             String selectionXml = "";
-            System.out.println(selectionXml.substring(selectionXml.lastIndexOf(".") + 1, selectionXml.length()));
             Model model = new Model();
             View view = new View();
             Presenter presenter = new Presenter(model, view);
-
-            if(arguments.contains("-m")){
-                displayOptions("-m", presenter);
-            }
-            if(arguments.contains("-n")){
-                displayOptions("-n", presenter);
-            }
-            if(arguments.contains("-i")){
-                displayOptions("-i", presenter);
-            }
 
             for(int i = 0;i < arguments.size();i++){
                 String xmlFile = arguments.get(i);
@@ -67,7 +56,7 @@ public class TripCo {
                     if(!xml.equals(xmlExtension) && !csv.equals(csvExtension)){ //both checks are false
                         continue;
                     }
-                    else{ //one file matches
+                    else{ //one file matches the extension
                         if(xml.equals(xmlExtension)){
                             selectionXml = xmlFile;
                             System.out.println("Found selectionXml: " + selectionXml);
@@ -76,14 +65,25 @@ public class TripCo {
                             filename = csvFile;
                             System.out.println("Found csv file: " + filename);
                         }
-
                     }
                 } catch(IndexOutOfBoundsException e){
                     continue;
                 }
             }
-
-
+            if(arguments.contains("-g")){
+                displayOptions("-g", presenter);
+            }
+            else{
+                if(arguments.contains("-m")){
+                    displayOptions("-m", presenter);
+                }
+                if(arguments.contains("-n")){
+                    displayOptions("-n", presenter);
+                }
+                if(arguments.contains("-i")){
+                    displayOptions("-i", presenter);
+                }
+            }
             presenter.planTrip(filename, selectionXml);
             Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                 public void run() {
