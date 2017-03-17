@@ -283,11 +283,23 @@ public class MapGUI {
 
     private JPanel generateMapDisplayOptions() {
         JPanel panel = createInnerPanel();
-        setGBC(0, 0, 2);
-        JButton a = new JButton("");
+        JButton names = new JButton("Toggle Names");
+        JButton ids = new JButton("Toggle IDs");
+        JButton mileage = new JButton("Toggle Mileage");
+        JButton twoOpt = new JButton("Toggle 2-opt");
+        JButton threeOpt = new JButton("Toggle 3-opt");
 
 
-        panel.add(a, gbc);
+        setGBC(0, 0, 1);
+        panel.add(names, gbc);
+        setGBC(1, 0, 1);
+        panel.add(ids, gbc);
+        setGBC(0, 1, 2);
+        panel.add(mileage, gbc);
+        setGBC(0, 2, 1);
+        panel.add(twoOpt, gbc);
+        setGBC(1, 2, 1);
+        panel.add(threeOpt, gbc);
         return panel;
     }
 
