@@ -199,28 +199,44 @@ public class Presenter {
         return -1;
     }
 
-    public void setDisplayMileage(boolean x) {
-        displayMileage = x;
-    }
-
-    public void setDisplayId(boolean x) {
-        displayId = x;
-    }
-
-    public void setDisplayName(boolean x) {
-        displayName = x;
-    }
-
-    public boolean getDisplayMileage() {
+    public boolean isDisplayMileage() {
         return displayMileage;
     }
 
-    public boolean getDisplayId() {
+    public void setDisplayMileage(boolean displayMileage) {
+        this.displayMileage = displayMileage;
+    }
+
+    public boolean isDisplayId() {
         return displayId;
     }
 
-    public boolean getDisplayName() {
+    public void setDisplayId(boolean displayId) {
+        this.displayId = displayId;
+    }
+
+    public boolean isDisplayName() {
         return displayName;
+    }
+
+    public void setDisplayName(boolean displayName) {
+        this.displayName = displayName;
+    }
+
+    public boolean isTwoOpt() {
+        return twoOpt;
+    }
+
+    public void setTwoOpt(boolean twoOpt) {
+        this.twoOpt = twoOpt;
+    }
+
+    public boolean isThreeOpt() {
+        return threeOpt;
+    }
+
+    public void setThreeOpt(boolean threeOpt) {
+        this.threeOpt = threeOpt;
     }
 
     public boolean displayGui(boolean x){
