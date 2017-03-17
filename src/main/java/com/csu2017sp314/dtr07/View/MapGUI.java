@@ -1,6 +1,14 @@
 package com.csu2017sp314.dtr07.View;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+
 import javax.swing.*;
+import javax.xml.soap.Text;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -34,6 +42,7 @@ public class MapGUI {
     private ArrayList<JButton> buttons = new ArrayList<>();
     private String tripName = "ERROR";
     private JPanel loadPanel;
+    private Group root;
 
     MapGUI() {
 
@@ -61,7 +70,13 @@ public class MapGUI {
         new Convert(filename, -1);
         options = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
-        createMapGUI(filename);
+        //createMapGUI(filename);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                background(filename);
+            }
+        });
         //createFaceGUI();
 
         /*JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
@@ -74,6 +89,41 @@ public class MapGUI {
         createOptionsGUI();
         map.setVisible(true); //making the frame visible
         return 1;
+    }
+
+    void background(String filename) {
+        map = new JFrame("TripCo");
+        final JFXPanel fxPanel = new JFXPanel();
+        map.add(fxPanel);
+        map.setLocation(0, 0);
+        map.setSize(1064, 802);
+        map.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                fxPanel.setScene(createBGScene(filename));
+            }
+        });
+    }
+
+    private Scene createBGScene(String filename) {
+        root = new Group();
+        Scene scene = new Scene(root);
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+        browser.setPrefSize(1064, 802);
+        webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
+        System.out.println("Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
+        root.getChildren().add(browser);
+        return (scene);
+    }
+
+    private void updateBG() {
+        final WebView browser = new WebView();
+        final WebEngine webEngine = browser.getEngine();
+        browser.setPrefSize(1064, 802);
+        webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
+        root.getChildren().add(browser);
     }
 
     private int createMapGUI(String filename) {
@@ -270,6 +320,17 @@ public class MapGUI {
     }
 
     void refresh() throws Exception {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateBG();
+                    }
+                });
+            }
+        });
         map.setVisible(false);
         new Convert(filename, filenameIncrementer);
         JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + filenameIncrementer + "_User.png"));
