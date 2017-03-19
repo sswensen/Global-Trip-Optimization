@@ -283,7 +283,7 @@ public class MapGUI {
 
         //<filename>file.csv</filename>
         Element csvFilename = saveXml.createElement("filename");
-        csvFilename.appendChild(saveXml.createTextNode(filename));
+        csvFilename.appendChild(saveXml.createTextNode(filename + ".svg"));
         selection.appendChild(csvFilename);
 
 
