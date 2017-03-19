@@ -85,6 +85,7 @@ public class MapGUI {
         this.workingDirectoryFilePath = System.getProperty("user.dir") + "/";
         //new Convert(filename, -1);
         options = new JTabbedPane();
+        itineraryTabs = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
         //createMapGUI(filename);
         SwingUtilities.invokeLater(new Runnable() {
@@ -249,6 +250,7 @@ public class MapGUI {
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(new ArrayList<>(trip));
+                    userAddLocList(trip);
                     System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
                     saveTripToXML(tripName, trip);

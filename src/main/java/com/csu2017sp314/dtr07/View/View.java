@@ -172,6 +172,7 @@ public class View {
             gui.init(f);
         } catch(Exception e) {
             System.err.println(e);
+            System.err.println("Error initilizing gui with filename " + f);
         }
         gui.displayXML(ids);
     }
