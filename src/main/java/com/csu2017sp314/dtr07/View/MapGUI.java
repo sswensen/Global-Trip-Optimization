@@ -16,6 +16,11 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -258,7 +263,7 @@ public class MapGUI {
         return 1;
     }
 
-    private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException{
+    private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException{
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
         saveXml = docBuilder.newDocument();
@@ -276,11 +281,20 @@ public class MapGUI {
             Element id = saveXml.createElement((String) ids.get(i));
             destinations.appendChild(id);
         }
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        String[] cut = filename.split("/");
+        String f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
+        //XML document
+        DOMSource source = new DOMSource(saveXml);
+        StreamResult result = new StreamResult(new File(f + ".xml"));
+        transformer.transform(source, result);
         copySVG(name);
         return 1;
     }
 
-    private JButton addSaveButton(String name) throws ParserConfigurationException{
+    private JButton addSaveButton(String name) throws ParserConfigurationException, TransformerException{
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
@@ -305,8 +319,11 @@ public class MapGUI {
                     tripNames.add(tripName);
                     try{
                         saveTripToXML(tripName, trip);
-                    }catch(ParserConfigurationException parseException){}
+                    }catch(ParserConfigurationException parseException){
 
+                    }catch(TransformerException transException){
+
+                    }
                     if(rightTick) {
                         setGBC(1, z2, 1);
                         rightTick = false;
@@ -364,7 +381,11 @@ public class MapGUI {
                 userAddLocList(trip); //Update svg
                 try {
                     saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
-                }catch(ParserConfigurationException parseException){}
+                }catch(ParserConfigurationException parseException){
+
+                }catch(TransformerException transException){
+
+                }
                 System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
@@ -413,7 +434,7 @@ public class MapGUI {
         return panel;
     }
 
-    void displayXML(ArrayList<String> ids) throws ParserConfigurationException{
+    void displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException{
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
         loadPanel = createInnerPanel();
