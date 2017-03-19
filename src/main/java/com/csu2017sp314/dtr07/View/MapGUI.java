@@ -223,6 +223,12 @@ public class MapGUI {
         gbc.gridwidth = gridWidth;
     }
 
+    private int saveTripToXML(String name, ArrayList ids) {
+        //If ids array is changed, need to modify call in addSaveButton
+
+        return 1;
+    }
+
     private JButton addSaveButton(String name) {
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
@@ -245,6 +251,7 @@ public class MapGUI {
                     trips.add(new ArrayList<>(trip));
                     System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
+                    saveTripToXML(tripName, trip);
                     if(rightTick) {
                         setGBC(1, z2, 1);
                         rightTick = false;
