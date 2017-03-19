@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.io.File;
@@ -226,7 +227,9 @@ public class MapGUI {
 
     private int saveTripToXML(String name, ArrayList ids) {
         //If ids array is changed, need to modify call in addSaveButton
-
+        File originalSVG = new File(workingDirectoryFilePath + filename + ".svg");
+        File newSVG = new File(workingDirectoryFilePath + "png/" + name + ".svg");
+        //Files.copy(originalSVG, newSVG, );
         return 1;
     }
 
