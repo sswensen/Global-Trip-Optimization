@@ -285,11 +285,13 @@ public class MapGUI {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        String[] cut = filename.split("/");
-        String f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
+
+        //String[] cut = filename.split("/");
+        //String f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
+
         //XML document
         DOMSource source = new DOMSource(saveXml);
-        StreamResult result = new StreamResult(new File(f + ".xml"));
+        StreamResult result = new StreamResult(new File(name + ".xml"));
         transformer.transform(source, result);
         copySVG(name);
         return 1;
