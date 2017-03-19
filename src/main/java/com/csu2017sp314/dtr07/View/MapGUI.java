@@ -268,18 +268,32 @@ public class MapGUI {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
         saveXml = docBuilder.newDocument();
+        //root element
         Element rootElement = saveXml.createElement("xml");
         saveXml.appendChild(rootElement);
+
+        //selection
         Element selection = saveXml.createElement("selection");
         rootElement.appendChild(selection);
-        Element tripName = saveXml.createElement(name);
+
+        //<title>name</title>
+        Element tripName = saveXml.createElement("title");
+        tripName.appendChild(saveXml.createTextNode(name));
         selection.appendChild(tripName);
-        Element csvFilename = saveXml.createElement(filename);
+
+        //<filename>file.csv</filename>
+        Element csvFilename = saveXml.createElement("filename");
+        csvFilename.appendChild(saveXml.createTextNode(filename));
         selection.appendChild(csvFilename);
+
+
         Element destinations = saveXml.createElement("destinations");
         selection.appendChild(destinations);
+
+
         for(int i = 0; i < ids.size();i++){
-            Element id = saveXml.createElement((String) ids.get(i));
+            Element id = saveXml.createElement("id");
+            id.appendChild(saveXml.createTextNode((String) ids.get(i)));
             destinations.appendChild(id);
         }
 
