@@ -101,6 +101,7 @@ public class MapGUI {
 
 
         createOptionsGUI();
+        createItineraryWindow();
         map.setVisible(true); //making the frame visible
         return 1;
     }
@@ -184,6 +185,15 @@ public class MapGUI {
         //uOp.setSize(300, 802);
         uOp.setLocation(1063, 0);
         uOp.setVisible(true);
+        return 1;
+    }
+
+    private int createItineraryWindow() {
+        JFrame itin = new JFrame("Itinerary");
+        itin.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        uOp.getContentPane().add(options, BorderLayout.CENTER);
+        itin.setLocation(1360, 0);
+        itin.setVisible(true);
         return 1;
     }
 
