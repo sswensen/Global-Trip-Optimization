@@ -6,8 +6,16 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import org.junit.experimental.theories.internal.ParameterizedAssertionError;
 
 import javax.swing.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -58,6 +66,7 @@ public class MapGUI {
     private JPanel fTemp;
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
+    private Document saveXml;
 
     MapGUI() {
 
@@ -249,12 +258,29 @@ public class MapGUI {
         return 1;
     }
 
-    private int saveTripToXML(String name, ArrayList ids) {
-
+    private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException{
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = factory.newDocumentBuilder();
+        saveXml = docBuilder.newDocument();
+        Element rootElement = saveXml.createElement("xml");
+        saveXml.appendChild(rootElement);
+        Element selection = saveXml.createElement("selection");
+        rootElement.appendChild(selection);
+        Element tripName = saveXml.createElement(name);
+        selection.appendChild(tripName);
+        Element csvFilename = saveXml.createElement(filename);
+        selection.appendChild(csvFilename);
+        Element destinations = saveXml.createElement("destinations");
+        selection.appendChild(destinations);
+        for(int i = 0; i < ids.size();i++){
+            Element id = saveXml.createElement((String) ids.get(i));
+            destinations.appendChild(id);
+        }
+        copySVG(name);
         return 1;
     }
 
-    private JButton addSaveButton(String name) {
+    private JButton addSaveButton(String name) throws ParserConfigurationException{
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
@@ -277,7 +303,10 @@ public class MapGUI {
                     userAddLocList(trip);
                     System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
-                    saveTripToXML(tripName, trip);
+                    try{
+                        saveTripToXML(tripName, trip);
+                    }catch(ParserConfigurationException parseException){}
+
                     if(rightTick) {
                         setGBC(1, z2, 1);
                         rightTick = false;
@@ -333,7 +362,9 @@ public class MapGUI {
                 trips.remove(savedTrip);
                 trips.add(savedTrip, new ArrayList<>(trip));
                 userAddLocList(trip); //Update svg
-                saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
+                try {
+                    saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
+                }catch(ParserConfigurationException parseException){}
                 System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
@@ -382,7 +413,7 @@ public class MapGUI {
         return panel;
     }
 
-    void displayXML(ArrayList<String> ids) {
+    void displayXML(ArrayList<String> ids) throws ParserConfigurationException{
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
         loadPanel = createInnerPanel();

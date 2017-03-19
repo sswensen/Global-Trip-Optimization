@@ -156,7 +156,8 @@ public class View {
         transformer.transform(source2, result2);
     }
 
-    public void gui() {
+
+    public void gui() throws ParserConfigurationException{
         gui.setCallback((String s) -> {
             this.userAddLoc(s);
         });
