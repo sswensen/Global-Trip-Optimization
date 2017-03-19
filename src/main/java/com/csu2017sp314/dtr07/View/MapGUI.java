@@ -13,9 +13,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.io.File;
+
+import java.nio.file.CopyOption;
+import java.nio.file.StandardCopyOption;
+
 
 /**
  * Created by SummitDrift on 3/6/17.
@@ -225,11 +231,26 @@ public class MapGUI {
         gbc.gridwidth = gridWidth;
     }
 
-    private int saveTripToXML(String name, ArrayList ids) {
+    private int copySVG(String name) {
         //If ids array is changed, need to modify call in addSaveButton
-        File originalSVG = new File(workingDirectoryFilePath + filename + ".svg");
-        File newSVG = new File(workingDirectoryFilePath + "png/" + name + ".svg");
-        //Files.copy(originalSVG, newSVG, );
+        Path FROM = Paths.get(workingDirectoryFilePath + filename + ".svg");
+        Path TO = Paths.get(workingDirectoryFilePath + "png/" + name + ".svg");
+        CopyOption[] options = new CopyOption[]{
+                StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.COPY_ATTRIBUTES
+        };
+        try {
+            Files.copy(FROM, TO, options);
+        } catch(Exception e) {
+            System.err.println(e);
+            System.err.println("Error copying saved trip file");
+            return -1;
+        }
+        return 1;
+    }
+
+    private int saveTripToXML(String name, ArrayList ids) {
+
         return 1;
     }
 
@@ -311,6 +332,8 @@ public class MapGUI {
                 } else{*/
                 trips.remove(savedTrip);
                 trips.add(savedTrip, new ArrayList<>(trip));
+                userAddLocList(trip); //Update svg
+                saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
                 System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
