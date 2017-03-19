@@ -29,12 +29,14 @@ public class MapGUI {
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
+    private JTabbedPane itineraryTabs;
     private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
     private ArrayList<String> tripNames = new ArrayList<>();
     private ArrayList<String> tempLoc;
     private String workingDirectoryFilePath;
     private JFrame uOp;
+    private JFrame itinerary;
     private GridBagConstraints gbc;
     private boolean tick = false;
     private boolean rightTick = false;
@@ -100,8 +102,11 @@ public class MapGUI {
         options.addTab("Two", icon, jplInnerPanel2);*/
 
 
-        createOptionsGUI();
-        createItineraryWindow();
+        //createOptionsGUI();
+        uOp = createJFrame("User Options", 1063, 0, options);
+        //createItineraryWindow();
+        itinerary = createJFrame("Itinerary", 1363, 0, itineraryTabs);
+
         map.setVisible(true); //making the frame visible
         return 1;
     }
@@ -191,10 +196,19 @@ public class MapGUI {
     private int createItineraryWindow() {
         JFrame itin = new JFrame("Itinerary");
         itin.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        uOp.getContentPane().add(options, BorderLayout.CENTER);
+        itin.getContentPane().add(options, BorderLayout.CENTER);
         itin.setLocation(1360, 0);
         itin.setVisible(true);
         return 1;
+    }
+
+    private JFrame createJFrame(String name, int x, int y, JTabbedPane tabs) {
+        JFrame ret = new JFrame(name);
+        ret.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        ret.getContentPane().add(tabs, BorderLayout.CENTER);
+        ret.setLocation(x, y);
+        ret.setVisible(true);
+        return ret;
     }
 
     private JPanel createInnerPanel() {
