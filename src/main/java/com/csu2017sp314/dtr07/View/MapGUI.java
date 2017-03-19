@@ -71,7 +71,7 @@ public class MapGUI {
     private JPanel fTemp;
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
-    private Document saveXml;
+
 
     MapGUI() {
 
@@ -264,6 +264,7 @@ public class MapGUI {
     }
 
     private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException{
+        Document saveXml;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
         saveXml = docBuilder.newDocument();
