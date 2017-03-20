@@ -12,6 +12,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,6 +25,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -261,7 +264,37 @@ public class MapGUI {
         }
         return 1;
     }
+    public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+        Document readXml;
+        File xmlFile = new File(selectionXml);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        readXml = dBuilder.parse(xmlFile);
+        readXml.getDocumentElement().normalize();
+        //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        ArrayList<String> tempTrip = new ArrayList<>();
+        NodeList nList = readXml.getElementsByTagName("destinations");
+        for(int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            if(nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                int i = 0;
 
+                while(eElement.getElementsByTagName("id").item(i) != null) {
+                    tempTrip.add(eElement.getElementsByTagName("id").item(i).getTextContent());
+                    tripNames.add(eElement.getElementsByTagName("id").item(i).getTextContent());
+                    i++;
+                }
+            }
+        }
+        trips.add(tempTrip);
+        System.out.println(selectionXml);
+        for(int i = 0; i < tripNames.size(); i++) {
+            System.out.println("id at index " + i + " = " + tripNames.get(i));
+        }
+        System.out.println("trips size = " + trips.size());
+    }
     private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException{
         Document saveXml;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -590,6 +623,7 @@ public class MapGUI {
     }
 
     public static void main(String[] args) throws Exception {
+        /*
         JFrame f = new JFrame("TripCo"); //creating instance of JFrame
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         JButton b = new JButton("click"); //creating instance of JButton
@@ -605,5 +639,10 @@ public class MapGUI {
         //f.pack(); //Will make everything MASSIVE
         f.setLayout(null); //using no layout managers
         f.setVisible(true); //making the frame visible
+        */
+        MapGUI g = new MapGUI();
+        g.readXML("src/test/resources/Testing/selectionXml.xml");
+        g.readXML("testing.xml");
+        g.readXML("testing3.xml");
     }
 }
