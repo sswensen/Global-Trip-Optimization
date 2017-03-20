@@ -68,6 +68,7 @@ public class MapGUI {
     private JPanel loadPanel;
     private Group root;
     private JPanel fTemp;
+    private JPanel fTemp2;
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
 
@@ -114,6 +115,8 @@ public class MapGUI {
                 background(filename);
             }
         });
+        gbc = new GridBagConstraints();
+
         //createFaceGUI();
 
         /*JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
@@ -453,8 +456,8 @@ public class MapGUI {
     void displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException{
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
+        fTemp2 = createInnerPanel();
         loadPanel = createInnerPanel();
-        gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
         currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
@@ -540,6 +543,8 @@ public class MapGUI {
         //uOp.setMinimumSize(new Dimension(500, 500));
 
         uOp.pack();
+
+        itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
     }
 
     public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
