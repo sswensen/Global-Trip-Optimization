@@ -178,6 +178,10 @@ public class View {
         gui.displayXML(ids);
     }
 
+    public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        gui.addLegToItinerary(seqId, name1, name2, mileage);
+    }
+
     public void refresh() throws Exception {
         gui.refresh();
     }

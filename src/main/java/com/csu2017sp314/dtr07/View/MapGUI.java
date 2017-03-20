@@ -59,7 +59,7 @@ public class MapGUI {
     private String workingDirectoryFilePath;
     private JFrame uOp;
     private JFrame itinerary;
-    private GridBagConstraints gbc;
+    private GridBagConstraints gbc = new GridBagConstraints();
     private boolean tick = false;
     private boolean rightTick = false;
     private int savedTrip = -1;
@@ -71,6 +71,7 @@ public class MapGUI {
     private JPanel loadPanel;
     private Group root;
     private JPanel fTemp;
+    private JPanel fTemp2;
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
 
@@ -487,7 +488,6 @@ public class MapGUI {
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
         loadPanel = createInnerPanel();
-        gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
         currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
@@ -573,6 +573,24 @@ public class MapGUI {
         //uOp.setMinimumSize(new Dimension(500, 500));
 
         uOp.pack();
+
+        itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
+        itinerary.pack();
+    }
+
+    public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        if(fTemp2 == null) {
+            fTemp2 = createInnerPanel();
+        }
+        if(seqId.equals("0")) {
+            fTemp2.removeAll();
+            fTemp2.repaint();
+            fTemp2.requestFocus(true);
+        }
+        setGBC(0, Integer.parseInt(seqId), 4);
+        JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
+
+        fTemp2.add(lab, gbc);
     }
 
     void refresh() throws Exception {
