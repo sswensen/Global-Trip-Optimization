@@ -8,13 +8,35 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import javax.swing.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.io.File;
+
+import java.nio.file.CopyOption;
+import java.nio.file.StandardCopyOption;
+
 
 /**
  * Created by SummitDrift on 3/6/17.
@@ -29,13 +51,15 @@ public class MapGUI {
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
+    private JTabbedPane itineraryTabs;
     private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
     private ArrayList<String> tripNames = new ArrayList<>();
     private ArrayList<String> tempLoc;
     private String workingDirectoryFilePath;
     private JFrame uOp;
-    private GridBagConstraints gbc;
+    private JFrame itinerary;
+    private GridBagConstraints gbc = new GridBagConstraints();
     private boolean tick = false;
     private boolean rightTick = false;
     private int savedTrip = -1;
@@ -47,8 +71,10 @@ public class MapGUI {
     private JPanel loadPanel;
     private Group root;
     private JPanel fTemp;
+    private JPanel fTemp2;
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
+
 
     MapGUI() {
 
@@ -83,6 +109,7 @@ public class MapGUI {
         this.workingDirectoryFilePath = System.getProperty("user.dir") + "/";
         //new Convert(filename, -1);
         options = new JTabbedPane();
+        itineraryTabs = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
         //createMapGUI(filename);
         SwingUtilities.invokeLater(new Runnable() {
@@ -100,7 +127,11 @@ public class MapGUI {
         options.addTab("Two", icon, jplInnerPanel2);*/
 
 
-        createOptionsGUI();
+        //createOptionsGUI();
+        uOp = createJFrame("User Options", 1063, 0, options);
+        //createItineraryWindow();
+        itinerary = createJFrame("Itinerary", 1363, 0, itineraryTabs);
+
         map.setVisible(true); //making the frame visible
         return 1;
     }
@@ -187,6 +218,24 @@ public class MapGUI {
         return 1;
     }
 
+    private int createItineraryWindow() {
+        JFrame itin = new JFrame("Itinerary");
+        itin.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        itin.getContentPane().add(options, BorderLayout.CENTER);
+        itin.setLocation(1360, 0);
+        itin.setVisible(true);
+        return 1;
+    }
+
+    private JFrame createJFrame(String name, int x, int y, JTabbedPane tabs) {
+        JFrame ret = new JFrame(name);
+        ret.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        ret.getContentPane().add(tabs, BorderLayout.CENTER);
+        ret.setLocation(x, y);
+        ret.setVisible(true);
+        return ret;
+    }
+
     private JPanel createInnerPanel() {
         JPanel jplPanel = new JPanel();
         jplPanel.setLayout(new GridBagLayout());
@@ -199,7 +248,103 @@ public class MapGUI {
         gbc.gridwidth = gridWidth;
     }
 
-    private JButton addSaveButton(String name) {
+    private int copySVG(String name) {
+        //If ids array is changed, need to modify call in addSaveButton
+        Path FROM = Paths.get(workingDirectoryFilePath + filename + ".svg");
+        Path TO = Paths.get(workingDirectoryFilePath + "png/" + name + ".svg");
+        CopyOption[] options = new CopyOption[]{
+                StandardCopyOption.REPLACE_EXISTING,
+                StandardCopyOption.COPY_ATTRIBUTES
+        };
+        try {
+            Files.copy(FROM, TO, options);
+        } catch(Exception e) {
+            System.err.println(e);
+            System.err.println("Error copying saved trip file");
+            return -1;
+        }
+        return 1;
+    }
+    public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+        Document readXml;
+        File xmlFile = new File(selectionXml);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        readXml = dBuilder.parse(xmlFile);
+        readXml.getDocumentElement().normalize();
+        //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        ArrayList<String> tempTrip = new ArrayList<>();
+        NodeList nList = readXml.getElementsByTagName("destinations");
+        for(int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            if(nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                int i = 0;
+
+                while(eElement.getElementsByTagName("id").item(i) != null) {
+                    tempTrip.add(eElement.getElementsByTagName("id").item(i).getTextContent());
+                    tripNames.add(eElement.getElementsByTagName("id").item(i).getTextContent());
+                    i++;
+                }
+            }
+        }
+        trips.add(tempTrip);
+        System.out.println(selectionXml);
+        for(int i = 0; i < tripNames.size(); i++) {
+            System.out.println("id at index " + i + " = " + tripNames.get(i));
+        }
+        System.out.println("trips size = " + trips.size());
+    }
+    private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException{
+        Document saveXml;
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = factory.newDocumentBuilder();
+        saveXml = docBuilder.newDocument();
+        //root element
+        Element rootElement = saveXml.createElement("xml");
+        saveXml.appendChild(rootElement);
+
+        //selection
+        Element selection = saveXml.createElement("selection");
+        rootElement.appendChild(selection);
+
+        //<title>name</title>
+        Element tripName = saveXml.createElement("title");
+        tripName.appendChild(saveXml.createTextNode(name));
+        selection.appendChild(tripName);
+
+        //<filename>file.csv</filename>
+        Element csvFilename = saveXml.createElement("filename");
+        csvFilename.appendChild(saveXml.createTextNode(filename + ".svg"));
+        selection.appendChild(csvFilename);
+
+
+        Element destinations = saveXml.createElement("destinations");
+        selection.appendChild(destinations);
+
+
+        for(int i = 0; i < ids.size();i++){
+            Element id = saveXml.createElement("id");
+            id.appendChild(saveXml.createTextNode((String) ids.get(i)));
+            destinations.appendChild(id);
+        }
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+
+        //String[] cut = filename.split("/");
+        //String f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
+
+        //XML document
+        DOMSource source = new DOMSource(saveXml);
+        StreamResult result = new StreamResult(new File(workingDirectoryFilePath + "png/" + name + ".xml"));
+        transformer.transform(source, result);
+        copySVG(name);
+        return 1;
+    }
+
+    private JButton addSaveButton(String name) throws ParserConfigurationException, TransformerException{
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
@@ -219,8 +364,16 @@ public class MapGUI {
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(new ArrayList<>(trip));
+                    userAddLocList(trip);
                     System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
+                    try{
+                        saveTripToXML(tripName, trip);
+                    }catch(ParserConfigurationException parseException){
+
+                    }catch(TransformerException transException){
+
+                    }
                     if(rightTick) {
                         setGBC(1, z2, 1);
                         rightTick = false;
@@ -275,6 +428,14 @@ public class MapGUI {
                 } else{*/
                 trips.remove(savedTrip);
                 trips.add(savedTrip, new ArrayList<>(trip));
+                userAddLocList(trip); //Update svg
+                try {
+                    saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
+                }catch(ParserConfigurationException parseException){
+
+                }catch(TransformerException transException){
+
+                }
                 System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
@@ -323,11 +484,10 @@ public class MapGUI {
         return panel;
     }
 
-    void displayXML(ArrayList<String> ids) {
+    void displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException{
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
         loadPanel = createInnerPanel();
-        gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
         currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
@@ -413,6 +573,24 @@ public class MapGUI {
         //uOp.setMinimumSize(new Dimension(500, 500));
 
         uOp.pack();
+
+        itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
+        itinerary.pack();
+    }
+
+    public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        if(fTemp2 == null) {
+            fTemp2 = createInnerPanel();
+        }
+        if(seqId.equals("0")) {
+            fTemp2.removeAll();
+            fTemp2.repaint();
+            fTemp2.requestFocus(true);
+        }
+        setGBC(0, Integer.parseInt(seqId), 4);
+        JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
+
+        fTemp2.add(lab, gbc);
     }
 
     void refresh() throws Exception {
@@ -463,6 +641,7 @@ public class MapGUI {
     }
 
     public static void main(String[] args) throws Exception {
+        /*
         JFrame f = new JFrame("TripCo"); //creating instance of JFrame
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         JButton b = new JButton("click"); //creating instance of JButton
@@ -478,5 +657,10 @@ public class MapGUI {
         //f.pack(); //Will make everything MASSIVE
         f.setLayout(null); //using no layout managers
         f.setVisible(true); //making the frame visible
+        */
+        MapGUI g = new MapGUI();
+        g.readXML("src/test/resources/Testing/selectionXml.xml");
+        g.readXML("testing.xml");
+        g.readXML("testing3.xml");
     }
 }

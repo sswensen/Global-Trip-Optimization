@@ -154,6 +154,7 @@ public class Presenter {
             view.addHeader("Colorado");
             view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
+            makeItinerary();
             model.resetUserLoc();
             view.refresh();
         } catch(Exception e) {
@@ -167,7 +168,7 @@ public class Presenter {
     public int eventLoadLoc() throws SAXException, IOException, ParserConfigurationException, TransformerException {
         view.initializeTrip(selectionXml, svgMap);
 
-        int numPairs = model.getUserPairs().size();
+        int numPairs = model.getNumPairs();
 
         view.addFooter(model.getTripDistance());
         int finalPairId = 0;
@@ -201,7 +202,8 @@ public class Presenter {
         view.addHeader("Colorado");
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
         view.finalizeTrip(fname);
-        return -1;
+
+        return 1;
     }
 
     public boolean getTwoOpt() {
@@ -254,6 +256,17 @@ public class Presenter {
         return displayGui;
     }
 
+    private void makeItinerary() {
+        int numUserPairs = model.getUserNumPairs();
+        if(numUserPairs == 0) {
+            numUserPairs = model.getNumPairs();
+        }
+        for(int i = 0; i < numUserPairs; i++) {
+            //System.out.println("Adding something to index " + i);
+            view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), model.getPairDistance(i));
+        }
+    }
+
     public void planTrip(String filename, String selectionXml, String svgMap) throws Exception {
         fname = filename;
         this.selectionXml = selectionXml;
@@ -296,7 +309,7 @@ public class Presenter {
         view.addHeader("Colorado");
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
         view.finalizeTrip(filename);
-
+        makeItinerary();
         if(displayGui){
             view.gui();
         }

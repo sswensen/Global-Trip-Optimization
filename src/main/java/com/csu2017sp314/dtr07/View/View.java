@@ -156,7 +156,8 @@ public class View {
         transformer.transform(source2, result2);
     }
 
-    public void gui() {
+
+    public void gui() throws ParserConfigurationException, TransformerException{
         gui.setCallback((String s) -> {
             this.userAddLoc(s);
         });
@@ -172,8 +173,13 @@ public class View {
             gui.init(f);
         } catch(Exception e) {
             System.err.println(e);
+            System.err.println("Error initilizing gui with filename " + f);
         }
         gui.displayXML(ids);
+    }
+
+    public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        gui.addLegToItinerary(seqId, name1, name2, mileage);
     }
 
     public void refresh() throws Exception {

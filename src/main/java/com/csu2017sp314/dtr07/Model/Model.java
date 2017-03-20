@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class Model {
     //private ArrayList<Location> locations;
     private ArrayList<Pair> pairs;
-    private ArrayList<Pair> userPairs;
+    private ArrayList<Pair> userPairs = new ArrayList<>();
     private ArrayList<Location> locations;
     private ArrayList<Location> userLocations = new ArrayList<>();
 
