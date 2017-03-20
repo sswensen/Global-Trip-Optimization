@@ -149,6 +149,7 @@ public class Presenter {
                     view.addIDLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstId);
                     view.addIDLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondId);
                 }
+                view.addLegToItinerary(pairId, firstName, secondName, model.getPairDistance(i));
             }
             view.addFooter(model.getTripDistance());
             view.addHeader("Colorado");
@@ -244,8 +245,6 @@ public class Presenter {
         return displayName;
     }
 
-
-
     public boolean displayGui(boolean x){
         return (displayGui = x);
     }
@@ -263,6 +262,10 @@ public class Presenter {
         int numPairs = model.getNumPairs();
         //view.addBorders();
         //view.addHeader("Colorado");
+        view.setFilename(filename);
+        if(displayGui){
+            view.gui();
+        }
         view.addFooter(model.getTripDistance());
         int finalPairId = 0;
         for(int i = 0; i < numPairs; i++) {
@@ -290,16 +293,15 @@ public class Presenter {
                 view.addIDLabel(firstLon, firstLat, firstId);
                 view.addIDLabel(secondLon, secondLat, secondId);
             }
+            view.addLegToItinerary(pairId, firstName, secondName, pairDistance);
         }
-
         view.addFooter(model.getTripDistance());
         view.addHeader("Colorado");
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
         view.finalizeTrip(filename);
+        view.refresh();
 
-        if(displayGui){
-            view.gui();
-        }
+
         //view.gui();
         //TimeUnit.SECONDS.sleep(3);
         /*eventUserAddLoc("3");

@@ -140,6 +140,11 @@ public class View {
         svg.addBorders();
     }
 
+    public void setFilename(String filename) {
+        String[] cut = filename.split("/");
+        f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
+    }
+
     public void finalizeTrip(String filename) throws TransformerException {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -176,6 +181,10 @@ public class View {
             System.err.println("Error initilizing gui with filename " + f);
         }
         gui.displayXML(ids);
+    }
+
+    public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        gui.addLegToItinerary(seqId, name1, name2, mileage);
     }
 
     public void refresh() throws Exception {
