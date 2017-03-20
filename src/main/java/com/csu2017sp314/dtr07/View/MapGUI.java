@@ -307,7 +307,7 @@ public class MapGUI {
                     tempTrip.add(eElement.getElementsByTagName("id").item(i).getTextContent());
                     tripNames.add(eElement.getElementsByTagName("id").item(i).getTextContent());
 
-                    tripName = ""; //this needs to be current trip name
+                    tripName = ""; //TODO this needs to be current trip name
                     i++;
                 }
             }
