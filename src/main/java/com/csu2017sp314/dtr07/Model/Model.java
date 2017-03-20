@@ -21,7 +21,7 @@ public class Model {
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
-        //if(twoOpt)
+        if(twoOpt)
             twoOpt();
         return 1;
     }
