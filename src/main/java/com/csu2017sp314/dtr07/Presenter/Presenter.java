@@ -262,7 +262,7 @@ public class Presenter {
             numUserPairs = model.getNumPairs();
         }
         for(int i = 0; i < numUserPairs; i++) {
-            System.out.println("Adding something to index " + i);
+            //System.out.println("Adding something to index " + i);
             view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), model.getPairDistance(i));
         }
     }
