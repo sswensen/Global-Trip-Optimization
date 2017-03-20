@@ -42,6 +42,9 @@ import java.nio.file.StandardCopyOption;
  * Created by SummitDrift on 3/6/17.
  * @author Scott Swensen
  * File for displaying map with interactive stuff
+ * This file is going to be really complicated
+ * Prepare yourself
+ * Winter is coming...
  */
 
 public class MapGUI {
