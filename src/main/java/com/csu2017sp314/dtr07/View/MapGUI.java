@@ -232,14 +232,15 @@ public class MapGUI {
 
     private JButton createXMLBrowser() {
         JButton ret = new JButton("Load From XML");
-        JFileChooser jFileChooser = new JFileChooser();
-        jFileChooser.setCurrentDirectory(new File(workingDirectoryFilePath));
-        int result = jFileChooser.showOpenDialog(new JFrame());
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = jFileChooser.getSelectedFile();
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-        }
-
+        ret.addActionListener((ActionEvent e) -> {
+            JFileChooser jFileChooser = new JFileChooser();
+            jFileChooser.setCurrentDirectory(new File(workingDirectoryFilePath));
+            int result = jFileChooser.showOpenDialog(new JFrame());
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = jFileChooser.getSelectedFile();
+                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            }
+        });
         return ret;
     }
 
