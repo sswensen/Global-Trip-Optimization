@@ -286,7 +286,6 @@ public class MapGUI {
                     tripNames.add(eElement.getElementsByTagName("id").item(i).getTextContent());
                     i++;
                 }
-
             }
         }
         trips.add(tempTrip);

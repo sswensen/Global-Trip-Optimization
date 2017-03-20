@@ -30,11 +30,11 @@ public class TripCo {
                 break;
             case "-2":
                 presenter.setTwoOpt(true);
-                presenter.getTwoOpt();
+                //presenter.getTwoOpt();
                 break;
             case "-3":
                 presenter.setThreeOpt(true);
-                presenter.getThreeOpt();
+                //presenter.getThreeOpt();
                 break;
             default:
                 break;
