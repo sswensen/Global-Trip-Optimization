@@ -56,7 +56,7 @@ public class MapGUI {
     private String workingDirectoryFilePath;
     private JFrame uOp;
     private JFrame itinerary;
-    private GridBagConstraints gbc;
+    private GridBagConstraints gbc = new GridBagConstraints();
     private boolean tick = false;
     private boolean rightTick = false;
     private int savedTrip = -1;
@@ -115,8 +115,6 @@ public class MapGUI {
                 background(filename);
             }
         });
-        gbc = new GridBagConstraints();
-
         //createFaceGUI();
 
         /*JPanel jplInnerPanel1 = createInnerPanel("Tab 1 Contains Tooltip and Icon");
@@ -456,7 +454,6 @@ public class MapGUI {
     void displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException{
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
-        fTemp2 = createInnerPanel();
         loadPanel = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
@@ -545,15 +542,22 @@ public class MapGUI {
         uOp.pack();
 
         itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
+        itinerary.pack();
     }
 
     public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        if(fTemp2 == null) {
+            fTemp2 = createInnerPanel();
+        }
+        if(seqId.equals("0")) {
+            fTemp2.removeAll();
+            fTemp2.repaint();
+            fTemp2.requestFocus(true);
+        }
         setGBC(0, Integer.parseInt(seqId), 4);
         JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
 
         fTemp2.add(lab, gbc);
-
-        itinerary.pack();
     }
 
     void refresh() throws Exception {
