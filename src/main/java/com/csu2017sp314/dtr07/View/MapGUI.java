@@ -6,7 +6,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import org.junit.experimental.theories.internal.ParameterizedAssertionError;
 
 import javax.swing.*;
 import org.w3c.dom.Document;
@@ -305,7 +304,7 @@ public class MapGUI {
 
         //XML document
         DOMSource source = new DOMSource(saveXml);
-        StreamResult result = new StreamResult(new File(name + ".xml"));
+        StreamResult result = new StreamResult(new File(workingDirectoryFilePath + "png/" + name + ".xml"));
         transformer.transform(source, result);
         copySVG(name);
         return 1;
