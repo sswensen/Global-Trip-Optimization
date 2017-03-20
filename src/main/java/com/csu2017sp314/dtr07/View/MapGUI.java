@@ -230,6 +230,19 @@ public class MapGUI {
         return 1;
     }
 
+    private JButton createXMLBrowser() {
+        JButton ret = new JButton("Load From XML");
+        JFileChooser jFileChooser = new JFileChooser();
+        jFileChooser.setCurrentDirectory(new File(workingDirectoryFilePath));
+        int result = jFileChooser.showOpenDialog(new JFrame());
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = jFileChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        }
+
+        return ret;
+    }
+
     private JFrame createJFrame(String name, int x, int y, JTabbedPane tabs) {
         JFrame ret = new JFrame(name);
         ret.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -367,6 +380,7 @@ public class MapGUI {
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(new ArrayList<>(trip));
+                    lastTrip = new ArrayList<>(trip);
                     userAddLocList(trip);
                     System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
