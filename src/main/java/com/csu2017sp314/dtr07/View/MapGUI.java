@@ -542,6 +542,15 @@ public class MapGUI {
         uOp.pack();
     }
 
+    public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        setGBC(0, Integer.parseInt(seqId), 4);
+        JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
+
+        fTemp2.add(lab, gbc);
+
+        itinerary.pack();
+    }
+
     void refresh() throws Exception {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
