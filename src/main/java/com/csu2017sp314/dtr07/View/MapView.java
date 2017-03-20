@@ -8,7 +8,9 @@ import java.io.IOException;
 
 /**
  * Created by SummitDrift on 3/6/17.
+ * @author Scott Swensen
  */
+
 public interface MapView {
     void initializeTrip() throws SAXException, IOException, ParserConfigurationException;
 

@@ -24,44 +24,59 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 //import org.w3c.dom.DOMImplementation;
 
+/**
+ * Created by SummitDrift on 2/13/17.
+ * Main class for View Package
+ */
+
 public class View {
-    public Consumer<String> callback;
+    private Consumer<String> callback;
+    private Consumer<ArrayList<String>> callback2;
+    private Consumer<String> callback3;
     private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
-    private Document readXml;
-    private ArrayList<Integer> ids = new ArrayList<>();
+    private ArrayList<String> ids = new ArrayList<>();
     private String f;
-    MapGUI gui;
+    private MapGUI gui;
+    private String svgMap;
 
-    public void initializeTrip(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
-        svg = new SVGBuilder();
+    public void initializeTrip(String selectionXml, String svgMap) throws SAXException, IOException, ParserConfigurationException {
+        this.svgMap = svgMap;
+        gui = new MapGUI();
+        svg = new SVGBuilder(svgMap);
         xml = new XMLBuilder();
         readXML(selectionXml);
     }
-    
+
+    public void resetTrip() throws SAXException, IOException, ParserConfigurationException {
+        svg = new SVGBuilder(svgMap);
+        xml = new XMLBuilder();
+    }
+
     public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+        Document readXml;
         File xmlFile = new File(selectionXml);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         readXml = dBuilder.parse(xmlFile);
         readXml.getDocumentElement().normalize();
-        System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
         NodeList nList = readXml.getElementsByTagName("destinations");
-        for(int temp = 0; temp < nList.getLength(); temp++){
+        for(int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
-            System.out.println("\nCurrent Element :" + nNode.getNodeName());
-            if(nNode.getNodeType() == Node.ELEMENT_NODE){
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            if(nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 int i = 0;
-                while(eElement.getElementsByTagName("id").item(i) != null){
-                    ids.add(Integer.parseInt(eElement.getElementsByTagName("id").item(i).getTextContent()));
+                while(eElement.getElementsByTagName("id").item(i) != null) {
+                    ids.add(eElement.getElementsByTagName("id").item(i).getTextContent());
                     i++;
                 }
             }
         }
-        for(int i  = 0; i < ids.size();i++){
-            System.out.println("id at index " + i + " = " + ids.get(i));
+        for(int i = 0; i < ids.size(); i++) {
+            //System.out.println("id at index " + i + " = " + ids.get(i));
         }
     }
 
@@ -69,8 +84,24 @@ public class View {
         this.callback = callback;
     }
 
-    public void userAddLoc(String id) {
+    public void setCallback2(Consumer<ArrayList<String>> callback2) {
+        this.callback2 = callback2;
+    }
+
+    public void setCallback3(Consumer<String> callback3) {
+        this.callback3 = callback3;
+    }
+
+    private void userAddLoc(String id) {
         callback.accept(id);
+    }
+
+    private void userAddLocList(ArrayList<String> ids) {
+        callback2.accept(ids);
+    }
+
+    private void mapOptions(String option) {
+        callback3.accept(option);
     }
 
     public void addLeg(String id, String start, String finish, int mileage) {
@@ -125,29 +156,38 @@ public class View {
         transformer.transform(source2, result2);
     }
 
-    public void gui() {
-        gui = new MapGUI(f);
+
+    public void gui() throws ParserConfigurationException, TransformerException{
+        gui.setCallback((String s) -> {
+            this.userAddLoc(s);
+        });
+
+        gui.setCallback2((ArrayList<String> s) -> {
+            this.userAddLocList(s);
+        });
+
+        gui.setCallback3((String s) -> {
+            this.mapOptions(s);
+        });
         try {
-            gui.init();
+            gui.init(f);
         } catch(Exception e) {
             System.err.println(e);
+            System.err.println("Error initilizing gui with filename " + f);
         }
+        gui.displayXML(ids);
+    }
+
+    public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        gui.addLegToItinerary(seqId, name1, name2, mileage);
     }
 
     public void refresh() throws Exception {
         gui.refresh();
     }
 
-    Document getXMLdoc() {
-        return xml.getXMLdoc();
-    }
-
-    Document getSVGdoc() {
-        return svg.getSVGdoc();
-    }
-
-    ArrayList<Integer> getIdArrayList(){
-        return ids;
+    public boolean cleanup() {
+        return gui.cleanup();
     }
 
     public static void main(String[] argv) throws ParserConfigurationException, TransformerException {

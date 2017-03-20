@@ -9,9 +9,11 @@ import org.junit.Test;
  * Testing file for Model.java
  */
 public class TestModel {
+
     @Before
     public void initialize() {
     }
+
     private Model m = new Model();
 
     @Test

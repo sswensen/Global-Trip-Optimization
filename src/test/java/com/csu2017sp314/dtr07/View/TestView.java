@@ -12,6 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public class TestView {
     private View v = new View();
+
     @Before
     public void initialize() throws ParserConfigurationException {
 

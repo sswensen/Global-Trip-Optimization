@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 /**
  * Created by SummitDrift on 2/13/17.
+ * @author Scott Swensen
  * Main class for Model Package
  */
+
 public class Model {
     //private ArrayList<Location> locations;
     private ArrayList<Pair> pairs;
-    private ArrayList<Pair> userPairs;
+    private ArrayList<Pair> userPairs = new ArrayList<>();
     private ArrayList<Location> locations;
     private ArrayList<Location> userLocations = new ArrayList<>();
     private boolean twoOpt;
@@ -42,13 +44,31 @@ public class Model {
         int index = searchLocations(id, "id");
         if(index >= 0) {
             userLocations.add(locations.get(index));
+            //System.out.println("Adding " + id + " to locations");
             return 1;
         } else {
             return -1;
         }
     }
 
-    public int searchLocations(String identifier, String field) {
+    public int toggleListLocations(ArrayList<String> ids) {
+        if(!ids.isEmpty()) {
+            for(String id : ids) {
+                userLocations.add(locations.get(searchLocations(id, "id")));
+            }
+            if(userLocations.size() > 0) {
+                return 1;
+            }
+            for(Location loc : userLocations) {
+                //System.out.println("Array: " + loc.getId());
+            }
+        } else {
+            userLocations = new ArrayList<>(locations);
+        }
+        return 1;
+    }
+
+    private int searchLocations(String identifier, String field) {
         if(field.equalsIgnoreCase("name")) {
             for(int x = 0; x < locations.size(); x++) {
                 if(locations.get(x).getName().equals(identifier)) {
@@ -77,22 +97,6 @@ public class Model {
     public String getLegFinishLocation() {
         return pairs.get(pairs.size()-2).getTwo().getName();
     }
-
-    /*public int getLegDistance(Object o) {
-        return -1;
-    }
-
-    public int getLocationID(int index) {
-        return locations.get(index).getId();
-    }
-
-    public double getLocationLattitude(int index) {
-        return locations.get(index).getLat();
-    }
-
-    public double getLocationLongitude(int index) {
-        return locations.get(index).getLon();
-    }*/
 
     public double getFirstLon(final int i) {
         return pairs.get(i).getOne().getLon();
@@ -210,6 +214,12 @@ public class Model {
         return userPairs.get(i).getTwo().getId();
     }
 
+    public void printUserLoc() {
+        for(int i = 0; i < userLocations.size(); i++) {
+            System.out.println("ID at index " + i + " = "+ userLocations.get(i).getId());
+        }
+    }
+
     private ArrayList<Location> twoOptSwap(ArrayList<Location> route, ArrayList<Pair> newPairs, int i, int k)
     {
         /*
@@ -305,5 +315,4 @@ public class Model {
         }
         //System.out.println(totalImprovements);
     }
-
 }
