@@ -122,6 +122,8 @@ public class Presenter {
     private int eventUserAddLocList(ArrayList<String> ids) {
         currentIds = ids;
         model.toggleListLocations(ids);
+        if(twoOpt)
+            model.setTwoOpt(true);
         //model.printUserLoc();
         try {
             view.resetTrip();
@@ -212,6 +214,7 @@ public class Presenter {
 
     public void setTwoOpt(boolean twoOpt) {
         this.twoOpt = twoOpt;
+        model.setTwoOpt(twoOpt);
     }
 
     public boolean getThreeOpt() {
