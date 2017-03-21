@@ -35,7 +35,6 @@ public class Model {
         }        
         if(threeOpt) {
             previousLocations = new ArrayList<>(userLocations);
-            //threeOpt();
             bothOpt();
         }
         if(testThreeOpt)
