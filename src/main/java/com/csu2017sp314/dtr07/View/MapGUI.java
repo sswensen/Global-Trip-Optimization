@@ -68,7 +68,7 @@ public class MapGUI {
     private int savedTrip = -1;
     private int filenameIncrementer = 1;
     private int z = -1; //Number of saved trips
-    private int z2 = 0; //You'll figure it out
+    private int z2 = 1; //You'll figure it out
     private ArrayList<JButton> buttons = new ArrayList<>();
     private String tripName = "ERROR";
     private JPanel loadPanel;
