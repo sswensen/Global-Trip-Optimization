@@ -285,41 +285,55 @@ public class Model {
         }
     }
 
-    private ArrayList<Location> twoOptSwap(ArrayList<Location> route, ArrayList<Pair> newPairs, int i, int j) {
-        ArrayList<Location> newLocations = new ArrayList<>();
-        newLocations.addAll(route);
-        //1
-        for(int a = 0; a <= i - 1; a++) {
-            newLocations.set(a, route.get(a));
+    private void copySegmentInOrder(ArrayList<Location> source, ArrayList<Location> dest, int from, int through) {
+        for(int i = from; i <= through; i++) {
+            dest.set(i, source.get(i));
         }
-        //2
+    }
+
+    private void copySegmentReverse(ArrayList<Location> source, ArrayList<Location> dest, int from, int through) {
         int dec = 0;
-        for(int a = i; a <= j; a++) {
-            newLocations.set(a, route.get(j - dec));
+        for(int i = from; i <= through; i++) {
+            dest.set(i, source.get(through - dec));
             dec++;
         }
-        //3
-        for(int a = j + 1; a < route.size(); a++) {
-            newLocations.set(a, route.get(a));
-        }
+    }
+
+    private void generatePairs(ArrayList<Location> newLocations, ArrayList<Pair> newPairs) {
         for(int a = 0; a < newLocations.size() - 1; a++) {
             newPairs.add(new Pair(Integer.toString(a), newLocations.get(a), newLocations.get(a + 1), newLocations.get(a).distance(newLocations.get(a + 1))));
         }
         newPairs.add(new Pair(Integer.toString(newLocations.size() - 1), newLocations.get(newLocations.size() - 1), newLocations.get(0), newLocations.get(newLocations.size() - 1).distance(newLocations.get(0))));
-        return newLocations;
     }
 
-    protected int twoOpt() {
-        int oldTripDistance;
-        int newTripDistance;
-        ArrayList<Location> newLocations;
-        ArrayList<Pair> newPairs;
+    private ArrayList<Location> generateRoute() {
         ArrayList<Location> route = new ArrayList<>();
         for(Pair pair : pairs) {
             route.add(pair.getOne());
         }
+        return route;
+    }
+
+    private ArrayList<Location> twoOptSwap(ArrayList<Location> route, ArrayList<Pair> newPairs, int i, int j) {
+        ArrayList<Location> newLocations = new ArrayList<>();
+        newLocations.addAll(route);
+        //1
+        copySegmentInOrder(route, newLocations, 0, i-1);
+        //2
+        copySegmentReverse(route, newLocations, i, j);
+        //3
+        copySegmentInOrder(route, newLocations, j+1, route.size()-1);
+
+        generatePairs(newLocations, newPairs);
+        return newLocations;
+    }
+
+    protected int twoOpt() {
+        int oldTripDistance, newTripDistance;
+        ArrayList<Location> newLocations;
+        ArrayList<Pair> newPairs;
+        ArrayList<Location> route = generateRoute();
         int totalImprovements = 0;
-        this.totalImprovements = 0;
         int improvements = 1;
         while(improvements > 0) {
             improvements = 0;
@@ -346,30 +360,15 @@ public class Model {
         ArrayList<Location> newLocations = new ArrayList<>();
         newLocations.addAll(route);
         //1
-        for(int a = 0; a <= i - 1; a++) {
-            newLocations.set(a, route.get(a));
-        }
+        copySegmentInOrder(route, newLocations, 0, i-1);
         //2
-        int dec = 0;
-        for(int a = i; a <= j; a++) {
-            newLocations.set(a, route.get(j - dec));
-            dec++;
-        }
+        copySegmentReverse(route, newLocations, i, j);
         //3
-        dec = 0;
-        for(int a = j + 1; a <= k; a++) {
-            newLocations.set(a, route.get(k - dec));
-            dec++;
-        }
+        copySegmentReverse(route, newLocations, j+1, k);
         //4
-        for(int a = k + 1; a < route.size(); a++) {
-            newLocations.set(a, route.get(a));
-        }
+        copySegmentInOrder(route, newLocations, k+1, route.size()-1);
 
-        for(int a = 0; a < newLocations.size() - 1; a++) {
-            newPairs.add(new Pair(Integer.toString(a), newLocations.get(a), newLocations.get(a + 1), newLocations.get(a).distance(newLocations.get(a + 1))));
-        }
-        newPairs.add(new Pair(Integer.toString(newLocations.size() - 1), newLocations.get(newLocations.size() - 1), newLocations.get(0), newLocations.get(newLocations.size() - 1).distance(newLocations.get(0))));
+        generatePairs(newLocations, newPairs);
         return newLocations;
     }
 
