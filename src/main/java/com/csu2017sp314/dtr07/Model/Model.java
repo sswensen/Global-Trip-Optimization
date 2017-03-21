@@ -33,6 +33,11 @@ public class Model {
         }        
         if(threeOpt) {
             previousLocations = new ArrayList<>(userLocations);
+            bothOpt();
+        }
+        if(testThreeOpt)
+        {
+            previousLocations = new ArrayList<>(userLocations);
             threeOpt();
             //bothOpt();
         }
