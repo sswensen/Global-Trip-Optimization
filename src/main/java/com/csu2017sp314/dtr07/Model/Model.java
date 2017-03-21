@@ -18,6 +18,7 @@ public class Model {
     private ArrayList<Location> previousLocations;
     private boolean twoOpt;
     private boolean threeOpt;
+    private boolean tick = false;
 
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
@@ -26,7 +27,7 @@ public class Model {
         locations = lf.getLocations();
         pairs = lf.getPairs();
         if(twoOpt) {
-            previousLocations = new ArrayList<>(locations);
+            previousLocations = new ArrayList<>(userLocations);
             twoOpt();
         }        
         if(threeOpt)
@@ -39,16 +40,15 @@ public class Model {
 
     public int planUserTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
-        if(!twoOpt) {
-            locations = new ArrayList<>(previousLocations);
+        if(!twoOpt && !tick) {
             userLocations = new ArrayList<>(previousLocations);
         }
         lf.setLocations(userLocations);
         lf.thirdTry();
-        locations = lf.getLocations();
+        userLocations = lf.getLocations();
         pairs = lf.getPairs();
         if(twoOpt) {
-            previousLocations = new ArrayList<>(locations);
+            previousLocations = new ArrayList<>(userLocations);
             twoOpt();
         }
         userPairs.clear();
@@ -83,12 +83,18 @@ public class Model {
     public int toggleListLocations(ArrayList<String> ids) {
         if(!ids.isEmpty()) {
             for(String id : ids) {
-                userLocations.add(locations.get(searchLocations(id, "id")));
+                int f = searchLocations(id, "id");
+                if(f > -1) {
+                    userLocations.add(locations.get(f));
+                } else {
+                    System.err.println("Error searching for " + id);
+                }
             }
         } else {
             userLocations = new ArrayList<>(locations);
         }
         if(userLocations.size() > 0) {
+            tick = true;
             return 1;
         }
         return -1;
