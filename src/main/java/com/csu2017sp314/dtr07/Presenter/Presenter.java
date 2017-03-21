@@ -124,8 +124,11 @@ public class Presenter {
         model.toggleListLocations(ids);
         if(twoOpt)
             model.setTwoOpt(true);
+        else
+            model.setTwoOpt(false);
         //model.printUserLoc();
         try {
+            model.planUserTrip(fname);
             view.resetTrip();
             int numPairs = model.getUserPairs().size();
 
