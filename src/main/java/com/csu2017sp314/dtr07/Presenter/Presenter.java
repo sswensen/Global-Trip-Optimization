@@ -178,89 +178,47 @@ public class Presenter {
         return 1;
     }
 
-    public int eventLoadLoc() throws SAXException, IOException, ParserConfigurationException, TransformerException {
-        view.initializeTrip(selectionXml, svgMap);
-
-        int numPairs = model.getNumPairs();
-
-        view.addFooter(model.getTripDistance());
-        int finalPairId = 0;
-        for(int i = 0; i < numPairs; i++) {
-            double firstLon = model.getUserFirstLon(i);
-            double firstLat = model.getUserFirstLat(i);
-            double secondLon = model.getUserSecondLon(i);
-            double secondLat = model.getUserSecondLat(i);
-            int pairDistance = model.getUserPairDistance(i);
-            String pairId = model.getUserPairId(i);
-            String firstId = model.getUserFirstId(i);
-            String secondId = model.getUserSecondId(i);
-            String firstName = model.getUserFirstName(i);
-            String secondName = model.getUserSecondName(i);
-            view.addLeg(pairId, firstName, secondName, pairDistance);
-            finalPairId++;
-            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
-            if(displayName) {
-                view.addCityNameLabel(firstLon, firstLat, firstName);
-                view.addCityNameLabel(secondLon, secondLat, secondName);
-            }
-            if(displayMileage) {
-                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId);
-            }
-            if(displayId) {
-                view.addIDLabel(firstLon, firstLat, firstId);
-                view.addIDLabel(secondLon, secondLat, secondId);
-            }
-        }
-        view.addFooter(model.getTripDistance());
-        view.addHeader("Colorado");
-        view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
-        view.finalizeTrip(fname);
-
-        return 1;
-    }
-
     public boolean getTwoOpt() {
         return twoOpt;
-    }
+    } //done
 
     public void setTwoOpt(boolean twoOpt) {
         this.twoOpt = twoOpt;
         model.setTwoOpt(twoOpt);
-    }
+    } //done
 
     public boolean getThreeOpt() {
         return threeOpt;
-    }
+    } //done
 
     public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
         model.setThreeOpt(threeOpt);
-    }
+    } //done
 
     public void setDisplayMileage(boolean x) {
         displayMileage = x;
-    }
+    }//done
 
     public void setDisplayId(boolean x) {
         displayId = x;
-    }
+    } //done
 
     public void setDisplayName(boolean x) {
         displayName = x;
-    }
+    } //done
 
     public boolean getDisplayMileage() {
         return displayMileage;
-    }
+    } //done
 
     public boolean getDisplayId() {
         return displayId;
-    }
+    } //done
 
     public boolean getDisplayName() {
         return displayName;
-    }
-
+    }//done
 
     public boolean displayGui(boolean x) {
         return (displayGui = x);
@@ -268,6 +226,10 @@ public class Presenter {
 
     public boolean getDisplayGui() {
         return displayGui;
+    }
+
+    public String getFname(){
+        return fname;
     }
 
     private void makeItinerary() {
@@ -327,16 +289,5 @@ public class Presenter {
         if(displayGui) {
             view.gui();
         }
-        //view.gui();
-        //TimeUnit.SECONDS.sleep(3);
-        /*eventUserAddLoc("3");
-        eventUserAddLoc("10");
-        eventUserAddLoc("17");
-        eventLoadLoc();
-        view.refresh();*/
-    }
-
-    public boolean cleanup() {
-        return view.cleanup();
     }
 }
