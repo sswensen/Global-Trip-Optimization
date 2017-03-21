@@ -46,7 +46,9 @@ public class View {
         gui = new MapGUI();
         svg = new SVGBuilder(svgMap);
         xml = new XMLBuilder();
-        readXML(selectionXml);
+        if(!selectionXml.equals("")) {
+            readXML(selectionXml);
+        }
     }
 
     public void resetTrip() throws SAXException, IOException, ParserConfigurationException {
