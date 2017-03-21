@@ -11,7 +11,6 @@ import java.util.ArrayList;
  */
 
 public class Model {
-    //private ArrayList<Location> locations;
     private ArrayList<Pair> pairs;
     private ArrayList<Pair> userPairs = new ArrayList<>();
     private ArrayList<Location> locations;
@@ -19,7 +18,9 @@ public class Model {
     private ArrayList<Location> previousLocations = new ArrayList<>();
     private boolean twoOpt;
     private boolean threeOpt;
+    private boolean testThreeOpt;
     private boolean tick = false;
+    private int totalImprovements;
 
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
@@ -30,7 +31,7 @@ public class Model {
         if(twoOpt) {
             previousLocations = new ArrayList<>(userLocations);
             twoOpt();
-        }        
+        }
         if(threeOpt) {
             previousLocations = new ArrayList<>(userLocations);
             bothOpt();
@@ -39,7 +40,6 @@ public class Model {
         {
             previousLocations = new ArrayList<>(userLocations);
             threeOpt();
-            //bothOpt();
         }
 
         userPairs.clear();
@@ -134,8 +134,26 @@ public class Model {
         this.twoOpt = twoOpt;
     }
 
+    public boolean getTwoOpt() {
+        return twoOpt;
+    }
+
     public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
+    }
+
+    public boolean getThreeOpt() {
+        return threeOpt;
+    }
+
+    public void setTestThreeOpt(boolean testThreeOpt)
+    {
+        this.testThreeOpt = testThreeOpt;
+    }
+
+    public int getTotalImprovements()
+    {
+        return totalImprovements;
     }
 
     public String getLegStartLocation() {
@@ -291,7 +309,7 @@ public class Model {
         return newLocations;
     }
 
-    private int twoOpt() {
+    protected int twoOpt() {
         int oldTripDistance;
         int newTripDistance;
         ArrayList<Location> newLocations;
@@ -301,6 +319,7 @@ public class Model {
             route.add(pair.getOne());
         }
         int totalImprovements = 0;
+        this.totalImprovements = 0;
         int improvements = 1;
         while(improvements > 0) {
             improvements = 0;
@@ -319,6 +338,7 @@ public class Model {
                 }
             }
         }
+        this.totalImprovements = totalImprovements;
         return totalImprovements;
     }
 
@@ -353,7 +373,7 @@ public class Model {
         return newLocations;
     }
 
-    private int threeOpt() {
+    protected int threeOpt() {
         int oldTripDistance;
         int newTripDistance;
         ArrayList<Location> newLocations;
@@ -363,6 +383,7 @@ public class Model {
             route.add(pair.getOne());
         }
         int totalImprovements = 0;
+        this.totalImprovements = 0;
         int improvements = 1;
         while(improvements > 0) {
             improvements = 0;
@@ -383,12 +404,13 @@ public class Model {
                 }
             }
         }
+        this.totalImprovements = totalImprovements;
         return totalImprovements;
     }
 
     private void bothOpt()
     {
-        while ( threeOpt() > 0 || twoOpt() > 0 );
+        while (threeOpt() > 0 || twoOpt() > 0);
     }
 
 }
