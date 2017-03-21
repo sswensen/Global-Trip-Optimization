@@ -15,7 +15,7 @@ public class Model {
     private ArrayList<Pair> userPairs = new ArrayList<>();
     private ArrayList<Location> locations;
     private ArrayList<Location> userLocations = new ArrayList<>();
-    private ArrayList<Location> previousLocations;
+    private ArrayList<Location> previousLocations = new ArrayList<>();
     private boolean twoOpt;
     private boolean threeOpt;
 
@@ -42,11 +42,7 @@ public class Model {
 
     public int planUserTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
-        if(!twoOpt) {
-            locations = new ArrayList<>(previousLocations);
-            userLocations = new ArrayList<>(previousLocations);
-        }
-        if(!threeOpt){
+        if(!twoOpt && !threeOpt) {
             locations = new ArrayList<>(previousLocations);
             userLocations = new ArrayList<>(previousLocations);
         }
