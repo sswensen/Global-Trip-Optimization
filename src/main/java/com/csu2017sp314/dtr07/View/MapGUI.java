@@ -68,7 +68,7 @@ public class MapGUI {
     private int savedTrip = -1;
     private int filenameIncrementer = 1;
     private int z = -1; //Number of saved trips
-    private int z2 = 0; //You'll figure it out
+    private int z2 = 1; //You'll figure it out
     private ArrayList<JButton> buttons = new ArrayList<>();
     private String tripName = "ERROR";
     private JPanel loadPanel;
@@ -232,14 +232,19 @@ public class MapGUI {
 
     private JButton createXMLBrowser() {
         JButton ret = new JButton("Load From XML");
-        JFileChooser jFileChooser = new JFileChooser();
-        jFileChooser.setCurrentDirectory(new File(workingDirectoryFilePath));
-        int result = jFileChooser.showOpenDialog(new JFrame());
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = jFileChooser.getSelectedFile();
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-        }
-
+        ret.addActionListener((ActionEvent e) -> {
+            JFileChooser jFileChooser = new JFileChooser();
+            jFileChooser.setCurrentDirectory(new File(workingDirectoryFilePath));
+            int result = jFileChooser.showOpenDialog(new JFrame());
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = jFileChooser.getSelectedFile();
+                try {
+                    readXML(selectedFile.getAbsolutePath());
+                } catch(Exception ee) {
+                    System.err.println("Error in createXMLBrowser");
+                }
+            }
+        });
         return ret;
     }
 
@@ -298,21 +303,27 @@ public class MapGUI {
         //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
         ArrayList<String> tempTrip = new ArrayList<>();
         NodeList nList = readXml.getElementsByTagName("destinations");
+        NodeList nList2 = readXml.getElementsByTagName("title");
+        System.out.println("nnList2 size = " + nList2.getLength());
+        for(int i = 0; i < nList2.getLength();i++){
+            Node a = nList2.item(i);
+            tripName = a.getTextContent();
+        }
         for(int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
             //System.out.println("\nCurrent Element :" + nNode.getNodeName());
             if(nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 int i = 0;
-
                 while(eElement.getElementsByTagName("id").item(i) != null) {
                     tempTrip.add(eElement.getElementsByTagName("id").item(i).getTextContent());
-                    tripNames.add(eElement.getElementsByTagName("id").item(i).getTextContent());
                     i++;
                 }
             }
         }
         trips.add(tempTrip);
+        tripNames.add(tripName);
+        addLoadButton(tripName);
         System.out.println(selectionXml);
         for(int i = 0; i < tripNames.size(); i++) {
             System.out.println("id at index " + i + " = " + tripNames.get(i));
@@ -367,6 +378,41 @@ public class MapGUI {
         return 1;
     }
 
+    private void addLoadButton(String name) {
+        if(rightTick) {
+            setGBC(1, z2, 1);
+            rightTick = false;
+            z2++;
+        } else {
+            setGBC(0, z2, 1);
+            rightTick = true;
+        }
+        if(trips.size() == 0 || name.equals(" Save Trip "))
+            savedTrip = z;
+        System.out.println("Trip name is " + tripName);
+        JButton load = new JButton("Load Trip " + tripName);
+        loadPanel.add(load, gbc);
+        System.out.println("Added button " + load.getText());
+        load.addActionListener((ActionEvent eee) -> {
+            System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+            tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
+            userAddLocList(tempLoc);
+            lastTrip = new ArrayList<>(tempLoc);
+            updateTripLabel(load.getText().substring(10));
+            for(JButton a : buttons) {
+                tick = true;
+                a.doClick();
+                a.doClick();
+            }
+
+            savedTrip = tripNames.indexOf(load.getText().substring(10));
+
+        });
+        updateTripLabel(load.getText().substring(10));
+        savedTrip = tripNames.indexOf(load.getText().substring(10));
+        System.out.println("Setting savedTrip to " + tripNames.indexOf(load.getText().substring(10)));
+    }
+
     private JButton addSaveButton(String name) throws ParserConfigurationException, TransformerException{
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
@@ -398,38 +444,7 @@ public class MapGUI {
                     }catch(TransformerException transException){
 
                     }
-                    if(rightTick) {
-                        setGBC(1, z2, 1);
-                        rightTick = false;
-                        z2++;
-                    } else {
-                        setGBC(0, z2, 1);
-                        rightTick = true;
-                    }
-                    if(trips.size() == 0 || name.equals(" Save Trip "))
-                        savedTrip = z;
-                    System.out.println("Trip name is " + tripName);
-                    JButton load = new JButton("Load Trip " + tripName);
-                    loadPanel.add(load, gbc);
-                    System.out.println("Added button " + load.getText());
-                    load.addActionListener((ActionEvent eee) -> {
-                        System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
-                        tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
-                        userAddLocList(tempLoc);
-                        lastTrip = new ArrayList<>(tempLoc);
-                        updateTripLabel(load.getText().substring(10));
-                        for(JButton a : buttons) {
-                            tick = true;
-                            a.doClick();
-                            a.doClick();
-                        }
-
-                        savedTrip = tripNames.indexOf(load.getText().substring(10));
-
-                    });
-                    updateTripLabel(load.getText().substring(10));
-                    savedTrip = tripNames.indexOf(load.getText().substring(10));
-                    System.out.println("Setting savedTrip to " + tripNames.indexOf(load.getText().substring(10)));
+                    addLoadButton(name);
                 });
                 holding.setLocation(1063, 0);
                 holding.setSize(200, 50);
@@ -517,6 +532,9 @@ public class MapGUI {
         currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
         currentTrip.setPreferredSize(new Dimension(30, 30));
         fTemp.add(currentTrip, gbc);
+
+        JButton loadFromXML = createXMLBrowser();
+        loadPanel.add(loadFromXML, gbc);
 
         setGBC(0, 1, 2);
 
