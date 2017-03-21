@@ -16,6 +16,7 @@ public class Model {
     private ArrayList<Location> locations;
     private ArrayList<Location> userLocations = new ArrayList<>();
     private boolean twoOpt;
+    private boolean threeOpt;
 
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
@@ -25,6 +26,8 @@ public class Model {
         pairs = lf.getPairs();
         if(twoOpt)
             twoOpt();
+        if(threeOpt)
+            threeOpt();
         return 1;
     }
 
@@ -88,6 +91,11 @@ public class Model {
     public void setTwoOpt(boolean twoOpt)
     {
         this.twoOpt = twoOpt;
+    }
+
+    public void setThreeOpt(boolean threeOpt)
+    {
+        this.threeOpt = threeOpt;
     }
 
     public String getLegStartLocation() {
@@ -220,67 +228,37 @@ public class Model {
         }
     }
 
-    private ArrayList<Location> twoOptSwap(ArrayList<Location> route, ArrayList<Pair> newPairs, int i, int k)
+    private ArrayList<Location> twoOptSwap(ArrayList<Location> route, ArrayList<Pair> newPairs, int i, int j)
     {
-        /*
-        1. take route[1] to route[i-1] and add them in order to new_route
-        2. take route[i] to route[k] and add them in reverse order to new_route
-        3. take route[k+1] to end and add them in order to new_route
-        return new_route;
-        example route: A ==> B ==> C ==> D ==> E ==> F ==> G ==> H ==> A
-        example i = 4, example k = 7
-        new_route:
-        1. (A ==> B ==> C)
-        2. A ==> B ==> C ==> (G ==> F ==> E ==> D)
-        3. A ==> B ==> C ==> G ==> F ==> E ==> D (==> H ==> A)
-        */
         ArrayList<Location> newLocations = new ArrayList<>();
         newLocations.addAll(route);
         //1
-        for(int j=0; j<=i-1; j++)
+        for(int a=0; a<=i-1; a++)
         {
-            newLocations.set(j, route.get(j));
-            //Scott?
-            //newPairs.add(new Pair(Integer.toString(j), locations.get(j), locations.get(j + 1), locations.get(j).distance(locations.get(j + 1))));
+            newLocations.set(a, route.get(a));
         }
         //2
         int dec = 0;
-        for(int j=i; j<=k; j++)
+        for(int a=i; a<=j; a++)
         {
-            newLocations.set(j, route.get(k-dec));
+            newLocations.set(a, route.get(j-dec));
             dec++;
         }
         //3
-        for(int j=k+1; j<route.size(); j++)
+        for(int a=j+1; a<route.size(); a++)
         {
-            newLocations.set(j, route.get(j));
+            newLocations.set(a, route.get(a));
         }
-        for(int j=0; j<newLocations.size()-1; j++)
+        for(int a=0; a<newLocations.size()-1; a++)
         {
-            newPairs.add(new Pair(Integer.toString(j), newLocations.get(j), newLocations.get(j + 1), newLocations.get(j).distance(newLocations.get(j + 1))));
+            newPairs.add(new Pair(Integer.toString(a), newLocations.get(a), newLocations.get(a + 1), newLocations.get(a).distance(newLocations.get(a + 1))));
         }
         newPairs.add(new Pair(Integer.toString(newLocations.size() - 1), newLocations.get(newLocations.size() - 1), newLocations.get(0), newLocations.get(newLocations.size() - 1).distance(newLocations.get(0))));
         return newLocations;
     }
 
-    private void twoOpt()
+    private int twoOpt()
     {
-        /*
-        repeat until no improvement is made {
-            start_again:
-            best_distance = calculateTotalDistance(existing_route)
-            for (i = 0; i < number of nodes eligible to be swapped - 1; i++) {
-                for (k = i + 1; k < number of nodes eligible to be swapped; k++) {
-                    new_route = 2optSwap(existing_route, i, k)
-                    new_distance = calculateTotalDistance(new_route)
-                    if (new_distance < best_distance) {
-                        existing_route = new_route
-                        goto start_again
-                    }
-                }
-            }
-        }
-        */
         int oldTripDistance;
         int newTripDistance;
         ArrayList<Location> newLocations;
@@ -298,10 +276,10 @@ public class Model {
             oldTripDistance = getTripDistance();
             for (int i = 0; i < route.size() - 1; i++)
             {
-                for (int k = i + 1; k < route.size(); k++)
+                for (int j = i + 1; j < route.size(); j++)
                 {
                     newPairs = new ArrayList<>();
-                    newLocations = twoOptSwap(route, newPairs, i, k);
+                    newLocations = twoOptSwap(route, newPairs, i, j);
                     newTripDistance = getTripDistance(newPairs);
                     if(newTripDistance<oldTripDistance)
                     {
@@ -313,6 +291,82 @@ public class Model {
                 }
             }
         }
-        //System.out.println(totalImprovements);
+        return totalImprovements;
+    }
+
+    private ArrayList<Location> threeOptSwap(ArrayList<Location> route, ArrayList<Pair> newPairs, int i, int j, int k)
+    {
+        ArrayList<Location> newLocations = new ArrayList<>();
+        newLocations.addAll(route);
+        //1
+        for(int a=0; a<=i-1; a++)
+        {
+            newLocations.set(a, route.get(a));
+        }
+        //2
+        int dec = 0;
+        for(int a=i; a<=j; a++)
+        {
+            newLocations.set(a, route.get(j-dec));
+            dec++;
+        }
+        //3
+        dec = 0;
+        for(int a=j+1; a<=k; a++)
+        {
+            newLocations.set(a, route.get(k-dec));
+            dec++;
+        }
+        //4
+        for(int a=k+1; a<route.size(); a++)
+        {
+            newLocations.set(a, route.get(a));
+        }
+
+        for(int a=0; a<newLocations.size()-1; a++)
+        {
+            newPairs.add(new Pair(Integer.toString(a), newLocations.get(a), newLocations.get(a + 1), newLocations.get(a).distance(newLocations.get(a + 1))));
+        }
+        newPairs.add(new Pair(Integer.toString(newLocations.size() - 1), newLocations.get(newLocations.size() - 1), newLocations.get(0), newLocations.get(newLocations.size() - 1).distance(newLocations.get(0))));
+        return newLocations;
+    }
+
+    private int threeOpt()
+    {
+        int oldTripDistance;
+        int newTripDistance;
+        ArrayList<Location> newLocations;
+        ArrayList<Pair> newPairs;
+        ArrayList<Location> route = new ArrayList<>();
+        for(Pair pair : pairs)
+        {
+            route.add(pair.getOne());
+        }
+        int totalImprovements = 0;
+        int improvements = 1;
+        while(improvements > 0)
+        {
+            improvements = 0;
+            oldTripDistance = getTripDistance();
+            for (int i = 0; i < route.size() - 2; i++)
+            {
+                for (int j = i + 1; j < route.size()-1; j++)
+                {
+                    for(int k = j + 1; k < route.size(); k++)
+                    {
+                        newPairs = new ArrayList<>();
+                        newLocations = threeOptSwap(route, newPairs, i, j, k);
+                        newTripDistance = getTripDistance(newPairs);
+                        if (newTripDistance < oldTripDistance) {
+                            route = newLocations;
+                            pairs = newPairs;
+                            improvements++;
+                            totalImprovements++;
+                        }
+                    }
+                }
+            }
+        }
+        return totalImprovements;
     }
 }
