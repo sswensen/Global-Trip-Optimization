@@ -76,7 +76,7 @@ public class Presenter {
         } else {
             displayName = true;
         }
-        System.out.println("Names now " + displayId);
+        System.out.println("Names now " + displayName);
     }
 
     private void toggleIds() {
@@ -94,16 +94,18 @@ public class Presenter {
         } else {
             displayMileage = true;
         }
-        System.out.println("Mileage now " + displayId);
+        System.out.println("Mileage now " + displayMileage);
     }
 
     private void toggle2opt() {
         if(twoOpt) {
             twoOpt = false;
+            model.setTwoOpt(false);
         } else {
             twoOpt = true;
+            model.setTwoOpt(true);
         }
-        System.out.println("2-opt now " + displayId);
+        System.out.println("2-opt now " + twoOpt);
     }
 
     private void toggle3opt() {
@@ -112,7 +114,7 @@ public class Presenter {
         } else {
             threeOpt = true;
         }
-        System.out.println("3-opt now " + displayId);
+        System.out.println("3-opt now " + threeOpt);
     }
 
     private int eventUserAddLoc(String id) {
