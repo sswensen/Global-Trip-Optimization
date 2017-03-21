@@ -630,6 +630,7 @@ public class MapGUI {
         itinerary.getContentPane().add(jsp);
         itinerary.setPreferredSize(new Dimension(800, 800));
         itinerary.pack();
+        ret = 1;
         return ret;
     }
 

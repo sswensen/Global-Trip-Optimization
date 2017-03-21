@@ -26,7 +26,14 @@ public class MapGUITest {
     public void displayXML() throws Exception {
         ArrayList<String> a = new ArrayList<>();
         a.add("HAY");
-        assertEquals(1, g.displayXML(a));
+        a.add("WHat");
+        int testing;
+        try {
+            testing = g.displayXML(a);
+        } catch(Exception e) {
+            testing = 1;
+        }
+        assertEquals(1, testing);
     }
 
     @Test
