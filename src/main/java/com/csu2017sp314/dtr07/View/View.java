@@ -54,7 +54,7 @@ public class View {
         xml = new XMLBuilder();
     }
 
-    public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+    private void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
         Document readXml;
         File xmlFile = new File(selectionXml);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -79,6 +79,10 @@ public class View {
             //System.out.println("id at index " + i + " = " + ids.get(i));
         }
     }
+
+    Document getXMLdoc() { return xml.getXMLdoc(); }
+
+    Document getSVGdoc() { return svg.getSVGdoc(); }
 
     public void setCallback(Consumer<String> callback) {
         this.callback = callback;
