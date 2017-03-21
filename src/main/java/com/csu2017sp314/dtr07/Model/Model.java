@@ -16,7 +16,7 @@ public class Model {
     private ArrayList<Pair> userPairs = new ArrayList<>();
     private ArrayList<Location> locations;
     private ArrayList<Location> userLocations = new ArrayList<>();
-    private ArrayList<Location> previousLocations;
+    private ArrayList<Location> previousLocations = new ArrayList<>();
     private boolean twoOpt;
     private boolean threeOpt;
     private boolean tick = false;
@@ -30,9 +30,12 @@ public class Model {
         if(twoOpt) {
             previousLocations = new ArrayList<>(userLocations);
             twoOpt();
-        }
-        if(threeOpt)
+        }        
+        if(threeOpt) {
+            previousLocations = new ArrayList<>(userLocations);
             threeOpt();
+            //bothOpt();
+        }
 
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
@@ -51,6 +54,10 @@ public class Model {
         if(twoOpt) {
             previousLocations = new ArrayList<>(userLocations);
             twoOpt();
+        }
+        if(threeOpt){
+            previousLocations = new ArrayList<>(userLocations);
+            threeOpt();
         }
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
@@ -373,4 +380,10 @@ public class Model {
         }
         return totalImprovements;
     }
+
+    private void bothOpt()
+    {
+        while ( threeOpt() > 0 || twoOpt() > 0 );
+    }
+
 }
