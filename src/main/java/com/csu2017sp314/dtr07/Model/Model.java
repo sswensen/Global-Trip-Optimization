@@ -15,6 +15,7 @@ public class Model {
     private ArrayList<Pair> userPairs = new ArrayList<>();
     private ArrayList<Location> locations;
     private ArrayList<Location> userLocations = new ArrayList<>();
+    private ArrayList<Location> previousLocations;
     private boolean twoOpt;
     private boolean threeOpt;
 
@@ -24,18 +25,43 @@ public class Model {
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
-        if(twoOpt)
+        if(twoOpt) {
+            previousLocations = new ArrayList<>(locations);
             twoOpt();
+        }        
         if(threeOpt)
             threeOpt();
+      
+        userPairs.clear();
+        userPairs = new ArrayList<>(pairs);        
+        return 1;
+    }
+
+    public int planUserTrip(String filename) throws FileNotFoundException {
+        LocationFactory lf = new LocationFactory();
+        if(!twoOpt) {
+            locations = new ArrayList<>(previousLocations);
+            userLocations = new ArrayList<>(previousLocations);
+        }
+        lf.setLocations(userLocations);
+        lf.thirdTry();
+        locations = lf.getLocations();
+        pairs = lf.getPairs();
+        if(twoOpt) {
+            previousLocations = new ArrayList<>(locations);
+            twoOpt();
+        }
+        userPairs.clear();
+        userPairs = new ArrayList<>(pairs);
         return 1;
     }
 
     public ArrayList<Pair> getUserPairs() {
-        LocationFactory lf = new LocationFactory();
+        /*LocationFactory lf = new LocationFactory();
         lf.readUserLocations(userLocations);
         lf.thirdTry();
         userPairs = lf.getPairs();
+        return userPairs;*/
         return userPairs;
     }
 
@@ -59,16 +85,13 @@ public class Model {
             for(String id : ids) {
                 userLocations.add(locations.get(searchLocations(id, "id")));
             }
-            if(userLocations.size() > 0) {
-                return 1;
-            }
-            for(Location loc : userLocations) {
-                //System.out.println("Array: " + loc.getId());
-            }
         } else {
             userLocations = new ArrayList<>(locations);
         }
-        return 1;
+        if(userLocations.size() > 0) {
+            return 1;
+        }
+        return -1;
     }
 
     private int searchLocations(String identifier, String field) {

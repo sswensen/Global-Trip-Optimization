@@ -99,6 +99,10 @@ class LocationFactory {
         return true;
     }
 
+    public void setLocations(ArrayList<Location> locations) {
+        this.locations = locations;
+    }
+
     ArrayList<Location> getLocations() {
         return locations;
     }
