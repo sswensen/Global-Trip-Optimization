@@ -316,6 +316,7 @@ public class MapGUI {
         }
         trips.add(tempTrip);
         tripNames.add(tripName);
+        addLoadButton(tripName);
         System.out.println(selectionXml);
         for(int i = 0; i < tripNames.size(); i++) {
             System.out.println("id at index " + i + " = " + tripNames.get(i));
@@ -524,6 +525,9 @@ public class MapGUI {
         currentTrip = new JLabel("Untitled trip", SwingConstants.CENTER);
         currentTrip.setPreferredSize(new Dimension(30, 30));
         fTemp.add(currentTrip, gbc);
+
+        JButton loadFromXML = createXMLBrowser();
+        loadPanel.add(loadFromXML, gbc);
 
         setGBC(0, 1, 2);
 
