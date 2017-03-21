@@ -373,16 +373,11 @@ public class Model {
     }
 
     protected int threeOpt() {
-        int oldTripDistance;
-        int newTripDistance;
+        int oldTripDistance, newTripDistance;
         ArrayList<Location> newLocations;
         ArrayList<Pair> newPairs;
-        ArrayList<Location> route = new ArrayList<>();
-        for(Pair pair : pairs) {
-            route.add(pair.getOne());
-        }
+        ArrayList<Location> route = generateRoute();
         int totalImprovements = 0;
-        this.totalImprovements = 0;
         int improvements = 1;
         while(improvements > 0) {
             improvements = 0;
