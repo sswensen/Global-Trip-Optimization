@@ -118,11 +118,11 @@ public class TripCo {
                     displayOptions("-3", presenter);
                 }
                 presenter.planTrip(filename, selectionXml, svgMap);
-                Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+                /*Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                     public void run() {
                         //presenter.cleanup();
                     }
-                }, "Shutdown-thread"));
+                }, "Shutdown-thread"));*/
             }
         }
     }
