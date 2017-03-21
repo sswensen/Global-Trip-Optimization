@@ -7,8 +7,9 @@ import java.util.Scanner;
 
 /**
  * Created by SummitDrift on 2/13/17.
+ *
  * @author Scott Swensen
- * Factory for creation of locations and pairs
+ *         Factory for creation of locations and pairs
  */
 
 class LocationFactory {
@@ -40,9 +41,9 @@ class LocationFactory {
                 }
             }
         }
-        while (scan.hasNext()) {
+        while(scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
-            Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+",""), line[longitude].replaceAll("\\s+",""));
+            Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+", ""), line[longitude].replaceAll("\\s+", ""));
             locations.add(temp);
         }
         scan.close();
@@ -65,12 +66,12 @@ class LocationFactory {
         ArrayList<Location> originalLocations;
         for(int i = 0; i < sizer; i++) {
             originalLocations = new ArrayList<>(locations);
-            for (int x = 0; x < locations.size() - 1; x++) {
+            for(int x = 0; x < locations.size() - 1; x++) {
                 double distance = 999999999;
                 int index = -1;
-                for (int y = x + 1; y < locations.size(); y++) {
+                for(int y = x + 1; y < locations.size(); y++) {
                     double temp = locations.get(x).distance(locations.get(y));
-                    if (distance > temp) {
+                    if(distance > temp) {
                         distance = temp;
                         index = y;
                     }
@@ -87,7 +88,7 @@ class LocationFactory {
             }
             //System.out.println("[" + i + "]: " + total);
             if(total < bestDistance) {
-                bestDistance = (int)Math.round(total);
+                bestDistance = (int) Math.round(total);
                 bestPairs = new ArrayList<>(pairs);
             }
             pairs.clear();

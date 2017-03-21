@@ -255,12 +255,11 @@ public class Presenter {
     }
 
 
-
-    public boolean displayGui(boolean x){
+    public boolean displayGui(boolean x) {
         return (displayGui = x);
     }
 
-    public boolean getDisplayGui(){
+    public boolean getDisplayGui() {
         return displayGui;
     }
 
@@ -318,7 +317,7 @@ public class Presenter {
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
         view.finalizeTrip(filename);
         makeItinerary();
-        if(displayGui){
+        if(displayGui) {
             view.gui();
         }
         //view.gui();

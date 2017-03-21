@@ -8,6 +8,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import javax.swing.*;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
@@ -40,11 +41,12 @@ import java.nio.file.StandardCopyOption;
 
 /**
  * Created by SummitDrift on 3/6/17.
+ *
  * @author Scott Swensen
- * File for displaying map with interactive stuff
- * This file is going to be really complicated
- * Prepare yourself
- * Winter is coming...
+ *         File for displaying map with interactive stuff
+ *         This file is going to be really complicated
+ *         Prepare yourself
+ *         Winter is coming...
  */
 
 public class MapGUI {
@@ -202,7 +204,7 @@ public class MapGUI {
         return 1;
     }
 
-    int createFaceGUI() {
+    private int createFaceGUI() {
         face = new JFrame("User Options");
         face.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         face.setLocation(1063, 0);
@@ -236,7 +238,7 @@ public class MapGUI {
             JFileChooser jFileChooser = new JFileChooser();
             jFileChooser.setCurrentDirectory(new File(workingDirectoryFilePath));
             int result = jFileChooser.showOpenDialog(new JFrame());
-            if (result == JFileChooser.APPROVE_OPTION) {
+            if(result == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = jFileChooser.getSelectedFile();
                 try {
                     readXML(selectedFile.getAbsolutePath());
@@ -256,7 +258,8 @@ public class MapGUI {
         ret.setVisible(true);
         return ret;
     }
-    private JFrame createScrollingJFrame(String name, int x, int y){
+
+    private JFrame createScrollingJFrame(String name, int x, int y) {
         JFrame ret = new JFrame(name);
         ret.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //ret.getContentPane().add(new BorderLayout.CENTER);
@@ -264,6 +267,7 @@ public class MapGUI {
         ret.setVisible(true);
         return ret;
     }
+
     private JPanel createInnerPanel() {
         JPanel jplPanel = new JPanel();
         jplPanel.setLayout(new GridBagLayout());
@@ -293,7 +297,8 @@ public class MapGUI {
         }
         return 1;
     }
-    public void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+
+    private void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
         Document readXml;
         File xmlFile = new File(selectionXml);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -305,7 +310,7 @@ public class MapGUI {
         NodeList nList = readXml.getElementsByTagName("destinations");
         NodeList nList2 = readXml.getElementsByTagName("title");
         System.out.println("nnList2 size = " + nList2.getLength());
-        for(int i = 0; i < nList2.getLength();i++){
+        for(int i = 0; i < nList2.getLength(); i++) {
             Node a = nList2.item(i);
             tripName = a.getTextContent();
         }
@@ -330,7 +335,8 @@ public class MapGUI {
         }
         System.out.println("trips size = " + trips.size());
     }
-    private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException{
+
+    private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException {
         Document saveXml;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
@@ -358,7 +364,7 @@ public class MapGUI {
         selection.appendChild(destinations);
 
 
-        for(int i = 0; i < ids.size();i++){
+        for(int i = 0; i < ids.size(); i++) {
             Element id = saveXml.createElement("id");
             id.appendChild(saveXml.createTextNode((String) ids.get(i)));
             destinations.appendChild(id);
@@ -413,7 +419,7 @@ public class MapGUI {
         System.out.println("Setting savedTrip to " + tripNames.indexOf(load.getText().substring(10)));
     }
 
-    private JButton addSaveButton(String name) throws ParserConfigurationException, TransformerException{
+    private JButton addSaveButton(String name) throws ParserConfigurationException, TransformerException {
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc);
@@ -437,11 +443,11 @@ public class MapGUI {
                     userAddLocList(trip);
                     System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
-                    try{
+                    try {
                         saveTripToXML(tripName, trip);
-                    }catch(ParserConfigurationException parseException){
+                    } catch(ParserConfigurationException parseException) {
 
-                    }catch(TransformerException transException){
+                    } catch(TransformerException transException) {
 
                     }
                     addLoadButton(name);
@@ -470,9 +476,9 @@ public class MapGUI {
                 userAddLocList(trip); //Update svg
                 try {
                     saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
-                }catch(ParserConfigurationException parseException){
+                } catch(ParserConfigurationException parseException) {
 
-                }catch(TransformerException transException){
+                } catch(TransformerException transException) {
 
                 }
                 System.out.println("Adding " + trip + " to trips at index " + savedTrip);
@@ -523,7 +529,8 @@ public class MapGUI {
         return panel;
     }
 
-    void displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException{
+    int displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException {
+        int ret = -1;
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
         loadPanel = createInnerPanel();
@@ -553,6 +560,7 @@ public class MapGUI {
 
         int numButtons = 0;
         for(String id : ids) {
+            ret = 1;
             JButton b = new JButton("      Add      ");
             buttons.add(b);
             b.addActionListener((ActionEvent e) -> { //This fires when button b is pressed, unique for each instance!
@@ -620,14 +628,16 @@ public class MapGUI {
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         itinerary.getContentPane().add(jsp);
-        itinerary.setPreferredSize(new Dimension(800,800));
+        itinerary.setPreferredSize(new Dimension(800, 800));
         itinerary.pack();
+        return ret;
     }
 
-    public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+    int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
+        int ret = -1;
         if(fTemp2 == null) {
             fTemp2 = createInnerPanel();
-
+            ret = 1;
         }
         if(seqId.equals("0")) {
             fTemp2.removeAll();
@@ -638,6 +648,8 @@ public class MapGUI {
         JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
         lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
+
+        return ret;
     }
 
     void refresh() throws Exception {
