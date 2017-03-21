@@ -29,9 +29,12 @@ public class Model {
             previousLocations = new ArrayList<>(locations);
             twoOpt();
         }        
-        if(threeOpt)
+        if(threeOpt) {
+            previousLocations = new ArrayList<>(locations);
             threeOpt();
-      
+            //bothOpt();
+        }
+
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);        
         return 1;
@@ -43,6 +46,10 @@ public class Model {
             locations = new ArrayList<>(previousLocations);
             userLocations = new ArrayList<>(previousLocations);
         }
+        if(!threeOpt){
+            locations = new ArrayList<>(previousLocations);
+            userLocations = new ArrayList<>(previousLocations);
+        }
         lf.setLocations(userLocations);
         lf.thirdTry();
         locations = lf.getLocations();
@@ -50,6 +57,10 @@ public class Model {
         if(twoOpt) {
             previousLocations = new ArrayList<>(locations);
             twoOpt();
+        }
+        if(threeOpt){
+            previousLocations = new ArrayList<>(locations);
+            threeOpt();
         }
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
@@ -392,4 +403,10 @@ public class Model {
         }
         return totalImprovements;
     }
+
+    private void bothOpt()
+    {
+        while ( threeOpt() > 0 || twoOpt() > 0 );
+    }
+
 }
