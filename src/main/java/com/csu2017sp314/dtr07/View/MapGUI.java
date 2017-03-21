@@ -595,17 +595,35 @@ public class MapGUI {
     public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
         if(fTemp2 == null) {
             fTemp2 = createInnerPanel();
-
         }
         if(seqId.equals("0")) {
             fTemp2.removeAll();
             fTemp2.repaint();
             fTemp2.requestFocus(true);
         }
-        setGBC(0, Integer.parseInt(seqId), 4);
-        JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
-        lab.setHorizontalAlignment(2);
-        fTemp2.add(lab, gbc);
+        int y = Integer.parseInt(seqId);
+
+        setGBC(0, y, 1);
+        JLabel id = new JLabel(seqId);
+
+        setGBC(1, y, 1);
+        JLabel n1 = new JLabel(seqId);
+
+        setGBC(2, y, 1);
+        JLabel n2 = new JLabel(seqId);
+
+        setGBC(3, y, 1);
+        JLabel mil = new JLabel(seqId);
+
+        id.setHorizontalAlignment(2);
+        //fTemp2.add(id, gbc);
+        n1.setHorizontalAlignment(2);
+        fTemp2.add(n1, gbc);
+        n2.setHorizontalAlignment(2);
+        fTemp2.add(n2, gbc);
+        mil.setHorizontalAlignment(2);
+        fTemp2.add(mil, gbc);
+
     }
 
     void refresh() throws Exception {
