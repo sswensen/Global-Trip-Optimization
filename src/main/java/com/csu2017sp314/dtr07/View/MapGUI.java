@@ -296,23 +296,26 @@ public class MapGUI {
         //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
         ArrayList<String> tempTrip = new ArrayList<>();
         NodeList nList = readXml.getElementsByTagName("destinations");
+        NodeList nList2 = readXml.getElementsByTagName("title");
+        System.out.println("nnList2 size = " + nList2.getLength());
+        for(int i = 0; i < nList2.getLength();i++){
+            Node a = nList2.item(i);
+            tripName = a.getTextContent();
+        }
         for(int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
             //System.out.println("\nCurrent Element :" + nNode.getNodeName());
             if(nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 int i = 0;
-
                 while(eElement.getElementsByTagName("id").item(i) != null) {
                     tempTrip.add(eElement.getElementsByTagName("id").item(i).getTextContent());
-                    tripNames.add(eElement.getElementsByTagName("id").item(i).getTextContent());
-
-                    tripName = ""; //TODO this needs to be current trip name
                     i++;
                 }
             }
         }
         trips.add(tempTrip);
+        tripNames.add(tripName);
         System.out.println(selectionXml);
         for(int i = 0; i < tripNames.size(); i++) {
             System.out.println("id at index " + i + " = " + tripNames.get(i));
