@@ -111,8 +111,10 @@ public class Presenter {
     private void toggle3opt() {
         if(threeOpt) {
             threeOpt = false;
+            model.setThreeOpt(false);
         } else {
             threeOpt = true;
+            model.setThreeOpt(true);
         }
         System.out.println("3-opt now " + threeOpt);
     }
@@ -128,6 +130,10 @@ public class Presenter {
             model.setTwoOpt(true);
         else
             model.setTwoOpt(false);
+        if(threeOpt)
+            model.setThreeOpt(true);
+        else
+            model.setThreeOpt(false);
         //model.printUserLoc();
         try {
             model.planUserTrip(fname);
@@ -228,6 +234,7 @@ public class Presenter {
 
     public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
+        model.setThreeOpt(threeOpt);
     }
 
     public void setDisplayMileage(boolean x) {
@@ -255,12 +262,11 @@ public class Presenter {
     }
 
 
-
-    public boolean displayGui(boolean x){
+    public boolean displayGui(boolean x) {
         return (displayGui = x);
     }
 
-    public boolean getDisplayGui(){
+    public boolean getDisplayGui() {
         return displayGui;
     }
 
@@ -318,7 +324,7 @@ public class Presenter {
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
         view.finalizeTrip(filename);
         makeItinerary();
-        if(displayGui){
+        if(displayGui) {
             view.gui();
         }
         //view.gui();

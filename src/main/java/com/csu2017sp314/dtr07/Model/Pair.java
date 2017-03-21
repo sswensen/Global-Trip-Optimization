@@ -2,6 +2,7 @@ package com.csu2017sp314.dtr07.Model;
 
 /**
  * Created by SummitDrift on 2/17/17.
+ *
  * @author Scott Swensen
  */
 

@@ -2,8 +2,9 @@ package com.csu2017sp314.dtr07.Model;
 
 /**
  * Created by SummitDrift on 2/13/17.
+ *
  * @author Scott Swensen
- * Class for holding information on a single location
+ *         Class for holding information on a single location
  */
 
 public class Location {
@@ -26,7 +27,7 @@ public class Location {
         int deg = in.indexOf('\u00b0');
         int pr = in.indexOf('\'');
         int dpr = in.indexOf('\"');
-        String card = in.substring(in.length()-1);
+        String card = in.substring(in.length() - 1);
         if(deg > -1 && pr > -1 && dpr > -1) {
             final double d = Double.parseDouble(in.substring(0, deg));
             final double m = Double.parseDouble(in.substring(deg + 1, pr));
@@ -42,7 +43,7 @@ public class Location {
         } else {
             ret = Double.parseDouble(in);
         }
-        switch (card) {
+        switch(card) {
             case "N":
             case "E":
                 //do shit
@@ -70,16 +71,16 @@ public class Location {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
-        if (unit.equals("K")) {
+        if(unit.equals("K")) {
             dist = dist * 1.609344;
-        } else if (unit.equals("N")) {
+        } else if(unit.equals("N")) {
             dist = dist * 0.8684;
         }
         return (dist);
     }
 
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	/*::	This function converts decimal degrees to radians			:*/
+    /*::	This function converts decimal degrees to radians			:*/
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
@@ -134,16 +135,30 @@ public class Location {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if(this == o) {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Location location = (Location) o;
 
-        if (Double.compare(location.lat, lat) != 0) { return false; }
-        if (Double.compare(location.lon, lon) != 0) { return false; }
-        if (nearest != location.nearest) { return false; }
-        if (nearestDistance != location.nearestDistance) { return false; }
-        if (id != null ? !id.equals(location.id) : location.id != null) { return false; }
+        if(Double.compare(location.lat, lat) != 0) {
+            return false;
+        }
+        if(Double.compare(location.lon, lon) != 0) {
+            return false;
+        }
+        if(nearest != location.nearest) {
+            return false;
+        }
+        if(nearestDistance != location.nearestDistance) {
+            return false;
+        }
+        if(id != null ? !id.equals(location.id) : location.id != null) {
+            return false;
+        }
         return name != null ? name.equals(location.name) : location.name == null;
     }
 
