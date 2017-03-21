@@ -89,11 +89,19 @@ public class TripCo {
                     continue;
                 }
             }
-
-            if(arguments.contains("-g")){
-                displayOptions("-g", presenter);
+            if(arguments.contains("-g") && arguments.contains("-f")){
+                System.out.println("Error: can not have both -f and -g options");
             }
-            else{
+            if(arguments.contains("-g") && !arguments.contains("-f")){
+                displayOptions("-g", presenter);
+                presenter.planTrip(filename, selectionXml, svgMap);
+                Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+                    public void run() {
+                        //presenter.cleanup();
+                    }
+                }, "Shutdown-thread"));
+            }
+            else if(arguments.contains("-f") && !arguments.contains("-g")) {
                 if(arguments.contains("-m")){
                     displayOptions("-m", presenter);
                 }
@@ -109,13 +117,13 @@ public class TripCo {
                 if(arguments.contains("-3")){
                     displayOptions("-3", presenter);
                 }
+                presenter.planTrip(filename, selectionXml, svgMap);
+                Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+                    public void run() {
+                        //presenter.cleanup();
+                    }
+                }, "Shutdown-thread"));
             }
-            presenter.planTrip(filename, selectionXml, svgMap);
-            Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-                public void run() {
-                    //presenter.cleanup();
-                }
-            }, "Shutdown-thread"));
         }
     }
 }
