@@ -54,7 +54,7 @@ public class MapGUI {
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
-    private JTabbedPane itineraryTabs;
+    //private JTabbedPane itineraryTabs;
     private JFrame face; //User interface with locations
     private ArrayList<ArrayList<String>> trips = new ArrayList<>();
     private ArrayList<String> tripNames = new ArrayList<>();
@@ -112,7 +112,7 @@ public class MapGUI {
         this.workingDirectoryFilePath = System.getProperty("user.dir") + "/";
         //new Convert(filename, -1);
         options = new JTabbedPane();
-        itineraryTabs = new JTabbedPane();
+        //itineraryTabs = new JTabbedPane();
         //ImageIcon icon = new ImageIcon("png/favicon.ico", "HELP2");
         //createMapGUI(filename);
         SwingUtilities.invokeLater(new Runnable() {
@@ -133,7 +133,7 @@ public class MapGUI {
         //createOptionsGUI();
         uOp = createJFrame("User Options", 1063, 0, options);
         //createItineraryWindow();
-        itinerary = createJFrame("Itinerary", 1363, 0, itineraryTabs);
+        itinerary = createScrollingJFrame("Itinerary", 1363, 0);
 
         map.setVisible(true); //making the frame visible
         return 1;
@@ -238,7 +238,14 @@ public class MapGUI {
         ret.setVisible(true);
         return ret;
     }
-
+    private JFrame createScrollingJFrame(String name, int x, int y){
+        JFrame ret = new JFrame(name);
+        ret.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        //ret.getContentPane().add(new BorderLayout.CENTER);
+        ret.setLocation(x, y);
+        ret.setVisible(true);
+        return ret;
+    }
     private JPanel createInnerPanel() {
         JPanel jplPanel = new JPanel();
         jplPanel.setLayout(new GridBagLayout());
@@ -576,14 +583,19 @@ public class MapGUI {
         //uOp.setMinimumSize(new Dimension(500, 500));
 
         uOp.pack();
-
-        itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
+        //itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
+        JScrollPane jsp = new JScrollPane(fTemp2);
+        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        itinerary.getContentPane().add(jsp);
+        itinerary.setPreferredSize(new Dimension(800,800));
         itinerary.pack();
     }
 
     public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
         if(fTemp2 == null) {
             fTemp2 = createInnerPanel();
+
         }
         if(seqId.equals("0")) {
             fTemp2.removeAll();
@@ -592,7 +604,7 @@ public class MapGUI {
         }
         setGBC(0, Integer.parseInt(seqId), 4);
         JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
-
+        lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
     }
 
