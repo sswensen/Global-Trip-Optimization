@@ -171,8 +171,8 @@ public class Presenter {
             model.resetUserLoc();
             view.refresh();
         } catch(Exception e) {
-            System.out.println("Exception encountered in Presenter.java");
-            System.err.println(e);
+            //System.out.println("Exception encountered in Presenter.java");
+            //System.err.println(e);
             return -1;
         }
         return 1;
