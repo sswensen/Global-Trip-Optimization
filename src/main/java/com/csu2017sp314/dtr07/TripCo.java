@@ -36,6 +36,9 @@ public class TripCo {
                 presenter.setThreeOpt(true);
                 //presenter.getThreeOpt();
                 break;
+            case "-f":
+                //
+                break;
             default:
                 break;
         }
