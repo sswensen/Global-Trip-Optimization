@@ -344,9 +344,9 @@ public class Model {
         return distTable;
     }
 
-    private double dist(double[][] distTable, int i, int j)
+    private double dist(double[][] distTable, int from, int to)
     {
-        return distTable[i][j];
+        return distTable[from][to];
     }
 
     private double dist(Location[] route, int i, int j) {
@@ -477,11 +477,11 @@ public class Model {
     {
         Location[] route = betterGenerateRoute();
         double[][] distTable = generateDistanceTable(route);
-        System.out.println(distTable[18][33]);
-        System.out.println(dist(route, 18, 33));
-        System.out.println(distTable[33][18]);
+        //System.out.println(distTable[18][33]);
+        //System.out.println(dist(route, 18, 33));
+        //System.out.println(distTable[33][18]);
         //for(int i = 0; i<distTable.length; i++) {
-         //   System.out.println(Arrays.toString(distTable[i]));
+        //    System.out.println(Arrays.toString(distTable[i]));
         //}
         ArrayList<Pair> newPairs = new ArrayList<>();
         int totalImprovements = 0;
