@@ -336,7 +336,7 @@ public class Model {
 
     private double[][] generateDistanceTable(Location[] route) {
         double[][] distTable = new double[route.length][route.length];
-        for(int i=0; i<route.length; i++) {
+        for(int i = 0; i < route.length; i++) {
             for (int j = 0; j < route.length; j++) {
                 distTable[i][j] = route[i].distance(route[j]);
             }
@@ -482,8 +482,8 @@ public class Model {
         int improvements = 1;
         while(improvements > 0) {
             improvements = 0;
-            for(int i = 0; i <= route.length - 3; i++) {
-                for(int j = i + 2; j <= route.length - 1; j++) {
+            for(int i = 0; i < route.length - 3; i++) {
+                for(int j = i + 2; j < route.length - 1; j++) {
                     if((dist(distTable, i, i+1)+dist(distTable, j, j+1)) > (dist(distTable, i, j)+dist(distTable, i+1, j+1))) {
                         reverseSegment(route, i+1, j);
                         improvements++;
@@ -556,7 +556,13 @@ public class Model {
         int[] array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         System.out.println(Arrays.toString(array));
 
-        array = model.swapSegments(array, 1, 4, 5, 8);
+        //array = model.swapSegments(array, 1, 4, 5, 8);
+        //System.out.println(Arrays.toString(array));
+
+        model.reverseSegment(array, 1, 4);
+        System.out.println(Arrays.toString(array));
+
+        model.reverseSegment(array, 5, 8);
         System.out.println(Arrays.toString(array));
 
         model.reverseSegment(array, 1, 4);
