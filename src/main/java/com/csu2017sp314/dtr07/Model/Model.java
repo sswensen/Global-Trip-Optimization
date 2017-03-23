@@ -349,6 +349,10 @@ public class Model {
         return distTable[i][j];
     }
 
+    private double dist(Location[] route, int i, int j) {
+        return route[i].distance(route[j]);
+    }
+
     private void reverseSegment(Location[] route, int i, int j) {
         while(true) {
             Location temp = route[i];
@@ -473,6 +477,9 @@ public class Model {
     {
         Location[] route = betterGenerateRoute();
         double[][] distTable = generateDistanceTable(route);
+        System.out.println(distTable[18][33]);
+        System.out.println(dist(route, 18, 33));
+        System.out.println(distTable[33][18]);
         //for(int i = 0; i<distTable.length; i++) {
          //   System.out.println(Arrays.toString(distTable[i]));
         //}
@@ -480,10 +487,11 @@ public class Model {
         int totalImprovements = 0;
         this.totalImprovements = 0;
         int improvements = 1;
+        int n = route.length-1;
         while(improvements > 0) {
             improvements = 0;
-            for(int i = 0; i < route.length - 3; i++) {
-                for(int j = i + 2; j < route.length - 1; j++) {
+            for(int i = 0; i <= n - 3; i++) {
+                for(int j = i + 2; j <= n - 1; j++) {
                     if((dist(distTable, i, i+1)+dist(distTable, j, j+1)) > (dist(distTable, i, j)+dist(distTable, i+1, j+1))) {
                         reverseSegment(route, i+1, j);
                         improvements++;
@@ -491,6 +499,7 @@ public class Model {
                     }
                 }
             }
+            System.out.println(improvements);
         }
         this.totalImprovements = totalImprovements;
         betterGeneratePairs(route, newPairs);
@@ -550,8 +559,7 @@ public class Model {
         while (threeOpt() > 0 || twoOpt() > 0);
     }
 
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         Model model = new Model();
         int[] array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         System.out.println(Arrays.toString(array));
