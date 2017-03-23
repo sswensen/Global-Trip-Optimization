@@ -334,6 +334,7 @@ public class Model {
         ArrayList<Pair> newPairs;
         ArrayList<Location> route = generateRoute();
         int totalImprovements = 0;
+        this.totalImprovements = 0;
         int improvements = 1;
         while(improvements > 0) {
             improvements = 0;
@@ -345,7 +346,7 @@ public class Model {
                     newTripDistance = getTripDistance(newPairs);
                     if(newTripDistance < oldTripDistance) {
                         route = newLocations;
-                        pairs = newPairs;
+                        this.pairs = newPairs;
                         improvements++;
                         totalImprovements++;
                     }
@@ -378,6 +379,7 @@ public class Model {
         ArrayList<Pair> newPairs;
         ArrayList<Location> route = generateRoute();
         int totalImprovements = 0;
+        this.totalImprovements = 0;
         int improvements = 1;
         while(improvements > 0) {
             improvements = 0;
