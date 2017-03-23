@@ -1,6 +1,7 @@
 package com.csu2017sp314.dtr07.Model;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -76,6 +77,14 @@ public class Model {
         userPairs = lf.getPairs();
         return userPairs;*/
         return userPairs;
+    }
+
+    public ArrayList<String> getLocationIds() {
+        ArrayList<String> ret = new ArrayList<>();
+        for(Location l : locations) {
+            ret.add(l.getId());
+        }
+        return ret;
     }
 
     public void resetUserLoc() {
