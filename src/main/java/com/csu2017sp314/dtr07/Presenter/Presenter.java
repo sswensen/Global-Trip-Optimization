@@ -247,9 +247,10 @@ public class Presenter {
         fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
-        view.initializeTrip(selectionXml, svgMap);
         model.planTrip(filename);
         int numPairs = model.getNumPairs();
+        view.originalIds = model.getLocationIds();
+        view.initializeTrip(selectionXml, svgMap);
         //view.addBorders();
         //view.addHeader("Colorado");
         view.addFooter(model.getTripDistance());

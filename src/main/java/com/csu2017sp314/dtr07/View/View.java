@@ -40,6 +40,7 @@ public class View {
     private String f;
     private MapGUI gui;
     private String svgMap;
+    public ArrayList<String> originalIds;
 
     public void initializeTrip(String selectionXml, String svgMap) throws SAXException, IOException, ParserConfigurationException {
         this.svgMap = svgMap;
@@ -48,6 +49,8 @@ public class View {
         xml = new XMLBuilder();
         if(!selectionXml.equals("")) {
             readXML(selectionXml);
+        } else {
+            ids = new ArrayList<>(originalIds);
         }
     }
 
@@ -77,9 +80,9 @@ public class View {
                 }
             }
         }
-        for(int i = 0; i < ids.size(); i++) {
+        /*for(int i = 0; i < ids.size(); i++) {
             //System.out.println("id at index " + i + " = " + ids.get(i));
-        }
+        }*/
     }
 
     Document getXMLdoc() { return xml.getXMLdoc(); }
