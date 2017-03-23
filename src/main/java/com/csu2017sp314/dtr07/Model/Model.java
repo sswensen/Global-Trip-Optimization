@@ -2,6 +2,7 @@ package com.csu2017sp314.dtr07.Model;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -30,7 +31,7 @@ public class Model {
         pairs = lf.getPairs();
         if(twoOpt) {
             previousLocations = new ArrayList<>(userLocations);
-            twoOpt();
+            betterTwoOpt();
         }
         if(threeOpt) {
             previousLocations = new ArrayList<>(userLocations);
@@ -306,12 +307,122 @@ public class Model {
         newPairs.add(new Pair(Integer.toString(newLocations.size() - 1), newLocations.get(newLocations.size() - 1), newLocations.get(0), newLocations.get(newLocations.size() - 1).distance(newLocations.get(0))));
     }
 
+    private void betterGeneratePairs(Location[] route, ArrayList<Pair> newPairs) {
+        for(int a = 0; a < route.length - 1; a++) {
+            newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1])));
+        }
+        newPairs.add(new Pair(Integer.toString(route.length - 2), route[route.length - 2], route[0], route[route.length - 2].distance(route[0])));
+        pairs = newPairs;
+    }
+
     private ArrayList<Location> generateRoute() {
         ArrayList<Location> route = new ArrayList<>();
         for(Pair pair : pairs) {
             route.add(pair.getOne());
         }
         return route;
+    }
+
+    private Location[] betterGenerateRoute() {
+        Location[] route = new Location[pairs.size()+1];
+        int i = 0;
+        for(Pair pair : pairs) {
+            route[i] = pair.getOne();
+            i++;
+        }
+        route[route.length-1] = pairs.get(0).getOne();
+        return route;
+    }
+
+    private double[][] generateDistanceTable(Location[] route) {
+        double[][] distTable = new double[route.length][route.length];
+        for(int i=0; i<route.length; i++) {
+            for (int j = 0; j < route.length; j++) {
+                distTable[i][j] = route[i].distance(route[j]);
+            }
+        }
+        return distTable;
+    }
+
+    private double dist(double[][] distTable, int i, int j)
+    {
+        return distTable[i][j];
+    }
+
+    private void reverseSegment(Location[] route, int i, int j) {
+        while(true) {
+            Location temp = route[i];
+            route[i] = route[j];
+            route[j] = temp;
+            i++;
+            j--;
+            if(i==j || j<i)
+                break;
+        }
+    }
+
+    private void reverseSegment(int[] route, int i, int j) {
+        while(true) {
+            int temp = route[i];
+            route[i] = route[j];
+            route[j] = temp;
+            i++;
+            j--;
+            if(i==j || j<i)
+                break;
+        }
+    }
+
+    private Location[] swapSegments(Location[] route, int a, int b, int c, int d) {
+        Location[] newRoute = new Location[route.length];
+        //Copy up to a in order
+        int index = 0;
+        for(int i=0; i<a; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        //Add c->d to newRoute
+        for(int i=c; i<=d; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        //Add a->b to newRoute
+        for(int i=a; i<=b; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        //Add d->n to newRoute
+        for(int i=d+1; i<route.length; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        return newRoute;
+    }
+
+    private int[] swapSegments(int[] route, int a, int b, int c, int d) {
+        int[] newRoute = new int[route.length];
+        //Copy up to a in order
+        int index = 0;
+        for(int i=0; i<a; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        //Add c->d to newRoute
+        for(int i=c; i<=d; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        //Add a->b to newRoute
+        for(int i=a; i<=b; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        //Add d->n to newRoute
+        for(int i=d+1; i<route.length; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        return newRoute;
     }
 
     private ArrayList<Location> twoOptSwap(ArrayList<Location> route, ArrayList<Pair> newPairs, int i, int j) {
@@ -329,7 +440,8 @@ public class Model {
     }
 
     protected int twoOpt() {
-        int oldTripDistance, newTripDistance;
+        int oldTripDistance;
+        int newTripDistance;
         ArrayList<Location> newLocations;
         ArrayList<Pair> newPairs;
         ArrayList<Location> route = generateRoute();
@@ -357,6 +469,34 @@ public class Model {
         return totalImprovements;
     }
 
+    protected int betterTwoOpt()
+    {
+        Location[] route = betterGenerateRoute();
+        double[][] distTable = generateDistanceTable(route);
+        //for(int i = 0; i<distTable.length; i++) {
+         //   System.out.println(Arrays.toString(distTable[i]));
+        //}
+        ArrayList<Pair> newPairs = new ArrayList<>();
+        int totalImprovements = 0;
+        this.totalImprovements = 0;
+        int improvements = 1;
+        while(improvements > 0) {
+            improvements = 0;
+            for(int i = 0; i <= route.length - 3; i++) {
+                for(int j = i + 2; j <= route.length - 1; j++) {
+                    if((dist(distTable, i, i+1)+dist(distTable, j, j+1)) > (dist(distTable, i, j)+dist(distTable, i+1, j+1))) {
+                        reverseSegment(route, i+1, j);
+                        improvements++;
+                        totalImprovements++;
+                    }
+                }
+            }
+        }
+        this.totalImprovements = totalImprovements;
+        betterGeneratePairs(route, newPairs);
+        return totalImprovements;
+    }
+
     private ArrayList<Location> threeOptSwap(ArrayList<Location> route, ArrayList<Pair> newPairs, int i, int j, int k) {
         ArrayList<Location> newLocations = new ArrayList<>();
         newLocations.addAll(route);
@@ -374,7 +514,8 @@ public class Model {
     }
 
     protected int threeOpt() {
-        int oldTripDistance, newTripDistance;
+        int oldTripDistance;
+        int newTripDistance;
         ArrayList<Location> newLocations;
         ArrayList<Pair> newPairs;
         ArrayList<Location> route = generateRoute();
@@ -409,4 +550,16 @@ public class Model {
         while (threeOpt() > 0 || twoOpt() > 0);
     }
 
+    public static void main(String args[])
+    {
+        Model model = new Model();
+        int[] array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        System.out.println(Arrays.toString(array));
+
+        array = model.swapSegments(array, 1, 4, 5, 8);
+        System.out.println(Arrays.toString(array));
+
+        model.reverseSegment(array, 1, 4);
+        System.out.println(Arrays.toString(array));
+    }
 }
