@@ -643,7 +643,7 @@ public class MapGUI {
         if(seqId.equals("0")) {
             fTemp2.removeAll();
             fTemp2.repaint();
-            fTemp2.requestFocus(true);
+            //fTemp2.requestFocus(true);
         }
         setGBC(0, Integer.parseInt(seqId), 4);
         JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
