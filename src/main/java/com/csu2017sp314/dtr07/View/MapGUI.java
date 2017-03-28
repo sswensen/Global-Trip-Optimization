@@ -683,9 +683,9 @@ public class MapGUI {
 
     boolean cleanup() {
         boolean ret;
-        File t = new File(workingDirectoryFilePath + "png/" + filename + (filenameIncrementer - 1) + "_User.png");
+        File t = new File(workingDirectoryFilePath + "output/" + filename + (filenameIncrementer - 1) + "_User.png");
         ret = t.delete();
-        File temp = new File(workingDirectoryFilePath + "png/" + filename + ".png");
+        File temp = new File(workingDirectoryFilePath + "output/" + filename + ".png");
         Boolean ret2 = temp.delete();
         filenameIncrementer = 0;
         return ret & ret2;
