@@ -1,27 +1,45 @@
 engines:
-  # ... CONFIG CONTENT ...
+  # L
+  # O
+  # N
+  # G
+  #
+  # L
+  # I
+  # V
+  # E
+  # 
+  # T
+  # H
+  # E
+  #
+  # C
+  # H
+  # I
+  # E
+  # F
   checkstyle:
     enabled: true
     channel: "beta"
     checks:
       com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck:
-        enabled: false
+        enabled: false #Idk why this check exists
       com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck:
-        enabled: false
+        enabled: false #I also dk why this check exists
       com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck:
-        enabled: false
+        enabled: false #Ok this makes a little more sense
       com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck:
-        enabled: false
+        enabled: false #Really...
       com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck:
-        enabled: false
+        enabled: false #Dont really understand this either
       com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck:
-        enabled: false
+        enabled: true #Maybe we should reenable this
       com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
-        enabled: false
+        enabled: false #wtf why
       com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck:
-        enabled: false
+        enabled: false #dk what this is
       com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck:
-        enabled: false
+        enabled: false #no
   csslint:
     enabled: false
 # ... CONFIG CONTENT ...
@@ -29,8 +47,8 @@ ratings:
   paths:
   - "**.java"
 exclude_paths:
-- "png/*"
+- "output/*"
 - "target/*"
-- "coverage/*"
-- "src/test/coverage/*"
+- "demo/*"
+- "S3/*"
 - "src/test/resources/lib/*"
