@@ -17,6 +17,7 @@ public class Model {
     private ArrayList<Location> locations;
     private ArrayList<Location> userLocations = new ArrayList<>();
     private ArrayList<Location> previousLocations = new ArrayList<>();
+    private ArrayList<String> selectedLocations;
     private boolean twoOpt;
     private boolean threeOpt;
     private boolean testThreeOpt;
@@ -25,7 +26,8 @@ public class Model {
 
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
-        lf.readFile(filename);
+        lf.setSelectedAirports(selectedLocations);
+        lf.readFile(filename); //TODO Read from database
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
@@ -286,6 +288,10 @@ public class Model {
 
     public String getUserSecondId(int i) {
         return userPairs.get(i).getTwo().getId();
+    }
+
+    public void setSelectedLocations(ArrayList<String> selectedLocations) {
+        this.selectedLocations = selectedLocations;
     }
 
     public void printUserLoc() {

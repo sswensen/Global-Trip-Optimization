@@ -13,9 +13,10 @@ import java.util.Scanner;
  */
 
 class LocationFactory {
-    private ArrayList<Location> locations = new ArrayList<Location>();
+    private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<Pair> pairs = new ArrayList<>();
     private ArrayList<Pair> bestPairs = new ArrayList<>();
+    private ArrayList<String> selectedAirports = new ArrayList<>();
 
     boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
@@ -24,7 +25,7 @@ class LocationFactory {
         int latitude = -1;
         int longitude = -1;
         if(scan.hasNext()) {
-            String[] line = scan.nextLine().split(",");
+            String[] line = scan.nextLine().replaceAll("\"", "").split(",");
             for(int x = 0; x < line.length; x++) {
                 String temp = line[x];
                 if(temp.equalsIgnoreCase("id")) {
@@ -43,10 +44,21 @@ class LocationFactory {
         }
         while(scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
-            Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+", ""), line[longitude].replaceAll("\\s+", ""));
-            locations.add(temp);
+            if(selectedAirports.contains(line[id])) {
+                Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+", ""), line[longitude].replaceAll("\\s+", ""));
+                locations.add(temp);
+            }
         }
         scan.close();
+        //TODO Remove this
+        locations.add(new Location("NZCH", "Christchurch International Airport", "-43.48939896", "172.5319977"));
+        locations.add(new Location("00A", "Total Rf Heliport", "40.07080078", "-74.93360138"));
+        locations.add(new Location("00IL", "Hammer Airport", "41.97840118", "-89.56040192"));
+        locations.add(new Location("00LA", "Shell Chemical East Site Heliport", "30.191944", "-90.980833"));
+        locations.add(new Location("00NK", "Cliche Cove Seaplane Base", "44.8118612", "-73.3698057"));
+        locations.add(new Location("01CO", "St Vincent General Hospital Heliport", "39.24530029", "-106.2460022"));
+        locations.add(new Location("02GA", "Doug Bolton Field", "34.20259857", "-83.42900085"));
+        locations.add(new Location("CN24", "Flying R Airport", "38.28300095", "-121.2549973"));
         return locations.size() > 0;
     }
 
@@ -102,6 +114,10 @@ class LocationFactory {
 
     public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
+    }
+
+    public void setSelectedAirports(ArrayList<String> selectedAirports) {
+        this.selectedAirports = selectedAirports;
     }
 
     ArrayList<Location> getLocations() {
