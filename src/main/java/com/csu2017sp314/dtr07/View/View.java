@@ -41,6 +41,9 @@ public class View {
     private MapGUI gui;
     private String svgMap;
     public ArrayList<String> originalIds;
+    private double width;
+    private double height;
+
 
     public void initializeTrip(String selectionXml, String svgMap) throws SAXException, IOException, ParserConfigurationException {
         this.svgMap = svgMap;
@@ -52,6 +55,8 @@ public class View {
         } else {
             ids = new ArrayList<>(originalIds);
         }
+        width = svg.getWidth();
+        height = svg.getHeight();
     }
 
     public void resetTrip() throws SAXException, IOException, ParserConfigurationException {

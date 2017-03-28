@@ -2,11 +2,15 @@ package com.csu2017sp314.dtr07.View;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -17,6 +21,8 @@ import java.io.IOException;
 
 class SVGBuilder {
     private Document SVGdoc;
+    private double width;
+    private double height;
     private int labelID = 1;
 
     SVGBuilder(String svgMap) throws ParserConfigurationException, SAXException, IOException {
@@ -31,6 +37,7 @@ class SVGBuilder {
             filepath = "src/test/resources/coloradoMap.svg";
         }
         SVGdoc = docBuilder.parse(filepath);
+        readSVG();
         /*String svgNS = "http://www.w3.org/2000/svg";
 		DOMImplementation impl = docBuilder.getDOMImplementation();
 		SVGdoc = impl.createDocument(svgNS, "svg", null);
@@ -40,27 +47,48 @@ class SVGBuilder {
 		svgRoot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");*/
     }
+    private void readSVG() throws SAXException, IOException, ParserConfigurationException {
+        Document readSVG = SVGdoc;
+        readSVG.getDocumentElement().normalize();
+        System.out.println("*Testing*   Root element :" + readSVG.getDocumentElement().getNodeName());
+        NodeList nList = readSVG.getElementsByTagName("svg");
+        for(int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            if(nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                if(eElement.getAttribute("width") != null) {
+                    System.out.println("width = " + eElement.getAttribute("width"));
+                    width = Double.parseDouble(eElement.getAttribute("width"));
+                }
+                if(eElement.getAttribute("height") != null) {
+                    System.out.println("height = " + eElement.getAttribute("height"));
+                    height = Double.parseDouble(eElement.getAttribute("height"));
+                }
+            }
+        }
+    }
 
     private double convertLongitudeCoordinates(double x) {
-        double xPixels = 993.54946; //Width of colorado map
-        double startX = -109;
-        double endX = -102;
+        double xPixels = width; //Width of colorado map
+        double startX = -180;
+        double endX = 180;
         //Convert to SVG 'x' coordinate
         double strideX = endX - startX;
         double relativeX = (x - startX);
         double realX = relativeX * (xPixels / strideX);
-        return (realX + 34.72952);
+        return (realX);
     }
 
     private double convertLatitudeCoordinates(double y) {
-        double yPixels = 709.98902; //Height of colorado map
-        double startY = 41;
-        double endY = 37;
+        double yPixels = height; //Height of colorado map
+        double startY = 90;
+        double endY = -90;
         //Convert to SVG 'y' coordinate
         double strideY = endY - startY;
         double relativeY = (y - startY);
         double realY = relativeY * (yPixels / strideY);
-        return (realY + 34.76269);
+        return (realY);
     }
 
     void addLine(double x1, double y1, double x2, double y2, String id) {
@@ -186,4 +214,26 @@ class SVGBuilder {
     Document getSVGdoc() {
         return SVGdoc;
     }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public static void main(String[] argv) throws Exception {
+        SVGBuilder svg = new SVGBuilder("");
+        svg.readSVG();
+    }
 }
+
