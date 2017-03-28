@@ -31,6 +31,7 @@ public class Model {
         pairs = lf.getPairs();
         if(twoOpt) {
             previousLocations = new ArrayList<>(userLocations);
+            //twoOpt();
             betterTwoOpt();
         }
         if(threeOpt) {
@@ -311,8 +312,7 @@ public class Model {
         for(int a = 0; a < route.length - 1; a++) {
             newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1])));
         }
-        newPairs.add(new Pair(Integer.toString(route.length - 2), route[route.length - 2], route[0], route[route.length - 2].distance(route[0])));
-        //pairs = newPairs;
+        //newPairs.add(new Pair(Integer.toString(route.length - 2), route[route.length - 2], route[0], route[route.length - 2].distance(route[0])));
         return newPairs;
     }
 
@@ -492,7 +492,19 @@ public class Model {
         ArrayList<Pair> newPairs = new ArrayList<>();
         //Start Debug
         betterGeneratePairs(route, newPairs);
-        System.out.println(getTripDistance(newPairs));
+        System.out.println(getTripDistance());
+        //System.out.println(getTripDistance(newPairs));
+        //boolean same = true;
+        //for(int i=0; i<pairs.size(); i++) {
+        //    if(!pairs.get(i).getOne().getName().equals(newPairs.get(i).getOne().getName())) {
+        //        same = false;
+        //    }
+        //}
+        //if(same)
+        //    System.out.println("YESSSSSSSSSSSS");
+        System.out.println(Arrays.toString(route));
+        System.out.println(pairs);
+        System.out.println(newPairs);
         //End Debug
         int totalImprovements = 0;
         this.totalImprovements = 0;
@@ -526,7 +538,9 @@ public class Model {
             //System.out.println(improvements);
         }
         this.totalImprovements = totalImprovements;
+        //Start Debug
         newPairs = new ArrayList<>();
+        //End Debug
         pairs = betterGeneratePairs(route, newPairs);
         return totalImprovements;
     }

@@ -108,7 +108,7 @@ public class TestModel {
     public void threeOpt() throws Exception
     {
         m.setTestThreeOpt(true);
-        m.planTrip("./src/test/resources/Testing/grid8x14skip.csv");
+        m.planTrip("./src/test/resources/Testing/corand25.csv");
         assertTrue("true", m.getTotalImprovements()>0);
     }
 }
