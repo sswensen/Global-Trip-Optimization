@@ -28,7 +28,6 @@ public class Model {
         LocationFactory lf = new LocationFactory();
         lf.setSelectedAirports(selectedLocations);
         lf.readFile(filename); //TODO Read from database
-
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
