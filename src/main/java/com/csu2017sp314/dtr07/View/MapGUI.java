@@ -79,6 +79,8 @@ public class MapGUI {
     private JPanel fTemp2;
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
+    private int width;
+    private int height;
 
 
     MapGUI() {
@@ -689,6 +691,14 @@ public class MapGUI {
         Boolean ret2 = temp.delete();
         filenameIncrementer = 0;
         return ret & ret2;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     private void printAll() {
