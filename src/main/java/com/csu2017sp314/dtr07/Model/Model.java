@@ -507,7 +507,6 @@ public class Model {
                         System.out.println(dist(distTable, i, i+1) + " " + dist(distTable, j, j+1) + " " + dist(distTable, i, j) + " " + dist(distTable, i+1, j+1));
                         System.out.println(dist(distTable, route[i], route[i+1]) + " " + dist(distTable, route[j], route[j+1]) + " " + dist(distTable, route[i], route[j]) + " " + dist(distTable, route[i+1], route[j+1]));
                         System.out.println(dist(route, i, i+1) + " " + dist(route, j, j+1) + " " + dist(route, i, j) + " " + dist(route, i+1, j+1));
-                        //System.out.println(route[i].distance(route[i+1]) + " " + route[j].distance(route[j+1]) + " " + route[i].distance(route[j]) + " " + route[i+1].distance(route[j+1]));
                         reverseSegment(route, i+1, j);
                         improvements++;
                         totalImprovements++;
