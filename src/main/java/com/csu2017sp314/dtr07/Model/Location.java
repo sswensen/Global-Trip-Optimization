@@ -14,6 +14,8 @@ public class Location {
     private double lon;
     private int nearest = -1;
     private int nearestDistance = 9999999;
+    private int i_table;
+    private int j_table;
 
     Location(String id, String name, String lat, String lon) {
         this.id = id;
@@ -91,6 +93,22 @@ public class Location {
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
+    }
+
+    public int getI_table() {
+        return this.i_table;
+    }
+
+    public int getJ_table() {
+        return this.j_table;
+    }
+
+    public void setI_table(int i_table) {
+        this.i_table = i_table;
+    }
+
+    public void setJ_table(int i_table) {
+        this.j_table = j_table;
     }
 
     public String getId() {

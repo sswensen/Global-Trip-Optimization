@@ -337,7 +337,9 @@ public class Model {
     private double[][] generateDistanceTable(Location[] route) {
         double[][] distTable = new double[route.length][route.length];
         for(int i = 0; i < route.length; i++) {
+            route[i].setI_table(i);
             for (int j = 0; j < route.length; j++) {
+                route[j].setJ_table(j);
                 distTable[i][j] = route[i].distance(route[j]);
             }
         }
@@ -346,11 +348,15 @@ public class Model {
 
     private double dist(double[][] distTable, int from, int to)
     {
-        return distTable[from][to];
+        return (distTable[from][to]);
     }
 
-    private double dist(Location[] route, int i, int j) {
-        return route[i].distance(route[j]);
+    private double dist(Location[] route, int from, int to) {
+        return route[from].distance(route[to]);
+    }
+
+    private double dist(double[][] distTable, Location from, Location to) {
+        return distTable[from.getI_table()][to.getI_table()];
     }
 
     private void reverseSegment(Location[] route, int i, int j) {
@@ -477,13 +483,15 @@ public class Model {
     {
         Location[] route = betterGenerateRoute();
         double[][] distTable = generateDistanceTable(route);
-        //System.out.println(distTable[18][33]);
+        //System.out.println(route[18].distance(route[33]));
+        //System.out.println(dist(distTable, 18, 33));
         //System.out.println(dist(route, 18, 33));
-        //System.out.println(distTable[33][18]);
         //for(int i = 0; i<distTable.length; i++) {
         //    System.out.println(Arrays.toString(distTable[i]));
         //}
         ArrayList<Pair> newPairs = new ArrayList<>();
+        betterGeneratePairs(route, newPairs);
+        System.out.println(getTripDistance(newPairs));
         int totalImprovements = 0;
         this.totalImprovements = 0;
         int improvements = 1;
@@ -492,14 +500,24 @@ public class Model {
             improvements = 0;
             for(int i = 0; i <= n - 3; i++) {
                 for(int j = i + 2; j <= n - 1; j++) {
-                    if((dist(distTable, i, i+1)+dist(distTable, j, j+1)) > (dist(distTable, i, j)+dist(distTable, i+1, j+1))) {
+                    //System.out.println((dist(distTable, i, i+1)+dist(distTable, j, j+1)) + " greater than " + (dist(distTable, i, j)+dist(distTable, i+1, j+1)) + "?");
+                    if((dist(distTable, route[i], route[i+1])+dist(distTable, route[j], route[j+1])) > (dist(distTable, route[i], route[j])+dist(distTable, route[i+1], route[j+1]))) {
+                        System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName());
+                        System.out.println("i: " + route[i].getLat() + " " + route[i].getLon() + " i+1: " + route[i+1].getLat() + " " + route[i+1].getLon() + " j: " + route[j].getLat() + " " + route[j].getLon() + " j+1: " + route[j+1].getLat() + " " + route[j+1].getLon());
+                        System.out.println(dist(distTable, i, i+1) + " " + dist(distTable, j, j+1) + " " + dist(distTable, i, j) + " " + dist(distTable, i+1, j+1));
+                        System.out.println(dist(distTable, route[i], route[i+1]) + " " + dist(distTable, route[j], route[j+1]) + " " + dist(distTable, route[i], route[j]) + " " + dist(distTable, route[i+1], route[j+1]));
+                        System.out.println(dist(route, i, i+1) + " " + dist(route, j, j+1) + " " + dist(route, i, j) + " " + dist(route, i+1, j+1));
+                        //System.out.println(route[i].distance(route[i+1]) + " " + route[j].distance(route[j+1]) + " " + route[i].distance(route[j]) + " " + route[i+1].distance(route[j+1]));
                         reverseSegment(route, i+1, j);
                         improvements++;
                         totalImprovements++;
+                        newPairs = new ArrayList<>();
+                        betterGeneratePairs(route, newPairs);
+                        System.out.println(getTripDistance(newPairs));
                     }
                 }
             }
-            System.out.println(improvements);
+            //System.out.println(improvements);
         }
         this.totalImprovements = totalImprovements;
         betterGeneratePairs(route, newPairs);
