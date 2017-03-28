@@ -13,9 +13,10 @@ import java.util.Scanner;
  */
 
 class LocationFactory {
-    private ArrayList<Location> locations = new ArrayList<Location>();
+    private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<Pair> pairs = new ArrayList<>();
     private ArrayList<Pair> bestPairs = new ArrayList<>();
+    private ArrayList<String> selectedAirports = new ArrayList<>();
 
     boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
@@ -24,7 +25,7 @@ class LocationFactory {
         int latitude = -1;
         int longitude = -1;
         if(scan.hasNext()) {
-            String[] line = scan.nextLine().split(",");
+            String[] line = scan.nextLine().replaceAll("\"", "").split(",");
             for(int x = 0; x < line.length; x++) {
                 String temp = line[x];
                 if(temp.equalsIgnoreCase("id")) {
@@ -43,8 +44,10 @@ class LocationFactory {
         }
         while(scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
-            Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+", ""), line[longitude].replaceAll("\\s+", ""));
-            locations.add(temp);
+            if(selectedAirports.contains(line[id])) {
+                Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+", ""), line[longitude].replaceAll("\\s+", ""));
+                locations.add(temp);
+            }
         }
         scan.close();
         return locations.size() > 0;
@@ -102,6 +105,10 @@ class LocationFactory {
 
     public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
+    }
+
+    public void setSelectedAirports(ArrayList<String> selectedAirports) {
+        this.selectedAirports = selectedAirports;
     }
 
     ArrayList<Location> getLocations() {
