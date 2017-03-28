@@ -79,6 +79,8 @@ public class MapGUI {
     private JPanel fTemp2;
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
+    private int width;
+    private int height;
 
 
     MapGUI() {
@@ -133,9 +135,9 @@ public class MapGUI {
 
 
         //createOptionsGUI();
-        uOp = createJFrame("User Options", 1063, 0, options);
+        uOp = createJFrame("User Options", width+1, 0, options);
         //createItineraryWindow();
-        itinerary = createScrollingJFrame("Itinerary", 1363, 0);
+        itinerary = createScrollingJFrame("Itinerary", 0, 0);
 
         map.setVisible(true); //making the frame visible
         return 1;
@@ -146,7 +148,7 @@ public class MapGUI {
         final JFXPanel fxPanel = new JFXPanel();
         map.add(fxPanel);
         map.setLocation(0, 0);
-        map.setSize(1064, 802);
+        map.setSize(width, height);
         map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Platform.runLater(new Runnable() {
             @Override
@@ -161,7 +163,7 @@ public class MapGUI {
         Scene scene = new Scene(root);
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
-        browser.setPrefSize(1064, 802);
+        browser.setPrefSize(width, height);
         try {
             URL bgURL = new File(workingDirectoryFilePath + filename + ".svg").toURI().toURL();
             webEngine.load(bgURL.toString());
@@ -177,7 +179,7 @@ public class MapGUI {
     private void updateBG() {
         final WebView browser = new WebView();
         final WebEngine webEngine = browser.getEngine();
-        browser.setPrefSize(1064, 802);
+        browser.setPrefSize(width, height);
         try {
             URL bgURL = new File(workingDirectoryFilePath + filename + ".svg").toURI().toURL();
             webEngine.load(bgURL.toString());
@@ -199,8 +201,8 @@ public class MapGUI {
         map.setContentPane( background );*/
 
         map.setLocation(0, 0);
-        map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
-        map.setSize(1064, 802);
+        map.setSize(width-1, height-1); //Refreshes window, needed or image doesn't appear
+        map.setSize(width, height);
         return 1;
     }
 
@@ -689,6 +691,14 @@ public class MapGUI {
         Boolean ret2 = temp.delete();
         filenameIncrementer = 0;
         return ret & ret2;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     private void printAll() {

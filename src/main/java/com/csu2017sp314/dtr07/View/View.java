@@ -57,6 +57,8 @@ public class View {
         }
         width = svg.getWidth();
         height = svg.getHeight();
+        gui.setWidth((int)width);
+        gui.setHeight((int)height+20);
     }
 
     public void resetTrip() throws SAXException, IOException, ParserConfigurationException {
