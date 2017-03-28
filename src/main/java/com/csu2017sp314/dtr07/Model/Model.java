@@ -307,12 +307,13 @@ public class Model {
         newPairs.add(new Pair(Integer.toString(newLocations.size() - 1), newLocations.get(newLocations.size() - 1), newLocations.get(0), newLocations.get(newLocations.size() - 1).distance(newLocations.get(0))));
     }
 
-    private void betterGeneratePairs(Location[] route, ArrayList<Pair> newPairs) {
+    private ArrayList<Pair> betterGeneratePairs(Location[] route, ArrayList<Pair> newPairs) {
         for(int a = 0; a < route.length - 1; a++) {
             newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1])));
         }
         newPairs.add(new Pair(Integer.toString(route.length - 2), route[route.length - 2], route[0], route[route.length - 2].distance(route[0])));
         //pairs = newPairs;
+        return newPairs;
     }
 
     private ArrayList<Location> generateRoute() {
@@ -517,7 +518,6 @@ public class Model {
                         //Start Debug
                         newPairs = new ArrayList<>();
                         betterGeneratePairs(route, newPairs);
-                        pairs = newPairs;
                         System.out.println(getTripDistance(newPairs));
                         //End Debug
                     }
@@ -527,8 +527,7 @@ public class Model {
         }
         this.totalImprovements = totalImprovements;
         newPairs = new ArrayList<>();
-        betterGeneratePairs(route, newPairs);
-        pairs = newPairs;
+        pairs = betterGeneratePairs(route, newPairs);
         return totalImprovements;
     }
 
