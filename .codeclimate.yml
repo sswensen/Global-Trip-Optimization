@@ -33,7 +33,7 @@ engines:
       com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck:
         enabled: false #Dont really understand this either
       com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck:
-        enabled: true #Maybe we should reenable this
+        enabled: false #Maybe we should reenable this, jk we are definetly not
       com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
         enabled: false #wtf why
       com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck:
