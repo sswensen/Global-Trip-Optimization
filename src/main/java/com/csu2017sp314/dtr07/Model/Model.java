@@ -22,6 +22,7 @@ public class Model {
     private boolean testThreeOpt;
     private boolean tick = false;
     private int totalImprovements;
+    private double[][] distTable;
 
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
@@ -36,7 +37,8 @@ public class Model {
         }
         if(threeOpt) {
             previousLocations = new ArrayList<>(userLocations);
-            bothOpt();
+            //bothOpt();
+            betterThreeOpt();
         }
         if(testThreeOpt)
         {
@@ -343,6 +345,7 @@ public class Model {
                 distTable[i][j] = route[i].distance(route[j]);
             }
         }
+        this.distTable = distTable;
         return distTable;
     }
 
@@ -479,8 +482,7 @@ public class Model {
         return totalImprovements;
     }
 
-    protected int betterTwoOpt()
-    {
+    protected int betterTwoOpt() {
         Location[] route = betterGenerateRoute();
         double[][] distTable = generateDistanceTable(route);
         //System.out.println(route[18].distance(route[33]));
@@ -590,6 +592,38 @@ public class Model {
             }
         }
         this.totalImprovements = totalImprovements;
+        return totalImprovements;
+    }
+
+    private boolean improve(ArrayList<Location> route, int i, int j, int k) {
+        //if(dist())
+        return false;
+    }
+
+    protected int betterThreeOpt() {
+        Location[] route = betterGenerateRoute();
+        double[][] distTable = generateDistanceTable(route);
+        ArrayList<Pair> newPairs = new ArrayList<>();
+        int totalImprovements = 0;
+        this.totalImprovements = 0;
+        int improvements = 1;
+        int n = route.length-1;
+        while(improvements > 0) {
+            improvements = 0;
+            for(int i=0; i<=n-5; i++) {
+                for(int j=i+2; j<=n-3; j++) {
+                    for(int k=j+2; k<=n-1; k++) {
+                        if ((dist(distTable, route[i], route[i + 1]) + dist(distTable, route[j], route[j + 1])) > (dist(distTable, route[i], route[j]) + dist(distTable, route[i + 1], route[j + 1]))) {
+                            //reverseSegment(route, i + 1, j);
+                            improvements++;
+                            totalImprovements++;
+                        }
+                    }
+                }
+            }
+        }
+        this.totalImprovements = totalImprovements;
+        pairs = betterGeneratePairs(route, newPairs);
         return totalImprovements;
     }
 
