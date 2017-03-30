@@ -403,6 +403,11 @@ public class Model {
             newRoute[index] = route[i];
             index++;
         }
+        //Add b+1->c to newRoute
+        for(int i=b+1; i<c; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
         //Add a->b to newRoute
         for(int i=a; i<=b; i++) {
             newRoute[index] = route[i];
@@ -426,6 +431,11 @@ public class Model {
         }
         //Add c->d to newRoute
         for(int i=c; i<=d; i++) {
+            newRoute[index] = route[i];
+            index++;
+        }
+        //Add b+1->c to newRoute
+        for(int i=b+1; i<c; i++) {
             newRoute[index] = route[i];
             index++;
         }
@@ -603,29 +613,60 @@ public class Model {
         double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1]) + dist(route[k], route[k+1]);
         if(originalDist > (dist(route[i], route[i+1]) + dist(route[j], route[k]) + dist(route[j+1], route[k+1]))) {
             reverseSegment(route, j+1, k);
+            return true;
+        }
+        else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[j+1]) + dist(route[k], route[k+1]))) {
+            reverseSegment(route, i+1, j);
+            return true;
         }
         else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1]))) {
-
+            reverseSegment(route, i+1, k);
+            return true;
         }
         else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[i+1]) + dist(route[j], route[k+1]))) {
-
+            route = swapSegments(route, i+1, j, j+1, k);
+            return true;
         }
         else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[k]) + dist(route[j+1], route[k+1]))) {
-
+            reverseSegment(route, i+1, j);
+            reverseSegment(route, j+1, k);
+            return true;
         }
         else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[i+1]) + dist(route[j], route[k+1]))) {
-
+            reverseSegment(route, j + 1, k);
+            route = swapSegments(route, i + 1, j, j + 1, k);
+            return true;
         }
         else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[j]) + dist(route[i+1], route[k+1]))) {
-
+            reverseSegment(route, i+1, j);
+            route = swapSegments(route, i+1, j, j+1, k);
+            return true;
         }
-        return false;
+        else {
+            return false;
+        }
     }
 
     protected int betterThreeOpt() {
         Location[] route = betterGenerateRoute();
         double[][] distTable = generateDistanceTable(route);
         ArrayList<Pair> newPairs = new ArrayList<>();
+        //Start Debug
+        betterGeneratePairs(route, newPairs);
+        System.out.println(getTripDistance());
+        //System.out.println(getTripDistance(newPairs));
+        //boolean same = true;
+        //for(int i=0; i<pairs.size(); i++) {
+        //    if(!pairs.get(i).getOne().getName().equals(newPairs.get(i).getOne().getName())) {
+        //        same = false;
+        //    }
+        //}
+        //if(same)
+        //    System.out.println("YESSSSSSSSSSSS");
+        System.out.println(Arrays.toString(route));
+        System.out.println(pairs);
+        System.out.println(newPairs);
+        //End Debug
         int totalImprovements = 0;
         this.totalImprovements = 0;
         int improvements = 1;
@@ -635,16 +676,24 @@ public class Model {
             for(int i=0; i<=n-5; i++) {
                 for(int j=i+2; j<=n-3; j++) {
                     for(int k=j+2; k<=n-1; k++) {
-                        if ((dist(route[i], route[i + 1]) + dist(route[j], route[j + 1])) > (dist(route[i], route[j]) + dist(route[i + 1], route[j + 1]))) {
-                            //reverseSegment(route, i + 1, j);
+                        if (improve(route, i, j ,k)) {
                             improvements++;
                             totalImprovements++;
+
+                            //Start Debug
+                            newPairs = new ArrayList<>();
+                            betterGeneratePairs(route, newPairs);
+                            System.out.println(getTripDistance(newPairs));
+                            //End Debug
                         }
                     }
                 }
             }
         }
         this.totalImprovements = totalImprovements;
+        //Start Debug
+        newPairs = new ArrayList<>();
+        //End Debug
         pairs = betterGeneratePairs(route, newPairs);
         return totalImprovements;
     }
@@ -659,16 +708,20 @@ public class Model {
         int[] array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         System.out.println(Arrays.toString(array));
 
-        //array = model.swapSegments(array, 1, 4, 5, 8);
+        model.reverseSegment(array, 1, 4);
+        array = model.swapSegments(array, 1, 4, 5, 8);
+
+        //model.reverseSegment(array, 5, 7);
+        //array = model.swapSegments(array, 0, 2, 3, 5);
+        System.out.println(Arrays.toString(array));
+
+        //model.reverseSegment(array, 1, 4);
         //System.out.println(Arrays.toString(array));
 
-        model.reverseSegment(array, 1, 4);
-        System.out.println(Arrays.toString(array));
+        //model.reverseSegment(array, 5, 8);
+        //System.out.println(Arrays.toString(array));
 
-        model.reverseSegment(array, 5, 8);
-        System.out.println(Arrays.toString(array));
-
-        model.reverseSegment(array, 1, 4);
-        System.out.println(Arrays.toString(array));
+        //model.reverseSegment(array, 1, 4);
+        //System.out.println(Arrays.toString(array));
     }
 }
