@@ -362,6 +362,10 @@ public class Model {
         return distTable[from.getTableIndex()][to.getTableIndex()];
     }
 
+    private double dist(Location from, Location to) {
+        return this.distTable[from.getTableIndex()][to.getTableIndex()];
+    }
+
     private void reverseSegment(Location[] route, int i, int j) {
         while(true) {
             Location temp = route[i];
@@ -516,7 +520,7 @@ public class Model {
             improvements = 0;
             for(int i=0; i<=n-3; i++) {
                 for(int j=i+2; j<=n-1; j++) {
-                    if((dist(distTable, route[i], route[i+1])+dist(distTable, route[j], route[j+1])) > (dist(distTable, route[i], route[j])+dist(distTable, route[i+1], route[j+1]))) {
+                    if((dist(route[i], route[i+1])+dist(route[j], route[j+1])) > (dist(route[i], route[j])+dist(route[i+1], route[j+1]))) {
                         //Start Debug
                         System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName());
                         System.out.println("i: " + route[i].getLat() + " " + route[i].getLon() + " i+1: " + route[i+1].getLat() + " " + route[i+1].getLon() + " j: " + route[j].getLat() + " " + route[j].getLon() + " j+1: " + route[j+1].getLat() + " " + route[j+1].getLon());
@@ -595,8 +599,26 @@ public class Model {
         return totalImprovements;
     }
 
-    private boolean improve(ArrayList<Location> route, int i, int j, int k) {
-        //if(dist())
+    private boolean improve(Location[] route, int i, int j, int k) {
+        double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1]) + dist(route[k], route[k+1]);
+        if(originalDist > (dist(route[i], route[i+1]) + dist(route[j], route[k]) + dist(route[j+1], route[k+1]))) {
+            reverseSegment(route, j+1, k);
+        }
+        else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1]))) {
+
+        }
+        else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[i+1]) + dist(route[j], route[k+1]))) {
+
+        }
+        else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[k]) + dist(route[j+1], route[k+1]))) {
+
+        }
+        else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[i+1]) + dist(route[j], route[k+1]))) {
+
+        }
+        else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[j]) + dist(route[i+1], route[k+1]))) {
+
+        }
         return false;
     }
 
@@ -613,7 +635,7 @@ public class Model {
             for(int i=0; i<=n-5; i++) {
                 for(int j=i+2; j<=n-3; j++) {
                     for(int k=j+2; k<=n-1; k++) {
-                        if ((dist(distTable, route[i], route[i + 1]) + dist(distTable, route[j], route[j + 1])) > (dist(distTable, route[i], route[j]) + dist(distTable, route[i + 1], route[j + 1]))) {
+                        if ((dist(route[i], route[i + 1]) + dist(route[j], route[j + 1])) > (dist(route[i], route[j]) + dist(route[i + 1], route[j + 1]))) {
                             //reverseSegment(route, i + 1, j);
                             improvements++;
                             totalImprovements++;
