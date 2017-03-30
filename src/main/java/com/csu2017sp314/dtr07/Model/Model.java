@@ -214,9 +214,12 @@ public class Model {
 
     public int getTripDistance(ArrayList<Pair> pairs) {
         int ret = 0;
+        //double dist = 0.0;
         for(Pair p : pairs) {
+        //    dist += p.getDistance();
             ret += p.getDistance();
         }
+        //System.out.println(dist);
         return ret;
     }
 
@@ -618,24 +621,32 @@ public class Model {
                 reverseSegment(route, i+1, j);
                 return route;
             case 3:
+                System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 reverseSegment(route, i+1, k);
+                System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
             case 4:
+                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 route = swapSegments(route, i+1, j, j+1, k);
+                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
-            case 5:
+            case 5: //Change to final dist
+                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 reverseSegment(route, i+1, j);
                 reverseSegment(route, j+1, k);
+                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
             case 6:
+                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 reverseSegment(route, j+1, k);
                 route = swapSegments(route, i+1, j, j+1, k);
+                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
             case 7:
-                System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 reverseSegment(route, i+1, j);
                 route = swapSegments(route, i+1, j, j+1, k);
-                System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
             default:
                 return route;
@@ -706,9 +717,9 @@ public class Model {
         //}
         //if(same)
         //    System.out.println("YESSSSSSSSSSSS");
-        System.out.println(Arrays.toString(route));
-        System.out.println(pairs);
-        System.out.println(newPairs);
+        //System.out.println(Arrays.toString(route));
+        //System.out.println(pairs);
+        //System.out.println(newPairs);
         //End Debug
         int totalImprovements = 0;
         this.totalImprovements = 0;
