@@ -609,41 +609,84 @@ public class Model {
         return totalImprovements;
     }
 
-    private boolean improve(Location[] route, int i, int j, int k) {
+    private Location[] improve(Location[] route, int num, int i, int j, int k) {
+        switch(num) {
+            case 1:
+                reverseSegment(route, j+1, k);
+                return route;
+            case 2:
+                reverseSegment(route, i+1, j);
+                return route;
+            case 3:
+                reverseSegment(route, i+1, k);
+                return route;
+            case 4:
+                route = swapSegments(route, i+1, j, j+1, k);
+                return route;
+            case 5:
+                reverseSegment(route, i+1, j);
+                reverseSegment(route, j+1, k);
+                return route;
+            case 6:
+                reverseSegment(route, j+1, k);
+                route = swapSegments(route, i+1, j, j+1, k);
+                return route;
+            case 7:
+                System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+                reverseSegment(route, i+1, j);
+                route = swapSegments(route, i+1, j, j+1, k);
+                System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+                return route;
+            default:
+                return route;
+        }
+    }
+
+    private int improved(Location[] route, int i, int j, int k) {
         double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1]) + dist(route[k], route[k+1]);
         if(originalDist > (dist(route[i], route[i+1]) + dist(route[j], route[k]) + dist(route[j+1], route[k+1]))) {
-            reverseSegment(route, j+1, k);
-            return true;
+            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+            //reverseSegment(route, j+1, k);
+            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+            return 1;
         }
         else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[j+1]) + dist(route[k], route[k+1]))) {
-            reverseSegment(route, i+1, j);
-            return true;
+            //reverseSegment(route, i+1, j);
+            return 2;
         }
         else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1]))) {
-            reverseSegment(route, i+1, k);
-            return true;
+            //reverseSegment(route, i+1, k);
+            return 3;
         }
         else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[i+1]) + dist(route[j], route[k+1]))) {
-            route = swapSegments(route, i+1, j, j+1, k);
-            return true;
+            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+            //route = swapSegments(route, i+1, j, j+1, k);
+            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+            return 4;
         }
         else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[k]) + dist(route[j+1], route[k+1]))) {
-            reverseSegment(route, i+1, j);
-            reverseSegment(route, j+1, k);
-            return true;
+            //reverseSegment(route, i+1, j);
+            //reverseSegment(route, j+1, k);
+            return 5;
         }
         else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[i+1]) + dist(route[j], route[k+1]))) {
-            reverseSegment(route, j + 1, k);
-            route = swapSegments(route, i + 1, j, j + 1, k);
-            return true;
+            //reverseSegment(route, j+1, k);
+            //route = swapSegments(route, i+1, j, j+1, k);
+            return 6;
         }
         else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[j]) + dist(route[i+1], route[k+1]))) {
-            reverseSegment(route, i+1, j);
-            route = swapSegments(route, i+1, j, j+1, k);
-            return true;
+            //Start Debug
+            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+            //System.out.println("i: " + route[i].getLat() + " " + route[i].getLon() + " i+1: " + route[i+1].getLat() + " " + route[i+1].getLon() + " j: " + route[j].getLat() + " " + route[j].getLon() + " j+1: " + route[j+1].getLat() + " " + route[j+1].getLon() + " k: " + route[k].getLat() + " " + route[k].getLon() + " k+1: " + route[k+1].getLat() + " " + route[k+1].getLon());
+            //System.out.println(originalDist + " " + dist(route[i], route[j+1]) + " " + dist(route[k], route[j]) + " " + dist(route[i+1], route[k+1]));
+            //End Debug
+            //reverseSegment(route, i+1, j);
+            //route = swapSegments(route, i+1, j, j+1, k);
+            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+            return 7;
         }
         else {
-            return false;
+            return 0;
         }
     }
 
@@ -676,7 +719,9 @@ public class Model {
             for(int i=0; i<=n-5; i++) {
                 for(int j=i+2; j<=n-3; j++) {
                     for(int k=j+2; k<=n-1; k++) {
-                        if (improve(route, i, j ,k)) {
+                        int improved = improved(route, i, j ,k);
+                        if (improved>0) {
+                            route = improve(route, improved, i, j, k);
                             improvements++;
                             totalImprovements++;
 
@@ -707,6 +752,9 @@ public class Model {
         Model model = new Model();
         int[] array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         System.out.println(Arrays.toString(array));
+
+        //model.reverseSegment(array, 1, 4);
+        //array = model.swapSegments(array, 1, 4, 5, 8);
 
         model.reverseSegment(array, 1, 4);
         array = model.swapSegments(array, 1, 4, 5, 8);
