@@ -2,6 +2,7 @@ package com.csu2017sp314.dtr07.Model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ class LocationFactory {
     private ArrayList<Pair> bestPairs = new ArrayList<>();
     private ArrayList<String> selectedAirports = new ArrayList<>();
 
-    boolean readFile(String in) throws FileNotFoundException {
+    /*boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
         int id = -1;
         int name = -1;
@@ -60,9 +61,16 @@ class LocationFactory {
         locations.add(new Location("02GA", "Doug Bolton Field", "34.20259857", "-83.42900085"));
         locations.add(new Location("CN24", "Flying R Airport", "38.28300095", "-121.2549973"));
         return locations.size() > 0;
+    }*/
+
+    boolean readFromDB(ArrayList<String> where) {
+        QueryBuilder qb = new QueryBuilder();
+        //qb.setWhere(where);
+        qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport");
+        qb.fireQuery();
+        locations = qb.getLocations();
+        return locations.size() > 0;
     }
-
-
 
     boolean readUserLocations(ArrayList<Location> userLoc) {
         for(int i = 0; i < userLoc.size(); i++) {

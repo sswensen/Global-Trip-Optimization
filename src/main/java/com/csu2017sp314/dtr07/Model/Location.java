@@ -12,14 +12,22 @@ public class Location {
     private String name;
     private double lat;
     private double lon;
+    private String municipality;
+    private String region;
+    private String country;
+    private String continent;
     private int nearest = -1;
     private int nearestDistance = 9999999;
 
-    Location(String id, String name, String lat, String lon) {
+    Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent) {
         this.id = id;
         this.name = name;
         this.lat = convertCoordinates(lat);
         this.lon = convertCoordinates(lon);
+        this.municipality = municipality;
+        this.region = region;
+        this.country = country;
+        this.continent = continent;
     }
 
     private static double convertCoordinates(String in) {

@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 
 public class TestLocation {
-    @Before
+    /*@Before
     public void initialize() {
     }
 
@@ -57,5 +57,5 @@ public class TestLocation {
     @Test
     public void setLon() throws Exception {
         //one.setLat("3106°47'35\" W");
-    }
+    }*/
 }
