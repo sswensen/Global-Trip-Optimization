@@ -107,7 +107,7 @@ public class TestModel {
     @Test
     public void threeOpt() throws Exception
     {
-        m.setTestThreeOpt(true);
+        m.setThreeOpt(true);
         m.planTrip("./src/test/resources/Testing/corand25.csv");
         assertTrue("true", m.getTotalImprovements()>0);
     }

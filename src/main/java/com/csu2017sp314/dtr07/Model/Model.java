@@ -19,7 +19,7 @@ public class Model {
     private ArrayList<Location> previousLocations = new ArrayList<>();
     private boolean twoOpt;
     private boolean threeOpt;
-    private boolean testThreeOpt;
+    //private boolean testThreeOpt;
     private boolean tick = false;
     private int totalImprovements;
     private double[][] distTable;
@@ -34,6 +34,7 @@ public class Model {
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
+        /*
         if(twoOpt) {
             //previousLocations = new ArrayList<>(userLocations);
             //twoOpt();
@@ -49,7 +50,7 @@ public class Model {
             //previousLocations = new ArrayList<>(userLocations);
             //threeOpt();
         }
-
+        */
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
         return 1;
@@ -64,6 +65,7 @@ public class Model {
         lf.thirdTry();
         userLocations = lf.getLocations();
         pairs = lf.getPairs();
+        /*
         if(twoOpt) {
             previousLocations = new ArrayList<>(userLocations);
             twoOpt();
@@ -72,6 +74,7 @@ public class Model {
             previousLocations = new ArrayList<>(userLocations);
             threeOpt();
         }
+        */
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
         return 1;
@@ -154,10 +157,12 @@ public class Model {
         return threeOpt;
     }
 
+    /*
     public void setTestThreeOpt(boolean testThreeOpt)
     {
         this.testThreeOpt = testThreeOpt;
     }
+    */
 
     public int getTotalImprovements()
     {
@@ -216,6 +221,7 @@ public class Model {
         return ret;
     }
 
+    /*
     public int getTripDistance(ArrayList<Pair> pairs) {
         int ret = 0;
         //double dist = 0.0;
@@ -226,6 +232,7 @@ public class Model {
         //System.out.println(dist);
         return ret;
     }
+    */
 
     public String getFirstId(int i) {
         return pairs.get(i).getOne().getId();
@@ -296,6 +303,7 @@ public class Model {
         }
     }
 
+    /*
     private void copySegmentInOrder(ArrayList<Location> source, ArrayList<Location> dest, int from, int through) {
         for(int i = from; i <= through; i++) {
             dest.set(i, source.get(i));
@@ -788,4 +796,5 @@ public class Model {
         //model.reverseSegment(array, 1, 4);
         //System.out.println(Arrays.toString(array));
     }
+    */
 }
