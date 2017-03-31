@@ -89,7 +89,7 @@ class LocationFactory {
             pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
             if(twoOpt) {
                 if(threeOpt) {
-
+                    betterThreeOpt();
                 }
                 else {
                     betterTwoOpt();
