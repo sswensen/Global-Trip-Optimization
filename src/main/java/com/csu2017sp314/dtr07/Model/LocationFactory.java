@@ -140,7 +140,6 @@ class LocationFactory {
         for(int a = 0; a < route.length - 1; a++) {
             newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1])));
         }
-        //newPairs.add(new Pair(Integer.toString(route.length - 2), route[route.length - 2], route[0], route[route.length - 2].distance(route[0])));
         return newPairs;
     }
 
@@ -178,8 +177,9 @@ class LocationFactory {
             route[j] = temp;
             i++;
             j--;
-            if(i==j || j<i)
+            if(i==j || j<i) {
                 break;
+            }
         }
     }
 
@@ -217,29 +217,7 @@ class LocationFactory {
     protected int betterTwoOpt() {
         Location[] route = betterGenerateRoute();
         generateDistanceTable(route);
-        //System.out.println(route[18].distance(route[33]));
-        //System.out.println(dist(distTable, 18, 33));
-        //System.out.println(dist(route, 18, 33));
-        //for(int i = 0; i<distTable.length; i++) {
-        //    System.out.println(Arrays.toString(distTable[i]));
-        //}
         ArrayList<Pair> newPairs = new ArrayList<>();
-        //Start Debug
-        //betterGeneratePairs(route, newPairs);
-        //System.out.println(getTripDistance());
-        //System.out.println(getTripDistance(newPairs));
-        //boolean same = true;
-        //for(int i=0; i<pairs.size(); i++) {
-        //    if(!pairs.get(i).getOne().getName().equals(newPairs.get(i).getOne().getName())) {
-        //        same = false;
-        //    }
-        //}
-        //if(same)
-        //    System.out.println("YESSSSSSSSSSSS");
-        //System.out.println(Arrays.toString(route));
-        //System.out.println(pairs);
-        //System.out.println(newPairs);
-        //End Debug
         int totalImprovements = 0;
         this.totalImprovements = 0;
         int improvements = 1;
@@ -249,32 +227,14 @@ class LocationFactory {
             for(int i=0; i<=n-3; i++) {
                 for(int j=i+2; j<=n-1; j++) {
                     if((dist(route[i], route[i+1])+dist(route[j], route[j+1])) > (dist(route[i], route[j])+dist(route[i+1], route[j+1]))) {
-                        //Start Debug
-                        //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName());
-                        //System.out.println("i: " + route[i].getLat() + " " + route[i].getLon() + " i+1: " + route[i+1].getLat() + " " + route[i+1].getLon() + " j: " + route[j].getLat() + " " + route[j].getLon() + " j+1: " + route[j+1].getLat() + " " + route[j+1].getLon());
-                        //System.out.println(dist(distTable, i, i+1) + " " + dist(distTable, j, j+1) + " " + dist(distTable, i, j) + " " + dist(distTable, i+1, j+1));
-                        //System.out.println(dist(distTable, route[i], route[i+1]) + " " + dist(distTable, route[j], route[j+1]) + " " + dist(distTable, route[i], route[j]) + " " + dist(distTable, route[i+1], route[j+1]));
-                        //System.out.println(dist(route, i, i+1) + " " + dist(route, j, j+1) + " " + dist(route, i, j) + " " + dist(route, i+1, j+1));
-                        //End Debug
-
                         reverseSegment(route, i+1, j);
                         improvements++;
                         totalImprovements++;
-
-                        //Start Debug
-                        //newPairs = new ArrayList<>();
-                        //betterGeneratePairs(route, newPairs);
-                        //System.out.println(getTripDistance(newPairs));
-                        //End Debug
                     }
                 }
             }
-            //System.out.println(improvements);
         }
         this.totalImprovements = totalImprovements;
-        //Start Debug
-        //newPairs = new ArrayList<>();
-        //End Debug
         pairs = betterGeneratePairs(route, newPairs);
         return totalImprovements;
     }
@@ -288,32 +248,22 @@ class LocationFactory {
                 reverseSegment(route, i+1, j);
                 return route;
             case 3:
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 reverseSegment(route, i+1, k);
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
             case 4:
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 route = swapSegments(route, i+1, j, j+1, k);
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
-            case 5: //Change to final dist
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
+            case 5:
                 reverseSegment(route, i+1, j);
                 reverseSegment(route, j+1, k);
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
             case 6:
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 reverseSegment(route, j+1, k);
                 route = swapSegments(route, i+1, j, j+1, k);
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
             case 7:
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 reverseSegment(route, i+1, j);
                 route = swapSegments(route, i+1, j, j+1, k);
-                //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
                 return route;
             default:
                 return route;
@@ -323,45 +273,24 @@ class LocationFactory {
     private int improved(Location[] route, int i, int j, int k) {
         double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1]) + dist(route[k], route[k+1]);
         if(originalDist > (dist(route[i], route[i+1]) + dist(route[j], route[k]) + dist(route[j+1], route[k+1]))) {
-            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
-            //reverseSegment(route, j+1, k);
-            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
             return 1;
         }
         else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[j+1]) + dist(route[k], route[k+1]))) {
-            //reverseSegment(route, i+1, j);
             return 2;
         }
         else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1]))) {
-            //System.out.println(originalDist + " " + (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1])));
-            //reverseSegment(route, i+1, k);
             return 3;
         }
         else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[i+1]) + dist(route[j], route[k+1]))) {
-            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
-            //route = swapSegments(route, i+1, j, j+1, k);
-            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
             return 4;
         }
         else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[k]) + dist(route[j+1], route[k+1]))) {
-            //reverseSegment(route, i+1, j);
-            //reverseSegment(route, j+1, k);
             return 5;
         }
         else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[i+1]) + dist(route[j], route[k+1]))) {
-            //reverseSegment(route, j+1, k);
-            //route = swapSegments(route, i+1, j, j+1, k);
             return 6;
         }
         else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[j]) + dist(route[i+1], route[k+1]))) {
-            //Start Debug
-            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
-            //System.out.println("i: " + route[i].getLat() + " " + route[i].getLon() + " i+1: " + route[i+1].getLat() + " " + route[i+1].getLon() + " j: " + route[j].getLat() + " " + route[j].getLon() + " j+1: " + route[j+1].getLat() + " " + route[j+1].getLon() + " k: " + route[k].getLat() + " " + route[k].getLon() + " k+1: " + route[k+1].getLat() + " " + route[k+1].getLon());
-            //System.out.println(originalDist + " " + dist(route[i], route[j+1]) + " " + dist(route[k], route[j]) + " " + dist(route[i+1], route[k+1]));
-            //End Debug
-            //reverseSegment(route, i+1, j);
-            //route = swapSegments(route, i+1, j, j+1, k);
-            //System.out.println("i: " + route[i].getName() + " i+1: " + route[i+1].getName() + " j: " + route[j].getName() + " j+1: " + route[j+1].getName() + " k: " + route[k].getName() + " k+1: " + route[k+1].getName());
             return 7;
         }
         else {
@@ -373,22 +302,6 @@ class LocationFactory {
         Location[] route = betterGenerateRoute();
         generateDistanceTable(route);
         ArrayList<Pair> newPairs = new ArrayList<>();
-        //Start Debug
-        //betterGeneratePairs(route, newPairs);
-        //System.out.println(getTripDistance());
-        //System.out.println(getTripDistance(newPairs));
-        //boolean same = true;
-        //for(int i=0; i<pairs.size(); i++) {
-        //    if(!pairs.get(i).getOne().getName().equals(newPairs.get(i).getOne().getName())) {
-        //        same = false;
-        //    }
-        //}
-        //if(same)
-        //    System.out.println("YESSSSSSSSSSSS");
-        //System.out.println(Arrays.toString(route));
-        //System.out.println(pairs);
-        //System.out.println(newPairs);
-        //End Debug
         int totalImprovements = 0;
         this.totalImprovements = 0;
         int improvements = 1;
@@ -403,21 +316,12 @@ class LocationFactory {
                             route = improve(route, improved, i, j, k);
                             improvements++;
                             totalImprovements++;
-
-                            //Start Debug
-                            //newPairs = new ArrayList<>();
-                            //betterGeneratePairs(route, newPairs);
-                            //System.out.println(getTripDistance(newPairs));
-                            //End Debug
                         }
                     }
                 }
             }
         }
         this.totalImprovements = totalImprovements;
-        //Start Debug
-        //newPairs = new ArrayList<>();
-        //End Debug
         pairs = betterGeneratePairs(route, newPairs);
         return totalImprovements;
     }
