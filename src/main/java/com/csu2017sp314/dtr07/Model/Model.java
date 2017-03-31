@@ -27,10 +27,12 @@ public class Model {
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
         lf.readFile(filename);
-        if(twoOpt)
+        if(twoOpt) {
             lf.setTwoOpt(true);
-        if(threeOpt)
+        }
+        if(threeOpt) {
             lf.setThreeOpt(true);
+        }
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
