@@ -62,6 +62,8 @@ class LocationFactory {
         return locations.size() > 0;
     }
 
+
+
     boolean readUserLocations(ArrayList<Location> userLoc) {
         for(int i = 0; i < userLoc.size(); i++) {
             locations.add(userLoc.get(i));

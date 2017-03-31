@@ -27,7 +27,7 @@ public class Model {
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
         lf.setSelectedAirports(selectedLocations);
-        lf.readFile(filename); //TODO Read from database
+        lf.readFile(filename); //TODO Read from database after initial read from xml
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
