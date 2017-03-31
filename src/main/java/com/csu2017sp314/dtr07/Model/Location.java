@@ -77,10 +77,10 @@ public class Location {
                 + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        if(unit.equals("K")) {
+        dist = dist * 60 * 1.1515; //Default is miles ("M")
+        if(unit.equals("K")) { //Kilometers
             dist = dist * 1.609344;
-        } else if(unit.equals("N")) {
+        } else if(unit.equals("N")) { //Nautical miles
             dist = dist * 0.8684;
         }
         return (dist);
