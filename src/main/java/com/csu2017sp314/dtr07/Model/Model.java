@@ -666,6 +666,7 @@ public class Model {
             return 2;
         }
         else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1]))) {
+            System.out.println(originalDist + " " + (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1])));
             //reverseSegment(route, i+1, k);
             return 3;
         }
