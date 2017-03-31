@@ -90,8 +90,7 @@ class LocationFactory {
             if(twoOpt) {
                 if(threeOpt) {
                     betterThreeOpt();
-                }
-                else {
+                } else {
                     betterTwoOpt();
                 }
             }
