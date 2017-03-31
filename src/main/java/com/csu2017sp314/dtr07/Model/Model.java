@@ -55,6 +55,7 @@ public class Model {
         */
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
+        System.out.println(getSecondName(0));
         return 1;
     }
 
