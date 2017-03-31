@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class TestModel {
 
-    @Before
+    /*@Before
     public void initialize() {
     }
 
@@ -110,5 +110,5 @@ public class TestModel {
         m.setTestThreeOpt(true);
         m.planTrip("./src/test/resources/Testing/grid8x14skip.csv");
         assertTrue("true", m.getTotalImprovements()>0);
-    }
+    }*/
 }
