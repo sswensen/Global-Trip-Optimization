@@ -81,6 +81,7 @@ public class MapGUI {
     private ArrayList<String> lastTrip = new ArrayList<>();
     private int width;
     private int height;
+    private String unit;
 
 
     MapGUI() {
@@ -515,6 +516,22 @@ public class MapGUI {
         return b;
     }
 
+    private JButton mapToggleUnits() {
+        JButton b = new JButton("Switch to KM");
+        b.addActionListener((ActionEvent e) -> {
+            if(b.getText().equals("Switch to KM")) { //Checks if button has already been pressed
+                b.setText("Switch to Miles"); //If not pressed, toggle text and add
+                unit = "M";
+            } else if(b.getText().equals("Switch to Miles")) {
+                b.setText("Switch to KM");
+                unit = "K";
+            }
+            mapOptions(unit);
+            userAddLocList(lastTrip);
+        });
+        return b;
+    }
+
     private JPanel generateMapDisplayOptions() {
         JPanel panel = createInnerPanel();
 
@@ -528,6 +545,8 @@ public class MapGUI {
         panel.add(mapDisplayButtons("2-opt"), gbc);
         setGBC(1, 2, 1);
         panel.add(mapDisplayButtons("3-opt"), gbc);
+        setGBC(0,0,2);
+        panel.add(mapToggleUnits(), gbc);
         return panel;
     }
 

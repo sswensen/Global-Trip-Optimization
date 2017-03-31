@@ -55,6 +55,12 @@ public class Presenter {
             if(s.equals("3-opt")) {
                 toggle3opt();
             }
+            if(s.equals("M")) {
+                //TODO put this somewhere
+            }
+            if(s.equals("K")) {
+                //TODO put this somewhere
+            }
             /*if(currentIds.isEmpty()) {
                 try {
                     System.out.println("Using original map");
@@ -260,7 +266,7 @@ public class Presenter {
         selectedAirports.add("BKPR");
         selectedAirports.add("CYEG");
         model.setSelectedLocations(selectedAirports);
-        model.planTrip(filename);
+        model.planTrip(filename, "M");
         int numPairs = model.getNumPairs();
         view.originalIds = model.getLocationIds();
         view.initializeTrip(selectionXml, svgMap);
