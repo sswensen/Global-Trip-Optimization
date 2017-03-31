@@ -77,7 +77,8 @@ public class Location {
         } else if(unit.equals("N")) {
             dist = dist * 0.8684;
         }
-        return (dist);
+        //Add Math.round
+        return Math.round(dist);
     }
 
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
