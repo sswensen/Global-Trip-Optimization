@@ -62,7 +62,16 @@ public class Model {
 
     public int planUserTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
+        if(twoOpt) {
+            lf.setTwoOpt(true);
+        }
         if(!twoOpt && !tick) {
+            userLocations = new ArrayList<>(previousLocations);
+        }
+        if(threeOpt) {
+            lf.setThreeOpt(true);
+        }
+        if(!threeOpt && !tick) {
             userLocations = new ArrayList<>(previousLocations);
         }
         lf.setLocations(userLocations);
