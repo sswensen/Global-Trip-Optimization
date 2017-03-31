@@ -67,8 +67,7 @@ public class Location {
         return ret;
     }
 
-    double distance(Location in) {
-        final String unit = "M";
+    double distance(Location in, String unit) {
         double lat1 = this.lat;
         double lon1 = this.lon;
         double lat2 = in.getLat();

@@ -18,6 +18,7 @@ class LocationFactory {
     private ArrayList<Pair> pairs = new ArrayList<>();
     private ArrayList<Pair> bestPairs = new ArrayList<>();
     private ArrayList<String> selectedAirports = new ArrayList<>();
+    private String unit = "";
 
     /*boolean readFile(String in) throws FileNotFoundException {
         Scanner scan = new Scanner(new File(in));
@@ -92,7 +93,7 @@ class LocationFactory {
                 double distance = 999999999;
                 int index = -1;
                 for(int y = x + 1; y < locations.size(); y++) {
-                    double temp = locations.get(x).distance(locations.get(y));
+                    double temp = locations.get(x).distance(locations.get(y), unit);
                     if(distance > temp) {
                         distance = temp;
                         index = y;
@@ -101,9 +102,9 @@ class LocationFactory {
                 Location temploc = locations.get(x + 1);
                 locations.set(x + 1, locations.get(index));
                 locations.set(index, temploc);
-                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1))));
+                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1), unit)));
             }
-            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
+            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0), unit)));
             double total = 0;
             for(Pair p : pairs) {
                 total += p.getDistance();
@@ -128,6 +129,10 @@ class LocationFactory {
 
     public void setSelectedAirports(ArrayList<String> selectedAirports) {
         this.selectedAirports = selectedAirports;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     ArrayList<Location> getLocations() {
