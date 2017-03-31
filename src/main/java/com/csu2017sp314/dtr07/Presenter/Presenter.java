@@ -150,7 +150,7 @@ public class Presenter {
                 String secondName = model.getUserSecondName(i);
                 view.addLeg(pairId, firstName, secondName, model.getUserPairDistance(i));
                 finalPairId++;
-                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId);
+                view.addWrappedLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId);
                 if(displayName) {
                     view.addCityNameLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstName);
                     view.addCityNameLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondName);
@@ -281,7 +281,7 @@ public class Presenter {
             String secondName = model.getSecondName(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
             finalPairId++;
-            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
+            view.addWrappedLine(firstLon, firstLat, secondLon, secondLat, pairId);
             if(displayName) {
                 view.addCityNameLabel(firstLon, firstLat, firstName);
                 view.addCityNameLabel(secondLon, secondLat, secondName);

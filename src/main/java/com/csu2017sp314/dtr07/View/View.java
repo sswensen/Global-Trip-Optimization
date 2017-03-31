@@ -132,6 +132,8 @@ public class View {
         svg.addLine(x1, y1, x2, y2, id);
     }
 
+    public void addWrappedLine(double x1, double y1, double x2, double y2, String id){svg.addWrappedLine(x1, y1, x2, y2, id);};
+
     public void addDistance(double x1, double y1, double x2, double y2, int distance, String id) {
         svg.addDistance(x1, y1, x2, y2, distance, id);
     }

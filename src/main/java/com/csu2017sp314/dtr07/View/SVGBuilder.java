@@ -69,6 +69,7 @@ class SVGBuilder {
         }
     }
 
+
     private double convertLongitudeCoordinates(double x) {
         double xPixels = width; //Width of colorado map
         double startX = -180;
@@ -102,7 +103,24 @@ class SVGBuilder {
         line.setAttribute("stroke", "#999999");
         SVGdoc.getDocumentElement().appendChild(line);
     }
+    void addWrappedLine(double x1, double y1, double x2, double y2, String id){
+        //locations.add(new Location("NZCH", "Christchurch International Airport", "-28.48939896", "130.5319977"));
+        //locations.add(new Location("CN24", "Flying R Airport", "38.28300095", "-117.2549973"));
+        if(x1 > 0 && x2 < 0){
+            addLine(x1, y1, 180, ((y2+y1)/2), id);
+            //System.out.println(((y2+y1)/2));
+            addLine(x2, y2, -180, ((y2+y1)/2), id);
+            //System.out.println(((y2+y1)/2));
+        }
+    }
 
+    private double wrapAround(double coordinate, double max){
+        coordinate %= max + 1;
+        if(coordinate < -180){
+            coordinate += max;
+        }
+        return coordinate;
+    }
     void addDistance(double x1, double y1, double x2, double y2, int distanceBetween, String id) {
         Element distance = SVGdoc.createElement("text");
         distance.setAttribute("font-family", "Sans-serif");
@@ -232,7 +250,7 @@ class SVGBuilder {
     }
 
     public static void main(String[] argv) throws Exception {
-        SVGBuilder svg = new SVGBuilder("");
+        SVGBuilder svg = new SVGBuilder("S3/World5.svg");
         svg.readSVG();
     }
 }

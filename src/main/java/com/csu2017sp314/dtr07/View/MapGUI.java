@@ -559,7 +559,13 @@ public class MapGUI {
 
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
-
+        JPanel scrollableButton = new JPanel();
+        JScrollPane scrollPane = new JScrollPane(scrollableButton);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        setGBC(0,2,3);
+        fTemp.add(scrollPane, gbc);
+        scrollableButton.setLayout(new GridBagLayout());
         int numButtons = 0;
         for(String id : ids) {
             ret = 1;
@@ -600,20 +606,20 @@ public class MapGUI {
                 }
             });
 
-            gbc.fill = GridBagConstraints.NONE;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
             JButton t = new JButton(id);
             JLabel t2 = new JLabel(id);
             t.setEnabled(false);
 
-            fTemp.add(b);
+            scrollableButton.add(b);
             b.setVisible(true);
             t.setVisible(true);
 
             numButtons++;
             setGBC(0, numButtons + 1, 1);
-            fTemp.add(b, gbc);
-            setGBC(1, numButtons + 1, 3);
-            fTemp.add(t2, gbc);
+            scrollableButton.add(b, gbc);
+            setGBC(1, numButtons + 1, 1);
+            scrollableButton.add(t2, gbc);
         }
 
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
