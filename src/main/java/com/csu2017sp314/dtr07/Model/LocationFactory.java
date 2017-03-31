@@ -216,11 +216,11 @@ class LocationFactory {
     protected int betterTwoOpt() {
         Location[] route = betterGenerateRoute();
         generateDistanceTable(route);
-        ArrayList<Pair> newPairs = new ArrayList<>();
         int totalImprovements = 0;
         this.totalImprovements = 0;
         int improvements = 1;
         int n = route.length-1;
+        ArrayList<Pair> newPairs = new ArrayList<>();
         while(improvements > 0) {
             improvements = 0;
             for(int i=0; i<=n-3; i++) {
