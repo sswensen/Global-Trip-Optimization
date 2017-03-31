@@ -31,7 +31,7 @@ public class QueryBuilder {
             "INNER JOIN regions ON regions.iso_country = countries.code " +
             "INNER JOIN airports ON airports.iso_region = regions.code ";
     private final String limit = " LIMIT 10";
-    private ArrayList<Location> locations = new ArrayList<>();
+    private ArrayList<Location> locations = new ArrayList<>(); //TODO should probably be converted to an array, expecially if there are hundreds of locations returning.
 
     public void searchDatabase(String type, String continent, String country, String region, String municipality, String name) {
         ArrayList<String> w = new ArrayList<>();
