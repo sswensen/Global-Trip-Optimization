@@ -11,6 +11,7 @@ package com.csu2017sp314.dtr07.Model;
  */
 
 import com.csu2017sp314.dtr07.Model.Location;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,9 +28,9 @@ public class QueryBuilder {
     private final String columns = "SELECT airports.ident,airports.name,latitude,longitude,municipality,regions.name,countries.name,continents.name ";
     private final String continents = "FROM continents ";
     private String where = "";
-    private final String join = "INNER JOIN countries ON countries.continent = continents.id " +
-            "INNER JOIN regions ON regions.iso_country = countries.code " +
-            "INNER JOIN airports ON airports.iso_region = regions.code ";
+    private final String join = "INNER JOIN countries ON countries.continent = continents.id "
+            + "INNER JOIN regions ON regions.iso_country = countries.code "
+            + "INNER JOIN airports ON airports.iso_region = regions.code ";
     private final String limit = " LIMIT 10";
     private ArrayList<Location> locations = new ArrayList<>(); //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
@@ -58,26 +59,26 @@ public class QueryBuilder {
     public void setWhere(ArrayList<String> wheres) {
         ArrayList<String> q = new ArrayList<>();
         String type = wheres.get(0);
-        String continent = wheres.get(1);
-        String country = wheres.get(2);
-        String region = wheres.get(3);
-        String municipality = wheres.get(4);
-        String airportName = wheres.get(5);
         if(!type.equals("")) {
             q.add("type like '%" + type + "%'");
         }
+        String continent = wheres.get(1);
         if(!continent.equals("")) {
             q.add("continents.id like '%" + continent + "%'");
         }
+        String country = wheres.get(2);
         if(!country.equals("")) {
             q.add("countries.code like '%" + country + "%'");
         }
+        String region = wheres.get(3);
         if(!region.equals("")) {
             q.add("regions.code like '%" + region + "%'");
         }
+        String municipality = wheres.get(4);
         if(!municipality.equals("")) {
             q.add("municipality like '%" + municipality + "%'");
         }
+        String airportName = wheres.get(5);
         if(!airportName.equals("")) {
             q.add("airports.name like '%" + airportName + "%'");
         }
@@ -140,6 +141,7 @@ public class QueryBuilder {
         } catch(Exception e) {
             System.err.printf("Exception: ");
             System.err.println(e.getMessage());
+            System.err.println("-------------EXITING!!!------------");
             System.exit(33); //Something broke in the database :/
         }
         return rs;

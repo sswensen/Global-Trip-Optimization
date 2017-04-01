@@ -47,6 +47,7 @@ class SVGBuilder {
 		svgRoot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");*/
     }
+
     private void readSVG() throws SAXException, IOException, ParserConfigurationException {
         Document readSVG = SVGdoc;
         readSVG.getDocumentElement().normalize();
