@@ -55,7 +55,7 @@ public class QueryBuilder {
 
     //TODO add function for changing limit
 
-    public void setWhere(ArrayList<String> wheres) { //TODO remove static
+    public void setWhere(ArrayList<String> wheres) {
         ArrayList<String> q = new ArrayList<>();
         String type = wheres.get(0);
         String continent = wheres.get(1);
@@ -140,6 +140,7 @@ public class QueryBuilder {
         } catch(Exception e) {
             System.err.printf("Exception: ");
             System.err.println(e.getMessage());
+            System.exit(33); //Something broke in the database :/
         }
         return rs;
     }
