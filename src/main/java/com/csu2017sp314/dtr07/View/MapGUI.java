@@ -1,45 +1,47 @@
-package com.csu2017sp314.dtr07.View;
 
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+        package com.csu2017sp314.dtr07.View;
 
-import javax.swing.*;
+        import javafx.application.Platform;
+        import javafx.embed.swing.JFXPanel;
+        import javafx.scene.Group;
+        import javafx.scene.Scene;
+        import javafx.scene.web.WebEngine;
+        import javafx.scene.web.WebView;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
+        import javax.swing.*;
 
-import javax.swing.border.Border;
-import javax.swing.table.*;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Vector;
-import java.util.function.Consumer;
-import java.io.File;
+        import org.w3c.dom.Document;
+        import org.w3c.dom.NodeList;
+        import org.w3c.dom.Node;
+        import org.w3c.dom.Element;
+        import org.xml.sax.SAXException;
 
-import java.nio.file.CopyOption;
-import java.nio.file.StandardCopyOption;
+        import javax.swing.table.DefaultTableModel;
+        import javax.swing.table.TableCellRenderer;
+        import javax.swing.table.TableColumn;
+        import javax.xml.parsers.DocumentBuilder;
+        import javax.xml.parsers.DocumentBuilderFactory;
+        import javax.xml.parsers.ParserConfigurationException;
+        import javax.xml.transform.Transformer;
+        import javax.xml.transform.TransformerException;
+        import javax.xml.transform.TransformerFactory;
+        import javax.xml.transform.dom.DOMSource;
+        import javax.xml.transform.stream.StreamResult;
+        import java.awt.*;
+        import java.awt.event.ActionEvent;
+        import java.awt.event.WindowEvent;
+        import java.io.IOException;
+        import java.net.URL;
+        import java.nio.file.Files;
+        import java.nio.file.Path;
+        import java.nio.file.Paths;
+        import java.util.ArrayList;
+        import java.util.Vector;
+        import java.util.function.Consumer;
+        import java.io.File;
+
+        import java.nio.file.CopyOption;
+        import java.nio.file.StandardCopyOption;
 
 
 /**
@@ -84,10 +86,10 @@ public class MapGUI {
     private ArrayList<String> lastTrip = new ArrayList<>();
     private int width;
     private int height;
+    private String unit;
     private ArrayList<String> tempArray = new ArrayList<>();
     private ArrayList<String> tempIdArray = new ArrayList<>();
     private ArrayList<String> tempDistanceArray = new ArrayList<>();
-
 
     MapGUI() {
 
@@ -263,6 +265,7 @@ public class MapGUI {
         ret.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         ret.getContentPane().add(tabs, BorderLayout.CENTER);
         ret.setLocation(x, y);
+        ret.setVisible(true);
         return ret;
     }
 
@@ -520,6 +523,22 @@ public class MapGUI {
         return b;
     }
 
+    private JButton mapToggleUnits() {
+        JButton b = new JButton("Switch to KM");
+        b.addActionListener((ActionEvent e) -> {
+            if(b.getText().equals("Switch to KM")) { //Checks if button has already been pressed
+                b.setText("Switch to Miles"); //If not pressed, toggle text and add
+                unit = "M";
+            } else if(b.getText().equals("Switch to Miles")) {
+                b.setText("Switch to KM");
+                unit = "K";
+            }
+            mapOptions(unit);
+            userAddLocList(lastTrip);
+        });
+        return b;
+    }
+
     private JPanel generateMapDisplayOptions() {
         JPanel panel = createInnerPanel();
 
@@ -533,6 +552,8 @@ public class MapGUI {
         panel.add(mapDisplayButtons("2-opt"), gbc);
         setGBC(1, 2, 1);
         panel.add(mapDisplayButtons("3-opt"), gbc);
+        setGBC(0,0,2);
+        panel.add(mapToggleUnits(), gbc);
         return panel;
     }
 
@@ -628,8 +649,9 @@ public class MapGUI {
         options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
         //options.addTab("Four", face.getContentPane());
         //uOp.setMinimumSize(new Dimension(500, 500));
-        uOp.pack();
 
+        uOp.pack();
+        //itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
         DefaultTableModel model = new DefaultTableModel();
         JTable table = new JTable(model);
         model.addColumn("ID");
@@ -706,36 +728,8 @@ public class MapGUI {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         itinerary.add(scrollPane, BorderLayout.CENTER);
         itinerary.pack();
-
         ret = 1;
         return ret;
-    }
-    public  void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double[] percentages) {
-        double total = 0;
-        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
-            total += percentages[i];
-        }
-
-        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
-            TableColumn column = table.getColumnModel().getColumn(i);
-            column.setPreferredWidth((int)
-                    (tablePreferredWidth * (percentages[i] / total)));
-        }
-    }
-
-    public void resizeColumnWidth(JTable table) {
-        final TableColumnModel columnModel = table.getColumnModel();
-        for (int column = 0; column < table.getColumnCount(); column++) {
-            int width = 15; // Min width
-            for (int row = 0; row < table.getRowCount(); row++) {
-                TableCellRenderer renderer = table.getCellRenderer(row, column);
-                Component comp = table.prepareRenderer(renderer, row, column);
-                width = Math.max(comp.getPreferredSize().width +1 , width);
-            }
-            if(width > 300)
-                width=300;
-            columnModel.getColumn(column).setPreferredWidth(width);
-        }
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
@@ -751,13 +745,12 @@ public class MapGUI {
         }
         setGBC(0, Integer.parseInt(seqId), 4);
         JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
+        lab.setHorizontalAlignment(2);
+        fTemp2.add(lab, gbc);
         String temp = (name1 + " to " + name2);
         tempDistanceArray.add(Integer.toString(mileage));
         tempIdArray.add(seqId);
         tempArray.add(temp);
-        lab.setHorizontalAlignment(2);
-        fTemp2.add(lab, gbc);
-
         return ret;
     }
 
@@ -783,7 +776,6 @@ public class MapGUI {
         background.setLayout(new BorderLayout());
         map.setContentPane(background);
         filenameIncrementer++;
-
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802); //Second part for refreshing the window
         map.setVisible(true); //making the frame visible*/
@@ -840,3 +832,4 @@ public class MapGUI {
         g.readXML("testing3.xml");
     }
 }
+
