@@ -15,6 +15,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import javax.swing.border.Border;
+import javax.swing.table.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.function.Consumer;
 import java.io.File;
 
@@ -81,6 +84,9 @@ public class MapGUI {
     private ArrayList<String> lastTrip = new ArrayList<>();
     private int width;
     private int height;
+    private ArrayList<String> tempArray = new ArrayList<>();
+    private ArrayList<String> tempIdArray = new ArrayList<>();
+    private ArrayList<String> tempDistanceArray = new ArrayList<>();
 
 
     MapGUI() {
@@ -257,7 +263,6 @@ public class MapGUI {
         ret.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         ret.getContentPane().add(tabs, BorderLayout.CENTER);
         ret.setLocation(x, y);
-        ret.setVisible(true);
         return ret;
     }
 
@@ -623,17 +628,114 @@ public class MapGUI {
         options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
         //options.addTab("Four", face.getContentPane());
         //uOp.setMinimumSize(new Dimension(500, 500));
-
         uOp.pack();
-        //itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
-        JScrollPane jsp = new JScrollPane(fTemp2);
-        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        itinerary.getContentPane().add(jsp);
-        itinerary.setPreferredSize(new Dimension(800, 800));
+
+        DefaultTableModel model = new DefaultTableModel();
+        JTable table = new JTable(model);
+        model.addColumn("ID");
+        model.addColumn("Trip");
+        model.addColumn("Distance");
+        for(int i = 0; i < fTemp2.getComponentCount();i++){
+            Vector row = new Vector();
+            row.add(tempIdArray.get(i));
+            row.add(tempArray.get(i));
+            row.add(tempDistanceArray.get(i));
+            model.addRow(row);
+        }
+        table.getTableHeader().setBackground(Color.BLACK);
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        /*
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+            System.out.println(tableColumn.getHeaderValue() + " " + preferredWidth);
+            tableColumn.setPreferredWidth( preferredWidth );
+        }
+        */
+        for (int column = 0; column < table.getColumnCount(); column++){
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = 0;
+            TableCellRenderer rend = table.getTableHeader().getDefaultRenderer();
+            TableCellRenderer rendCol = tableColumn.getHeaderRenderer();
+            if (rendCol == null) rendCol = rend;
+            Component header = rendCol.getTableCellRendererComponent(table, tableColumn.getHeaderValue(), false, false, 0, column);
+            maxWidth = header.getPreferredSize().width;
+            //System.out.println("maxWidth :"+maxWidth);
+
+            for (int row = 0; row < table.getRowCount(); row++){
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+                //System.out.println("preferredWidth :"+preferredWidth);
+                //System.out.println("Width :"+width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+
+                if (preferredWidth <= maxWidth){
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+        //double[] percents = {10,70,20};
+        //setJTableColumnsWidth(table,600,percents);
+        Dimension d = table.getPreferredSize();
+        System.out.println(d.getWidth() + " " + d.getHeight());
+        table.setPreferredScrollableViewportSize(new Dimension((int)d.getWidth(), 500));
+        JScrollPane scrollPane = new JScrollPane(table);
+        //scrollPane.setPreferredSize(new Dimension(600,500));
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        itinerary.add(scrollPane, BorderLayout.CENTER);
         itinerary.pack();
+
         ret = 1;
         return ret;
+    }
+    public  void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double[] percentages) {
+        double total = 0;
+        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
+            total += percentages[i];
+        }
+
+        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
+            TableColumn column = table.getColumnModel().getColumn(i);
+            column.setPreferredWidth((int)
+                    (tablePreferredWidth * (percentages[i] / total)));
+        }
+    }
+
+    public void resizeColumnWidth(JTable table) {
+        final TableColumnModel columnModel = table.getColumnModel();
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            int width = 15; // Min width
+            for (int row = 0; row < table.getRowCount(); row++) {
+                TableCellRenderer renderer = table.getCellRenderer(row, column);
+                Component comp = table.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width +1 , width);
+            }
+            if(width > 300)
+                width=300;
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
@@ -649,6 +751,10 @@ public class MapGUI {
         }
         setGBC(0, Integer.parseInt(seqId), 4);
         JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
+        String temp = (name1 + " to " + name2);
+        tempDistanceArray.add(Integer.toString(mileage));
+        tempIdArray.add(seqId);
+        tempArray.add(temp);
         lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
 
