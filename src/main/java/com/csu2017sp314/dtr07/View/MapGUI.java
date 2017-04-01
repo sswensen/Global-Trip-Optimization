@@ -721,7 +721,7 @@ public class MapGUI {
         //setJTableColumnsWidth(table,600,percents);
         Dimension d = table.getPreferredSize();
         System.out.println(d.getWidth() + " " + d.getHeight());
-        table.setPreferredScrollableViewportSize(new Dimension((int)d.getWidth(), 500));
+        table.setPreferredScrollableViewportSize(new Dimension((int)d.getWidth() + 1, 500));
         JScrollPane scrollPane = new JScrollPane(table);
         //scrollPane.setPreferredSize(new Dimension(600,500));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
