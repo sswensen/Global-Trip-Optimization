@@ -145,7 +145,7 @@ class SVGBuilder {
         header.setAttribute("font-family", "Sans-serif");
         header.setAttribute("font-size", "18");
         header.setAttribute("id", "state");
-        header.setAttribute("x", "532");
+        header.setAttribute("x", "512");
         header.setAttribute("y", "20");
         header.setTextContent(title);
         SVGdoc.getDocumentElement().appendChild(header);
@@ -157,8 +157,8 @@ class SVGBuilder {
         footer.setAttribute("font-family", "Sans-serif");
         footer.setAttribute("font-size", "18");
         footer.setAttribute("id", "distance");
-        footer.setAttribute("x", "500");
-        footer.setAttribute("y", "510");
+        footer.setAttribute("x", "512");
+        footer.setAttribute("y", "505");
         footer.setTextContent(totalDistance + " miles");
         SVGdoc.getDocumentElement().appendChild(footer);
     }
