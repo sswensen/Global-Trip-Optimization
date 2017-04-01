@@ -18,6 +18,7 @@ public class Location {
     private String continent;
     private int nearest = -1;
     private int nearestDistance = 9999999;
+    private int tableIndex;
 
     Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent) {
         this.id = id;
@@ -83,7 +84,8 @@ public class Location {
         } else if(unit.equals("N")) { //Nautical miles
             dist = dist * 0.8684;
         }
-        return (dist);
+        //Add Math.round
+        return Math.round(dist);
     }
 
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
@@ -98,6 +100,14 @@ public class Location {
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
+    }
+
+    public int getTableIndex() {
+        return this.tableIndex;
+    }
+
+    public void setTableIndex(int tableIndex) {
+        this.tableIndex = tableIndex;
     }
 
     public String getId() {
