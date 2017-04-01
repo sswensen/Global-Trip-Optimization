@@ -12,7 +12,7 @@ URL - change team number
   <artifactId>tripco</artifactId>
   <name>TripCo</name>
   <packaging>jar</packaging>
-  <version>0.2-sprint</version>
+  <version>0.3-sprint</version>
    <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -25,6 +25,13 @@ URL - change team number
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+	<dependency>
+	  <groupId>mysql</groupId>
+	  <artifactId>mysql-connector-java</artifactId>
+	  <version>5.1.17</version>
+	  <type>jar</type>
+	  <scope>compile</scope>
+	</dependency>
   </dependencies>
   <build>
     <plugins>

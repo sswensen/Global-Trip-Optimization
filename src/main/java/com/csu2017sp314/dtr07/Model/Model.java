@@ -23,11 +23,14 @@ public class Model {
     private boolean testThreeOpt;
     private boolean tick = false;
     private int totalImprovements;
+    private String unit;
 
-    public int planTrip(String filename) throws FileNotFoundException {
+    public int planTrip(String filename, String units) throws FileNotFoundException {
+        this.unit = units;
         LocationFactory lf = new LocationFactory();
+        lf.setUnit(units);
         lf.setSelectedAirports(selectedLocations);
-        lf.readFile(filename); //TODO Read from database
+        //lf.readFromDB(new ArrayList<>()); //TODO Read from database after initial read from xml
         lf.thirdTry();
         locations = lf.getLocations();
         pairs = lf.getPairs();
@@ -316,9 +319,9 @@ public class Model {
 
     private void generatePairs(ArrayList<Location> newLocations, ArrayList<Pair> newPairs) {
         for(int a = 0; a < newLocations.size() - 1; a++) {
-            newPairs.add(new Pair(Integer.toString(a), newLocations.get(a), newLocations.get(a + 1), newLocations.get(a).distance(newLocations.get(a + 1))));
+            newPairs.add(new Pair(Integer.toString(a), newLocations.get(a), newLocations.get(a + 1), newLocations.get(a).distance(newLocations.get(a + 1), unit)));
         }
-        newPairs.add(new Pair(Integer.toString(newLocations.size() - 1), newLocations.get(newLocations.size() - 1), newLocations.get(0), newLocations.get(newLocations.size() - 1).distance(newLocations.get(0))));
+        newPairs.add(new Pair(Integer.toString(newLocations.size() - 1), newLocations.get(newLocations.size() - 1), newLocations.get(0), newLocations.get(newLocations.size() - 1).distance(newLocations.get(0), unit)));
     }
 
     private ArrayList<Location> generateRoute() {
@@ -424,4 +427,9 @@ public class Model {
         while (threeOpt() > 0 || twoOpt() > 0);
     }
 
+
+    public static void main(String[] args) {
+        LocationFactory lf = new LocationFactory();
+        lf.readFromDB(new ArrayList<>());
+    }
 }

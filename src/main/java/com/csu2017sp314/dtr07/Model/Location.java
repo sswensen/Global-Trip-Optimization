@@ -12,14 +12,22 @@ public class Location {
     private String name;
     private double lat;
     private double lon;
+    private String municipality;
+    private String region;
+    private String country;
+    private String continent;
     private int nearest = -1;
     private int nearestDistance = 9999999;
 
-    Location(String id, String name, String lat, String lon) {
+    Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent) {
         this.id = id;
         this.name = name;
         this.lat = convertCoordinates(lat);
         this.lon = convertCoordinates(lon);
+        this.municipality = municipality;
+        this.region = region;
+        this.country = country;
+        this.continent = continent;
     }
 
     private static double convertCoordinates(String in) {
@@ -59,8 +67,7 @@ public class Location {
         return ret;
     }
 
-    double distance(Location in) {
-        final String unit = "M";
+    double distance(Location in, String unit) {
         double lat1 = this.lat;
         double lon1 = this.lon;
         double lat2 = in.getLat();
@@ -70,10 +77,10 @@ public class Location {
                 + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        if(unit.equals("K")) {
+        dist = dist * 60 * 1.1515; //Default is miles ("M")
+        if(unit.equals("K")) { //Kilometers
             dist = dist * 1.609344;
-        } else if(unit.equals("N")) {
+        } else if(unit.equals("N")) { //Nautical miles
             dist = dist * 0.8684;
         }
         return (dist);
