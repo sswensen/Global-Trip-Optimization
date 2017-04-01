@@ -52,7 +52,6 @@ class LocationFactory {
             }
         }
         scan.close();
-        //TODO Remove this
         locations.add(new Location("NZCH", "Christchurch International Airport", "-43.48939896", "172.5319977"));
         locations.add(new Location("00A", "Total Rf Heliport", "40.07080078", "-74.93360138"));
         locations.add(new Location("00IL", "Hammer Airport", "41.97840118", "-89.56040192"));
@@ -129,6 +128,10 @@ class LocationFactory {
 
     public void setSelectedAirports(ArrayList<String> selectedAirports) {
         this.selectedAirports = selectedAirports;
+        QueryBuilder qb = new QueryBuilder();
+        qb.search4IDinDatabase(selectedAirports);
+        qb.fireQuery();
+        locations = qb.getLocations();
     }
 
     public void setUnit(String unit) {

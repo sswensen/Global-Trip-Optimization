@@ -302,7 +302,7 @@ public class Presenter {
         }
 
         view.addFooter(model.getTripDistance());
-        view.addHeader("Colorado");
+        view.addHeader("Long Live the Chief");
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
         view.finalizeTrip(filename);
         makeItinerary();
