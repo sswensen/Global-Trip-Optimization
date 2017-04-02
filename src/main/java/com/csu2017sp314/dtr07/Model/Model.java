@@ -27,12 +27,13 @@ public class Model {
     private String unit;
     private double[][] distTable;
 
+    //TODO add method that takes arraylist (wheres) and returns set of strings of names of the airports
+
     public int planTrip(String filename, String units) throws FileNotFoundException {
         this.unit = units;
         LocationFactory lf = new LocationFactory();
         lf.setUnit(units);
-        lf.setSelectedAirports(selectedLocations);
-        lf.readFromDB(new ArrayList<>()); //TODO Read from database after initial read from xml
+        lf.setSelectedAirports(selectedLocations); //THis also searches the database lol
         //lf.readFile(filename);
         if(twoOpt) {
             lf.setTwoOpt(true);

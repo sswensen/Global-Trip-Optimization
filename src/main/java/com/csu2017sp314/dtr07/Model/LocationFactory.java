@@ -71,7 +71,7 @@ class LocationFactory {
     boolean readFromDB(ArrayList<String> where) {
         QueryBuilder qb = new QueryBuilder();
         //qb.setWhere(where);
-        qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport");
+        qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport"); //TODO change this to use where array list
         qb.fireQuery();
         locations = qb.getLocations();
         return locations.size() > 0;
