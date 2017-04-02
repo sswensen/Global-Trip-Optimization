@@ -80,7 +80,7 @@ public class Model {
         if(!threeOpt && !tick) {
             userLocations = new ArrayList<>(previousLocations);
         }
-        lf.setLocations(userLocations);
+        lf.setLocations(userLocations);//TODO read from database
         lf.thirdTry();
         userLocations = lf.getLocations();
         pairs = lf.getPairs();
@@ -808,6 +808,16 @@ public class Model {
         int[] array = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         System.out.println(Arrays.toString(array));
 
+    public static void main(String[] args) {
+        LocationFactory lf = new LocationFactory();
+        ArrayList<String> w = new ArrayList<>();
+        w.add("");
+        w.add("NA");
+        w.add("");
+        w.add("");
+        w.add("");
+        w.add("");
+        lf.readFromDB(w);
         //model.reverseSegment(array, 1, 4);
         //array = model.swapSegments(array, 1, 4, 5, 8);
 
