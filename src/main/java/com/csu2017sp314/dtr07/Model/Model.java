@@ -58,7 +58,7 @@ public class Model {
         if(!twoOpt && !tick) {
             userLocations = new ArrayList<>(previousLocations);
         }
-        lf.setLocations(userLocations);
+        lf.setLocations(userLocations);//TODO read from database
         lf.thirdTry();
         userLocations = lf.getLocations();
         pairs = lf.getPairs();
@@ -430,6 +430,13 @@ public class Model {
 
     public static void main(String[] args) {
         LocationFactory lf = new LocationFactory();
-        lf.readFromDB(new ArrayList<>());
+        ArrayList<String> w = new ArrayList<>();
+        w.add("");
+        w.add("NA");
+        w.add("");
+        w.add("");
+        w.add("");
+        w.add("");
+        lf.readFromDB(w);
     }
 }

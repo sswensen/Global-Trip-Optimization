@@ -74,6 +74,9 @@ public class Presenter {
                 System.out.println("Using new map");
             }*/
         });
+        view.setCallback4((ArrayList<String> s) -> {
+            this.eventUserAddLocList(s); //TODO update this
+        });
     }
 
     private void toggleName() {
@@ -142,7 +145,7 @@ public class Presenter {
             model.setThreeOpt(false);
         //model.printUserLoc();
         try {
-            model.planUserTrip(fname);
+            model.planUserTrip(fname);//TODO add arraylist to planUserTrip, might need to make another method like eventUserAddLocList
             view.resetTrip();
             int numPairs = model.getUserPairs().size();
 

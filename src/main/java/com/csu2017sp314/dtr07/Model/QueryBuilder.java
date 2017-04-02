@@ -18,9 +18,11 @@ import java.util.ArrayList;
 
 /**
  * Created by SummitDrift on 3/28/17.
+ * File for creating SQL queries to access the database
+ * @author SummitDrift
  */
 
-public class QueryBuilder {
+class QueryBuilder {
     private final String myDriver = "com.mysql.jdbc.Driver";
     //private final static String myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314"; //Original
     private final String myUrl = "jdbc:mysql://127.0.0.1:3306/cs314"; //Using tunneling
@@ -34,7 +36,7 @@ public class QueryBuilder {
     private final String limit = " LIMIT 10";
     private ArrayList<Location> locations = new ArrayList<>(); //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
-    public void searchDatabase(String type, String continent, String country, String region, String municipality, String name) {
+    void searchDatabase(String type, String continent, String country, String region, String municipality, String name) {
         ArrayList<String> w = new ArrayList<>();
         w.add(type);
         w.add(continent);
@@ -45,10 +47,10 @@ public class QueryBuilder {
         setWhere(w);
     }
 
-    public void search4IDinDatabase(ArrayList<String> ids) {
+    void search4IDinDatabase(ArrayList<String> ids) {
         String w = "WHERE airports.ident in (";
         for(int i = 0; i < ids.size()-1; i++) {
-            w += "'" + ids.get(i) + "', ";
+            w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
         }
         w += "'" + ids.get(ids.size()-1) + "')";
         where = w;
@@ -56,7 +58,9 @@ public class QueryBuilder {
 
     //TODO add function for changing limit
 
-    public void setWhere(ArrayList<String> wheres) {
+    //TODO add function that returns the number of items found
+
+    private void setWhere(ArrayList<String> wheres) {
         ArrayList<String> q = new ArrayList<>();
         String type = wheres.get(0);
         if(!type.equals("")) {
@@ -87,14 +91,14 @@ public class QueryBuilder {
             if(ret.equals("")) {
                 ret = "WHERE ";
             } else {
-                ret += " and ";
+                ret += " and "; //TODO replace with StringBuilder.append
             }
             ret += q.get(i);
         }
         where = ret;
     }
 
-    public ResultSet fireQuery() {
+    ResultSet fireQuery() {
         ResultSet rs = null;
         try { // connect to the database
             Class.forName(myDriver);
@@ -147,7 +151,7 @@ public class QueryBuilder {
         return rs;
     }
 
-    public ArrayList<Location> getLocations() {
+    ArrayList<Location> getLocations() {
         return locations;
     }
 }

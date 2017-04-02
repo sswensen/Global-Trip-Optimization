@@ -53,6 +53,7 @@ public class MapGUI {
     private Consumer<String> callback; //Used if other callback method is used
     private Consumer<ArrayList<String>> callback2;
     private Consumer<String> callback3; //Used if other callback method is used
+    private Consumer<ArrayList<String>> callback4; //Used for searching database
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
@@ -99,6 +100,11 @@ public class MapGUI {
     void setCallback3(Consumer<String> callback3) {
         this.callback3 = callback3;
     }
+
+    void setCallback4(Consumer<ArrayList<String>> callback4) {
+        this.callback4 = callback4;
+    }
+
 
     /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);

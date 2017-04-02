@@ -33,6 +33,7 @@ public class View {
     private Consumer<String> callback;
     private Consumer<ArrayList<String>> callback2;
     private Consumer<String> callback3;
+    private Consumer<ArrayList<String>> callback4;
     private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
@@ -106,6 +107,10 @@ public class View {
 
     public void setCallback3(Consumer<String> callback3) {
         this.callback3 = callback3;
+    }
+
+    public void setCallback4(Consumer<ArrayList<String>> callback4) {
+        this.callback4 = callback4;
     }
 
     private void userAddLoc(String id) {
