@@ -68,13 +68,14 @@ class LocationFactory {
         return locations.size() > 0;
     }*/
 
-    boolean readFromDB(ArrayList<String> where) {
+    ArrayList<Location> readFromDB(ArrayList<String> where) {
         QueryBuilder qb = new QueryBuilder();
         //qb.setWhere(where);
-        qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport"); //TODO change this to use where array list
+        //qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport");
+        qb.searchDatabase(where.get(0), where.get(1), where.get(2), where.get(3), where.get(4), where.get(5));
         qb.fireQuery();
         locations = qb.getLocations();
-        return locations.size() > 0;
+        return locations;
     }
 
     boolean readUserLocations(ArrayList<Location> userLoc) {

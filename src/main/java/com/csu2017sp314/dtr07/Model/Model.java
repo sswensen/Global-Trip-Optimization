@@ -100,6 +100,16 @@ public class Model {
         return 1;
     }
 
+    public ArrayList<String> searchDatabase(ArrayList<String> where) {
+        LocationFactory lf = new LocationFactory();
+        ArrayList<Location> locs = lf.readFromDB(where);
+        ArrayList<String> ret = new ArrayList<>(); //Very inefficient, see begining of fireQuery for additional options
+        for(Location loc : locs) {
+            ret.add(loc.getName());
+        }
+        return ret;
+    }
+
     public ArrayList<Pair> getUserPairs() {
         /*LocationFactory lf = new LocationFactory();
         lf.readUserLocations(userLocations);

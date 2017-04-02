@@ -82,7 +82,7 @@ public class Presenter {
             }*/
         });
         view.setCallback4((ArrayList<String> s) -> {
-            this.eventUserAddLocList(s); //TODO update this to call searchDB
+            ArrayList<String> locationNames = model.searchDatabase(s); //TODO push these location names back to
         });
     }
 
