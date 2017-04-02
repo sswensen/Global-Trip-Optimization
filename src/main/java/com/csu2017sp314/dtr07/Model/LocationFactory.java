@@ -172,7 +172,7 @@ class LocationFactory {
 
     private ArrayList<Pair> betterGeneratePairs(Location[] route, ArrayList<Pair> newPairs) {
         for(int a = 0; a < route.length - 1; a++) {
-            newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1])));
+            newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1], unit)));
         }
         return newPairs;
     }
@@ -193,7 +193,7 @@ class LocationFactory {
         for(int i = 0; i < route.length; i++) {
             route[i].setTableIndex(i);
             for (int j = 0; j < route.length; j++) {
-                distTable[i][j] = route[i].distance(route[j]);
+                distTable[i][j] = route[i].distance(route[j], unit);
             }
         }
         this.distTable = distTable;

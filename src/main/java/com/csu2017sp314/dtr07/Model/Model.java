@@ -32,8 +32,8 @@ public class Model {
         LocationFactory lf = new LocationFactory();
         lf.setUnit(units);
         lf.setSelectedAirports(selectedLocations);
-        //lf.readFromDB(new ArrayList<>()); //TODO Read from database after initial read from xml
-        lf.readFile(filename);
+        lf.readFromDB(new ArrayList<>()); //TODO Read from database after initial read from xml
+        //lf.readFile(filename);
         if(twoOpt) {
             lf.setTwoOpt(true);
         }
