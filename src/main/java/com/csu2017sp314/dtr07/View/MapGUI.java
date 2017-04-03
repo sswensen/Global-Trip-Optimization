@@ -15,6 +15,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.function.Consumer;
 import java.io.File;
 
@@ -83,7 +87,7 @@ public class MapGUI {
     private int width;
     private int height;
     private String unit;
-
+    DefaultTableModel model = new DefaultTableModel();
 
     MapGUI() {
 
@@ -651,14 +655,73 @@ public class MapGUI {
 
         uOp.pack();
         //itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
-        JScrollPane jsp = new JScrollPane(fTemp2);
-        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        itinerary.getContentPane().add(jsp);
+
+        JScrollPane scrollPane = createScrollableTable();
+        itinerary.getContentPane().add(scrollPane);
         itinerary.setPreferredSize(new Dimension(800, 800));
         itinerary.pack();
         ret = 1;
         return ret;
+    }
+
+    JScrollPane createScrollableTable(){
+        model = new DefaultTableModel();
+        JTable table = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane();
+        model.addColumn("Trip");
+        getDataFromPanel(fTemp2, model);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        resizeTable(table);
+        scrollPane.add(table);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        return scrollPane;
+    }
+
+    void getDataFromPanel(JPanel temp, DefaultTableModel tempModel){
+        for(int i = 0; i < temp.getComponentCount();i++){
+            if(temp.getComponent(i) instanceof JLabel) {
+                JLabel label = (JLabel)temp.getComponent(i);
+                String text = label.getText();
+                Vector row = new Vector();
+                row.add(text);
+                tempModel.addRow(row);
+            }
+        }
+    }
+
+    void resizeTable(JTable table){
+        for (int column = 0; column < table.getColumnCount(); column++){
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = 0;
+            TableCellRenderer rend = table.getTableHeader().getDefaultRenderer();
+            TableCellRenderer rendCol = tableColumn.getHeaderRenderer();
+            if (rendCol == null) rendCol = rend;
+            Component header = rendCol.getTableCellRendererComponent(table, tableColumn.getHeaderValue(), false, false, 0, column);
+            maxWidth = header.getPreferredSize().width;
+            //System.out.println("maxWidth :"+maxWidth);
+
+            for (int row = 0; row < table.getRowCount(); row++){
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+                //System.out.println("preferredWidth :"+preferredWidth);
+                //System.out.println("Width :"+width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+
+                if (preferredWidth <= maxWidth){
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+        Dimension d = table.getPreferredSize();
+        System.out.println(d.getWidth() + " " + d.getHeight());
+        table.setPreferredScrollableViewportSize(new Dimension((int)d.getWidth() + 1, 500));
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
