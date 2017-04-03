@@ -28,6 +28,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -589,19 +590,18 @@ public class MapGUI {
 
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
-
-        int numButtons = 0;
+        DefaultTableModel dm = new DefaultTableModel();
+        Vector<Vector<String>> buttons = new Vector<>();
         for(String id : ids) {
             ret = 1;
             JButton b = new JButton("      Add      ");
-            buttons.add(b);
             b.addActionListener((ActionEvent e) -> { //This fires when button b is pressed, unique for each instance!
                     /*
                         We can use the following method to run the call back each time a location is clicked (don't know about efficiency here)
                         Or we can do one where the callback is only initiated when the user clicks the button that loads the map after selecting locations
                         I'm going to implement the second method as the first one already is.
                         To use the first method, uncomment the line below.
-                     */
+                    */
                 //userAddLoc(id); //This is a callback to View
                 if(tick) {
                     for(int i = 0; i < tempLoc.size(); i++) {
@@ -629,23 +629,21 @@ public class MapGUI {
                     }
                 }
             });
-
-            gbc.fill = GridBagConstraints.NONE;
-            JButton t = new JButton(id);
-            JLabel t2 = new JLabel(id);
-            t.setEnabled(false);
-
-            fTemp.add(b);
-            b.setVisible(true);
-            t.setVisible(true);
-
-            numButtons++;
-            setGBC(0, numButtons + 1, 1);
-            fTemp.add(b, gbc);
-            setGBC(1, numButtons + 1, 3);
-            fTemp.add(t2, gbc);
+            Vector<String> temp = new Vector<>();
+            temp.addElement("Add");
+            temp.addElement(id);
+            buttons.add(temp);
         }
-
+        Vector<String> columnNames = new Vector<>();
+        columnNames.addElement("Click to add Destination");
+        columnNames.addElement("Location");
+        dm.setDataVector(buttons, columnNames);
+        JTable table2 = new JTable(dm);
+        table2.getColumn("Click to add Destination").setCellRenderer(new ButtonRenderer());
+        table2.getColumn("Click to add Destination").setCellEditor(new ButtonEditor(new JCheckBox()));
+        JScrollPane scroll = new JScrollPane(table2);
+        setGBC(0,2,4);
+        fTemp.add(scroll, gbc);
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
         options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
@@ -662,7 +660,78 @@ public class MapGUI {
         ret = 1;
         return ret;
     }
+    class ButtonRenderer extends JButton implements TableCellRenderer {
 
+        public ButtonRenderer() {
+            setOpaque(true);
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                                                       boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+                setBackground(UIManager.getColor("Button.background"));
+            }
+            setText((value == null) ? "" : value.toString());
+            return this;
+        }
+    }
+
+    class ButtonEditor extends DefaultCellEditor {
+        protected JButton button;
+
+        private String label;
+
+        private boolean isPushed;
+
+        public ButtonEditor(JCheckBox checkBox) {
+            super(checkBox);
+            button = new JButton();
+            button.setOpaque(true);
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                }
+            });
+        }
+
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            if (isSelected) {
+                button.setForeground(table.getSelectionForeground());
+                button.setBackground(table.getSelectionBackground());
+            } else {
+                button.setForeground(table.getForeground());
+                button.setBackground(table.getBackground());
+            }
+            label = (value == null) ? "" : value.toString();
+            button.setText(label);
+            isPushed = true;
+            return button;
+        }
+
+        public Object getCellEditorValue() {
+            if (isPushed) {
+                //
+                //
+                JOptionPane.showMessageDialog(button, label + ": Ouch!");
+                // System.out.println(label + ": Ouch!");
+            }
+            isPushed = false;
+            return new String(label);
+        }
+
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
+        }
+
+        protected void fireEditingStopped() {
+            super.fireEditingStopped();
+        }
+    }
     void resizeTable(JTable table){
         for (int column = 0; column < table.getColumnCount(); column++){
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
@@ -703,6 +772,7 @@ public class MapGUI {
             fTemp2 = createInnerPanel();
             ret = 1;
         }
+
         if(model == null){
             model = new DefaultTableModel();
             table = new JTable(model);
@@ -716,11 +786,13 @@ public class MapGUI {
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             ret = 1;
         }
+
         if(seqId.equals("0")) {
             fTemp2.removeAll();
             fTemp2.repaint();
             model.setRowCount(0);
         }
+
         setGBC(0, Integer.parseInt(seqId), 4);
         JLabel lab = new JLabel("ID: " + seqId + "   " + name1 + " to " + name2 + "   " + mileage + " miles");
         lab.setHorizontalAlignment(2);
