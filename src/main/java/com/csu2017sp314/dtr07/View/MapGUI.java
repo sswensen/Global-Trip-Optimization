@@ -87,7 +87,8 @@ public class MapGUI {
     private int width;
     private int height;
     private String unit;
-    DefaultTableModel model = new DefaultTableModel();
+    private DefaultTableModel model;
+    private JTable table;
 
     MapGUI() {
 
@@ -658,7 +659,7 @@ public class MapGUI {
 
         JScrollPane scrollPane = createScrollableTable();
         itinerary.getContentPane().add(scrollPane);
-        itinerary.setPreferredSize(new Dimension(800, 800));
+        //itinerary.setPreferredSize(new Dimension(800, 800));
         itinerary.pack();
         ret = 1;
         return ret;
@@ -666,27 +667,28 @@ public class MapGUI {
 
     JScrollPane createScrollableTable(){
         model = new DefaultTableModel();
-        JTable table = new JTable(model);
-        JScrollPane scrollPane = new JScrollPane();
+        table = new JTable(model);
         model.addColumn("Trip");
         getDataFromPanel(fTemp2, model);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         resizeTable(table);
-        scrollPane.add(table);
+        JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         return scrollPane;
     }
-
+    void redrawScrollableTable(){
+        model.setRowCount(0);
+        getDataFromPanel(fTemp2, model);
+    }
     void getDataFromPanel(JPanel temp, DefaultTableModel tempModel){
         for(int i = 0; i < temp.getComponentCount();i++){
-            if(temp.getComponent(i) instanceof JLabel) {
-                JLabel label = (JLabel)temp.getComponent(i);
-                String text = label.getText();
-                Vector row = new Vector();
-                row.add(text);
-                tempModel.addRow(row);
-            }
+            JLabel label = (JLabel) temp.getComponent(i);
+            String text = label.getText();
+            System.out.println("Label text = " + text);
+            Vector row = new Vector();
+            row.add(text);
+            tempModel.addRow(row);
         }
     }
 
@@ -720,7 +722,7 @@ public class MapGUI {
             tableColumn.setPreferredWidth(preferredWidth);
         }
         Dimension d = table.getPreferredSize();
-        System.out.println(d.getWidth() + " " + d.getHeight());
+        //System.out.println(d.getWidth() + " " + d.getHeight());
         table.setPreferredScrollableViewportSize(new Dimension((int)d.getWidth() + 1, 500));
     }
 
