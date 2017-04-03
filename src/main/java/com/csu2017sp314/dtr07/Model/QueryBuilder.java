@@ -10,9 +10,6 @@ package com.csu2017sp314.dtr07.Model;
  * java -cp ".:./com.mysql.jdbc_5.1.5.jar" Sprint3Example2 eID password
  */
 
-import com.csu2017sp314.dtr07.Model.Location;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -33,7 +30,7 @@ class QueryBuilder {
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
-    private final String limit = " LIMIT 10";
+    private final String limit = " LIMIT 100";
     private ArrayList<Location> locations = new ArrayList<>(); //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     void searchDatabase(String type, String continent, String country, String region, String municipality, String name) {
@@ -98,7 +95,11 @@ class QueryBuilder {
         where = ret;
     }
 
-    ResultSet fireQuery() {
+    ResultSet fireQuery() { //String whatDoYouWantBack) { //if "locations" is passed in as parameter, make locations with db stuff, else just return the names
+        /*boolean makeLocationsQuestionMark = false;
+        if(whatDoYouWantBack.equals("locations")) {
+            makeLocationsQuestionMark = true;
+        }*/
         ResultSet rs = null;
         try { // connect to the database
             Class.forName(myDriver);
@@ -153,5 +154,13 @@ class QueryBuilder {
 
     ArrayList<Location> getLocations() {
         return locations;
+    }
+
+    ArrayList<String> getLocationNames() { //Highly ineffient, see todo at beginning of fireQuery
+        ArrayList<String> ret = new ArrayList<>();
+        for(Location loc : locations) {
+            ret.add(loc.getName());
+        }
+        return ret;
     }
 }

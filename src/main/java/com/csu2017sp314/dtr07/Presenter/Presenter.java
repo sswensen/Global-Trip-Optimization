@@ -3,11 +3,18 @@ package com.csu2017sp314.dtr07.Presenter;
 import com.csu2017sp314.dtr07.Model.*;
 import com.csu2017sp314.dtr07.View.*;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -75,7 +82,7 @@ public class Presenter {
             }*/
         });
         view.setCallback4((ArrayList<String> s) -> {
-            this.eventUserAddLocList(s); //TODO update this
+            ArrayList<String> locationNames = model.searchDatabase(s); //TODO push these location names back to
         });
     }
 
@@ -256,7 +263,7 @@ public class Presenter {
         fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
-        //TODO populate selectedAirports arraylist with xml
+        /*//TODO populate selectedAirports arraylist with xml
         ArrayList selectedAirports = new ArrayList();
         selectedAirports.add("NZCH");
         selectedAirports.add("EHAM");
@@ -267,8 +274,9 @@ public class Presenter {
         selectedAirports.add("ZYHB");
         selectedAirports.add("ZYTX");
         selectedAirports.add("BKPR");
-        selectedAirports.add("CYEG");
-        model.setSelectedLocations(selectedAirports);
+        selectedAirports.add("CYEG");*/
+
+        model.setSelectedLocations(readXML(selectionXml));
         model.planTrip(filename, "M");
         int numPairs = model.getNumPairs();
         view.originalIds = model.getLocationIds();
@@ -312,5 +320,37 @@ public class Presenter {
         if(displayGui) {
             view.gui();
         }
+    }
+
+    private ArrayList<String> readXML(String selectionXml) throws Exception {
+        Document readXml;
+        String name = "";
+        File xmlFile = new File(selectionXml);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        readXml = dBuilder.parse(xmlFile);
+        readXml.getDocumentElement().normalize();
+        //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        ArrayList<String> ret = new ArrayList<>();
+        NodeList nList = readXml.getElementsByTagName("destinations");
+        NodeList nList2 = readXml.getElementsByTagName("title");
+        System.out.println("nnList2 size = " + nList2.getLength());
+        for(int i = 0; i < nList2.getLength(); i++) {
+            Node a = nList2.item(i);
+            name = a.getTextContent();
+        }
+        for(int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            if(nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                int i = 0;
+                while(eElement.getElementsByTagName("id").item(i) != null) {
+                    ret.add(eElement.getElementsByTagName("id").item(i).getTextContent());
+                    i++;
+                }
+            }
+        }
+        return ret;
     }
 }
