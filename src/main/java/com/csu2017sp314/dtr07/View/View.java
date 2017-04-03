@@ -121,6 +121,10 @@ public class View {
         callback2.accept(ids);
     }
 
+    private void searchDatabase(ArrayList<String> wheres) {
+        callback4.accept(wheres);
+    }
+
     private void mapOptions(String option) {
         callback3.accept(option);
     }
@@ -178,7 +182,7 @@ public class View {
     }
 
 
-    public void gui() throws ParserConfigurationException, TransformerException{
+    public void gui() throws Exception {
         gui.setCallback((String s) -> {
             this.userAddLoc(s);
         });
@@ -189,6 +193,10 @@ public class View {
 
         gui.setCallback3((String s) -> {
             this.mapOptions(s);
+        });
+
+        gui.setCallback4((ArrayList<String> s) -> {
+            this.searchDatabase(s);
         });
         try {
             gui.init(f);

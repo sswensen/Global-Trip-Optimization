@@ -66,15 +66,15 @@ class QueryBuilder {
         }
         String continent = wheres.get(1);
         if(!continent.equals("")) {
-            q.add("continents.id like '%" + continent + "%'");
+            q.add("continents.name like '%" + continent + "%'");
         }
         String country = wheres.get(2);
         if(!country.equals("")) {
-            q.add("countries.code like '%" + country + "%'");
+            q.add("countries.name like '%" + country + "%'");
         }
         String region = wheres.get(3);
         if(!region.equals("")) {
-            q.add("regions.code like '%" + region + "%'");
+            q.add("regions.name like '%" + region + "%'");
         }
         String municipality = wheres.get(4);
         if(!municipality.equals("")) {
@@ -122,7 +122,7 @@ class QueryBuilder {
                     }
 
                     // submit a query to list all large airports
-                    //System.out.println(columns + continents + join + where + limit);
+                    System.out.println(columns + continents + join + where + limit);
                     rs = st.executeQuery(columns + continents + join + where + limit);
 
                     try { // iterate through query results and print using column numbers

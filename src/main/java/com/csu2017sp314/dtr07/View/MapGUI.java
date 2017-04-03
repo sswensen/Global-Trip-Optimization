@@ -83,6 +83,8 @@ public class MapGUI {
     private int width;
     private int height;
     private String unit;
+    private ArrayList<String> fiveThingsForDatabase = new ArrayList<>(); //Used for callback
+    private int index = 0; //I inked...
 
 
     MapGUI() {
@@ -116,6 +118,10 @@ public class MapGUI {
 
     private void mapOptions(String option) {
         callback3.accept(option);
+    }
+
+    private void searchDatabase() {
+        callback4.accept(fiveThingsForDatabase);
     }
 
     int init(String filename) throws Exception {
@@ -557,24 +563,53 @@ public class MapGUI {
     }
 
     JComboBox makeDropdowns(ArrayList<String> options) {
+        String whatIsThis = options.get(0);
         JComboBox drop = new JComboBox(options.toArray(new String[0])); //This converts options to a String[]
+        index = 0;
+        switch(whatIsThis) {
+            case "Select an airport type filter":
+                index = 0;
+                break;
+            case "Select a continent filter":
+                index = 1;
+                break;
+            case "Select a country filter":
+                index = 2;
+                break;
+            case "Select a region filter":
+                index = 3;
+                break;
+
+        }
         drop.setEditable(false);
-        drop.addActionListener((ActionEvent e) -> {
+        /*drop.addActionListener((ActionEvent e) -> {
             JComboBox<String> combo = (JComboBox<String>) e.getSource();
             String selected = (String) combo.getSelectedItem();
             //TODO set the returning arraylist after this method is called multiple times
-        });
+            fiveThingsForDatabase.add(index, selected);
+        });*/
         return drop;
     }
 
-    ArrayList<String> sshImCheatingDontTell(String whatYouWant, String table) {
+    ArrayList<String> sshImCheatingDontTell(String whatYouWant, String table, String wheres) {
+        if(!wheres.equals("")) {
+            String temp = wheres;
+            wheres = "WHERE " + temp;
+        }
         ArrayList<String> ret = new ArrayList<>();
+        if(table.equalsIgnoreCase("airports"))
+            ret.add("Select an airport type filter");
+        if(table.equalsIgnoreCase("continents"))
+            ret.add("Select a continent filter");
+        if(table.equalsIgnoreCase("countries"))
+            ret.add("Select a country filter");
+        if(table.equalsIgnoreCase("regions"))
+            ret.add("Select a region filter");
         try {
-            String w = "";
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cs314", "sswensen", "830534566");
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT DISTINCT " + w + " FROM " + table);
+            ResultSet rs = st.executeQuery("SELECT DISTINCT " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
 
             while(rs.next()) {
                 ret.add(rs.getString(1));
@@ -586,13 +621,19 @@ public class MapGUI {
     }
 
     void displayDatabaseWindow() throws Exception {
+        fiveThingsForDatabase.add("");
+        fiveThingsForDatabase.add("");
+        fiveThingsForDatabase.add("");
+        fiveThingsForDatabase.add("");
+        fiveThingsForDatabase.add("");
+        fiveThingsForDatabase.add("");
+        fiveThingsForDatabase.add("");
         databaseFrame = new JFrame("Testing dropdowns");
         databaseFrame.setVisible(true);
         databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         databaseFrame.setLocation(430, 100);
         databaseWindow = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        setGBC(0, 0, 4);
 
         /*ArrayList<String> types = new ArrayList<>();
         types.add("baloonport");
@@ -629,14 +670,56 @@ public class MapGUI {
         continents.add("OC");
         continents.add("SA");*/
 
+        setGBC(0, 0, 4);
+        JComboBox airports = makeDropdowns(sshImCheatingDontTell("type", "airports", ""));
+        databaseWindow.add(airports, gbc);
+        databaseFrame.add(databaseWindow);
 
-        databaseWindow.add(makeDropdowns(sshImCheatingDontTell("type", "airports")), gbc);
+        setGBC(0, 1, 4);
+        JComboBox continents = makeDropdowns(sshImCheatingDontTell("name", "continents", ""));
+        databaseWindow.add(continents, gbc);
+        databaseFrame.add(databaseWindow);
 
+        setGBC(0, 2, 4);
+        JComboBox countries = makeDropdowns(sshImCheatingDontTell("name", "countries", ""));
+        databaseWindow.add(countries, gbc);
+        databaseFrame.add(databaseWindow);
+
+        setGBC(0, 3, 4);
+        JComboBox regions = makeDropdowns(sshImCheatingDontTell("name", "regions", ""));
+        databaseWindow.add(regions, gbc);
+        databaseFrame.add(databaseWindow);
+
+        /*setGBC(0, 4, 4);
+        databaseWindow.add(makeDropdowns(new ArrayList<>()), gbc);
+        databaseFrame.add(databaseWindow);
+
+        setGBC(0, 5, 4);
+        databaseWindow.add(makeDropdowns(new ArrayList<>()), gbc);
+        databaseFrame.add(databaseWindow);*/
+
+        //TODO add button for searching of database, else we could use the self updating ones but that might take a bit to update
+        setGBC(0, 6, 4);
+        JButton searchDatabasePlease = new JButton("Search");
+        searchDatabasePlease.addActionListener((ActionEvent e) -> {
+            fiveThingsForDatabase.remove(0);
+            fiveThingsForDatabase.add(0, (String)airports.getSelectedItem());
+            fiveThingsForDatabase.remove(1);
+            fiveThingsForDatabase.add(1, (String)continents.getSelectedItem());
+            fiveThingsForDatabase.remove(2);
+            fiveThingsForDatabase.add(2, (String)countries.getSelectedItem());
+            fiveThingsForDatabase.remove(3);
+            fiveThingsForDatabase.add(3, (String)regions.getSelectedItem());
+            fiveThingsForDatabase.remove(4);
+            searchDatabase();
+        });
+        databaseWindow.add(searchDatabasePlease, gbc);
         databaseFrame.add(databaseWindow);
         databaseFrame.pack();
     }
 
-    int displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException {
+    int displayXML(ArrayList<String> ids) throws Exception {
+        displayDatabaseWindow();
         int ret = -1;
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();

@@ -67,6 +67,7 @@ class LocationFactory {
         QueryBuilder qb = new QueryBuilder();
         //qb.setWhere(where);
         //qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport");
+        //qb.searchDatabase("large_airport", "North America", "United States", "Colorado", "", "");
         qb.searchDatabase(where.get(0), where.get(1), where.get(2), where.get(3), where.get(4), where.get(5));
         qb.fireQuery();
         locations = qb.getLocations();
