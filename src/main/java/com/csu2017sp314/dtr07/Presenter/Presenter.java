@@ -64,11 +64,11 @@ public class Presenter {
             }
             if(s.equals("M")) {
                 //TODO put this somewhere
-                System.out.println("Units now M");
+                System.out.println("[Presenter] Units now M");
             }
             if(s.equals("K")) {
                 //TODO put this somewhere
-                System.out.println("units now K");
+                System.out.println("[Presenter] Units now K");
             }
             /*if(currentIds.isEmpty()) {
                 try {
@@ -94,7 +94,7 @@ public class Presenter {
         } else {
             displayName = true;
         }
-        System.out.println("Names now " + displayName);
+        System.out.println("[Presenter] Names now " + displayName);
     }
 
     private void toggleIds() {
@@ -103,7 +103,7 @@ public class Presenter {
         } else {
             displayId = true;
         }
-        System.out.println("IDs now " + displayId);
+        System.out.println("[Presenter] IDs now " + displayId);
     }
 
     private void toggleMileage() {
@@ -112,7 +112,7 @@ public class Presenter {
         } else {
             displayMileage = true;
         }
-        System.out.println("Mileage now " + displayMileage);
+        System.out.println("[Presenter] Mileage now " + displayMileage);
     }
 
     private void toggle2opt() {
@@ -123,7 +123,7 @@ public class Presenter {
             twoOpt = true;
             model.setTwoOpt(true);
         }
-        System.out.println("2-opt now " + twoOpt);
+        System.out.println("[Presenter] 2-opt now " + twoOpt);
     }
 
     private void toggle3opt() {
@@ -134,7 +134,7 @@ public class Presenter {
             threeOpt = true;
             model.setThreeOpt(true);
         }
-        System.out.println("3-opt now " + threeOpt);
+        System.out.println("[Presenter] 3-opt now " + threeOpt);
     }
 
     private int eventUserAddLoc(String id) {
@@ -246,7 +246,7 @@ public class Presenter {
         return displayGui;
     }
 
-    public String getFname(){
+    public String getFname() {
         return fname;
     }
 
@@ -336,7 +336,6 @@ public class Presenter {
         ArrayList<String> ret = new ArrayList<>();
         NodeList nList = readXml.getElementsByTagName("destinations");
         NodeList nList2 = readXml.getElementsByTagName("title");
-        System.out.println("nnList2 size = " + nList2.getLength());
         for(int i = 0; i < nList2.getLength(); i++) {
             Node a = nList2.item(i);
             name = a.getTextContent();
