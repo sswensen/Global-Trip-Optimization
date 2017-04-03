@@ -656,8 +656,8 @@ public class MapGUI {
 
         uOp.pack();
         //itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
-
-        JScrollPane scrollPane = createScrollableTable();
+        resizeTable(table);
+        JScrollPane scrollPane = new JScrollPane(table);
         itinerary.getContentPane().add(scrollPane);
         //itinerary.setPreferredSize(new Dimension(800, 800));
         itinerary.pack();
@@ -677,10 +677,7 @@ public class MapGUI {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         return scrollPane;
     }
-    void redrawScrollableTable(){
-        model.setRowCount(0);
-        getDataFromPanel(fTemp2, model);
-    }
+
     void getDataFromPanel(JPanel temp, DefaultTableModel tempModel){
         for(int i = 0; i < temp.getComponentCount();i++){
             JLabel label = (JLabel) temp.getComponent(i);
@@ -732,16 +729,34 @@ public class MapGUI {
             fTemp2 = createInnerPanel();
             ret = 1;
         }
+        if(model == null){
+            model = new DefaultTableModel();
+            table = new JTable(model);
+            model.addColumn("Trip");
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            JScrollPane scrollPane = new JScrollPane(table);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            ret = 1;
+        }
         if(seqId.equals("0")) {
             fTemp2.removeAll();
-            //fTemp2.repaint();
+            fTemp2.repaint();
+            model.setRowCount(0);
+            //model.setRowCount(0);
             //fTemp2.requestFocus(true);
         }
         setGBC(0, Integer.parseInt(seqId), 4);
-        JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
+        JLabel lab = new JLabel("ID: " + seqId + " " + name1 + " to " + name2 + " " + mileage + " miles");
         lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
-
+        if(lab.getText() != null){
+            String text = lab.getText();
+            System.out.println("Label text = " + text);
+            Vector row = new Vector();
+            row.add(text);
+            model.addRow(row);
+        }
         return ret;
     }
 
