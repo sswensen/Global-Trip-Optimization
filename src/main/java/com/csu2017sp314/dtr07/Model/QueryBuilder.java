@@ -25,7 +25,7 @@ class QueryBuilder {
     //private final static String myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314"; //Original
     private final String myUrl = "jdbc:mysql://127.0.0.1:3306/cs314"; //Using tunneling
     private final String count = "SELECT COUNT(1) ";
-    private final String columns = "SELECT airports.ident,airports.name,latitude,longitude,municipality,regions.name,countries.name,continents.name ";
+    private final String columns = "SELECT airports.id,airports.name,latitude,longitude,municipality,regions.name,countries.name,continents.name ";
     private final String continents = "FROM continents ";
     private String where = "";
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
@@ -46,7 +46,7 @@ class QueryBuilder {
     }
 
     void search4IDinDatabase(ArrayList<String> ids) {
-        String w = "WHERE airports.ident in (";
+        String w = "WHERE airports.id in (";
         for(int i = 0; i < ids.size() - 1; i++) {
             w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
         }
