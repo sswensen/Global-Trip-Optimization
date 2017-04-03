@@ -64,9 +64,11 @@ public class Presenter {
             }
             if(s.equals("M")) {
                 //TODO put this somewhere
+                System.out.println("Units now M");
             }
             if(s.equals("K")) {
                 //TODO put this somewhere
+                System.out.println("units now K");
             }
             /*if(currentIds.isEmpty()) {
                 try {

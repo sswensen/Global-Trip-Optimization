@@ -545,13 +545,13 @@ public class MapGUI {
         panel.add(mapDisplayButtons("Names"), gbc);
         setGBC(1, 0, 1);
         panel.add(mapDisplayButtons("IDs"), gbc);
-        setGBC(0, 1, 2);
+        setGBC(0, 1, 1);
         panel.add(mapDisplayButtons("Mileage"), gbc);
         setGBC(0, 2, 1);
         panel.add(mapDisplayButtons("2-opt"), gbc);
         setGBC(1, 2, 1);
         panel.add(mapDisplayButtons("3-opt"), gbc);
-        setGBC(0,0,2);
+        setGBC(1,1,1);
         panel.add(mapToggleUnits(), gbc);
         return panel;
     }
@@ -669,7 +669,7 @@ public class MapGUI {
         }
         if(seqId.equals("0")) {
             fTemp2.removeAll();
-            fTemp2.repaint();
+            //fTemp2.repaint();
             //fTemp2.requestFocus(true);
         }
         setGBC(0, Integer.parseInt(seqId), 4);
