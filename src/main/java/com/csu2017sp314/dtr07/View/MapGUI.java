@@ -693,12 +693,8 @@ public class MapGUI {
             tableColumn.setPreferredWidth(preferredWidth);
         }
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double screenWidth = screenSize.getWidth();
         double screenHeight = screenSize.getHeight();
-        Dimension d = table.getPreferredSize();
-        //System.out.println(d.getWidth() + " " + d.getHeight());
-        int scrollBarSize = ((Integer)UIManager.get("ScrollBar.width")).intValue();
-        table.setPreferredScrollableViewportSize(new Dimension((width - scrollBarSize), ((int)screenHeight - height)));
+        table.setPreferredScrollableViewportSize(new Dimension(width, ((int)screenHeight - height)));
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
