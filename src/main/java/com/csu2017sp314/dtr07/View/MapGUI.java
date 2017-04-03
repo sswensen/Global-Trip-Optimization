@@ -184,7 +184,7 @@ public class MapGUI {
             System.err.println("Error reading URL of background image");
         }
         //webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
-        System.out.println("Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
+        System.out.println("[MapGUI] Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
         root.getChildren().add(browser);
         return (scene);
     }
@@ -324,7 +324,7 @@ public class MapGUI {
         ArrayList<String> tempTrip = new ArrayList<>();
         NodeList nList = readXml.getElementsByTagName("destinations");
         NodeList nList2 = readXml.getElementsByTagName("title");
-        System.out.println("nnList2 size = " + nList2.getLength());
+        //System.out.println("[MapGUI] nnList2 size = " + nList2.getLength());
         for(int i = 0; i < nList2.getLength(); i++) {
             Node a = nList2.item(i);
             tripName = a.getTextContent();
@@ -344,11 +344,11 @@ public class MapGUI {
         trips.add(tempTrip);
         tripNames.add(tripName);
         addLoadButton(tripName);
-        System.out.println(selectionXml);
+        //System.out.println("[MapGUI] " + selectionXml);
         for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("id at index " + i + " = " + tripNames.get(i));
+            System.out.println("[MapGUI] id at index " + i + " = " + tripNames.get(i));
         }
-        System.out.println("trips size = " + trips.size());
+        System.out.println("[MapGUI] trips size = " + trips.size());
     }
 
     private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException {
@@ -410,12 +410,12 @@ public class MapGUI {
         }
         if(trips.size() == 0 || name.equals(" Save Trip "))
             savedTrip = z;
-        System.out.println("Trip name is " + tripName);
+        System.out.println("[MapGUI] Trip name is " + tripName);
         JButton load = new JButton("Load Trip " + tripName);
         loadPanel.add(load, gbc);
-        System.out.println("Added button " + load.getText());
+        System.out.println("[MapGUI] Added button " + load.getText());
         load.addActionListener((ActionEvent eee) -> {
-            System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+            System.out.println("[MapGUI] Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
             tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
             userAddLocList(tempLoc);
             lastTrip = new ArrayList<>(tempLoc);
@@ -456,7 +456,7 @@ public class MapGUI {
                     trips.add(new ArrayList<>(trip));
                     lastTrip = new ArrayList<>(trip);
                     userAddLocList(trip);
-                    System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
+                    System.out.println("[MapGUI] Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
                     try {
                         saveTripToXML(tripName, trip);
@@ -496,13 +496,13 @@ public class MapGUI {
                 } catch(TransformerException transException) {
 
                 }
-                System.out.println("Adding " + trip + " to trips at index " + savedTrip);
+                System.out.println("[MapGUI] Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
-            System.out.println("savedTrip is " + savedTrip);
-            System.out.println("Z is " + z);
+            System.out.println("[MapGUI] savedTrip is " + savedTrip);
+            System.out.println("[MapGUI] Z is " + z);
             printAll();
-            System.out.println("--------------------------------");
+            System.out.println("[MapGUI] --------------------------------");
         });
         return sa;
     }
@@ -852,10 +852,10 @@ public class MapGUI {
 
     private void printAll() {
         for(int i = 0; i < trips.size(); i++) {
-            System.out.println("Trips at " + i + " is " + trips.get(i).toString());
+            System.out.println("[MapGUI] Trips at " + i + " is " + trips.get(i).toString());
         }
         for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("Trip Names at " + i + " is " + tripNames.get(i));
+            System.out.println("[MapGUI] Trip Names at " + i + " is " + tripNames.get(i));
         }
     }
 
