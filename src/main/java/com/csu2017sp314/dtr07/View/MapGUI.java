@@ -149,7 +149,7 @@ public class MapGUI {
         //createOptionsGUI();
         uOp = createJFrame("User Options", width+1, 0, options);
         //createItineraryWindow();
-        itinerary = createScrollingJFrame("Itinerary", 0, 0);
+        itinerary = createScrollingJFrame("Itinerary", 0, height);
 
         map.setVisible(true); //making the frame visible
         return 1;
@@ -651,42 +651,16 @@ public class MapGUI {
         options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
 
         options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
-        //options.addTab("Four", face.getContentPane());
-        //uOp.setMinimumSize(new Dimension(500, 500));
 
         uOp.pack();
-        //itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
-        resizeTable(table);
+        table.getTableHeader().setBackground(Color.BLACK);
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("Impact", Font.BOLD, 12));
         JScrollPane scrollPane = new JScrollPane(table);
         itinerary.getContentPane().add(scrollPane);
-        //itinerary.setPreferredSize(new Dimension(800, 800));
         itinerary.pack();
         ret = 1;
         return ret;
-    }
-
-    JScrollPane createScrollableTable(){
-        model = new DefaultTableModel();
-        table = new JTable(model);
-        model.addColumn("Trip");
-        getDataFromPanel(fTemp2, model);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        resizeTable(table);
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        return scrollPane;
-    }
-
-    void getDataFromPanel(JPanel temp, DefaultTableModel tempModel){
-        for(int i = 0; i < temp.getComponentCount();i++){
-            JLabel label = (JLabel) temp.getComponent(i);
-            String text = label.getText();
-            System.out.println("Label text = " + text);
-            Vector row = new Vector();
-            row.add(text);
-            tempModel.addRow(row);
-        }
     }
 
     void resizeTable(JTable table){
@@ -718,9 +692,12 @@ public class MapGUI {
             }
             tableColumn.setPreferredWidth(preferredWidth);
         }
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double screenWidth = screenSize.getWidth();
+        double screenHeight = screenSize.getHeight();
         Dimension d = table.getPreferredSize();
         //System.out.println(d.getWidth() + " " + d.getHeight());
-        table.setPreferredScrollableViewportSize(new Dimension((int)d.getWidth() + 1, 500));
+        table.setPreferredScrollableViewportSize(new Dimension(width, ((int)screenHeight - height)));
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
@@ -732,8 +709,11 @@ public class MapGUI {
         if(model == null){
             model = new DefaultTableModel();
             table = new JTable(model);
-            model.addColumn("Trip");
-            table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            model.addColumn("ID");
+            model.addColumn("From");
+            model.addColumn("To");
+            model.addColumn("Distance");
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
             JScrollPane scrollPane = new JScrollPane(table);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -743,19 +723,14 @@ public class MapGUI {
             fTemp2.removeAll();
             fTemp2.repaint();
             model.setRowCount(0);
-            //model.setRowCount(0);
-            //fTemp2.requestFocus(true);
         }
         setGBC(0, Integer.parseInt(seqId), 4);
-        JLabel lab = new JLabel("ID: " + seqId + " " + name1 + " to " + name2 + " " + mileage + " miles");
+        JLabel lab = new JLabel("ID: " + seqId + "   " + name1 + " to " + name2 + "   " + mileage + " miles");
         lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
         if(lab.getText() != null){
-            String text = lab.getText();
-            System.out.println("Label text = " + text);
-            Vector row = new Vector();
-            row.add(text);
-            model.addRow(row);
+            model.addRow(new Object[]{seqId,name1,name2,mileage});
+            resizeTable(table);
         }
         return ret;
     }
