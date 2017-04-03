@@ -76,8 +76,9 @@ public class MapGUI {
     private String tripName = "ERROR";
     private JPanel loadPanel;
     private Group root;
-    private JPanel fTemp;
-    private JPanel fTemp2;
+    private JPanel fTemp; //Add buttons
+    private JPanel fTemp2; //Itinerary
+    private JPanel databaseWindow; //GUI dropdowns
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
     private int width;
@@ -554,6 +555,18 @@ public class MapGUI {
         setGBC(1,1,1);
         panel.add(mapToggleUnits(), gbc);
         return panel;
+    }
+
+    void displayDatabaseWindow() throws Exception {
+        databaseWindow = createInnerPanel();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        setGBC(0, 0, 4);
+
+        JLabel hi = new JLabel("Untitled trip", SwingConstants.CENTER);
+        hi.setPreferredSize(new Dimension(30, 30));
+
+        fTemp.add(hi, gbc);
+
     }
 
     int displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException {
