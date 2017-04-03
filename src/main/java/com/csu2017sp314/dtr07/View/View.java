@@ -211,7 +211,8 @@ public class View {
         return gui.cleanup();
     }
 
-    public static void main(String[] argv) throws ParserConfigurationException, TransformerException {
-
+    public static void main(String[] argv) throws Exception {
+        MapGUI gui = new MapGUI();
+        gui.displayDatabaseWindow();
     }
 }

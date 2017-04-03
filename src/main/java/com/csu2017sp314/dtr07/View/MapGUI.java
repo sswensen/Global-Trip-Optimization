@@ -1,20 +1,19 @@
 package com.csu2017sp314.dtr07.View;
 
+import com.csu2017sp314.dtr07.Model.Location;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-
-import javax.swing.*;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,17 +25,16 @@ import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.function.Consumer;
-import java.io.File;
-
-import java.nio.file.CopyOption;
-import java.nio.file.StandardCopyOption;
 
 
 /**
@@ -79,6 +77,7 @@ public class MapGUI {
     private JPanel fTemp; //Add buttons
     private JPanel fTemp2; //Itinerary
     private JPanel databaseWindow; //GUI dropdowns
+    private JFrame databaseFrame; //Frame that databaseWindow goes in
     private JLabel currentTrip;
     private ArrayList<String> lastTrip = new ArrayList<>();
     private int width;
@@ -143,7 +142,7 @@ public class MapGUI {
 
 
         //createOptionsGUI();
-        uOp = createJFrame("User Options", width+1, 0, options);
+        uOp = createJFrame("User Options", width + 1, 0, options);
         //createItineraryWindow();
         itinerary = createScrollingJFrame("Itinerary", 0, 0);
 
@@ -209,7 +208,7 @@ public class MapGUI {
         map.setContentPane( background );*/
 
         map.setLocation(0, 0);
-        map.setSize(width-1, height-1); //Refreshes window, needed or image doesn't appear
+        map.setSize(width - 1, height - 1); //Refreshes window, needed or image doesn't appear
         map.setSize(width, height);
         return 1;
     }
@@ -552,21 +551,89 @@ public class MapGUI {
         panel.add(mapDisplayButtons("2-opt"), gbc);
         setGBC(1, 2, 1);
         panel.add(mapDisplayButtons("3-opt"), gbc);
-        setGBC(1,1,1);
+        setGBC(1, 1, 1);
         panel.add(mapToggleUnits(), gbc);
         return panel;
     }
 
+    JComboBox makeDropdowns(ArrayList<String> options) {
+        JComboBox drop = new JComboBox(options.toArray(new String[0])); //This converts options to a String[]
+        drop.setEditable(false);
+        drop.addActionListener((ActionEvent e) -> {
+            JComboBox<String> combo = (JComboBox<String>) e.getSource();
+            String selected = (String) combo.getSelectedItem();
+            //TODO set the returning arraylist after this method is called multiple times
+        });
+        return drop;
+    }
+
+    ArrayList<String> sshImCheatingDontTell(String whatYouWant, String table) {
+        ArrayList<String> ret = new ArrayList<>();
+        try {
+            String w = "";
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cs314", "sswensen", "830534566");
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT DISTINCT " + w + " FROM " + table);
+
+            while(rs.next()) {
+                ret.add(rs.getString(1));
+            }
+        } catch(Exception e) {
+            System.err.println("Problem in MapGUI with database");
+        }
+        return ret;
+    }
+
     void displayDatabaseWindow() throws Exception {
+        databaseFrame = new JFrame("Testing dropdowns");
+        databaseFrame.setVisible(true);
+        databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        databaseFrame.setLocation(430, 100);
         databaseWindow = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
 
-        JLabel hi = new JLabel("Untitled trip", SwingConstants.CENTER);
-        hi.setPreferredSize(new Dimension(30, 30));
+        /*ArrayList<String> types = new ArrayList<>();
+        types.add("baloonport");
+        types.add("closed");
+        types.add("heliport");
+        types.add("large_airport");
+        types.add("medium_airport");
+        types.add("seplane_base");
+        types.add("small_airport");
 
-        fTemp.add(hi, gbc);
+        ArrayList<String> continents = new ArrayList<>();
+        /*continents.add("AF");
+        continents.add("AN");
+        continents.add("AS");
+        continents.add("EU");
+        continents.add("NA");
+        continents.add("OC");
+        continents.add("SA");*/
 
+        /*continents.add("Asia");
+        continents.add("Oceania");
+        continents.add("Europe");
+        continents.add("Africa");
+        continents.add("Antarctica");
+        continents.add("South America");
+        continents.add("North America");*/
+
+        //ArrayList<String> country = new ArrayList<>();
+        /*continents.add("AF");
+        continents.add("AN");
+        continents.add("AS");
+        continents.add("EU");
+        continents.add("NA");
+        continents.add("OC");
+        continents.add("SA");*/
+
+
+        databaseWindow.add(makeDropdowns(sshImCheatingDontTell("type", "airports")), gbc);
+
+        databaseFrame.add(databaseWindow);
+        databaseFrame.pack();
     }
 
     int displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException {
