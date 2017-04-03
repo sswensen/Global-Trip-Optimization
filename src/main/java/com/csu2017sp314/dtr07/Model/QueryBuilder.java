@@ -10,9 +10,6 @@ package com.csu2017sp314.dtr07.Model;
  * java -cp ".:./com.mysql.jdbc_5.1.5.jar" Sprint3Example2 eID password
  */
 
-import com.csu2017sp314.dtr07.Model.Location;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-
 import java.sql.*;
 import java.util.ArrayList;
 

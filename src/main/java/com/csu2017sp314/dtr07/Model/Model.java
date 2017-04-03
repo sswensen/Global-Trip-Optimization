@@ -19,6 +19,7 @@ public class Model {
     private ArrayList<Location> userLocations = new ArrayList<>();
     private ArrayList<Location> previousLocations = new ArrayList<>();
     private ArrayList<String> selectedLocations;
+    private LocationFactory dataBaseSearch; //This is for populating the second GUI window and getting locations once the user has selected what he wnats
     private boolean twoOpt;
     private boolean threeOpt;
     //private boolean testThreeOpt;
@@ -101,13 +102,24 @@ public class Model {
     }
 
     public ArrayList<String> searchDatabase(ArrayList<String> where) {
-        LocationFactory lf = new LocationFactory();
-        ArrayList<Location> locs = lf.readFromDB(where);
+        dataBaseSearch = new LocationFactory();
+        ArrayList<Location> locs = dataBaseSearch.readFromDB(where);
         ArrayList<String> ret = new ArrayList<>(); //Very inefficient, see begining of fireQuery for additional options
         for(Location loc : locs) {
             ret.add(loc.getName());
         }
         return ret;
+    }
+     //This method finds the locations with the correspoinging ids after the user has selected what he wants from the database
+    public void getLocationsFromIds(ArrayList<String> ids) {
+        ArrayList<Location> locs = dataBaseSearch.getLocations();
+        for(String id : ids) {
+            for(int i = 0; i < locs.size(); i++) {
+                if(Integer.parseInt(id) == i) {
+                    //TODO need to make those buttons and update the itinerary, maybe use planUserTrip or something
+                }
+            }
+        }
     }
 
     public ArrayList<Pair> getUserPairs() {
