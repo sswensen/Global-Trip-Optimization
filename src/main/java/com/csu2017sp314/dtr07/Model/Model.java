@@ -110,7 +110,8 @@ public class Model {
         }
         return ret;
     }
-     //This method finds the locations with the correspoinging ids after the user has selected what he wants from the database
+
+    //This method finds the locations with the correspoinging ids after the user has selected what he wants from the database
     public void getLocationsFromIds(ArrayList<String> ids) {
         ArrayList<Location> locs = dataBaseSearch.getLocations();
         for(String id : ids) {
@@ -214,8 +215,7 @@ public class Model {
     }
     */
 
-    public int getTotalImprovements()
-    {
+    public int getTotalImprovements() {
         return totalImprovements;
     }
 

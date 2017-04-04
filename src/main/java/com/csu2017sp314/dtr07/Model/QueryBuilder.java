@@ -16,6 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by SummitDrift on 3/28/17.
  * File for creating SQL queries to access the database
+ *
  * @author SummitDrift
  */
 
@@ -45,17 +46,17 @@ class QueryBuilder {
     }
 
     void search4IDinDatabase(ArrayList<String> ids) {
-        String w = "WHERE airports.id in (";
-        for(int i = 0; i < ids.size()-1; i++) {
+        String w = "WHERE airports.ident in (";
+        for(int i = 0; i < ids.size() - 1; i++) {
             w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
         }
-        w += "'" + ids.get(ids.size()-1) + "')";
+        w += "'" + ids.get(ids.size() - 1) + "')";
         where = w;
     }
 
-    //TODO add function for changing limit
+    //TODO add function for changing limit, this is very optional as we will lkely limit to 500
 
-    //TODO add function that returns the number of items found
+    //TODO add function that returns the number of items found, actually this can be accomplished by calling the size function on the ids returned to the db selection window
 
     private void setWhere(ArrayList<String> wheres) {
         ArrayList<String> q = new ArrayList<>();
@@ -109,19 +110,19 @@ class QueryBuilder {
                 Statement st = conn.createStatement();
 
                 try { // submit a query to count the results
-                    System.out.println(count + continents + join + where);
+                    //System.out.println(count + continents + join + where);
                     rs = st.executeQuery(count + continents + join + where);
 
                     try { // print the number of rows
                         rs.next();
                         int rows = rs.getInt(1);
-                        System.out.printf("Selected rows = %d\n", rows);
+                        System.out.printf("[QueryBuilder] Selected rows = %d\n", rows);
                     } finally {
                         rs.close();
                     }
 
                     // submit a query to list all large airports
-                    System.out.println(columns + continents + join + where + limit);
+                    //System.out.println(columns + continents + join + where + limit);
                     rs = st.executeQuery(columns + continents + join + where + limit);
 
                     try { // iterate through query results and print using column numbers
@@ -130,9 +131,9 @@ class QueryBuilder {
                             /*for(int i = 1; i <= 7; i++)
                                 System.out.printf("%s,", rs.getString(i));
                             System.out.printf("%s\n", rs.getString(8));*/
-                            System.out.println("Creating location with id [" + rs.getString(1) + "]");
+                            //System.out.println("Creating location with id [" + rs.getString(1) + "]");
                             locations.add(new Location(rs.getString(1), rs.getString(2), rs.getString(3),
-                                rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+                                    rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
                         }
                     } finally {
                         rs.close();

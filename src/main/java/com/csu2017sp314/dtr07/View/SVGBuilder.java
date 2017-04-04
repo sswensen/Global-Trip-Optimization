@@ -51,19 +51,19 @@ class SVGBuilder {
     private void readSVG() throws SAXException, IOException, ParserConfigurationException {
         Document readSVG = SVGdoc;
         readSVG.getDocumentElement().normalize();
-        System.out.println("*Testing*   Root element :" + readSVG.getDocumentElement().getNodeName());
+        //System.out.println("*Testing*   Root element :" + readSVG.getDocumentElement().getNodeName());
         NodeList nList = readSVG.getElementsByTagName("svg");
         for(int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
-            System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
             if(nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 if(eElement.getAttribute("width") != null) {
-                    System.out.println("width = " + eElement.getAttribute("width"));
+                    //System.out.println("width = " + eElement.getAttribute("width"));
                     width = Double.parseDouble(eElement.getAttribute("width"));
                 }
                 if(eElement.getAttribute("height") != null) {
-                    System.out.println("height = " + eElement.getAttribute("height"));
+                    //System.out.println("height = " + eElement.getAttribute("height"));
                     height = Double.parseDouble(eElement.getAttribute("height"));
                 }
             }
