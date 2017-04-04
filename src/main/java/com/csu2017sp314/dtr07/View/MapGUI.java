@@ -1,6 +1,5 @@
 package com.csu2017sp314.dtr07.View;
 
-import com.csu2017sp314.dtr07.Model.Location;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Group;
@@ -85,6 +84,14 @@ public class MapGUI {
     private String unit;
     private ArrayList<String> fiveThingsForDatabase = new ArrayList<>(); //Used for callback
     private int index = 0; //I inked...
+    private JComboBox airports;
+    private JComboBox continents;
+    private JComboBox countries;
+    private JComboBox regions;
+    private int numAirports = 0;
+    private int numContinents = 0;
+    private int numCountries = 0;
+    private int numRegions = 0;
 
 
     MapGUI() {
@@ -569,32 +576,178 @@ public class MapGUI {
         switch(whatIsThis) {
             case "Select an airport type filter":
                 index = 0;
+                numAirports = options.size();
                 break;
             case "Select a continent filter":
                 index = 1;
+                numContinents = options.size();
                 break;
             case "Select a country filter":
                 index = 2;
+                numCountries = options.size();
                 break;
             case "Select a region filter":
                 index = 3;
+                numRegions = options.size();
                 break;
 
         }
         drop.setEditable(false);
-        /*drop.addActionListener((ActionEvent e) -> {
+        drop.addActionListener((ActionEvent e) -> {
             JComboBox<String> combo = (JComboBox<String>) e.getSource();
-            String selected = (String) combo.getSelectedItem();
+            //String selected = (String) combo.getSelectedItem();
+            String name = (String) drop.getItemAt(0);
+            int haythereboi = -1;
+            switch(name) {
+                case "Select an airport type filter":
+                    haythereboi = 0;
+                    break;
+                case "Select a continent filter":
+                    haythereboi = 1;
+                    break;
+                case "Select a country filter":
+                    haythereboi = 2;
+                    break;
+                case "Select a region filter":
+                    haythereboi = 3;
+                    break;
+            }
+            name = "";
             //TODO set the returning arraylist after this method is called multiple times
-            fiveThingsForDatabase.add(index, selected);
-        });*/
+            ArrayList<String> tempWheres = new ArrayList<>();
+            tempWheres.add((String) airports.getSelectedItem());
+            tempWheres.add((String) continents.getSelectedItem());
+            tempWheres.add((String) countries.getSelectedItem());
+            tempWheres.add((String) regions.getSelectedItem());
+            tempWheres.add("");
+            tempWheres.add("");
+            ArrayList<String> tempWheres2 = new ArrayList<>(tempWheres);
+            for(int i = 0; i < tempWheres2.size(); i++) {
+                String temp = tempWheres2.get(i);
+                if(temp.equals("Select an airport type filter") || temp.equals("Select a continent filter") || temp.equals("Select a country filter") || temp.equals("Select a region filter")) {
+                    tempWheres2.remove(i);
+                    tempWheres2.add(i, "");
+                }
+            }
+            String tempW = setWhere(tempWheres2);
+            updateDropdowns(tempW, haythereboi);
+
+            databaseWindow.removeAll();
+
+            setGBC(0, 0, 4);
+            databaseWindow.add(airports, gbc);
+            databaseFrame.add(databaseWindow);
+
+            setGBC(0, 1, 4);
+            databaseWindow.add(continents, gbc);
+            databaseFrame.add(databaseWindow);
+
+            setGBC(0, 2, 4);
+            databaseWindow.add(countries, gbc);
+            databaseFrame.add(databaseWindow);
+
+            setGBC(0, 3, 4);
+            databaseWindow.add(regions, gbc);
+            databaseFrame.add(databaseWindow);
+
+            airports.setSelectedItem(tempWheres.get(0));
+            continents.setSelectedItem(tempWheres.get(1));
+            countries.setSelectedItem(tempWheres.get(2));
+            regions.setSelectedItem(tempWheres.get(3));
+
+        });
         return drop;
+    }
+
+    void updateDropdowns(String where, int switching) {
+        ArrayList returnset;
+        /*ArrayList returnset = sshImCheatingDontTell("type", "airports", where);
+        returnset.add(0, "Select an airport type filter");
+        airports.removeAllItems();
+        for(Object a : returnset) {
+            airports.addItem(a);
+        }*/
+        switch(switching) {
+            /*case -2:
+                returnset = sshImCheatingDontTell("type", "airports", where);
+                //returnset.add(0, "Select an airport type filter");
+                //airports.removeAllItems();
+                for(int j = 0; j < airports.getItemCount() - 1; j++) {
+                    System.out.println("[MapGUI] Removing " + airports.getItemAt(j) + " from airports");
+                    airports.removeItemAt(j);
+                }
+                numAirports = 0;
+                //airports.addItem("Select an airport type filter");
+                for(Object a : returnset) {
+                    numAirports++;
+                    airports.addItem(a);
+                    System.out.println("[MapGUI] Adding " + a + " to airports");
+                }
+                break;*/
+            case 0:
+                returnset = sshImCheatingDontTell("continents.name", "continents", where);
+                //returnset.add(0, "Select a continent filter");
+                //try {continents.removeAllItems();} catch(Exception e) {}
+                /*for(int j = 0; j < continents.getItemCount() - 1; j++) {
+                    System.out.println("[MapGUI] Removing " + continents.getItemAt(j) + " from continents");
+                    continents.removeItemAt(j);
+                }
+                numContinents = 0;
+                //continents.addItem("Select a continent filter");
+                for(Object a : returnset) {
+                    numContinents++;
+                    continents.addItem(a);
+                    System.out.println("[MapGUI] Adding " + a + " to continents");
+                }*/
+                airports.removeAll();
+                airports = makeDropdowns(returnset);
+                break;
+            case 1:
+                returnset = sshImCheatingDontTell("countries.name", "countries", where);
+                //returnset.add(0, "Select a country filter");
+                //try {countries.removeAllItems();} catch(Exception e) {}
+                /*for(int j = 0; j < countries.getItemCount() - 1; j++) {
+                    System.out.println("[MapGUI] Removing " + countries.getItemAt(j) + " from countries");
+                    countries.removeItemAt(j);
+                }
+                numCountries = 0;
+                //countries.addItem("Select a country filter");
+                for(Object a : returnset) {
+                    numCountries++;
+                    countries.addItem(a);
+                    System.out.println("[MapGUI] Adding " + a + " to countries");
+                }*/
+                continents.removeAll();
+                continents = makeDropdowns(returnset);
+                break;
+            case 2:
+                returnset = sshImCheatingDontTell("regions.name", "regions", where);
+                //returnset.add(0, "Select a region filter");
+                //try {regions.removeAllItems();} catch(Exception e) {}
+
+                /*for(int j = 0; j < regions.getItemCount() - 1; j++) {
+                    System.out.println("[MapGUI] Removing " + regions.getItemAt(j) + " from regions");
+                    regions.removeItemAt(j);
+                }
+                numRegions = 0;
+                //regions.addItem("Select a region filter");
+                for(Object a : returnset) {
+                    numRegions++;
+                    regions.addItem(a);
+                    System.out.println("[MapGUI] Adding " + a + " to regions");
+                }*/
+                regions.removeAll();
+                regions = makeDropdowns(returnset);
+                break;
+            default:
+                System.out.println("Time to move on...");
+        }
     }
 
     ArrayList<String> sshImCheatingDontTell(String whatYouWant, String table, String wheres) {
         if(!wheres.equals("")) {
             String temp = wheres;
-            wheres = "WHERE " + temp;
+            wheres = " WHERE " + temp;
         }
         ArrayList<String> ret = new ArrayList<>();
         if(table.equalsIgnoreCase("airports"))
@@ -605,14 +758,23 @@ public class MapGUI {
             ret.add("Select a country filter");
         if(table.equalsIgnoreCase("regions"))
             ret.add("Select a region filter");
+
+        if(!wheres.equals("")) {
+            table = "continents" +
+                    " INNER JOIN countries ON countries.continent = continents.id\n" +
+                    " INNER JOIN regions ON regions.iso_country = countries.code\n" +
+                    " INNER JOIN airports ON airports.iso_region = regions.code";
+        }
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cs314", "sswensen", "830534566");
             Statement st = conn.createStatement();
+            System.out.println("SELECT DISTINCT " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
             ResultSet rs = st.executeQuery("SELECT DISTINCT " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
 
             while(rs.next()) {
                 ret.add(rs.getString(1));
+                System.out.println("Adding " + ret.get(ret.size()-1));
             }
         } catch(Exception e) {
             System.err.println("Problem in MapGUI with database");
@@ -671,22 +833,22 @@ public class MapGUI {
         continents.add("SA");*/
 
         setGBC(0, 0, 4);
-        JComboBox airports = makeDropdowns(sshImCheatingDontTell("type", "airports", ""));
+        airports = makeDropdowns(sshImCheatingDontTell("type", "airports", ""));
         databaseWindow.add(airports, gbc);
         databaseFrame.add(databaseWindow);
 
         setGBC(0, 1, 4);
-        JComboBox continents = makeDropdowns(sshImCheatingDontTell("name", "continents", ""));
+        continents = makeDropdowns(sshImCheatingDontTell("name", "continents", ""));
         databaseWindow.add(continents, gbc);
         databaseFrame.add(databaseWindow);
 
         setGBC(0, 2, 4);
-        JComboBox countries = makeDropdowns(sshImCheatingDontTell("name", "countries", ""));
+        countries = makeDropdowns(sshImCheatingDontTell("name", "countries", ""));
         databaseWindow.add(countries, gbc);
         databaseFrame.add(databaseWindow);
 
         setGBC(0, 3, 4);
-        JComboBox regions = makeDropdowns(sshImCheatingDontTell("name", "regions", ""));
+        regions = makeDropdowns(sshImCheatingDontTell("name", "regions", ""));
         databaseWindow.add(regions, gbc);
         databaseFrame.add(databaseWindow);
 
@@ -703,19 +865,57 @@ public class MapGUI {
         JButton searchDatabasePlease = new JButton("Search");
         searchDatabasePlease.addActionListener((ActionEvent e) -> {
             fiveThingsForDatabase.remove(0);
-            fiveThingsForDatabase.add(0, (String)airports.getSelectedItem());
+            fiveThingsForDatabase.add(0, (String) airports.getSelectedItem());
             fiveThingsForDatabase.remove(1);
-            fiveThingsForDatabase.add(1, (String)continents.getSelectedItem());
+            fiveThingsForDatabase.add(1, (String) continents.getSelectedItem());
             fiveThingsForDatabase.remove(2);
-            fiveThingsForDatabase.add(2, (String)countries.getSelectedItem());
+            fiveThingsForDatabase.add(2, (String) countries.getSelectedItem());
             fiveThingsForDatabase.remove(3);
-            fiveThingsForDatabase.add(3, (String)regions.getSelectedItem());
+            fiveThingsForDatabase.add(3, (String) regions.getSelectedItem());
             fiveThingsForDatabase.remove(4);
             searchDatabase();
         });
         databaseWindow.add(searchDatabasePlease, gbc);
         databaseFrame.add(databaseWindow);
         databaseFrame.pack();
+    }
+
+    private String setWhere(ArrayList<String> wheres) {
+        ArrayList<String> q = new ArrayList<>();
+        String type = wheres.get(0);
+        if(!type.equals("")) {
+            q.add("type like '%" + type + "%'");
+        }
+        String continent = wheres.get(1);
+        if(!continent.equals("")) {
+            q.add("continents.name like '%" + continent + "%'");
+        }
+        String country = wheres.get(2);
+        if(!country.equals("")) {
+            q.add("countries.name like '%" + country + "%'");
+        }
+        String region = wheres.get(3);
+        if(!region.equals("")) {
+            q.add("regions.name like '%" + region + "%'");
+        }
+        String municipality = wheres.get(4);
+        if(!municipality.equals("")) {
+            q.add("municipality like '%" + municipality + "%'");
+        }
+        String airportName = wheres.get(5);
+        if(!airportName.equals("")) {
+            q.add("airports.name like '%" + airportName + "%'");
+        }
+        String ret = "";
+        for(int i = 0; i < q.size(); i++) {
+            if(ret.equals("")) {
+                ret = "";
+            } else {
+                ret += " and ";
+            }
+            ret += q.get(i);
+        }
+        return ret;
     }
 
     int displayXML(ArrayList<String> ids) throws Exception {
