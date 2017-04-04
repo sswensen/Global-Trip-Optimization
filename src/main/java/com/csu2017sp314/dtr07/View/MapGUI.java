@@ -88,8 +88,8 @@ public class MapGUI {
     private String unit;
     private DefaultTableModel model;
     private JTable table;
-
-    private JTable table2;
+    private DefaultTableModel dm = new DefaultTableModel();
+    private JTable table2 = new JTable(dm);
     MapGUI() {
 
     }
@@ -183,7 +183,7 @@ public class MapGUI {
             System.err.println("Error reading URL of background image");
         }
         //webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
-        System.out.println("[MapGUI] Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
+        System.out.println("Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
         root.getChildren().add(browser);
         return (scene);
     }
@@ -323,7 +323,7 @@ public class MapGUI {
         ArrayList<String> tempTrip = new ArrayList<>();
         NodeList nList = readXml.getElementsByTagName("destinations");
         NodeList nList2 = readXml.getElementsByTagName("title");
-        //System.out.println("[MapGUI] nnList2 size = " + nList2.getLength());
+        System.out.println("nnList2 size = " + nList2.getLength());
         for(int i = 0; i < nList2.getLength(); i++) {
             Node a = nList2.item(i);
             tripName = a.getTextContent();
@@ -343,11 +343,11 @@ public class MapGUI {
         trips.add(tempTrip);
         tripNames.add(tripName);
         addLoadButton(tripName);
-        //System.out.println("[MapGUI] " + selectionXml);
+        System.out.println(selectionXml);
         for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("[MapGUI] id at index " + i + " = " + tripNames.get(i));
+            System.out.println("id at index " + i + " = " + tripNames.get(i));
         }
-        System.out.println("[MapGUI] trips size = " + trips.size());
+        System.out.println("trips size = " + trips.size());
     }
 
     private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException {
@@ -409,12 +409,12 @@ public class MapGUI {
         }
         if(trips.size() == 0 || name.equals(" Save Trip "))
             savedTrip = z;
-        System.out.println("[MapGUI] Trip name is " + tripName);
+        System.out.println("Trip name is " + tripName);
         JButton load = new JButton("Load Trip " + tripName);
         loadPanel.add(load, gbc);
-        System.out.println("[MapGUI] Added button " + load.getText());
+        System.out.println("Added button " + load.getText());
         load.addActionListener((ActionEvent eee) -> {
-            System.out.println("[MapGUI] Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+            System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
             tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
             userAddLocList(tempLoc);
             lastTrip = new ArrayList<>(tempLoc);
@@ -424,9 +424,27 @@ public class MapGUI {
                 a.doClick();
                 a.doClick();
             }
-
+            for(int i = 0; i < dm.getRowCount();i++) {
+                System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
+                for(int j = 0; j < tempLoc.size(); j++) {
+                    if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                        dm.setValueAt("Remove", i, 0);
+                    } else if(!tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                        dm.setValueAt("Add", i, 0);
+                    }
+                }
+            }
+            for(int i = 0; i < dm.getRowCount();i++) {
+                System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
+                for(int j = 0; j < tempLoc.size(); j++) {
+                    if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                        dm.setValueAt("Remove", i, 0);
+                    } else if(!tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                        dm.setValueAt("Add", i, 0);
+                    }
+                }
+            }
             savedTrip = tripNames.indexOf(load.getText().substring(10));
-
         });
         updateTripLabel(load.getText().substring(10));
         savedTrip = tripNames.indexOf(load.getText().substring(10));
@@ -455,7 +473,7 @@ public class MapGUI {
                     trips.add(new ArrayList<>(trip));
                     lastTrip = new ArrayList<>(trip);
                     userAddLocList(trip);
-                    System.out.println("[MapGUI] Adding " + trip + " to trips at index " + (trips.size() - 1));
+                    System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
                     try {
                         saveTripToXML(tripName, trip);
@@ -495,13 +513,13 @@ public class MapGUI {
                 } catch(TransformerException transException) {
 
                 }
-                System.out.println("[MapGUI] Adding " + trip + " to trips at index " + savedTrip);
+                System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
-            System.out.println("[MapGUI] savedTrip is " + savedTrip);
-            System.out.println("[MapGUI] Z is " + z);
+            System.out.println("savedTrip is " + savedTrip);
+            System.out.println("Z is " + z);
             printAll();
-            System.out.println("[MapGUI] --------------------------------");
+            System.out.println("--------------------------------");
         });
         return sa;
     }
@@ -591,10 +609,6 @@ public class MapGUI {
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
-
-        DefaultTableModel dm = new DefaultTableModel();
-        JTable table2 = new JTable(dm);
-
         Vector<String> columnNames = new Vector<>();
         Vector<Vector<String>> addButtons = new Vector<>();
         columnNames.addElement("Click to add Destination");
@@ -639,8 +653,17 @@ public class MapGUI {
                 }
             }
         };
-        ButtonColumn buttonColumn = new ButtonColumn(table2, test, 0);
 
+        ButtonColumn buttonColumn = new ButtonColumn(table2, test, 0);
+        /*
+        for(int i = 0; i < dm.getRowCount();i++){
+            JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,i, 0);
+            buttons.add(temp);
+        }
+        System.out.println(buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0).getClass());
+        JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0);
+        System.out.println(temp.getText());
+        */
         JScrollPane scroll = new JScrollPane(table2);
         setGBC(0,2,4);
         fTemp.add(scroll, gbc);
@@ -658,6 +681,7 @@ public class MapGUI {
         ret = 1;
         return ret;
     }
+
     public class ButtonColumn extends AbstractCellEditor
             implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
     {
@@ -983,10 +1007,10 @@ public class MapGUI {
 
     private void printAll() {
         for(int i = 0; i < trips.size(); i++) {
-            System.out.println("[MapGUI] Trips at " + i + " is " + trips.get(i).toString());
+            System.out.println("Trips at " + i + " is " + trips.get(i).toString());
         }
         for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("[MapGUI] Trip Names at " + i + " is " + tripNames.get(i));
+            System.out.println("Trip Names at " + i + " is " + tripNames.get(i));
         }
     }
 
