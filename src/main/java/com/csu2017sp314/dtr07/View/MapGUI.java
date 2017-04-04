@@ -15,9 +15,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.table.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,9 +27,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -91,6 +89,7 @@ public class MapGUI {
     private DefaultTableModel model;
     private JTable table;
 
+    private JTable table2;
     MapGUI() {
 
     }
@@ -563,6 +562,7 @@ public class MapGUI {
     }
 
     int displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException {
+
         int ret = -1;
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
@@ -590,66 +590,64 @@ public class MapGUI {
 
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
+
+
         DefaultTableModel dm = new DefaultTableModel();
-        Vector<Vector<String>> buttons = new Vector<>();
-        for(String id : ids) {
-            ret = 1;
-            JButton b = new JButton("      Add      ");
-            b.addActionListener((ActionEvent e) -> { //This fires when button b is pressed, unique for each instance!
-                    /*
-                        We can use the following method to run the call back each time a location is clicked (don't know about efficiency here)
-                        Or we can do one where the callback is only initiated when the user clicks the button that loads the map after selecting locations
-                        I'm going to implement the second method as the first one already is.
-                        To use the first method, uncomment the line below.
-                    */
-                //userAddLoc(id); //This is a callback to View
+        JTable table2 = new JTable(dm);
+
+        Vector<String> columnNames = new Vector<>();
+        Vector<Vector<String>> addButtons = new Vector<>();
+        columnNames.addElement("Click to add Destination");
+        columnNames.addElement("Location");
+        for(String id : ids){
+            Vector<String> temp = new Vector<>();
+            temp.addElement("Add");
+            temp.addElement(id);
+            addButtons.add(temp);
+        }
+        dm.setDataVector(addButtons, columnNames);
+        Action test = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable temp = (JTable) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) temp.getModel();
+                int index = Integer.parseInt(e.getActionCommand());
                 if(tick) {
                     for(int i = 0; i < tempLoc.size(); i++) {
-                        if(tempLoc.contains(id) && b.getText().equals("      Add      ")) {
-                            b.setText("   Remove   ");
-                        } else if(!tempLoc.contains(id) && b.getText().equals("   Remove   ")) {
-                            b.setText("      Add      ");
+                        if(tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Add")) {
+                            model.setValueAt("Remove", index, 0);
+                        }
+                        else if(!tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Remove")) {
+                            model.setValueAt("Add", index, 0);
                         }
                     }
                 }
                 tick = false;
-
-                if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
-                    if(!tempLoc.contains(id)) {
-                        tempLoc.add(id);
-                        //System.out.println("Added " + id + " to array");
-                        b.setText("   Remove   "); //If not pressed, toggle text and add
+                if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
+                    if(!tempLoc.contains(ids.get(index))) {
+                        tempLoc.add(ids.get(index));
+                        System.out.println("Added " + ids.get(index) + " to array");
+                        model.setValueAt("Remove", index, 0);
                     }
 
-                } else if(b.getText().equals("   Remove   ")) {
-                    if(tempLoc.contains(id)) {
-                        tempLoc.remove(id);
-                        //System.out.println("Removed " + id + " from array");
-                        b.setText("      Add      ");
+                } else if(model.getValueAt(index, 0).equals("Remove")) {
+                    if(tempLoc.contains(ids.get(index))) {
+                        tempLoc.remove(ids.get(index));
+                        System.out.println("Removed " + ids.get(index) + " from array");
+                        model.setValueAt("Add", index, 0);
                     }
                 }
-            });
-            Vector<String> temp = new Vector<>();
-            temp.addElement("Add");
-            temp.addElement(id);
-            buttons.add(temp);
-        }
-        Vector<String> columnNames = new Vector<>();
-        columnNames.addElement("Click to add Destination");
-        columnNames.addElement("Location");
-        dm.setDataVector(buttons, columnNames);
-        JTable table2 = new JTable(dm);
-        table2.getColumn("Click to add Destination").setCellRenderer(new ButtonRenderer());
-        table2.getColumn("Click to add Destination").setCellEditor(new ButtonEditor(new JCheckBox()));
+            }
+        };
+        ButtonColumn buttonColumn = new ButtonColumn(table2, test, 0);
+
         JScrollPane scroll = new JScrollPane(table2);
         setGBC(0,2,4);
         fTemp.add(scroll, gbc);
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
         options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
-
         options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
-
         uOp.pack();
         table.getTableHeader().setBackground(Color.BLACK);
         table.getTableHeader().setForeground(Color.WHITE);
@@ -660,78 +658,211 @@ public class MapGUI {
         ret = 1;
         return ret;
     }
-    class ButtonRenderer extends JButton implements TableCellRenderer {
+    public class ButtonColumn extends AbstractCellEditor
+            implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
+    {
+        private JTable table;
+        private Action action;
+        private int mnemonic;
+        private Border originalBorder;
+        private Border focusBorder;
 
-        public ButtonRenderer() {
-            setOpaque(true);
+        private JButton renderButton;
+        private JButton editButton;
+        private Object editorValue;
+        private boolean isButtonColumnEditor;
+
+        /**
+         *  Create the ButtonColumn to be used as a renderer and editor. The
+         *  renderer and editor will automatically be installed on the TableColumn
+         *  of the specified column.
+         *
+         *  @param table the table containing the button renderer/editor
+         *  @param action the Action to be invoked when the button is invoked
+         *  @param column the column to which the button renderer/editor is added
+         */
+        public ButtonColumn(JTable table, Action action, int column)
+        {
+            this.table = table;
+            this.action = action;
+
+            renderButton = new JButton();
+            editButton = new JButton();
+            editButton.setFocusPainted( false );
+            editButton.addActionListener( this );
+            originalBorder = editButton.getBorder();
+            setFocusBorder( new LineBorder(Color.BLUE) );
+
+            TableColumnModel columnModel = table.getColumnModel();
+            columnModel.getColumn(column).setCellRenderer( this );
+            columnModel.getColumn(column).setCellEditor( this );
+            table.addMouseListener( this );
         }
 
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column) {
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-                setBackground(table.getSelectionBackground());
-            } else {
-                setForeground(table.getForeground());
-                setBackground(UIManager.getColor("Button.background"));
+
+        /**
+         *  Get foreground color of the button when the cell has focus
+         *
+         *  @return the foreground color
+         */
+        public Border getFocusBorder()
+        {
+            return focusBorder;
+        }
+
+        /**
+         *  The foreground color of the button when the cell has focus
+         *
+         *  @param focusBorder the foreground color
+         */
+        public void setFocusBorder(Border focusBorder)
+        {
+            this.focusBorder = focusBorder;
+            editButton.setBorder( focusBorder );
+        }
+
+        public int getMnemonic()
+        {
+            return mnemonic;
+        }
+
+        /**
+         *  The mnemonic to activate the button when the cell has focus
+         *
+         *  @param mnemonic the mnemonic
+         */
+        public void setMnemonic(int mnemonic)
+        {
+            this.mnemonic = mnemonic;
+            renderButton.setMnemonic(mnemonic);
+            editButton.setMnemonic(mnemonic);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(
+                JTable table, Object value, boolean isSelected, int row, int column)
+        {
+            if (value == null)
+            {
+                editButton.setText( "" );
+                editButton.setIcon( null );
             }
-            setText((value == null) ? "" : value.toString());
-            return this;
+            else if (value instanceof Icon)
+            {
+                editButton.setText( "" );
+                editButton.setIcon( (Icon)value );
+            }
+            else
+            {
+                editButton.setText( value.toString() );
+                editButton.setIcon( null );
+            }
+
+            this.editorValue = value;
+            return editButton;
         }
+
+        @Override
+        public Object getCellEditorValue()
+        {
+            return editorValue;
+        }
+
+        //
+//  Implement TableCellRenderer interface
+//
+        public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+        {
+            if (isSelected)
+            {
+                renderButton.setForeground(table.getSelectionForeground());
+                renderButton.setBackground(table.getSelectionBackground());
+            }
+            else
+            {
+                renderButton.setForeground(table.getForeground());
+                renderButton.setBackground(UIManager.getColor("Button.background"));
+            }
+
+            if (hasFocus)
+            {
+                renderButton.setBorder( focusBorder );
+            }
+            else
+            {
+                renderButton.setBorder( originalBorder );
+            }
+
+//		renderButton.setText( (value == null) ? "" : value.toString() );
+            if (value == null)
+            {
+                renderButton.setText( "" );
+                renderButton.setIcon( null );
+            }
+            else if (value instanceof Icon)
+            {
+                renderButton.setText( "" );
+                renderButton.setIcon( (Icon)value );
+            }
+            else
+            {
+                renderButton.setText( value.toString() );
+                renderButton.setIcon( null );
+            }
+
+            return renderButton;
+        }
+
+        //
+//  Implement ActionListener interface
+//
+	/*
+	 *	The button has been pressed. Stop editing and invoke the custom Action
+	 */
+        public void actionPerformed(ActionEvent e)
+        {
+            int row = table.convertRowIndexToModel( table.getEditingRow() );
+            fireEditingStopped();
+
+            //  Invoke the Action
+
+            ActionEvent event = new ActionEvent(
+                    table,
+                    ActionEvent.ACTION_PERFORMED,
+                    "" + row);
+            action.actionPerformed(event);
+        }
+
+        //
+//  Implement MouseListener interface
+//
+	/*
+	 *  When the mouse is pressed the editor is invoked. If you then then drag
+	 *  the mouse to another cell before releasing it, the editor is still
+	 *  active. Make sure editing is stopped when the mouse is released.
+	 */
+        public void mousePressed(MouseEvent e)
+        {
+            if (table.isEditing()
+                    &&  table.getCellEditor() == this)
+                isButtonColumnEditor = true;
+        }
+
+        public void mouseReleased(MouseEvent e)
+        {
+            if (isButtonColumnEditor
+                    &&  table.isEditing())
+                table.getCellEditor().stopCellEditing();
+
+            isButtonColumnEditor = false;
+        }
+
+        public void mouseClicked(MouseEvent e) {}
+        public void mouseEntered(MouseEvent e) {}
+        public void mouseExited(MouseEvent e) {}
     }
 
-    class ButtonEditor extends DefaultCellEditor {
-        protected JButton button;
-
-        private String label;
-
-        private boolean isPushed;
-
-        public ButtonEditor(JCheckBox checkBox) {
-            super(checkBox);
-            button = new JButton();
-            button.setOpaque(true);
-            button.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
-                }
-            });
-        }
-
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-            if (isSelected) {
-                button.setForeground(table.getSelectionForeground());
-                button.setBackground(table.getSelectionBackground());
-            } else {
-                button.setForeground(table.getForeground());
-                button.setBackground(table.getBackground());
-            }
-            label = (value == null) ? "" : value.toString();
-            button.setText(label);
-            isPushed = true;
-            return button;
-        }
-
-        public Object getCellEditorValue() {
-            if (isPushed) {
-                //
-                //
-                JOptionPane.showMessageDialog(button, label + ": Ouch!");
-                // System.out.println(label + ": Ouch!");
-            }
-            isPushed = false;
-            return new String(label);
-        }
-
-        public boolean stopCellEditing() {
-            isPushed = false;
-            return super.stopCellEditing();
-        }
-
-        protected void fireEditingStopped() {
-            super.fireEditingStopped();
-        }
-    }
     void resizeTable(JTable table){
         for (int column = 0; column < table.getColumnCount(); column++){
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
