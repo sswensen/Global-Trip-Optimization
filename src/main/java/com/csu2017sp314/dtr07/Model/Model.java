@@ -21,7 +21,6 @@ public class Model {
     private boolean twoOpt;
     private boolean threeOpt;
     private boolean tick = false;
-    private int totalImprovements;
 
     public int planTrip(String filename) throws FileNotFoundException {
         LocationFactory lf = new LocationFactory();
@@ -156,11 +155,6 @@ public class Model {
 
     public boolean getThreeOpt() {
         return threeOpt;
-    }
-
-    public int getTotalImprovements()
-    {
-        return totalImprovements;
     }
 
     public String getLegStartLocation() {
