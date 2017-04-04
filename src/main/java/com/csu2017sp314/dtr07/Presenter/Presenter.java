@@ -45,6 +45,9 @@ public class Presenter {
         });
         view.setCallback2((ArrayList<String> s) -> {
             this.eventUserAddLocList(s);
+            for(String temp : s) {
+                System.out.println("[Presenter] This is callback2:\t" + temp);
+            }
         });
         view.setCallback3((String s) -> {
             if(s.equals("Names")) {
