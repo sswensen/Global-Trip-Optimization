@@ -89,13 +89,13 @@ class LocationFactory {
             pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
             if(twoOpt) {
                 if(threeOpt) {
-                    betterThreeOpt();
+                    threeOpt();
                 } else {
-                    betterTwoOpt();
+                    twoOpt();
                 }
             }
             if(threeOpt) {
-                betterThreeOpt();
+                threeOpt();
             }
             double total = 0;
             for(Pair p : pairs) {
@@ -115,6 +115,14 @@ class LocationFactory {
         return true;
     }
 
+    public void setTotalImprovements(int totalImprovements) {
+        this.totalImprovements = totalImprovements;
+    }
+
+    public int getTotalImprovements() {
+        return this.totalImprovements;
+    }
+
     public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
@@ -131,18 +139,26 @@ class LocationFactory {
         this.twoOpt = twoOpt;
     }
 
+    public boolean getTwoOpt() {
+        return this.twoOpt;
+    }
+
     public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
     }
 
-    private ArrayList<Pair> betterGeneratePairs(Location[] route, ArrayList<Pair> newPairs) {
+    public boolean getThreeOpt() {
+        return this.threeOpt;
+    }
+
+    private ArrayList<Pair> generatePairs(Location[] route, ArrayList<Pair> newPairs) {
         for(int a = 0; a < route.length - 1; a++) {
             newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1])));
         }
         return newPairs;
     }
 
-    private Location[] betterGenerateRoute() {
+    private Location[] generateRoute() {
         Location[] route = new Location[pairs.size()+1];
         int i = 0;
         for(Pair pair : pairs) {
@@ -213,8 +229,8 @@ class LocationFactory {
         return newRoute;
     }
 
-    protected int betterTwoOpt() {
-        Location[] route = betterGenerateRoute();
+    protected int twoOpt() {
+        Location[] route = generateRoute();
         generateDistanceTable(route);
         int totalImprovements = 0;
         this.totalImprovements = 0;
@@ -234,7 +250,7 @@ class LocationFactory {
             }
         }
         this.totalImprovements = totalImprovements;
-        pairs = betterGeneratePairs(route, newPairs);
+        pairs = generatePairs(route, newPairs);
         return totalImprovements;
     }
 
@@ -290,8 +306,8 @@ class LocationFactory {
         }
     }
 
-    protected int betterThreeOpt() {
-        Location[] route = betterGenerateRoute();
+    protected int threeOpt() {
+        Location[] route = generateRoute();
         generateDistanceTable(route);
         int totalImprovements = 0;
         this.totalImprovements = 0;
@@ -314,7 +330,7 @@ class LocationFactory {
             }
         }
         this.totalImprovements = totalImprovements;
-        pairs = betterGeneratePairs(route, newPairs);
+        pairs = generatePairs(route, newPairs);
         return totalImprovements;
     }
 }
