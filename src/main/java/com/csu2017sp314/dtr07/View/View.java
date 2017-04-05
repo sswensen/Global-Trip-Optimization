@@ -203,6 +203,10 @@ public class View {
         gui.displayXML(ids);
     }
 
+    public void makeGUILocations(ArrayList<Object> locs) {
+        gui.makeGUILocations(locs);
+    }
+
     public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
         gui.addLegToItinerary(seqId, name1, name2, mileage);
     }

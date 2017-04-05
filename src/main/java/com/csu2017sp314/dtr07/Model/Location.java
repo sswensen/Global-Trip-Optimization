@@ -33,7 +33,7 @@ public class Location {
         this.country = country;
         this.continent = continent;
         this.airportUrl = aUrl;
-        this.region = rUrl;
+        this.regionUrl = rUrl;
         this.countryUrl = cUrl;
     }
 
@@ -138,6 +138,34 @@ public class Location {
 
     double getLon() {
         return lon;
+    }
+
+    public String getMunicipality() {
+        return municipality;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getContinent() {
+        return continent;
+    }
+
+    public String getAirportUrl() {
+        return airportUrl;
+    }
+
+    public String getRegionUrl() {
+        return regionUrl;
+    }
+
+    public String getCountryUrl() {
+        return countryUrl;
     }
 
     int getNearest() {

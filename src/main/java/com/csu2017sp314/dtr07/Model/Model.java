@@ -19,6 +19,7 @@ public class Model {
     private ArrayList<Location> userLocations = new ArrayList<>();
     private ArrayList<Location> previousLocations = new ArrayList<>();
     private ArrayList<String> selectedLocations;
+    private ArrayList<Location> databaseLocationsReturned;
     private LocationFactory dataBaseSearch; //This is for populating the second GUI window and getting locations once the user has selected what he wnats
     private boolean twoOpt;
     private boolean threeOpt;
@@ -103,11 +104,27 @@ public class Model {
 
     public ArrayList<String> searchDatabase(ArrayList<String> where) {
         dataBaseSearch = new LocationFactory();
-        ArrayList<Location> locs = dataBaseSearch.readFromDB(where);
+        databaseLocationsReturned = dataBaseSearch.readFromDB(where);
         ArrayList<String> ret = new ArrayList<>(); //Very inefficient, see begining of fireQuery for additional options
-        for(Location loc : locs) {
+        for(Location loc : databaseLocationsReturned) {
             ret.add(loc.getName());
         }
+        return ret;
+    }
+
+    public ArrayList<Object> copyDBLocationsToView(int index) {
+        ArrayList<Object> ret = new ArrayList<>();
+        ret.add(databaseLocationsReturned.get(index).getId());
+        ret.add(databaseLocationsReturned.get(index).getName());
+        ret.add(databaseLocationsReturned.get(index).getLat());
+        ret.add(databaseLocationsReturned.get(index).getLon());
+        ret.add(databaseLocationsReturned.get(index).getMunicipality());
+        ret.add(databaseLocationsReturned.get(index).getRegion());
+        ret.add(databaseLocationsReturned.get(index).getCountry());
+        ret.add(databaseLocationsReturned.get(index).getContinent());
+        ret.add(databaseLocationsReturned.get(index).getAirportUrl());
+        ret.add(databaseLocationsReturned.get(index).getRegionUrl());
+        ret.add(databaseLocationsReturned.get(index).getCountryUrl());
         return ret;
     }
 

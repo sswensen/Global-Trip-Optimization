@@ -85,6 +85,7 @@ public class MapGUI {
     private String unit;
     private ArrayList<String> fiveThingsForDatabase = new ArrayList<>(); //Used for callback
     private int index = 0; //I inked...
+    private ArrayList<GUILocation> guiLocations = new ArrayList<>();
 
 
     MapGUI() {
@@ -869,6 +870,11 @@ public class MapGUI {
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802); //Second part for refreshing the window
         map.setVisible(true); //making the frame visible*/
+    }
+
+    void makeGUILocations(ArrayList<Object> locs) {
+        System.out.println("[MapGUI] Making GUILocations");
+        guiLocations.add(new GUILocation(locs));
     }
 
     boolean cleanup() {

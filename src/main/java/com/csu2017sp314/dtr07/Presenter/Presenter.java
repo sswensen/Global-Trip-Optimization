@@ -91,7 +91,15 @@ public class Presenter {
             for(String temp : locationNames) {
                 System.out.println("[Presenter] This is callback4:\t" + temp);
             }
+            for(int i = 0; i < locationNames.size(); i++) {
+                copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+            }
+            System.out.println("DONE MAKING LOCATIONS");
         });
+    }
+
+    private void copyLocationsToView(ArrayList<Object> locs) {
+        view.makeGUILocations(locs);
     }
 
     private void toggleName() {
@@ -289,9 +297,6 @@ public class Presenter {
         int numPairs = model.getNumPairs();
         view.originalIds = model.getLocationNames();
         view.initializeTrip(svgMap);
-        //TODO put the stuff that populates the location names here
-        //view.addBorders();
-        //view.addHeader("Colorado");
         view.addFooter(model.getTripDistance());
         int finalPairId = 0;
         for(int i = 0; i < numPairs; i++) {
