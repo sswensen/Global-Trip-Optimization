@@ -85,6 +85,7 @@ public class MapGUI {
     private String unit;
     private ArrayList<String> fiveThingsForDatabase = new ArrayList<>(); //Used for callback
     private int index = 0; //I inked...
+    private ArrayList<GUILocation> guiLocations = new ArrayList<>();
 
 
     MapGUI() {
@@ -714,6 +715,27 @@ public class MapGUI {
             searchDatabase();
         });
         databaseWindow.add(searchDatabasePlease, gbc);
+
+        setGBC(0, 7, 2);
+        JButton testingSearching = new JButton("Search for hardcoded");
+        testingSearching.addActionListener((ActionEvent e) -> {
+            ArrayList<String> testingNames = new ArrayList<>();
+            testingNames.add("Berlin-SchÃ¶nefeld International Airport");
+            testingNames.add("Denver International Airport");
+            userAddLocList(testingNames);
+            //TODO update names of the add buttons with using the ArrayList testingNames or whatever the global will be called
+        });
+        databaseWindow.add(testingSearching, gbc);
+        setGBC(2, 7, 2);
+        JButton testingSearching2 = new JButton("Search for hardcoded 2");
+        testingSearching2.addActionListener((ActionEvent e) -> {
+            ArrayList<String> testingNames = new ArrayList<>();
+            testingNames.add("Denver International Airport");
+            testingNames.add("London Heathrow Airport");
+            userAddLocList(testingNames);
+        });
+        databaseWindow.add(testingSearching2, gbc);
+
         databaseFrame.add(databaseWindow);
         databaseFrame.pack();
     }
@@ -869,6 +891,11 @@ public class MapGUI {
         map.setSize(1063, 801); //Refreshes window, needed or image doesn't appear
         map.setSize(1064, 802); //Second part for refreshing the window
         map.setVisible(true); //making the frame visible*/
+    }
+
+    void makeGUILocations(ArrayList<Object> locs) {
+        System.out.println("[MapGUI] Making GUILocations");
+        guiLocations.add(new GUILocation(locs));
     }
 
     boolean cleanup() {

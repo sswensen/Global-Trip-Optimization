@@ -35,6 +35,7 @@ public class Presenter {
     private ArrayList<String> currentIds = new ArrayList<>();
     private boolean displayGui;
     private String svgMap;
+    private boolean readingFromXML = true;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -91,7 +92,16 @@ public class Presenter {
             for(String temp : locationNames) {
                 System.out.println("[Presenter] This is callback4:\t" + temp);
             }
+            for(int i = 0; i < locationNames.size(); i++) {
+                copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+            }
+            System.out.println("DONE MAKING LOCATIONS");
+            readingFromXML = false;
         });
+    }
+
+    private void copyLocationsToView(ArrayList<Object> locs) {
+        view.makeGUILocations(locs);
     }
 
     private void toggleName() {
@@ -149,6 +159,7 @@ public class Presenter {
 
     private int eventUserAddLocList(ArrayList<String> ids) {
         currentIds = ids;
+        model.setReadingFromXML(readingFromXML);
         model.toggleListLocations(ids);
         if(twoOpt)
             model.setTwoOpt(true);
@@ -160,7 +171,7 @@ public class Presenter {
             model.setThreeOpt(false);
         //model.printUserLoc();
         try {
-            model.planUserTrip(fname);//TODO add arraylist to planUserTrip, might need to make another method like eventUserAddLocList
+            model.planUserTrip(fname, readingFromXML);//TODO add arraylist to planUserTrip, might need to make another method like eventUserAddLocList
             view.resetTrip();
             int numPairs = model.getUserPairs().size();
 
@@ -271,8 +282,8 @@ public class Presenter {
         fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
-        /*//TODO populate selectedAirports arraylist with xml
-        ArrayList selectedAirports = new ArrayList();
+
+        /*ArrayList selectedAirports = new ArrayList();
         selectedAirports.add("NZCH");
         selectedAirports.add("EHAM");
         selectedAirports.add("EDDB");
@@ -286,11 +297,13 @@ public class Presenter {
 
         model.setSelectedLocations(readXML(selectionXml));
         model.planTrip(filename, "M");
+        //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>()); //TODO push these location names back to
+        //for(int i = 0; i < model.getNumLocs(); i++) {
+        //    copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+        //}
         int numPairs = model.getNumPairs();
-        view.originalIds = model.getLocationIds();
-        view.initializeTrip(selectionXml, svgMap);
-        //view.addBorders();
-        //view.addHeader("Colorado");
+        view.originalIds = model.getLocationNames();
+        view.initializeTrip(svgMap);
         view.addFooter(model.getTripDistance());
         int finalPairId = 0;
         for(int i = 0; i < numPairs; i++) {
