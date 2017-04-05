@@ -723,6 +723,7 @@ public class MapGUI {
             testingNames.add("Berlin-SchÃ¶nefeld International Airport");
             testingNames.add("Denver International Airport");
             userAddLocList(testingNames);
+            //TODO update names of the add buttons with using the ArrayList testingNames or whatever the global will be called
         });
         databaseWindow.add(testingSearching, gbc);
         setGBC(2, 7, 2);
