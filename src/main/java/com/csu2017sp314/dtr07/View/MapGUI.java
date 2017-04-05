@@ -15,6 +15,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.table.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,14 +27,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.function.Consumer;
 import java.io.File;
 
@@ -83,8 +86,10 @@ public class MapGUI {
     private int width;
     private int height;
     private String unit;
-
-
+    private DefaultTableModel model;
+    private JTable table;
+    private DefaultTableModel dm = new DefaultTableModel();
+    private JTable table2 = new JTable(dm);
     MapGUI() {
 
     }
@@ -144,7 +149,7 @@ public class MapGUI {
         //createOptionsGUI();
         uOp = createJFrame("User Options", width+1, 0, options);
         //createItineraryWindow();
-        itinerary = createScrollingJFrame("Itinerary", 0, 0);
+        itinerary = createScrollingJFrame("Itinerary", 0, height);
 
         map.setVisible(true); //making the frame visible
         return 1;
@@ -178,7 +183,7 @@ public class MapGUI {
             System.err.println("Error reading URL of background image");
         }
         //webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
-        System.out.println("[MapGUI] Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
+        System.out.println("Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
         root.getChildren().add(browser);
         return (scene);
     }
@@ -318,7 +323,7 @@ public class MapGUI {
         ArrayList<String> tempTrip = new ArrayList<>();
         NodeList nList = readXml.getElementsByTagName("destinations");
         NodeList nList2 = readXml.getElementsByTagName("title");
-        //System.out.println("[MapGUI] nnList2 size = " + nList2.getLength());
+        System.out.println("nnList2 size = " + nList2.getLength());
         for(int i = 0; i < nList2.getLength(); i++) {
             Node a = nList2.item(i);
             tripName = a.getTextContent();
@@ -338,11 +343,11 @@ public class MapGUI {
         trips.add(tempTrip);
         tripNames.add(tripName);
         addLoadButton(tripName);
-        //System.out.println("[MapGUI] " + selectionXml);
+        System.out.println(selectionXml);
         for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("[MapGUI] id at index " + i + " = " + tripNames.get(i));
+            System.out.println("id at index " + i + " = " + tripNames.get(i));
         }
-        System.out.println("[MapGUI] trips size = " + trips.size());
+        System.out.println("trips size = " + trips.size());
     }
 
     private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException {
@@ -404,12 +409,12 @@ public class MapGUI {
         }
         if(trips.size() == 0 || name.equals(" Save Trip "))
             savedTrip = z;
-        System.out.println("[MapGUI] Trip name is " + tripName);
+        System.out.println("Trip name is " + tripName);
         JButton load = new JButton("Load Trip " + tripName);
         loadPanel.add(load, gbc);
-        System.out.println("[MapGUI] Added button " + load.getText());
+        System.out.println("Added button " + load.getText());
         load.addActionListener((ActionEvent eee) -> {
-            System.out.println("[MapGUI] Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+            System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
             tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
             userAddLocList(tempLoc);
             lastTrip = new ArrayList<>(tempLoc);
@@ -419,9 +424,27 @@ public class MapGUI {
                 a.doClick();
                 a.doClick();
             }
-
+            for(int i = 0; i < dm.getRowCount();i++) {
+                System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
+                for(int j = 0; j < tempLoc.size(); j++) {
+                    if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                        dm.setValueAt("Remove", i, 0);
+                    } else if(!tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                        dm.setValueAt("Add", i, 0);
+                    }
+                }
+            }
+            for(int i = 0; i < dm.getRowCount();i++) {
+                System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
+                for(int j = 0; j < tempLoc.size(); j++) {
+                    if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                        dm.setValueAt("Remove", i, 0);
+                    } else if(!tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                        dm.setValueAt("Add", i, 0);
+                    }
+                }
+            }
             savedTrip = tripNames.indexOf(load.getText().substring(10));
-
         });
         updateTripLabel(load.getText().substring(10));
         savedTrip = tripNames.indexOf(load.getText().substring(10));
@@ -450,7 +473,7 @@ public class MapGUI {
                     trips.add(new ArrayList<>(trip));
                     lastTrip = new ArrayList<>(trip);
                     userAddLocList(trip);
-                    System.out.println("[MapGUI] Adding " + trip + " to trips at index " + (trips.size() - 1));
+                    System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
                     try {
                         saveTripToXML(tripName, trip);
@@ -490,13 +513,13 @@ public class MapGUI {
                 } catch(TransformerException transException) {
 
                 }
-                System.out.println("[MapGUI] Adding " + trip + " to trips at index " + savedTrip);
+                System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
             }
-            System.out.println("[MapGUI] savedTrip is " + savedTrip);
-            System.out.println("[MapGUI] Z is " + z);
+            System.out.println("savedTrip is " + savedTrip);
+            System.out.println("Z is " + z);
             printAll();
-            System.out.println("[MapGUI] --------------------------------");
+            System.out.println("--------------------------------");
         });
         return sa;
     }
@@ -557,6 +580,7 @@ public class MapGUI {
     }
 
     int displayXML(ArrayList<String> ids) throws ParserConfigurationException, TransformerException {
+
         int ret = -1;
         tempLoc = new ArrayList<>();
         fTemp = createInnerPanel();
@@ -585,80 +609,316 @@ public class MapGUI {
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
-        int numButtons = 0;
-        for(String id : ids) {
-            ret = 1;
-            JButton b = new JButton("      Add      ");
-            buttons.add(b);
-            b.addActionListener((ActionEvent e) -> { //This fires when button b is pressed, unique for each instance!
-                    /*
-                        We can use the following method to run the call back each time a location is clicked (don't know about efficiency here)
-                        Or we can do one where the callback is only initiated when the user clicks the button that loads the map after selecting locations
-                        I'm going to implement the second method as the first one already is.
-                        To use the first method, uncomment the line below.
-                     */
-                //userAddLoc(id); //This is a callback to View
+        Vector<String> columnNames = new Vector<>();
+        Vector<Vector<String>> addButtons = new Vector<>();
+        columnNames.addElement("Click to add Destination");
+        columnNames.addElement("Location");
+        for(String id : ids){
+            Vector<String> temp = new Vector<>();
+            temp.addElement("Add");
+            temp.addElement(id);
+            addButtons.add(temp);
+        }
+        dm.setDataVector(addButtons, columnNames);
+        Action test = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable temp = (JTable) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) temp.getModel();
+                int index = Integer.parseInt(e.getActionCommand());
                 if(tick) {
                     for(int i = 0; i < tempLoc.size(); i++) {
-                        if(tempLoc.contains(id) && b.getText().equals("      Add      ")) {
-                            b.setText("   Remove   ");
-                        } else if(!tempLoc.contains(id) && b.getText().equals("   Remove   ")) {
-                            b.setText("      Add      ");
+                        if(tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Add")) {
+                            model.setValueAt("Remove", index, 0);
+                        }
+                        else if(!tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Remove")) {
+                            model.setValueAt("Add", index, 0);
                         }
                     }
                 }
                 tick = false;
-
-                if(b.getText().equals("      Add      ")) { //Checks if button has already been pressed
-                    if(!tempLoc.contains(id)) {
-                        tempLoc.add(id);
-                        //System.out.println("Added " + id + " to array");
-                        b.setText("   Remove   "); //If not pressed, toggle text and add
+                if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
+                    if(!tempLoc.contains(ids.get(index))) {
+                        tempLoc.add(ids.get(index));
+                        System.out.println("Added " + ids.get(index) + " to array");
+                        model.setValueAt("Remove", index, 0);
                     }
 
-                } else if(b.getText().equals("   Remove   ")) {
-                    if(tempLoc.contains(id)) {
-                        tempLoc.remove(id);
-                        //System.out.println("Removed " + id + " from array");
-                        b.setText("      Add      ");
+                } else if(model.getValueAt(index, 0).equals("Remove")) {
+                    if(tempLoc.contains(ids.get(index))) {
+                        tempLoc.remove(ids.get(index));
+                        System.out.println("Removed " + ids.get(index) + " from array");
+                        model.setValueAt("Add", index, 0);
                     }
                 }
-            });
+            }
+        };
 
-            gbc.fill = GridBagConstraints.NONE;
-            JButton t = new JButton(id);
-            JLabel t2 = new JLabel(id);
-            t.setEnabled(false);
-
-            fTemp.add(b);
-            b.setVisible(true);
-            t.setVisible(true);
-
-            numButtons++;
-            setGBC(0, numButtons + 1, 1);
-            fTemp.add(b, gbc);
-            setGBC(1, numButtons + 1, 3);
-            fTemp.add(t2, gbc);
+        ButtonColumn buttonColumn = new ButtonColumn(table2, test, 0);
+        /*
+        for(int i = 0; i < dm.getRowCount();i++){
+            JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,i, 0);
+            buttons.add(temp);
         }
-
+        System.out.println(buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0).getClass());
+        JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0);
+        System.out.println(temp.getText());
+        */
+        JScrollPane scroll = new JScrollPane(table2);
+        setGBC(0,2,4);
+        fTemp.add(scroll, gbc);
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
         options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
-
         options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
-        //options.addTab("Four", face.getContentPane());
-        //uOp.setMinimumSize(new Dimension(500, 500));
-
         uOp.pack();
-        //itineraryTabs.addTab("Itinerary", icon, fTemp2, "Itinerary for trips");
-        JScrollPane jsp = new JScrollPane(fTemp2);
-        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        itinerary.getContentPane().add(jsp);
-        itinerary.setPreferredSize(new Dimension(800, 800));
+        table.getTableHeader().setBackground(Color.BLACK);
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("Impact", Font.BOLD, 12));
+        JScrollPane scrollPane = new JScrollPane(table);
+        itinerary.getContentPane().add(scrollPane);
         itinerary.pack();
         ret = 1;
         return ret;
+    }
+
+    public class ButtonColumn extends AbstractCellEditor
+            implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
+    {
+        private JTable table;
+        private Action action;
+        private int mnemonic;
+        private Border originalBorder;
+        private Border focusBorder;
+
+        private JButton renderButton;
+        private JButton editButton;
+        private Object editorValue;
+        private boolean isButtonColumnEditor;
+
+        /**
+         *  Create the ButtonColumn to be used as a renderer and editor. The
+         *  renderer and editor will automatically be installed on the TableColumn
+         *  of the specified column.
+         *
+         *  @param table the table containing the button renderer/editor
+         *  @param action the Action to be invoked when the button is invoked
+         *  @param column the column to which the button renderer/editor is added
+         */
+        public ButtonColumn(JTable table, Action action, int column)
+        {
+            this.table = table;
+            this.action = action;
+
+            renderButton = new JButton();
+            editButton = new JButton();
+            editButton.setFocusPainted( false );
+            editButton.addActionListener( this );
+            originalBorder = editButton.getBorder();
+            setFocusBorder( new LineBorder(Color.BLUE) );
+
+            TableColumnModel columnModel = table.getColumnModel();
+            columnModel.getColumn(column).setCellRenderer( this );
+            columnModel.getColumn(column).setCellEditor( this );
+            table.addMouseListener( this );
+        }
+
+
+        /**
+         *  Get foreground color of the button when the cell has focus
+         *
+         *  @return the foreground color
+         */
+        public Border getFocusBorder()
+        {
+            return focusBorder;
+        }
+
+        /**
+         *  The foreground color of the button when the cell has focus
+         *
+         *  @param focusBorder the foreground color
+         */
+        public void setFocusBorder(Border focusBorder)
+        {
+            this.focusBorder = focusBorder;
+            editButton.setBorder( focusBorder );
+        }
+
+        public int getMnemonic()
+        {
+            return mnemonic;
+        }
+
+        /**
+         *  The mnemonic to activate the button when the cell has focus
+         *
+         *  @param mnemonic the mnemonic
+         */
+        public void setMnemonic(int mnemonic)
+        {
+            this.mnemonic = mnemonic;
+            renderButton.setMnemonic(mnemonic);
+            editButton.setMnemonic(mnemonic);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(
+                JTable table, Object value, boolean isSelected, int row, int column)
+        {
+            if (value == null)
+            {
+                editButton.setText( "" );
+                editButton.setIcon( null );
+            }
+            else if (value instanceof Icon)
+            {
+                editButton.setText( "" );
+                editButton.setIcon( (Icon)value );
+            }
+            else
+            {
+                editButton.setText( value.toString() );
+                editButton.setIcon( null );
+            }
+
+            this.editorValue = value;
+            return editButton;
+        }
+
+        @Override
+        public Object getCellEditorValue()
+        {
+            return editorValue;
+        }
+
+        //
+//  Implement TableCellRenderer interface
+//
+        public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+        {
+            if (isSelected)
+            {
+                renderButton.setForeground(table.getSelectionForeground());
+                renderButton.setBackground(table.getSelectionBackground());
+            }
+            else
+            {
+                renderButton.setForeground(table.getForeground());
+                renderButton.setBackground(UIManager.getColor("Button.background"));
+            }
+
+            if (hasFocus)
+            {
+                renderButton.setBorder( focusBorder );
+            }
+            else
+            {
+                renderButton.setBorder( originalBorder );
+            }
+
+//		renderButton.setText( (value == null) ? "" : value.toString() );
+            if (value == null)
+            {
+                renderButton.setText( "" );
+                renderButton.setIcon( null );
+            }
+            else if (value instanceof Icon)
+            {
+                renderButton.setText( "" );
+                renderButton.setIcon( (Icon)value );
+            }
+            else
+            {
+                renderButton.setText( value.toString() );
+                renderButton.setIcon( null );
+            }
+
+            return renderButton;
+        }
+
+        //
+//  Implement ActionListener interface
+//
+	/*
+	 *	The button has been pressed. Stop editing and invoke the custom Action
+	 */
+        public void actionPerformed(ActionEvent e)
+        {
+            int row = table.convertRowIndexToModel( table.getEditingRow() );
+            fireEditingStopped();
+
+            //  Invoke the Action
+
+            ActionEvent event = new ActionEvent(
+                    table,
+                    ActionEvent.ACTION_PERFORMED,
+                    "" + row);
+            action.actionPerformed(event);
+        }
+
+        //
+//  Implement MouseListener interface
+//
+	/*
+	 *  When the mouse is pressed the editor is invoked. If you then then drag
+	 *  the mouse to another cell before releasing it, the editor is still
+	 *  active. Make sure editing is stopped when the mouse is released.
+	 */
+        public void mousePressed(MouseEvent e)
+        {
+            if (table.isEditing()
+                    &&  table.getCellEditor() == this)
+                isButtonColumnEditor = true;
+        }
+
+        public void mouseReleased(MouseEvent e)
+        {
+            if (isButtonColumnEditor
+                    &&  table.isEditing())
+                table.getCellEditor().stopCellEditing();
+
+            isButtonColumnEditor = false;
+        }
+
+        public void mouseClicked(MouseEvent e) {}
+        public void mouseEntered(MouseEvent e) {}
+        public void mouseExited(MouseEvent e) {}
+    }
+
+    void resizeTable(JTable table){
+        for (int column = 0; column < table.getColumnCount(); column++){
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = tableColumn.getMinWidth();
+            int maxWidth = 0;
+            TableCellRenderer rend = table.getTableHeader().getDefaultRenderer();
+            TableCellRenderer rendCol = tableColumn.getHeaderRenderer();
+            if (rendCol == null) rendCol = rend;
+            Component header = rendCol.getTableCellRendererComponent(table, tableColumn.getHeaderValue(), false, false, 0, column);
+            maxWidth = header.getPreferredSize().width;
+            //System.out.println("maxWidth :"+maxWidth);
+
+            for (int row = 0; row < table.getRowCount(); row++){
+                TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
+                Component c = table.prepareRenderer(cellRenderer, row, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+                //System.out.println("preferredWidth :"+preferredWidth);
+                //System.out.println("Width :"+width);
+
+                //  We've exceeded the maximum width, no need to check other rows
+
+                if (preferredWidth <= maxWidth){
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double screenHeight = screenSize.getHeight();
+        table.setPreferredScrollableViewportSize(new Dimension(width, ((int)screenHeight - height)));
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
@@ -667,16 +927,35 @@ public class MapGUI {
             fTemp2 = createInnerPanel();
             ret = 1;
         }
+
+        if(model == null){
+            model = new DefaultTableModel();
+            table = new JTable(model);
+            model.addColumn("ID");
+            model.addColumn("From");
+            model.addColumn("To");
+            model.addColumn("Distance");
+            table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+            JScrollPane scrollPane = new JScrollPane(table);
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            ret = 1;
+        }
+
         if(seqId.equals("0")) {
             fTemp2.removeAll();
-            //fTemp2.repaint();
-            //fTemp2.requestFocus(true);
+            fTemp2.repaint();
+            model.setRowCount(0);
         }
+
         setGBC(0, Integer.parseInt(seqId), 4);
-        JLabel lab = new JLabel("ID: " + seqId + "\t" + name1 + " to " + name2 + "\t" + mileage + " miles");
+        JLabel lab = new JLabel("ID: " + seqId + "   " + name1 + " to " + name2 + "   " + mileage + " miles");
         lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
-
+        if(lab.getText() != null){
+            model.addRow(new Object[]{seqId,name1,name2,mileage});
+            resizeTable(table);
+        }
         return ret;
     }
 
@@ -728,10 +1007,10 @@ public class MapGUI {
 
     private void printAll() {
         for(int i = 0; i < trips.size(); i++) {
-            System.out.println("[MapGUI] Trips at " + i + " is " + trips.get(i).toString());
+            System.out.println("Trips at " + i + " is " + trips.get(i).toString());
         }
         for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("[MapGUI] Trip Names at " + i + " is " + tripNames.get(i));
+            System.out.println("Trip Names at " + i + " is " + tripNames.get(i));
         }
     }
 
