@@ -716,7 +716,7 @@ public class MapGUI {
         });
         databaseWindow.add(searchDatabasePlease, gbc);
 
-        setGBC(0, 7, 4);
+        setGBC(0, 7, 2);
         JButton testingSearching = new JButton("Search for hardcoded");
         testingSearching.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
@@ -725,6 +725,15 @@ public class MapGUI {
             userAddLocList(testingNames);
         });
         databaseWindow.add(testingSearching, gbc);
+        setGBC(2, 7, 2);
+        JButton testingSearching2 = new JButton("Search for hardcoded 2");
+        testingSearching2.addActionListener((ActionEvent e) -> {
+            ArrayList<String> testingNames = new ArrayList<>();
+            testingNames.add("Denver International Airport");
+            testingNames.add("London Heathrow Airport");
+            userAddLocList(testingNames);
+        });
+        databaseWindow.add(testingSearching2, gbc);
 
         databaseFrame.add(databaseWindow);
         databaseFrame.pack();
