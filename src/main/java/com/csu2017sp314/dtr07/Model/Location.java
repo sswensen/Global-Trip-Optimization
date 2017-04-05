@@ -16,11 +16,14 @@ public class Location {
     private String region;
     private String country;
     private String continent;
+    private String airportUrl;
+    private String regionUrl;
+    private String countryUrl;
     private int nearest = -1;
     private int nearestDistance = 9999999;
     private int tableIndex;
 
-    Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent) {
+    Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent, String aUrl, String rUrl, String cUrl) {
         this.id = id;
         this.name = name;
         this.lat = convertCoordinates(lat);
@@ -29,6 +32,9 @@ public class Location {
         this.region = region;
         this.country = country;
         this.continent = continent;
+        this.airportUrl = aUrl;
+        this.region = rUrl;
+        this.countryUrl = cUrl;
     }
 
     private static double convertCoordinates(String in) {

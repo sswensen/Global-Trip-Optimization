@@ -83,7 +83,7 @@ public class View {
                 Element eElement = (Element) nNode;
                 int i = 0;
                 while(eElement.getElementsByTagName("id").item(i) != null) {
-                    ids.add(eElement.getElementsByTagName("id").item(i).getTextContent());
+                    ids.add(eElement.getElementsByTagName("id").item(i).getTextContent()); //TODO search database for these ids and return the name
                     i++;
                 }
             }

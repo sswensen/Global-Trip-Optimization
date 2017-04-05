@@ -25,7 +25,7 @@ class QueryBuilder {
     //private final static String myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314"; //Original
     private final String myUrl = "jdbc:mysql://127.0.0.1:3306/cs314"; //Using tunneling
     private final String count = "SELECT COUNT(1) ";
-    private final String columns = "SELECT airports.id,airports.name,latitude,longitude,municipality,regions.name,countries.name,continents.name ";
+    private final String columns = "SELECT airports.id,airports.name,latitude,longitude,municipality,regions.name,countries.name,continents.name,airports.wikipedia_link,regions.wikipedia_link,countries.wikipedia_link ";
     private final String continents = "FROM continents ";
     private String where = "";
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
@@ -133,7 +133,7 @@ class QueryBuilder {
                             System.out.printf("%s\n", rs.getString(8));*/
                             //System.out.println("Creating location with id [" + rs.getString(1) + "]");
                             locations.add(new Location(rs.getString(1), rs.getString(2), rs.getString(3),
-                                    rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8)));
+                                    rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)));
                         }
                     } finally {
                         rs.close();
