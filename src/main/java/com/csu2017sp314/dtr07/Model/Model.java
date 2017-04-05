@@ -20,7 +20,7 @@ public class Model {
     private ArrayList<Location> previousLocations = new ArrayList<>();
     private ArrayList<String> selectedLocations;
     private ArrayList<Location> databaseLocationsReturned;
-    private LocationFactory dataBaseSearch; //This is for populating the second GUI window and getting locations once the user has selected what he wnats
+    private LocationFactory dataBaseSearch = new LocationFactory(); //This is for populating the second GUI window and getting locations once the user has selected what he wnats
     private boolean twoOpt;
     private boolean threeOpt;
     //private boolean testThreeOpt;
@@ -28,6 +28,7 @@ public class Model {
     private int totalImprovements;
     private String unit;
     private double[][] distTable;
+    private boolean readingFromXML = true;
 
     //TODO add method that takes arraylist (wheres) and returns set of strings of names of the airports
 
@@ -69,7 +70,8 @@ public class Model {
         return 1;
     }
 
-    public int planUserTrip(String filename) throws FileNotFoundException {
+    public int planUserTrip(String filename, boolean readingFromXML) throws FileNotFoundException {
+        this.readingFromXML = readingFromXML;
         LocationFactory lf = new LocationFactory();
         if(twoOpt) {
             lf.setTwoOpt(true);
@@ -83,7 +85,8 @@ public class Model {
         if(!threeOpt && !tick) {
             userLocations = new ArrayList<>(previousLocations);
         }
-        lf.setLocations(userLocations);//TODO read from database
+        lf.setLocations(userLocations);//TODOdone read from database
+        //List locations is not the ids of the selected airports
         lf.thirdTry();
         userLocations = lf.getLocations();
         pairs = lf.getPairs();
@@ -103,7 +106,6 @@ public class Model {
     }
 
     public ArrayList<String> searchDatabase(ArrayList<String> where) {
-        dataBaseSearch = new LocationFactory();
         databaseLocationsReturned = dataBaseSearch.readFromDB(where);
         ArrayList<String> ret = new ArrayList<>(); //Very inefficient, see begining of fireQuery for additional options
         for(Location loc : databaseLocationsReturned) {
@@ -182,13 +184,19 @@ public class Model {
 
     public int toggleListLocations(ArrayList<String> ids) {
         if(!ids.isEmpty()) {
+            if(readingFromXML) {
             for(String id : ids) {
-                int f = searchLocations(id, "id");
+                int f = searchLocations(id, "name");
                 if(f > -1) {
                     userLocations.add(locations.get(f));
                 } else {
                     System.err.println("Error searching for " + id);
                 }
+
+            }
+            } else {
+                dataBaseSearch.setSelectedAirports(ids); //Instead of searching the existing lcoations, maybe we should just do another query
+                userLocations = dataBaseSearch.getLocations(); //Thats is what i am implementing here
             }
         } else {
             userLocations = new ArrayList<>(locations);
@@ -279,6 +287,8 @@ public class Model {
     public int getNumPairs() {
         return pairs.size();
     }
+
+    public int getNumLocs() { return locations.size(); }
 
     public String getFirstName(final int i) {
         return pairs.get(i).getOne().getName();
@@ -374,6 +384,10 @@ public class Model {
 
     public void setSelectedLocations(ArrayList<String> selectedLocations) {
         this.selectedLocations = selectedLocations;
+    }
+
+    public ArrayList<String> getSelectedLocations() {
+        return selectedLocations;
     }
 
     public void printUserLoc() {

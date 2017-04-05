@@ -35,6 +35,7 @@ public class Presenter {
     private ArrayList<String> currentIds = new ArrayList<>();
     private boolean displayGui;
     private String svgMap;
+    private boolean readingFromXML = true;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -95,6 +96,7 @@ public class Presenter {
                 copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
             }
             System.out.println("DONE MAKING LOCATIONS");
+            readingFromXML = false;
         });
     }
 
@@ -168,7 +170,7 @@ public class Presenter {
             model.setThreeOpt(false);
         //model.printUserLoc();
         try {
-            model.planUserTrip(fname);//TODO add arraylist to planUserTrip, might need to make another method like eventUserAddLocList
+            model.planUserTrip(fname, readingFromXML);//TODO add arraylist to planUserTrip, might need to make another method like eventUserAddLocList
             view.resetTrip();
             int numPairs = model.getUserPairs().size();
 
@@ -294,6 +296,10 @@ public class Presenter {
 
         model.setSelectedLocations(readXML(selectionXml));
         model.planTrip(filename, "M");
+        ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>()); //TODO push these location names back to
+        //for(int i = 0; i < model.getNumLocs(); i++) {
+        //    copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+        //}
         int numPairs = model.getNumPairs();
         view.originalIds = model.getLocationNames();
         view.initializeTrip(svgMap);

@@ -10,7 +10,10 @@ package com.csu2017sp314.dtr07.Model;
  * java -cp ".:./com.mysql.jdbc_5.1.5.jar" Sprint3Example2 eID password
  */
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
