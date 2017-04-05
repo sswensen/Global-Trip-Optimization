@@ -83,16 +83,34 @@ public class TestModel {
     }
 
     @Test
-    public void setTwoOpt()
-    {
+    public void setTwoOpt() {
         m.setTwoOpt(true);
         assertEquals(true, m.getTwoOpt());
     }
 
     @Test
-    public void setThreeOpt()
-    {
+    public void setThreeOpt() {
         m.setThreeOpt(true);
         assertEquals(true, m.getThreeOpt());
+    }
+
+    @Test
+    public void twoOpt() throws Exception {
+        m.planTrip("./src/test/resources/Testing/ColoradoSkiResorts.csv");
+        int origDist = m.getTripDistance();
+        m.setTwoOpt(true);
+        m.planTrip("./src/test/resources/Testing/ColoradoSkiResorts.csv");
+        int newDist = m.getTripDistance();
+        assertEquals(true, origDist>newDist);
+    }
+
+    @Test
+    public void threeOpt() throws Exception {
+        m.planTrip("./src/test/resources/Testing/ColoradoSkiResorts.csv");
+        int origDist = m.getTripDistance();
+        m.setThreeOpt(true);
+        m.planTrip("./src/test/resources/Testing/ColoradoSkiResorts.csv");
+        int newDist = m.getTripDistance();
+        assertEquals(true, origDist>newDist);
     }
 }
