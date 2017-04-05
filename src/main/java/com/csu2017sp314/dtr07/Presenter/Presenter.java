@@ -296,7 +296,7 @@ public class Presenter {
 
         model.setSelectedLocations(readXML(selectionXml));
         model.planTrip(filename, "M");
-        ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>()); //TODO push these location names back to
+        //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>()); //TODO push these location names back to
         //for(int i = 0; i < model.getNumLocs(); i++) {
         //    copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
         //}

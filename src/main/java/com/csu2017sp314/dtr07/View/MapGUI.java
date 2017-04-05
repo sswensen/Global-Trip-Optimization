@@ -715,6 +715,17 @@ public class MapGUI {
             searchDatabase();
         });
         databaseWindow.add(searchDatabasePlease, gbc);
+
+        setGBC(0, 7, 4);
+        JButton testingSearching = new JButton("Search for hardcoded");
+        testingSearching.addActionListener((ActionEvent e) -> {
+            ArrayList<String> testingNames = new ArrayList<>();
+            testingNames.add("Berlin-SchÃ¶nefeld International Airport");
+            testingNames.add("Denver International Airport");
+            userAddLocList(testingNames);
+        });
+        databaseWindow.add(testingSearching, gbc);
+
         databaseFrame.add(databaseWindow);
         databaseFrame.pack();
     }
