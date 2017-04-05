@@ -46,16 +46,12 @@ public class View {
     private double height;
 
 
-    public void initializeTrip(String selectionXml, String svgMap) throws SAXException, IOException, ParserConfigurationException {
+    public void initializeTrip(String svgMap) throws SAXException, IOException, ParserConfigurationException {
         this.svgMap = svgMap;
         gui = new MapGUI();
         svg = new SVGBuilder(svgMap);
         xml = new XMLBuilder();
-        if(!selectionXml.equals("")) {
-            readXML(selectionXml);
-        } else {
-            ids = new ArrayList<>(originalIds);
-        }
+        ids = new ArrayList<>(originalIds);
         width = svg.getWidth();
         height = svg.getHeight();
         gui.setWidth((int)width);

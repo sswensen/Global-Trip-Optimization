@@ -140,6 +140,14 @@ public class Model {
         return ret;
     }
 
+    public ArrayList<String> getLocationNames() {
+        ArrayList<String> ret = new ArrayList<>();
+        for(Location l : locations) {
+            ret.add(l.getName());
+        }
+        return ret;
+    }
+
     public void resetUserLoc() {
         userLocations.clear();
     }

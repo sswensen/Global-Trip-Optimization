@@ -271,8 +271,8 @@ public class Presenter {
         fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
-        /*//TODO populate selectedAirports arraylist with xml
-        ArrayList selectedAirports = new ArrayList();
+
+        /*ArrayList selectedAirports = new ArrayList();
         selectedAirports.add("NZCH");
         selectedAirports.add("EHAM");
         selectedAirports.add("EDDB");
@@ -287,8 +287,9 @@ public class Presenter {
         model.setSelectedLocations(readXML(selectionXml));
         model.planTrip(filename, "M");
         int numPairs = model.getNumPairs();
-        view.originalIds = model.getLocationIds();
-        view.initializeTrip(selectionXml, svgMap);
+        view.originalIds = model.getLocationNames();
+        view.initializeTrip(svgMap);
+        //TODO put the stuff that populates the location names here
         //view.addBorders();
         //view.addHeader("Colorado");
         view.addFooter(model.getTripDistance());
