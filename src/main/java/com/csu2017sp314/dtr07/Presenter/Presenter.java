@@ -159,6 +159,7 @@ public class Presenter {
 
     private int eventUserAddLocList(ArrayList<String> ids) {
         currentIds = ids;
+        model.setReadingFromXML(readingFromXML);
         model.toggleListLocations(ids);
         if(twoOpt)
             model.setTwoOpt(true);

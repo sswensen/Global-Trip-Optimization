@@ -48,8 +48,8 @@ class QueryBuilder {
         setWhere(w);
     }
 
-    void search4IDinDatabase(ArrayList<String> ids) {
-        String w = "WHERE airports.id in (";
+    void search4IDinDatabase(ArrayList<String> ids, String idOrName) {
+        String w = "WHERE airports." + idOrName + " in (";
         for(int i = 0; i < ids.size() - 1; i++) {
             w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
         }

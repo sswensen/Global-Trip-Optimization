@@ -143,10 +143,10 @@ class LocationFactory {
         this.locations = locations;
     }
 
-    public void setSelectedAirports(ArrayList<String> selectedAirportIds) {
+    public void setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName) {
         this.selectedAirports = selectedAirportIds;
         QueryBuilder qb = new QueryBuilder();
-        qb.search4IDinDatabase(selectedAirports);
+        qb.search4IDinDatabase(selectedAirports, idOrName);
         qb.fireQuery(); //Searches db with selectedAirports as where and sets qb's local locations
         locations = qb.getLocations(); //Need to call this to update lf's locations
     }

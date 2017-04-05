@@ -36,7 +36,7 @@ public class Model {
         this.unit = units;
         LocationFactory lf = new LocationFactory();
         lf.setUnit(units);
-        lf.setSelectedAirports(selectedLocations); //THis also searches the database lol
+        lf.setSelectedAirports(selectedLocations, "id"); //THis also searches the database lol
         //lf.readFile(filename);
         if(twoOpt) {
             lf.setTwoOpt(true);
@@ -182,6 +182,10 @@ public class Model {
         }
     }
 
+    public void setReadingFromXML(boolean readingFromXML) {
+        this.readingFromXML = readingFromXML;
+    }
+
     public int toggleListLocations(ArrayList<String> ids) {
         if(!ids.isEmpty()) {
             if(readingFromXML) {
@@ -195,7 +199,7 @@ public class Model {
 
             }
             } else {
-                dataBaseSearch.setSelectedAirports(ids); //Instead of searching the existing lcoations, maybe we should just do another query
+                dataBaseSearch.setSelectedAirports(ids, "name"); //Instead of searching the existing lcoations, maybe we should just do another query
                 userLocations = dataBaseSearch.getLocations(); //Thats is what i am implementing here
             }
         } else {
