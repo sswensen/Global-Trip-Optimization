@@ -33,7 +33,47 @@ public class GUILocation {
         this.countryUrl = (String)in.get(10);
     }
 
+    public String getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public String getMunicipality() {
+        return municipality;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getContinent() {
+        return continent;
+    }
+
+    public String getAirportUrl() {
+        return airportUrl;
+    }
+
+    public String getRegionUrl() {
+        return regionUrl;
+    }
+
+    public String getCountryUrl() {
+        return countryUrl;
     }
 }
