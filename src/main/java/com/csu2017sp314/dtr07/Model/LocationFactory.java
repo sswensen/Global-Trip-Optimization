@@ -291,13 +291,20 @@ class LocationFactory {
 
     private int improved(Location[] route, int i, int j, int k) {
         double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1]) + dist(route[k], route[k+1]);
-        double distOne = (dist(route[i], route[i+1]) + dist(route[j], route[k]) + dist(route[j+1], route[k+1]));
-        double distTwo = (dist(route[i], route[j]) + dist(route[i+1], route[j+1]) + dist(route[k], route[k+1]));
-        double distThree = (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1]));
-        double distFour = (dist(route[i], route[j+1]) + dist(route[k], route[i+1]) + dist(route[j], route[k+1]));
-        double distFive = (dist(route[i], route[j]) + dist(route[i+1], route[k]) + dist(route[j+1], route[k+1]));
-        double distSix = (dist(route[i], route[k]) + dist(route[j+1], route[i+1]) + dist(route[j], route[k+1]));
-        double distSeven = (dist(route[i], route[j+1]) + dist(route[k], route[j]) + dist(route[i+1], route[k+1]));
+        double distOne = (dist(route[i], route[i+1]) + dist(route[j], route[k])
+                + dist(route[j+1], route[k+1]));
+        double distTwo = (dist(route[i], route[j]) + dist(route[i+1], route[j+1])
+                + dist(route[k], route[k+1]));
+        double distThree = (dist(route[i], route[k]) + dist(route[j+1], route[j])
+                + dist(route[i+1], route[k+1]));
+        double distFour = (dist(route[i], route[j+1]) + dist(route[k], route[i+1])
+                + dist(route[j], route[k+1]));
+        double distFive = (dist(route[i], route[j]) + dist(route[i+1], route[k])
+                + dist(route[j+1], route[k+1]));
+        double distSix = (dist(route[i], route[k]) + dist(route[j+1], route[i+1])
+                + dist(route[j], route[k+1]));
+        double distSeven = (dist(route[i], route[j+1]) + dist(route[k], route[j])
+                + dist(route[i+1], route[k+1]));
         if(originalDist > distOne) {
             return 1;
         } else if(originalDist > distTwo) {
