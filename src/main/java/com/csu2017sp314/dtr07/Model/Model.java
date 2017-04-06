@@ -325,7 +325,6 @@ public class Model {
         } else {
             double ret2 = (double) ret;
             ret2 = ret2*1.60934;
-            System.out.println("/n/n/n" + ret2 + "/n/n/n");
             return (int) ret2;
         }
     }

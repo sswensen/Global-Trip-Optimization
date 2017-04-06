@@ -120,7 +120,16 @@ class SVGBuilder {
         distance.setAttribute("id", ("leg" + id));
         distance.setAttribute("x", Double.toString((convertLongitudeCoordinates(x1) + convertLongitudeCoordinates(x2)) / 2));
         distance.setAttribute("y", Double.toString((convertLatitudeCoordinates(y1) + convertLatitudeCoordinates(y2)) / 2));
-        distance.setTextContent(Integer.toString(distanceBetween));
+        if(!kilometers) {
+            distance.setTextContent(Integer.toString(distanceBetween));
+
+        } else {
+            double kDist = (double) distanceBetween;
+            kDist *= 1.60934;
+            kDist = Math.round(kDist);
+            int kInt = (int) kDist;
+            distance.setTextContent(Integer.toString(kInt));
+        }
         SVGdoc.getDocumentElement().appendChild(distance);
     }
 
