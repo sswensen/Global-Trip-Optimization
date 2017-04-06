@@ -729,7 +729,7 @@ public class MapGUI {
         columnNames.addElement("Location");
         for(int i = 0; i < guiLocations.size();i++){
             Vector<String> temp = new Vector<>();
-            temp.addElement("Add");
+            temp.addElement("  ");
             temp.addElement(guiLocations.get(i).getName());
             addButtons.add(temp);
         }
@@ -743,29 +743,29 @@ public class MapGUI {
                 //private ArrayList<String> databaseLocations = new ArrayList<>();
                 if(tick) {
                     for(int i = 0; i < guiLocations.size(); i++) {
-                        if(databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("Add")) {
-                            model.setValueAt("Remove", index, 0);
+                        if(databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("  ")) {
+                            model.setValueAt("X", index, 0);
                         }
-                        else if(!databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("Remove")) {
-                            model.setValueAt("Add", index, 0);
+                        else if(!databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("X")) {
+                            model.setValueAt("  ", index, 0);
                         }
                     }
                 }
                 tick = false;
-                if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
+                if(model.getValueAt(index, 0).equals("  ")) { //Checks if button has already been pressed
                     if(!databaseLocations.contains(model.getValueAt(index,1))) {
                         databaseLocations.add((String) model.getValueAt(index,1));
                         System.out.println("Added " + model.getValueAt(index,1).toString() + " to array");
                         System.out.println("databaseLocations size = " + databaseLocations.size());
-                        model.setValueAt("Remove", index, 0);
+                        model.setValueAt("X", index, 0);
                     }
 
-                } else if(model.getValueAt(index, 0).equals("Remove")) {
+                } else if(model.getValueAt(index, 0).equals("X")) {
                     if(databaseLocations.contains(model.getValueAt(index,1))) {
                         databaseLocations.remove(model.getValueAt(index,1));
                         System.out.println("Removed " + model.getValueAt(index,1).toString() + " from array");
                         System.out.println("databaseLocations size = " + databaseLocations.size());
-                        model.setValueAt("Add", index, 0);
+                        model.setValueAt("  ", index, 0);
                     }
                 }
             }
@@ -775,6 +775,7 @@ public class MapGUI {
 
         JScrollPane scroll = new JScrollPane(table3);
         setGBC(0,8,4);
+        table3.setPreferredScrollableViewportSize(new Dimension(500,  250));
         databaseWindow.add(scroll, gbc);
         databaseFrame.pack();
     }
