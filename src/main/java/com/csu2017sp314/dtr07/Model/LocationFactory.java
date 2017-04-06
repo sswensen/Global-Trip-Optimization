@@ -159,7 +159,9 @@ class LocationFactory {
 
     private ArrayList<Pair> generatePairs(Location[] route, ArrayList<Pair> newPairs) {
         for(int a = 0; a < route.length - 1; a++) {
-            newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1])));
+            newPairs.add(new Pair(Integer.toString(a),
+                    route[a], route[a + 1],
+                    route[a].distance(route[a + 1])));
         }
         return newPairs;
     }
@@ -293,7 +295,8 @@ class LocationFactory {
     }
 
     private int improved(Location[] route, int i, int j, int k) {
-        double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1]) + dist(route[k], route[k+1]);
+        double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1])
+                + dist(route[k], route[k+1]);
         double distOne = (dist(route[i], route[i+1]) + dist(route[j], route[k])
                 + dist(route[j+1], route[k+1]));
         double distTwo = (dist(route[i], route[j]) + dist(route[i+1], route[j+1])
