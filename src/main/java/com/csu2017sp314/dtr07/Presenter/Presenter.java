@@ -58,7 +58,7 @@ public class Presenter {
             if(s.equals("IDs")) {
                 toggleIds();
             }
-            if(s.equals("Mileage")) {
+            if(s.equals("Distance")) {
                 toggleMileage();
             }
             if(s.equals("2-opt")) {
@@ -130,6 +130,15 @@ public class Presenter {
             displayMileage = true;
         }
         System.out.println("[Presenter] Mileage now " + displayMileage);
+    }
+
+    private void toggleKilometers() {
+        if(kilometers) {
+            kilometers = false;
+        } else {
+            kilometers = true;
+        }
+        System.out.println("[Presenter] Kilometers now " + kilometers);
     }
 
     private void toggle2opt() {
