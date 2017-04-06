@@ -36,6 +36,7 @@ public class Presenter {
     private boolean displayGui;
     private String svgMap;
     private boolean readingFromXML = true;
+    private boolean kilometers;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -230,6 +231,15 @@ public class Presenter {
         this.threeOpt = threeOpt;
         model.setThreeOpt(threeOpt);
     } //done
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+        view.setKilometers(kilometers);
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
 
     public void setDisplayMileage(boolean x) {
         displayMileage = x;

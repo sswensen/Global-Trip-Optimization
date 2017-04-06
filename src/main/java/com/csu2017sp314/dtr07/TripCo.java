@@ -32,11 +32,12 @@ public class TripCo {
                 break;
             case "-2":
                 presenter.setTwoOpt(true);
-                //presenter.getTwoOpt();
                 break;
             case "-3":
                 presenter.setThreeOpt(true);
-                //presenter.getThreeOpt();
+                break;
+            case "-k":
+                presenter.setKilometers(true);
                 break;
             default:
                 break;
@@ -116,6 +117,9 @@ public class TripCo {
                 }
                 if(arguments.contains("-3")) {
                     displayOptions("-3", presenter);
+                }
+                if(arguments.contains("-k")) {
+                    displayOptions("-k", presenter);
                 }
                 presenter.planTrip(filename, selectionXml, svgMap);
                 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
