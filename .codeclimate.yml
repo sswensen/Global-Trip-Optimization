@@ -15,13 +15,13 @@ engines:
       com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck:
-        enabled: false
+        enabled: true
       com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck:
-        enabled: false
+        enabled: true
   csslint:
     enabled: false
 # ... CONFIG CONTENT ...
