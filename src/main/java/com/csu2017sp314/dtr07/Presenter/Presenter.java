@@ -294,8 +294,11 @@ public class Presenter {
         selectedAirports.add("ZYTX");
         selectedAirports.add("BKPR");
         selectedAirports.add("CYEG");*/
-
-        model.setSelectedLocations(readXML(selectionXml));
+        if(selectionXml.equals("")) {
+            model.setSelectedLocations(new ArrayList<>());
+        } else {
+            model.setSelectedLocations(readXML(selectionXml));
+        }
         model.planTrip(filename, "M");
         //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>()); //TODO push these location names back to
         //for(int i = 0; i < model.getNumLocs(); i++) {

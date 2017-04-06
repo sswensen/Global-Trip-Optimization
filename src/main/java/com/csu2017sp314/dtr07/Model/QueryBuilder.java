@@ -49,12 +49,16 @@ class QueryBuilder {
     }
 
     void search4IDinDatabase(ArrayList<String> ids, String idOrName) {
-        String w = "WHERE airports." + idOrName + " in (";
-        for(int i = 0; i < ids.size() - 1; i++) {
-            w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
+        if(!ids.isEmpty()) {
+            String w = "WHERE airports." + idOrName + " in (";
+            for(int i = 0; i < ids.size() - 1; i++) {
+                w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
+            }
+            w += "'" + ids.get(ids.size() - 1) + "')";
+            where = w;
+        } else {
+            where = "";
         }
-        w += "'" + ids.get(ids.size() - 1) + "')";
-        where = w;
     }
 
     //TODO add function for changing limit, this is very optional as we will lkely limit to 500
