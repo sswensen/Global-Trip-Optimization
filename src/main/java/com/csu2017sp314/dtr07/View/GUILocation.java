@@ -32,4 +32,8 @@ public class GUILocation {
         this.regionUrl = (String)in.get(9);
         this.countryUrl = (String)in.get(10);
     }
+
+    public String getName() {
+        return name;
+    }
 }

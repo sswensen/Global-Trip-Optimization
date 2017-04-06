@@ -67,6 +67,7 @@ public class MapGUI {
     private JFrame itinerary;
     private GridBagConstraints gbc = new GridBagConstraints();
     private boolean tick = false;
+    private boolean tick2 = false;
     private boolean rightTick = false;
     private int savedTrip = -1;
     private int filenameIncrementer = 1;
@@ -88,10 +89,14 @@ public class MapGUI {
     private ArrayList<String> fiveThingsForDatabase = new ArrayList<>(); //Used for callback
     private int index = 0; //I inked...
     private ArrayList<GUILocation> guiLocations = new ArrayList<>();
+
     private DefaultTableModel model;
     private JTable table;
     private DefaultTableModel dm = new DefaultTableModel();
     private JTable table2 = new JTable(dm);
+    private DefaultTableModel dm2 = new DefaultTableModel();
+    private JTable table3 = new JTable(dm2);
+    private ArrayList<String> databaseLocations = new ArrayList<>();
     MapGUI() {
 
     }
@@ -657,42 +662,6 @@ public class MapGUI {
         databaseFrame.setLocation(430, 100);
         databaseWindow = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        /*ArrayList<String> types = new ArrayList<>();
-        types.add("baloonport");
-        types.add("closed");
-        types.add("heliport");
-        types.add("large_airport");
-        types.add("medium_airport");
-        types.add("seplane_base");
-        types.add("small_airport");
-
-        ArrayList<String> continents = new ArrayList<>();
-        /*continents.add("AF");
-        continents.add("AN");
-        continents.add("AS");
-        continents.add("EU");
-        continents.add("NA");
-        continents.add("OC");
-        continents.add("SA");*/
-
-        /*continents.add("Asia");
-        continents.add("Oceania");
-        continents.add("Europe");
-        continents.add("Africa");
-        continents.add("Antarctica");
-        continents.add("South America");
-        continents.add("North America");*/
-
-        //ArrayList<String> country = new ArrayList<>();
-        /*continents.add("AF");
-        continents.add("AN");
-        continents.add("AS");
-        continents.add("EU");
-        continents.add("NA");
-        continents.add("OC");
-        continents.add("SA");*/
-
         setGBC(0, 0, 4);
         JComboBox airports = makeDropdowns(sshImCheatingDontTell("type", "airports", ""));
         databaseWindow.add(airports, gbc);
@@ -713,14 +682,6 @@ public class MapGUI {
         databaseWindow.add(regions, gbc);
         databaseFrame.add(databaseWindow);
 
-        /*setGBC(0, 4, 4);
-        databaseWindow.add(makeDropdowns(new ArrayList<>()), gbc);
-        databaseFrame.add(databaseWindow);
-
-        setGBC(0, 5, 4);
-        databaseWindow.add(makeDropdowns(new ArrayList<>()), gbc);
-        databaseFrame.add(databaseWindow);*/
-
         //TODO add button for searching of database, else we could use the self updating ones but that might take a bit to update
         setGBC(0, 6, 4);
         JButton searchDatabasePlease = new JButton("Search");
@@ -739,7 +700,7 @@ public class MapGUI {
         databaseWindow.add(searchDatabasePlease, gbc);
 
         setGBC(0, 7, 2);
-        JButton testingSearching = new JButton("Search for hardcoded");
+        JButton testingSearching = new JButton("Search for hardcoded1");
         testingSearching.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
             testingNames.add("Berlin-SchÃ¶nefeld International Airport");
@@ -759,6 +720,60 @@ public class MapGUI {
         databaseWindow.add(testingSearching2, gbc);
 
         databaseFrame.add(databaseWindow);
+
+        Vector<String> columnNames = new Vector<>();
+        Vector<Vector<String>> addButtons = new Vector<>();
+        columnNames.addElement("Click to add Destination");
+        columnNames.addElement("Location");
+        for(int i = 0; i < guiLocations.size();i++){
+            Vector<String> temp = new Vector<>();
+            temp.addElement("Add");
+            temp.addElement(guiLocations.get(i).getName());
+            addButtons.add(temp);
+        }
+        dm2.setDataVector(addButtons, columnNames);
+        Action test = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable temp = (JTable) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) temp.getModel();
+                int index = Integer.parseInt(e.getActionCommand());
+                //private ArrayList<String> databaseLocations = new ArrayList<>();
+                if(tick) {
+                    for(int i = 0; i < guiLocations.size(); i++) {
+                        if(databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("Add")) {
+                            model.setValueAt("Remove", index, 0);
+                        }
+                        else if(!databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("Remove")) {
+                            model.setValueAt("Add", index, 0);
+                        }
+                    }
+                }
+                tick = false;
+                if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
+                    if(!databaseLocations.contains(model.getValueAt(index,1))) {
+                        databaseLocations.add((String) model.getValueAt(index,1));
+                        System.out.println("Added " + model.getValueAt(index,1).toString() + " to array");
+                        System.out.println("databaseLocations size = " + databaseLocations.size());
+                        model.setValueAt("Remove", index, 0);
+                    }
+
+                } else if(model.getValueAt(index, 0).equals("Remove")) {
+                    if(databaseLocations.contains(model.getValueAt(index,1))) {
+                        databaseLocations.remove(model.getValueAt(index,1));
+                        System.out.println("Removed " + model.getValueAt(index,1).toString() + " from array");
+                        System.out.println("databaseLocations size = " + databaseLocations.size());
+                        model.setValueAt("Add", index, 0);
+                    }
+                }
+            }
+        };
+
+        ButtonColumn buttonColumn = new ButtonColumn(table3, test, 0);
+
+        JScrollPane scroll = new JScrollPane(table3);
+        setGBC(0,8,4);
+        databaseWindow.add(scroll, gbc);
         databaseFrame.pack();
     }
 
