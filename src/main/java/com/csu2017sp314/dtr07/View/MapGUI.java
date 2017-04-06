@@ -661,30 +661,25 @@ public class MapGUI {
         databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenHeight = screenSize.getHeight();
-        databaseFrame.setLocation(1025, ((int)screenHeight - height)-42);
+        databaseFrame.setLocation(1025, ((int)screenHeight - height)+35);
         databaseWindow = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
         JComboBox airports = makeDropdowns(sshImCheatingDontTell("type", "airports", ""));
         databaseWindow.add(airports, gbc);
-        databaseFrame.add(databaseWindow);
 
         setGBC(0, 1, 4);
         JComboBox continents = makeDropdowns(sshImCheatingDontTell("name", "continents", ""));
         databaseWindow.add(continents, gbc);
-        databaseFrame.add(databaseWindow);
 
         setGBC(0, 2, 4);
         JComboBox countries = makeDropdowns(sshImCheatingDontTell("name", "countries", ""));
         databaseWindow.add(countries, gbc);
-        databaseFrame.add(databaseWindow);
 
         setGBC(0, 3, 4);
         JComboBox regions = makeDropdowns(sshImCheatingDontTell("name", "regions", ""));
         databaseWindow.add(regions, gbc);
-        databaseFrame.add(databaseWindow);
 
-        //TODO add button for searching of database, else we could use the self updating ones but that might take a bit to update
         setGBC(0, 6, 4);
         JButton searchDatabasePlease = new JButton("Search");
         searchDatabasePlease.addActionListener((ActionEvent e) -> {
@@ -721,7 +716,6 @@ public class MapGUI {
         });
         databaseWindow.add(testingSearching2, gbc);
 
-        databaseFrame.add(databaseWindow);
 
         Vector<String> columnNames = new Vector<>();
         Vector<Vector<String>> addButtons = new Vector<>();
@@ -775,8 +769,17 @@ public class MapGUI {
 
         JScrollPane scroll = new JScrollPane(table3);
         setGBC(0,8,4);
-        table3.setPreferredScrollableViewportSize(new Dimension(470,  250));
+        table3.setPreferredScrollableViewportSize(new Dimension(470,  260));
         databaseWindow.add(scroll, gbc);
+
+        setGBC(0, 9, 4);
+        JButton transferToFirstWindow = new JButton("Select");
+        searchDatabasePlease.addActionListener((ActionEvent e) -> {
+            //TODO SHIT HERE
+        });
+        databaseWindow.add(transferToFirstWindow, gbc);
+
+        databaseFrame.add(databaseWindow);
         databaseFrame.pack();
     }
 
