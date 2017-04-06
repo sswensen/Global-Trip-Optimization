@@ -5,23 +5,23 @@ engines:
     channel: "beta"
     checks:
       com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck:
-        enabled: false
+        enabled: false #Disabled because repo name-structure causes issues
       com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck:
-        enabled: false
+        enabled: false #Disabled because it asks for Javadocs we don't have
       com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck:
-        enabled: false
+        enabled: false #Disabled because it doesn't allow names such as i, which are completely understandable in methods such as twoOpt
       com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck:
-        enabled: false
+        enabled: false #Disabled because it doesn't allow names such as i, which are completely understandable in methods such as twoOpt
       com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck:
-        enabled: false
+        enabled: false #Disabled because it doesn't allow names such as i, which are completely understandable in methods such as twoOpt
       com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck:
-        enabled: false
+        enabled: true
       com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
-        enabled: false
+        enabled: true
       com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck:
-        enabled: false
+        enabled: true
       com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck:
-        enabled: false
+        enabled: true
   csslint:
     enabled: false
 # ... CONFIG CONTENT ...
