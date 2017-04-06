@@ -29,6 +29,7 @@ public class Model {
     private String unit;
     private double[][] distTable;
     private boolean readingFromXML = true;
+    private boolean kilometers;
 
     //TODO add method that takes arraylist (wheres) and returns set of strings of names of the airports
 
@@ -245,6 +246,14 @@ public class Model {
         return threeOpt;
     }
 
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
+
     /*
     public void setTestThreeOpt(boolean testThreeOpt)
     {
@@ -311,7 +320,14 @@ public class Model {
         for(Pair p : pairs) {
             ret += p.getDistance();
         }
-        return ret;
+        if(!kilometers) {
+            return ret;
+        } else {
+            double ret2 = (double) ret;
+            ret2 = ret2*1.60934;
+            System.out.println("/n/n/n" + ret2 + "/n/n/n");
+            return (int) ret2;
+        }
     }
 
     /*

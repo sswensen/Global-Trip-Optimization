@@ -244,6 +244,7 @@ public class Presenter {
     public void setKilometers(boolean kilometers) {
         this.kilometers = kilometers;
         view.setKilometers(kilometers);
+        model.setKilometers(kilometers);
     }
 
     public boolean isKilometers() {
