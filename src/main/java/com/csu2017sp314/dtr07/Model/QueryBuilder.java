@@ -62,6 +62,33 @@ class QueryBuilder {
     //TODO add function that returns the number of items found, actually this can be accomplished by calling the size function on the ids returned to the db selection window
 
     private void setWhere(ArrayList<String> wheres) {
+        if(wheres.get(0).equalsIgnoreCase("Select an airport type filter")) {
+            wheres.remove(0);
+            wheres.add(0, "");
+        }
+        if(wheres.get(1).equalsIgnoreCase("Select a continent filter")) {
+            wheres.remove(1);
+            wheres.add(1, "");
+        }
+        if(wheres.get(2).equalsIgnoreCase("Select a country filter")) {
+            wheres.remove(2);
+            wheres.add(2, "");
+        }
+        if(wheres.get(3).equalsIgnoreCase("Select a region filter")) {
+            wheres.remove(3);
+            wheres.add(3, "");
+        }
+
+        for(int i = 0; i < wheres.size(); i++) {
+            String temp = wheres.get(i);
+            if(temp.contains("'")) {
+                int iHateAppostrophies = temp.indexOf("'");
+                temp = temp.substring(iHateAppostrophies+1);
+            }
+            wheres.remove(i);
+            wheres.add(i, temp);
+        }
+
         ArrayList<String> q = new ArrayList<>();
         String type = wheres.get(0);
         if(!type.equals("")) {
@@ -87,6 +114,7 @@ class QueryBuilder {
         if(!airportName.equals("")) {
             q.add("airports.name like '%" + airportName + "%'");
         }
+
         String ret = "";
         for(int i = 0; i < q.size(); i++) {
             if(ret.equals("")) {
@@ -107,13 +135,13 @@ class QueryBuilder {
         ResultSet rs = null;
         try { // connect to the database
             Class.forName(myDriver);
-            Connection conn = DriverManager.getConnection(myUrl, "chundrus", "830424750");
+            Connection conn = DriverManager.getConnection(myUrl, "sswensen", "830534566");
 
             try { // create a statement
                 Statement st = conn.createStatement();
 
                 try { // submit a query to count the results
-                    //System.out.println(count + continents + join + where);
+                    System.out.println(count + continents + join + where);
                     rs = st.executeQuery(count + continents + join + where);
 
                     try { // print the number of rows

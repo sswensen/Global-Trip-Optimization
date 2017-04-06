@@ -733,7 +733,7 @@ public class MapGUI {
             fiveThingsForDatabase.add(2, (String)countries.getSelectedItem());
             fiveThingsForDatabase.remove(3);
             fiveThingsForDatabase.add(3, (String)regions.getSelectedItem());
-            fiveThingsForDatabase.remove(4);
+            //fiveThingsForDatabase.remove(4);
             searchDatabase();
         });
         databaseWindow.add(searchDatabasePlease, gbc);
