@@ -160,7 +160,7 @@ public class MapGUI {
         //createOptionsGUI();
         uOp = createJFrame("User Options", width + 1, 0, options);
         //createItineraryWindow();
-        itinerary = createScrollingJFrame("Itinerary", 0, height);
+        itinerary = createScrollingJFrame("Itinerary", 0, height+42);
 
         map.setVisible(true); //making the frame visible
         return 1;
@@ -659,7 +659,9 @@ public class MapGUI {
         databaseFrame = new JFrame("Testing dropdowns");
         databaseFrame.setVisible(true);
         databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        databaseFrame.setLocation(430, 100);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double screenHeight = screenSize.getHeight();
+        databaseFrame.setLocation(1063, ((int)screenHeight - height)-42);
         databaseWindow = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
@@ -1092,7 +1094,7 @@ public class MapGUI {
         }
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenHeight = screenSize.getHeight();
-        table.setPreferredScrollableViewportSize(new Dimension(width, ((int) screenHeight - height)));
+        table.setPreferredScrollableViewportSize(new Dimension(width-19, ((int) screenHeight - height)-42));
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
