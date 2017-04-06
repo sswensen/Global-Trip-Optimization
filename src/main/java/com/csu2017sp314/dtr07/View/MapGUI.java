@@ -92,6 +92,7 @@ public class MapGUI {
     private JTable table;
     private DefaultTableModel dm = new DefaultTableModel();
     private JTable table2 = new JTable(dm);
+
     MapGUI() {
 
     }
@@ -111,7 +112,6 @@ public class MapGUI {
     void setCallback4(Consumer<ArrayList<String>> callback4) {
         this.callback4 = callback4;
     }
-
 
     /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);
@@ -430,7 +430,7 @@ public class MapGUI {
                 a.doClick();
                 a.doClick();
             }
-            for(int i = 0; i < dm.getRowCount();i++) {
+            for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
                 for(int j = 0; j < tempLoc.size(); j++) {
                     if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
@@ -440,7 +440,7 @@ public class MapGUI {
                     }
                 }
             }
-            for(int i = 0; i < dm.getRowCount();i++) {
+            for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
                 for(int j = 0; j < tempLoc.size(); j++) {
                     if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
@@ -726,13 +726,13 @@ public class MapGUI {
         JButton searchDatabasePlease = new JButton("Search");
         searchDatabasePlease.addActionListener((ActionEvent e) -> {
             fiveThingsForDatabase.remove(0);
-            fiveThingsForDatabase.add(0, (String)airports.getSelectedItem());
+            fiveThingsForDatabase.add(0, (String) airports.getSelectedItem());
             fiveThingsForDatabase.remove(1);
-            fiveThingsForDatabase.add(1, (String)continents.getSelectedItem());
+            fiveThingsForDatabase.add(1, (String) continents.getSelectedItem());
             fiveThingsForDatabase.remove(2);
-            fiveThingsForDatabase.add(2, (String)countries.getSelectedItem());
+            fiveThingsForDatabase.add(2, (String) countries.getSelectedItem());
             fiveThingsForDatabase.remove(3);
-            fiveThingsForDatabase.add(3, (String)regions.getSelectedItem());
+            fiveThingsForDatabase.add(3, (String) regions.getSelectedItem());
             //fiveThingsForDatabase.remove(4);
             searchDatabase();
         });
@@ -796,7 +796,7 @@ public class MapGUI {
         Vector<Vector<String>> addButtons = new Vector<>();
         columnNames.addElement("Click to add Destination");
         columnNames.addElement("Location");
-        for(String id : ids){
+        for(String id : ids) {
             Vector<String> temp = new Vector<>();
             temp.addElement("Add");
             temp.addElement(id);
@@ -813,8 +813,7 @@ public class MapGUI {
                     for(int i = 0; i < tempLoc.size(); i++) {
                         if(tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Add")) {
                             model.setValueAt("Remove", index, 0);
-                        }
-                        else if(!tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Remove")) {
+                        } else if(!tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Remove")) {
                             model.setValueAt("Add", index, 0);
                         }
                     }
@@ -848,7 +847,7 @@ public class MapGUI {
         System.out.println(temp.getText());
         */
         JScrollPane scroll = new JScrollPane(table2);
-        setGBC(0,2,4);
+        setGBC(0, 2, 4);
         fTemp.add(scroll, gbc);
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
@@ -866,8 +865,7 @@ public class MapGUI {
     }
 
     public class ButtonColumn extends AbstractCellEditor
-            implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener
-    {
+            implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
         private JTable table;
         private Action action;
         private int mnemonic;
@@ -880,66 +878,61 @@ public class MapGUI {
         private boolean isButtonColumnEditor;
 
         /**
-         *  Create the ButtonColumn to be used as a renderer and editor. The
-         *  renderer and editor will automatically be installed on the TableColumn
-         *  of the specified column.
+         * Create the ButtonColumn to be used as a renderer and editor. The
+         * renderer and editor will automatically be installed on the TableColumn
+         * of the specified column.
          *
-         *  @param table the table containing the button renderer/editor
-         *  @param action the Action to be invoked when the button is invoked
-         *  @param column the column to which the button renderer/editor is added
+         * @param table  the table containing the button renderer/editor
+         * @param action the Action to be invoked when the button is invoked
+         * @param column the column to which the button renderer/editor is added
          */
-        public ButtonColumn(JTable table, Action action, int column)
-        {
+        public ButtonColumn(JTable table, Action action, int column) {
             this.table = table;
             this.action = action;
 
             renderButton = new JButton();
             editButton = new JButton();
-            editButton.setFocusPainted( false );
-            editButton.addActionListener( this );
+            editButton.setFocusPainted(false);
+            editButton.addActionListener(this);
             originalBorder = editButton.getBorder();
-            setFocusBorder( new LineBorder(Color.BLUE) );
+            setFocusBorder(new LineBorder(Color.BLUE));
 
             TableColumnModel columnModel = table.getColumnModel();
-            columnModel.getColumn(column).setCellRenderer( this );
-            columnModel.getColumn(column).setCellEditor( this );
-            table.addMouseListener( this );
+            columnModel.getColumn(column).setCellRenderer(this);
+            columnModel.getColumn(column).setCellEditor(this);
+            table.addMouseListener(this);
         }
 
 
         /**
-         *  Get foreground color of the button when the cell has focus
+         * Get foreground color of the button when the cell has focus
          *
-         *  @return the foreground color
+         * @return the foreground color
          */
-        public Border getFocusBorder()
-        {
+        public Border getFocusBorder() {
             return focusBorder;
         }
 
         /**
-         *  The foreground color of the button when the cell has focus
+         * The foreground color of the button when the cell has focus
          *
-         *  @param focusBorder the foreground color
+         * @param focusBorder the foreground color
          */
-        public void setFocusBorder(Border focusBorder)
-        {
+        public void setFocusBorder(Border focusBorder) {
             this.focusBorder = focusBorder;
-            editButton.setBorder( focusBorder );
+            editButton.setBorder(focusBorder);
         }
 
-        public int getMnemonic()
-        {
+        public int getMnemonic() {
             return mnemonic;
         }
 
         /**
-         *  The mnemonic to activate the button when the cell has focus
+         * The mnemonic to activate the button when the cell has focus
          *
-         *  @param mnemonic the mnemonic
+         * @param mnemonic the mnemonic
          */
-        public void setMnemonic(int mnemonic)
-        {
+        public void setMnemonic(int mnemonic) {
             this.mnemonic = mnemonic;
             renderButton.setMnemonic(mnemonic);
             editButton.setMnemonic(mnemonic);
@@ -947,22 +940,16 @@ public class MapGUI {
 
         @Override
         public Component getTableCellEditorComponent(
-                JTable table, Object value, boolean isSelected, int row, int column)
-        {
-            if (value == null)
-            {
-                editButton.setText( "" );
-                editButton.setIcon( null );
-            }
-            else if (value instanceof Icon)
-            {
-                editButton.setText( "" );
-                editButton.setIcon( (Icon)value );
-            }
-            else
-            {
-                editButton.setText( value.toString() );
-                editButton.setIcon( null );
+                JTable table, Object value, boolean isSelected, int row, int column) {
+            if(value == null) {
+                editButton.setText("");
+                editButton.setIcon(null);
+            } else if(value instanceof Icon) {
+                editButton.setText("");
+                editButton.setIcon((Icon) value);
+            } else {
+                editButton.setText(value.toString());
+                editButton.setIcon(null);
             }
 
             this.editorValue = value;
@@ -970,8 +957,7 @@ public class MapGUI {
         }
 
         @Override
-        public Object getCellEditorValue()
-        {
+        public Object getCellEditorValue() {
             return editorValue;
         }
 
@@ -979,43 +965,31 @@ public class MapGUI {
 //  Implement TableCellRenderer interface
 //
         public Component getTableCellRendererComponent(
-                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
-        {
-            if (isSelected)
-            {
+                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if(isSelected) {
                 renderButton.setForeground(table.getSelectionForeground());
                 renderButton.setBackground(table.getSelectionBackground());
-            }
-            else
-            {
+            } else {
                 renderButton.setForeground(table.getForeground());
                 renderButton.setBackground(UIManager.getColor("Button.background"));
             }
 
-            if (hasFocus)
-            {
-                renderButton.setBorder( focusBorder );
-            }
-            else
-            {
-                renderButton.setBorder( originalBorder );
+            if(hasFocus) {
+                renderButton.setBorder(focusBorder);
+            } else {
+                renderButton.setBorder(originalBorder);
             }
 
 //		renderButton.setText( (value == null) ? "" : value.toString() );
-            if (value == null)
-            {
-                renderButton.setText( "" );
-                renderButton.setIcon( null );
-            }
-            else if (value instanceof Icon)
-            {
-                renderButton.setText( "" );
-                renderButton.setIcon( (Icon)value );
-            }
-            else
-            {
-                renderButton.setText( value.toString() );
-                renderButton.setIcon( null );
+            if(value == null) {
+                renderButton.setText("");
+                renderButton.setIcon(null);
+            } else if(value instanceof Icon) {
+                renderButton.setText("");
+                renderButton.setIcon((Icon) value);
+            } else {
+                renderButton.setText(value.toString());
+                renderButton.setIcon(null);
             }
 
             return renderButton;
@@ -1024,12 +998,11 @@ public class MapGUI {
         //
 //  Implement ActionListener interface
 //
-	/*
-	 *	The button has been pressed. Stop editing and invoke the custom Action
+    /*
+     *	The button has been pressed. Stop editing and invoke the custom Action
 	 */
-        public void actionPerformed(ActionEvent e)
-        {
-            int row = table.convertRowIndexToModel( table.getEditingRow() );
+        public void actionPerformed(ActionEvent e) {
+            int row = table.convertRowIndexToModel(table.getEditingRow());
             fireEditingStopped();
 
             //  Invoke the Action
@@ -1049,40 +1022,43 @@ public class MapGUI {
 	 *  the mouse to another cell before releasing it, the editor is still
 	 *  active. Make sure editing is stopped when the mouse is released.
 	 */
-        public void mousePressed(MouseEvent e)
-        {
-            if (table.isEditing()
-                    &&  table.getCellEditor() == this)
+        public void mousePressed(MouseEvent e) {
+            if(table.isEditing()
+                    && table.getCellEditor() == this)
                 isButtonColumnEditor = true;
         }
 
-        public void mouseReleased(MouseEvent e)
-        {
-            if (isButtonColumnEditor
-                    &&  table.isEditing())
+        public void mouseReleased(MouseEvent e) {
+            if(isButtonColumnEditor
+                    && table.isEditing())
                 table.getCellEditor().stopCellEditing();
 
             isButtonColumnEditor = false;
         }
 
-        public void mouseClicked(MouseEvent e) {}
-        public void mouseEntered(MouseEvent e) {}
-        public void mouseExited(MouseEvent e) {}
+        public void mouseClicked(MouseEvent e) {
+        }
+
+        public void mouseEntered(MouseEvent e) {
+        }
+
+        public void mouseExited(MouseEvent e) {
+        }
     }
 
-    void resizeTable(JTable table){
-        for (int column = 0; column < table.getColumnCount(); column++){
+    void resizeTable(JTable table) {
+        for(int column = 0; column < table.getColumnCount(); column++) {
             TableColumn tableColumn = table.getColumnModel().getColumn(column);
             int preferredWidth = tableColumn.getMinWidth();
             int maxWidth = 0;
             TableCellRenderer rend = table.getTableHeader().getDefaultRenderer();
             TableCellRenderer rendCol = tableColumn.getHeaderRenderer();
-            if (rendCol == null) rendCol = rend;
+            if(rendCol == null) rendCol = rend;
             Component header = rendCol.getTableCellRendererComponent(table, tableColumn.getHeaderValue(), false, false, 0, column);
             maxWidth = header.getPreferredSize().width;
             //System.out.println("maxWidth :"+maxWidth);
 
-            for (int row = 0; row < table.getRowCount(); row++){
+            for(int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
                 Component c = table.prepareRenderer(cellRenderer, row, column);
                 int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
@@ -1092,7 +1068,7 @@ public class MapGUI {
 
                 //  We've exceeded the maximum width, no need to check other rows
 
-                if (preferredWidth <= maxWidth){
+                if(preferredWidth <= maxWidth) {
                     preferredWidth = maxWidth;
                     break;
                 }
@@ -1101,7 +1077,7 @@ public class MapGUI {
         }
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenHeight = screenSize.getHeight();
-        table.setPreferredScrollableViewportSize(new Dimension(width, ((int)screenHeight - height)));
+        table.setPreferredScrollableViewportSize(new Dimension(width, ((int) screenHeight - height)));
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
@@ -1111,7 +1087,7 @@ public class MapGUI {
             ret = 1;
         }
 
-        if(model == null){
+        if(model == null) {
             model = new DefaultTableModel();
             table = new JTable(model);
             model.addColumn("ID");
@@ -1135,8 +1111,8 @@ public class MapGUI {
         JLabel lab = new JLabel("ID: " + seqId + "   " + name1 + " to " + name2 + "   " + mileage + " miles");
         lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
-        if(lab.getText() != null){
-            model.addRow(new Object[]{seqId,name1,name2,mileage});
+        if(lab.getText() != null) {
+            model.addRow(new Object[]{seqId, name1, name2, mileage});
             resizeTable(table);
         }
         return ret;
@@ -1171,7 +1147,7 @@ public class MapGUI {
     }
 
     void makeGUILocations(ArrayList<Object> locs) {
-        System.out.println("[MapGUI] Making GUILocations");
+        //System.out.println("[MapGUI] Making GUILocations");
         guiLocations.add(new GUILocation(locs));
     }
 
