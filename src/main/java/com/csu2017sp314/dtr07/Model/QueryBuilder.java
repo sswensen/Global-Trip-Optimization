@@ -107,7 +107,7 @@ class QueryBuilder {
         ResultSet rs = null;
         try { // connect to the database
             Class.forName(myDriver);
-            Connection conn = DriverManager.getConnection(myUrl, "sswensen", "830534566");
+            Connection conn = DriverManager.getConnection(myUrl, "chundrus", "830424750");
 
             try { // create a statement
                 Statement st = conn.createStatement();
