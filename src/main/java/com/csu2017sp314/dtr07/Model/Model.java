@@ -324,7 +324,8 @@ public class Model {
             return ret;
         } else {
             double ret2 = (double) ret;
-            ret2 = ret2*1.60934;
+            ret2 *= 1.60934;
+            ret2 = Math.round(ret2);
             return (int) ret2;
         }
     }
