@@ -21,10 +21,10 @@ import java.io.IOException;
 
 class SVGBuilder {
     private Document SVGdoc;
+    private boolean kilometers;
     private double width;
     private double height;
     private int labelID = 1;
-    private boolean kilometers;
 
     SVGBuilder(String svgMap) throws ParserConfigurationException, SAXException, IOException {
         setKilometers(false);
