@@ -661,7 +661,7 @@ public class MapGUI {
         databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenHeight = screenSize.getHeight();
-        databaseFrame.setLocation(1063, ((int)screenHeight - height)-42);
+        databaseFrame.setLocation(1025, ((int)screenHeight - height)-42);
         databaseWindow = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
@@ -775,7 +775,7 @@ public class MapGUI {
 
         JScrollPane scroll = new JScrollPane(table3);
         setGBC(0,8,4);
-        table3.setPreferredScrollableViewportSize(new Dimension(500,  250));
+        table3.setPreferredScrollableViewportSize(new Dimension(470,  250));
         databaseWindow.add(scroll, gbc);
         databaseFrame.pack();
     }
