@@ -62,19 +62,19 @@ class QueryBuilder {
     //TODO add function that returns the number of items found, actually this can be accomplished by calling the size function on the ids returned to the db selection window
 
     private void setWhere(ArrayList<String> wheres) {
-        if(wheres.get(0).equalsIgnoreCase("Select an airport type filter")) {
+        if(wheres.get(0).equalsIgnoreCase("All airports")) {
             wheres.remove(0);
             wheres.add(0, "");
         }
-        if(wheres.get(1).equalsIgnoreCase("Select a continent filter")) {
+        if(wheres.get(1).equalsIgnoreCase("All continents")) {
             wheres.remove(1);
             wheres.add(1, "");
         }
-        if(wheres.get(2).equalsIgnoreCase("Select a country filter")) {
+        if(wheres.get(2).equalsIgnoreCase("All countries")) {
             wheres.remove(2);
             wheres.add(2, "");
         }
-        if(wheres.get(3).equalsIgnoreCase("Select a region filter")) {
+        if(wheres.get(3).equalsIgnoreCase("All regions")) {
             wheres.remove(3);
             wheres.add(3, "");
         }

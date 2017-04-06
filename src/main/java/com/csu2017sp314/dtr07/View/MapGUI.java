@@ -621,13 +621,13 @@ public class MapGUI {
         }
         ArrayList<String> ret = new ArrayList<>();
         if(table.equalsIgnoreCase("airports"))
-            ret.add("Select an airport type filter");
+            ret.add("All airports");
         if(table.equalsIgnoreCase("continents"))
-            ret.add("Select a continent filter");
+            ret.add("All continents");
         if(table.equalsIgnoreCase("countries"))
-            ret.add("Select a country filter");
+            ret.add("All countries");
         if(table.equalsIgnoreCase("regions"))
-            ret.add("Select a region filter");
+            ret.add("All regions");
         try {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cs314", "sswensen", "830534566");
