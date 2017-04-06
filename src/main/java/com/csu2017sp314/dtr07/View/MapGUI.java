@@ -698,7 +698,7 @@ public class MapGUI {
         });
         databaseWindow.add(searchDatabasePlease, gbc);
 
-        setGBC(0, 7, 2);
+        setGBC(0, 7, 1);
         JButton testingSearching = new JButton("Search for hardcoded 1");
         testingSearching.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
@@ -708,7 +708,7 @@ public class MapGUI {
             //TODO update names of the add buttons with using the ArrayList testingNames or whatever the global will be called
         });
         databaseWindow.add(testingSearching, gbc);
-        setGBC(2, 7, 2);
+        setGBC(1, 7, 1);
         JButton testingSearching2 = new JButton("Search for hardcoded 2");
         testingSearching2.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
@@ -717,6 +717,16 @@ public class MapGUI {
             userAddLocList(testingNames);
         });
         databaseWindow.add(testingSearching2, gbc);
+        setGBC(3, 7, 1);
+        JButton selectAll = new JButton("Select all");
+        selectAll.addActionListener((ActionEvent e) -> {
+            databaseLocations.clear();
+            for(GUILocation loc : guiLocations) {
+                databaseLocations.add(loc.getName());
+            }
+
+        });
+        databaseWindow.add(selectAll, gbc);
 
 
         updateAddButtonsDatabase();
