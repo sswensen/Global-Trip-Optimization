@@ -48,7 +48,8 @@ class LocationFactory {
         }
         while(scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
-            Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+", ""),
+            Location temp = new Location(line[id], line[name],
+                    line[latitude].replaceAll("\\s+", ""),
                     line[longitude].replaceAll("\\s+", ""));
             locations.add(temp);
         }
@@ -88,8 +89,10 @@ class LocationFactory {
                 pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1),
                         locations.get(x).distance(locations.get(x + 1))));
             }
-            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1),
-                    locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
+            pairs.add(new Pair(Integer.toString(locations.size() - 1),
+                    locations.get(locations.size() - 1),
+                    locations.get(0),
+                    locations.get(locations.size() - 1).distance(locations.get(0))));
             if(twoOpt) {
                 if(threeOpt) {
                     threeOpt();
