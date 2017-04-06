@@ -42,7 +42,7 @@ public class Model {
             lf.setTwoOpt(true);
         }
         if(threeOpt) {
-            lf.setThreeOpt(true);
+                lf.setThreeOpt(true);
         }
         lf.thirdTry();
         locations = lf.getLocations();

@@ -24,8 +24,10 @@ class SVGBuilder {
     private double width;
     private double height;
     private int labelID = 1;
+    private boolean kilometers;
 
     SVGBuilder(String svgMap) throws ParserConfigurationException, SAXException, IOException {
+        setKilometers(false);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
@@ -46,6 +48,14 @@ class SVGBuilder {
 		svgRoot.setAttribute("height", "1024");
 		svgRoot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");*/
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
     }
 
     private void readSVG() throws SAXException, IOException, ParserConfigurationException {
@@ -160,7 +170,12 @@ class SVGBuilder {
         footer.setAttribute("id", "distance");
         footer.setAttribute("x", "512");
         footer.setAttribute("y", "505");
-        footer.setTextContent(totalDistance + " miles");
+        if (!kilometers) {
+            footer.setTextContent(totalDistance + " miles");
+        }
+        else {
+            footer.setTextContent(totalDistance + " kilometers");
+        }
         SVGdoc.getDocumentElement().appendChild(footer);
     }
 
