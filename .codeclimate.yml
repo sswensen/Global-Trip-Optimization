@@ -4,8 +4,8 @@ engines:
     enabled: true
     channel: "beta"
     checks:
-      com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck:
-        enabled: false
+      com.puppycrawl.tools.checkstyle.checks.naming.PackageNameCheck:                 #Disabled because
+        enabled: true
       com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.naming.ParameterNameCheck:
@@ -15,13 +15,13 @@ engines:
       com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck:
-        enabled: true
+        enabled: false
       com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck:
-        enabled: true
+        enabled: false
   csslint:
     enabled: false
 # ... CONFIG CONTENT ...
