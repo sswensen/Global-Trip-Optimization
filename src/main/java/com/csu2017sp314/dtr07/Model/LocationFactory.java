@@ -48,7 +48,9 @@ class LocationFactory {
         }
         while(scan.hasNext()) {
             String[] line = scan.nextLine().split(",");
-            Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+", ""), line[longitude].replaceAll("\\s+", ""));
+            Location temp = new Location(line[id], line[name],
+                    line[latitude].replaceAll("\\s+", ""),
+                    line[longitude].replaceAll("\\s+", ""));
             locations.add(temp);
         }
         scan.close();
@@ -84,9 +86,13 @@ class LocationFactory {
                 Location temploc = locations.get(x + 1);
                 locations.set(x + 1, locations.get(index));
                 locations.set(index, temploc);
-                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1))));
+                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1),
+                        locations.get(x).distance(locations.get(x + 1))));
             }
-            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0))));
+            pairs.add(new Pair(Integer.toString(locations.size() - 1),
+                    locations.get(locations.size() - 1),
+                    locations.get(0),
+                    locations.get(locations.size() - 1).distance(locations.get(0))));
             if(twoOpt) {
                 if(threeOpt) {
                     threeOpt();
@@ -241,7 +247,8 @@ class LocationFactory {
             improvements = 0;
             for(int i=0; i<=n-3; i++) {
                 for(int j=i+2; j<=n-1; j++) {
-                    if((dist(route[i], route[i+1])+dist(route[j], route[j+1])) > (dist(route[i], route[j])+dist(route[i+1], route[j+1]))) {
+                    if((dist(route[i], route[i+1])+dist(route[j], route[j+1]))
+                            > (dist(route[i], route[j])+dist(route[i+1], route[j+1]))) {
                         reverseSegment(route, i+1, j);
                         improvements++;
                         totalImprovements++;
@@ -287,19 +294,33 @@ class LocationFactory {
 
     private int improved(Location[] route, int i, int j, int k) {
         double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1]) + dist(route[k], route[k+1]);
-        if(originalDist > (dist(route[i], route[i+1]) + dist(route[j], route[k]) + dist(route[j+1], route[k+1]))) {
+        double distOne = (dist(route[i], route[i+1]) + dist(route[j], route[k])
+                + dist(route[j+1], route[k+1]));
+        double distTwo = (dist(route[i], route[j]) + dist(route[i+1], route[j+1])
+                + dist(route[k], route[k+1]));
+        double distThree = (dist(route[i], route[k]) + dist(route[j+1], route[j])
+                + dist(route[i+1], route[k+1]));
+        double distFour = (dist(route[i], route[j+1]) + dist(route[k], route[i+1])
+                + dist(route[j], route[k+1]));
+        double distFive = (dist(route[i], route[j]) + dist(route[i+1], route[k])
+                + dist(route[j+1], route[k+1]));
+        double distSix = (dist(route[i], route[k]) + dist(route[j+1], route[i+1])
+                + dist(route[j], route[k+1]));
+        double distSeven = (dist(route[i], route[j+1]) + dist(route[k], route[j])
+                + dist(route[i+1], route[k+1]));
+        if(originalDist > distOne) {
             return 1;
-        } else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[j+1]) + dist(route[k], route[k+1]))) {
+        } else if(originalDist > distTwo) {
             return 2;
-        } else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[j]) + dist(route[i+1], route[k+1]))) {
+        } else if(originalDist > distThree) {
             return 3;
-        } else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[i+1]) + dist(route[j], route[k+1]))) {
+        } else if(originalDist > distFour) {
             return 4;
-        } else if(originalDist > (dist(route[i], route[j]) + dist(route[i+1], route[k]) + dist(route[j+1], route[k+1]))) {
+        } else if(originalDist > distFive) {
             return 5;
-        } else if(originalDist > (dist(route[i], route[k]) + dist(route[j+1], route[i+1]) + dist(route[j], route[k+1]))) {
+        } else if(originalDist > distSix) {
             return 6;
-        } else if(originalDist > (dist(route[i], route[j+1]) + dist(route[k], route[j]) + dist(route[i+1], route[k+1]))) {
+        } else if(originalDist > distSeven) {
             return 7;
         } else {
             return 0;
