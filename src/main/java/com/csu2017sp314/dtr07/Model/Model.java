@@ -36,7 +36,7 @@ public class Model {
         this.unit = units;
         LocationFactory lf = new LocationFactory();
         lf.setUnit(units);
-        lf.setSelectedAirports(selectedLocations, "id"); //THis also searches the database lol
+        databaseLocationsReturned = lf.setSelectedAirports(selectedLocations, "id"); //THis also searches the database lol
         //lf.readFile(filename);
         if(twoOpt) {
             lf.setTwoOpt(true);
@@ -199,7 +199,7 @@ public class Model {
 
             }
             } else {
-                dataBaseSearch.setSelectedAirports(ids, "name"); //Instead of searching the existing lcoations, maybe we should just do another query
+                databaseLocationsReturned = dataBaseSearch.setSelectedAirports(ids, "name"); //Instead of searching the existing lcoations, maybe we should just do another query
                 userLocations = dataBaseSearch.getLocations(); //Thats is what i am implementing here
             }
         } else {
@@ -251,6 +251,10 @@ public class Model {
         this.testThreeOpt = testThreeOpt;
     }
     */
+
+    public int getDatabaseLocationsReturnedSize() {
+        return databaseLocationsReturned.size();
+    }
 
     public int getTotalImprovements() {
         return totalImprovements;
