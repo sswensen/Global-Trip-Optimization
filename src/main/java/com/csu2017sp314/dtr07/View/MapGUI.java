@@ -580,7 +580,7 @@ public class MapGUI {
         setGBC(1, 0, 1);
         panel.add(mapDisplayButtons("IDs"), gbc);
         setGBC(0, 1, 1);
-        panel.add(mapDisplayButtons("Mileage"), gbc);
+        panel.add(mapDisplayButtons("3"), gbc);
         setGBC(0, 2, 1);
         panel.add(mapDisplayButtons("2-opt"), gbc);
         setGBC(1, 2, 1);
@@ -692,12 +692,14 @@ public class MapGUI {
             fiveThingsForDatabase.remove(3);
             fiveThingsForDatabase.add(3, (String) regions.getSelectedItem());
             //fiveThingsForDatabase.remove(4);
+            guiLocations.clear();
             searchDatabase();
+            updateAddButtonsDatabase(); //Update database selection scroll window
         });
         databaseWindow.add(searchDatabasePlease, gbc);
 
         setGBC(0, 7, 2);
-        JButton testingSearching = new JButton("Search for hardcoded1");
+        JButton testingSearching = new JButton("Search for hardcoded 1");
         testingSearching.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
             testingNames.add("Berlin-SchÃ¶nefeld International Airport");
@@ -717,6 +719,27 @@ public class MapGUI {
         databaseWindow.add(testingSearching2, gbc);
 
 
+        updateAddButtonsDatabase();
+
+        JScrollPane scroll = new JScrollPane(table3);
+        setGBC(0,8,4);
+        table3.setPreferredScrollableViewportSize(new Dimension(470,  260));
+        databaseWindow.add(scroll, gbc);
+
+        setGBC(0, 9, 4);
+        JButton transferToFirstWindow = new JButton("Select");
+        transferToFirstWindow.addActionListener((ActionEvent e) -> {
+            //TODOooooooooooooooooooooooooooooooooo
+            updateAddButtonsAddRemove(searchDBLocationNames());
+        });
+        databaseWindow.add(transferToFirstWindow, gbc);
+
+        databaseFrame.add(databaseWindow);
+        databaseFrame.pack();
+    }
+
+    void updateAddButtonsDatabase() {
+        dm2.setRowCount(0);
         Vector<String> columnNames = new Vector<>();
         Vector<Vector<String>> addButtons = new Vector<>();
         columnNames.addElement("Click to add Destination");
@@ -766,21 +789,6 @@ public class MapGUI {
         };
 
         ButtonColumn buttonColumn = new ButtonColumn(table3, test, 0);
-
-        JScrollPane scroll = new JScrollPane(table3);
-        setGBC(0,8,4);
-        table3.setPreferredScrollableViewportSize(new Dimension(470,  260));
-        databaseWindow.add(scroll, gbc);
-
-        setGBC(0, 9, 4);
-        JButton transferToFirstWindow = new JButton("Select");
-        searchDatabasePlease.addActionListener((ActionEvent e) -> {
-            //TODO SHIT HERE
-        });
-        databaseWindow.add(transferToFirstWindow, gbc);
-
-        databaseFrame.add(databaseWindow);
-        databaseFrame.pack();
     }
 
     int displayXML(ArrayList<String> ids) throws Exception {
@@ -813,10 +821,42 @@ public class MapGUI {
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
+        updateAddButtonsAddRemove(ids);
+
+        /*
+        for(int i = 0; i < dm.getRowCount();i++){
+            JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,i, 0);
+            buttons.add(temp);
+        }
+        System.out.println(buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0).getClass());
+        JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0);
+        System.out.println(temp.getText());
+        */
+        JScrollPane scroll = new JScrollPane(table2);
+        setGBC(0, 2, 4);
+        fTemp.add(scroll, gbc);
+        ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
+        options.addTab("Locations", icon, fTemp, "Locations");
+        options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
+        options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
+        uOp.pack();
+        table.getTableHeader().setBackground(Color.BLACK);
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("Impact", Font.BOLD, 12));
+        JScrollPane scrollPane = new JScrollPane(table);
+        itinerary.getContentPane().add(scrollPane);
+        itinerary.pack();
+        ret = 1;
+        return ret;
+    }
+
+    private void updateAddButtonsAddRemove(ArrayList<String> ids) {
+        dm.setRowCount(0);
         Vector<String> columnNames = new Vector<>();
         Vector<Vector<String>> addButtons = new Vector<>();
         columnNames.addElement("Click to add Destination");
         columnNames.addElement("Location");
+
         for(String id : ids) {
             Vector<String> temp = new Vector<>();
             temp.addElement("Add");
@@ -856,33 +896,7 @@ public class MapGUI {
                 }
             }
         };
-
         ButtonColumn buttonColumn = new ButtonColumn(table2, test, 0);
-        /*
-        for(int i = 0; i < dm.getRowCount();i++){
-            JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,i, 0);
-            buttons.add(temp);
-        }
-        System.out.println(buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0).getClass());
-        JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0);
-        System.out.println(temp.getText());
-        */
-        JScrollPane scroll = new JScrollPane(table2);
-        setGBC(0, 2, 4);
-        fTemp.add(scroll, gbc);
-        ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
-        options.addTab("Locations", icon, fTemp, "Locations");
-        options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
-        options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
-        uOp.pack();
-        table.getTableHeader().setBackground(Color.BLACK);
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.getTableHeader().setFont(new Font("Impact", Font.BOLD, 12));
-        JScrollPane scrollPane = new JScrollPane(table);
-        itinerary.getContentPane().add(scrollPane);
-        itinerary.pack();
-        ret = 1;
-        return ret;
     }
 
     public class ButtonColumn extends AbstractCellEditor
@@ -1172,6 +1186,18 @@ public class MapGUI {
         guiLocations.add(new GUILocation(locs));
     }
 
+    ArrayList<String> searchDBLocationNames() {
+        ArrayList<String> ret = new ArrayList<>();
+        for(int i = 0; i < guiLocations.size(); i++) {
+            for(int j = 0; j < databaseLocations.size(); j++) {
+                if(guiLocations.get(i).getName().equals(databaseLocations.get(j))) {
+                    ret.add(guiLocations.get(i).getName());
+                }
+            }
+        }
+        return ret;
+    }
+
     boolean cleanup() {
         boolean ret;
         File t = new File(workingDirectoryFilePath + "output/" + filename + (filenameIncrementer - 1) + "_User.png");
@@ -1180,6 +1206,15 @@ public class MapGUI {
         Boolean ret2 = temp.delete();
         filenameIncrementer = 0;
         return ret & ret2;
+    }
+
+    GUILocation searchGuiLocationsWithName(String name) {
+        for(GUILocation loc : guiLocations) {
+            if(loc.getName().equals(name)) {
+                return loc;
+            }
+        }
+        return null;
     }
 
     public void setWidth(int width) {
