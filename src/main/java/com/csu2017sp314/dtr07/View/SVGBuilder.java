@@ -27,7 +27,6 @@ class SVGBuilder {
     private int labelID = 1;
 
     SVGBuilder(String svgMap) throws ParserConfigurationException, SAXException, IOException {
-        setKilometers(false);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
 
