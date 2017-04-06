@@ -102,8 +102,8 @@ public class TripCo {
                     }
                 }, "Shutdown-thread"));
             } else if(arguments.contains("-f") && !arguments.contains("-g")) {
-                if(arguments.contains("-m")) {
-                    displayOptions("-m", presenter);
+                if(arguments.contains("-d")){
+                    displayOptions("-d", presenter);
                 }
                 if(arguments.contains("-n")) {
                     displayOptions("-n", presenter);
