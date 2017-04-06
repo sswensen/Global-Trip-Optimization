@@ -16,8 +16,9 @@ public class TripCo {
     private static ArrayList<String> arguments = new ArrayList<>();
 
     private static void displayOptions(String option, Presenter presenter) {
-        switch(option) {
-            case "-m":
+        switch(option)
+        {
+            case "-d":
                 presenter.setDisplayMileage(true);
                 break;
             case "-i":
