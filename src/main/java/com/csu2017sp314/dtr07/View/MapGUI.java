@@ -1182,6 +1182,15 @@ public class MapGUI {
         return ret & ret2;
     }
 
+    GUILocation searchGuiLocationsWithName(String name) {
+        for(GUILocation loc : guiLocations) {
+            if(loc.getName().equals(name)) {
+                return loc;
+            }
+        }
+        return null;
+    }
+
     public void setWidth(int width) {
         this.width = width;
     }
