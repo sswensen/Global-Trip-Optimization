@@ -741,6 +741,7 @@ public class MapGUI {
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
             //TODOooooooooooooooooooooooooooooooooo
             updateAddButtonsAddRemove(searchDBLocationNames());
+
         });
         databaseWindow.add(transferToFirstWindow, gbc);
 
