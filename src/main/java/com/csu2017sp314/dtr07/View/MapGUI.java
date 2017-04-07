@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.function.Consumer;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseListener;
+
 
 /**
  * Created by SummitDrift on 3/6/17.
@@ -885,8 +887,7 @@ public class MapGUI {
         return ret;
     }
 
-    public class ButtonColumn extends AbstractCellEditor
-            implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
+    public class ButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
         private JTable table;
         private Action action;
         private int mnemonic;
@@ -1077,17 +1078,12 @@ public class MapGUI {
             if(rendCol == null) rendCol = rend;
             Component header = rendCol.getTableCellRendererComponent(table, tableColumn.getHeaderValue(), false, false, 0, column);
             maxWidth = header.getPreferredSize().width;
-            //System.out.println("maxWidth :"+maxWidth);
 
             for(int row = 0; row < table.getRowCount(); row++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
                 Component c = table.prepareRenderer(cellRenderer, row, column);
                 int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
                 preferredWidth = Math.max(preferredWidth, width);
-                //System.out.println("preferredWidth :"+preferredWidth);
-                //System.out.println("Width :"+width);
-
-                //  We've exceeded the maximum width, no need to check other rows
 
                 if(preferredWidth <= maxWidth) {
                     preferredWidth = maxWidth;
@@ -1111,6 +1107,19 @@ public class MapGUI {
         if(model == null) {
             model = new DefaultTableModel();
             table = new JTable(model);
+            /*
+                private String id;
+                private String name;
+                private double lat;
+                private double lon;
+                private String municipality;
+                private String region;
+                private String country;
+                private String continent;
+                private String airportUrl;
+                private String regionUrl;
+                private String countryUrl;
+            */
             model.addColumn("ID");
             model.addColumn("From");
             model.addColumn("To");
@@ -1132,10 +1141,59 @@ public class MapGUI {
         JLabel lab = new JLabel("ID: " + seqId + "   " + name1 + " to " + name2 + "   " + mileage + " miles");
         lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
+        GUILocation temp = searchGuiLocationsWithName(name1);
+        GUILocation temp2 = searchGuiLocationsWithName(name2);
         if(lab.getText() != null) {
-            model.addRow(new Object[]{seqId, name1, name2, mileage});
+            model.addRow(new Object[]{seqId, temp.getName(), temp2.getName(), mileage});
             resizeTable(table);
         }
+        Action testColumn1 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable temp7 = (JTable) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) temp7.getModel();
+                int index = Integer.parseInt(e.getActionCommand());
+                System.out.println("value at this cell is = " + model.getValueAt(index,1));
+                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index,1));
+                JPopupMenu popupMenu = new JPopupMenu();
+                popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
+                popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
+                popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
+               System.out.println(temp3.getContinent());
+               System.out.println(temp3.getCountry());
+               System.out.println(temp3.getMunicipality());
+               temp7.addMouseListener(new MouseAdapter() {
+                   public void mouseClicked(MouseEvent evt) {
+                        popupMenu.show(evt.getComponent(),evt.getX(),evt.getY());
+                   }
+                });
+            }
+        };
+        Action testColumn2 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable temp7 = (JTable) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) temp7.getModel();
+                int index = Integer.parseInt(e.getActionCommand());
+                System.out.println("value at this cell is = " + model.getValueAt(index,2));
+                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index,2));
+                JPopupMenu popupMenu = new JPopupMenu();
+                popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
+                popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
+                popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
+                System.out.println(temp3.getContinent());
+                System.out.println(temp3.getCountry());
+                System.out.println(temp3.getMunicipality());
+                temp7.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent evt) {
+                        popupMenu.show(evt.getComponent(),evt.getX(),evt.getY());
+                    }
+                });
+            }
+        };
+
+        ButtonColumn buttonColumn = new ButtonColumn(table, testColumn1, 1);
+        ButtonColumn buttonColumn2 = new ButtonColumn(table, testColumn2, 2);
         return ret;
     }
 
@@ -1209,23 +1267,6 @@ public class MapGUI {
     }
 
     public static void main(String[] args) throws Exception {
-        /*
-        JFrame f = new JFrame("TripCo"); //creating instance of JFrame
-        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
-        JButton b = new JButton("click"); //creating instance of JButton
-        b.setBounds(964, 0, 100, 40); //x axis, y axis, width, height
-        f.add(b); //adding button in JFrame
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        f.setLayout(new BorderLayout());
-        f.setContentPane(new JLabel(new ImageIcon("png/Colorado14ers.png")));
-        f.setLayout(new FlowLayout());
-        f.setSize(1063, 779); //Refreshes window, needed or image doesn't appear
-        f.setSize(1064, 780);
-        //f.pack(); //Will make everything MASSIVE
-        f.setLayout(null); //using no layout managers
-        f.setVisible(true); //making the frame visible
-        */
         MapGUI g = new MapGUI();
         g.readXML("src/test/resources/Testing/selectionXml.xml");
         g.readXML("testing.xml");
