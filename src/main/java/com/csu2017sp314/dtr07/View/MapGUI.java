@@ -28,6 +28,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
 import java.sql.Connection;
@@ -38,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.function.Consumer;
 
-import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseListener;
 
 
 /**
@@ -1156,6 +1157,22 @@ public class MapGUI {
                 System.out.println("value at this cell is = " + model.getValueAt(index,1));
                 GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index,1));
                 JPopupMenu popupMenu = new JPopupMenu();
+                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (Desktop.isDesktopSupported()) {
+                            Desktop desktop = Desktop.getDesktop();
+                            try {
+                                URI uri = new URI(temp3.getAirportUrl());
+                                desktop.browse(uri);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            } catch (URISyntaxException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }));
                 popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
                 popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
                 popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
@@ -1178,6 +1195,23 @@ public class MapGUI {
                 System.out.println("value at this cell is = " + model.getValueAt(index,2));
                 GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index,2));
                 JPopupMenu popupMenu = new JPopupMenu();
+
+                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (Desktop.isDesktopSupported()) {
+                            Desktop desktop = Desktop.getDesktop();
+                            try {
+                                URI uri = new URI(temp3.getAirportUrl());
+                                desktop.browse(uri);
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            } catch (URISyntaxException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }));
                 popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
                 popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
                 popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
