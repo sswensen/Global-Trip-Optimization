@@ -52,13 +52,23 @@ class QueryBuilder {
         if(!ids.isEmpty()) {
             String w = "WHERE airports." + idOrName + " in (";
             for(int i = 0; i < ids.size() - 1; i++) {
-                if(!ids.get(i).contains("'")) {
+                /*if(!ids.get(i).contains("'")) {
                     w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
                 } else {
-                    w += "'" + ids.get(i).substring(0, ids.get(i).indexOf("'")) + ids.get(i).substring(ids.get(i).indexOf("'")+1) + "', ";
-                }
+                    String[] splitonsinglequote = ids.get(i).split("'");
+                    w += "'";
+                    for(int j = 0; j < splitonsinglequote.length; j++) {
+                        if(j != 0) {
+                            w += "'" + splitonsinglequote[j];
+                        } else {
+                            w += splitonsinglequote[j];
+                        }
+                    }
+                    w += "', ";
+                }*/
+                w += "\"" + ids.get(i) + "\", ";
             }
-            w += "'" + ids.get(ids.size() - 1) + "')";
+            w += "\"" + ids.get(ids.size() - 1) + "\")";
             where = w;
         } else {
             where = "";

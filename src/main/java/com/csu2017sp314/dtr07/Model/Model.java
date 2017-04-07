@@ -235,7 +235,11 @@ public class Model {
                     ret.add(loc);
                 } else {
                     //Search database for names instead of using the ones from the last query
-                    databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name");
+                    if(name.length() > 6) {
+                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name");
+                    } else {
+                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "id");
+                    }
                     return dataBaseSearch.getLocations();
                 }
             }
