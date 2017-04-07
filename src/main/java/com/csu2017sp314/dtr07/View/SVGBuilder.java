@@ -21,6 +21,7 @@ import java.io.IOException;
 
 class SVGBuilder {
     private Document SVGdoc;
+    private boolean kilometers;
     private double width;
     private double height;
     private int labelID = 1;
@@ -32,7 +33,7 @@ class SVGBuilder {
         //Creating the SVG document
         String filepath = "";
         if(!svgMap.isEmpty()) {
-             filepath = svgMap;
+            filepath = svgMap;
         } else {
             filepath = "src/test/resources/coloradoMap.svg";
         }
@@ -46,6 +47,14 @@ class SVGBuilder {
 		svgRoot.setAttribute("height", "1024");
 		svgRoot.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");*/
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
     }
 
     private void readSVG() throws SAXException, IOException, ParserConfigurationException {
@@ -111,7 +120,16 @@ class SVGBuilder {
         distance.setAttribute("id", ("leg" + id));
         distance.setAttribute("x", Double.toString((convertLongitudeCoordinates(x1) + convertLongitudeCoordinates(x2)) / 2));
         distance.setAttribute("y", Double.toString((convertLatitudeCoordinates(y1) + convertLatitudeCoordinates(y2)) / 2));
-        distance.setTextContent(Integer.toString(distanceBetween));
+        if(!kilometers) {
+            distance.setTextContent(Integer.toString(distanceBetween));
+
+        } else {
+            double kDist = (double) distanceBetween;
+            kDist *= 1.60934;
+            kDist = Math.round(kDist);
+            int kInt = (int) kDist;
+            distance.setTextContent(Integer.toString(kInt));
+        }
         SVGdoc.getDocumentElement().appendChild(distance);
     }
 
@@ -160,7 +178,12 @@ class SVGBuilder {
         footer.setAttribute("id", "distance");
         footer.setAttribute("x", "512");
         footer.setAttribute("y", "505");
-        footer.setTextContent(totalDistance + " miles");
+        if (!kilometers) {
+            footer.setTextContent(totalDistance + " miles");
+        }
+        else {
+            footer.setTextContent(totalDistance + " kilometers");
+        }
         SVGdoc.getDocumentElement().appendChild(footer);
     }
 

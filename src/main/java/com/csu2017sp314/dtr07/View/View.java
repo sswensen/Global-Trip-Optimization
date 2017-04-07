@@ -44,6 +44,7 @@ public class View {
     public ArrayList<String> originalIds;
     private double width;
     private double height;
+    private boolean kilometers;
 
 
     public void initializeTrip(String svgMap) throws SAXException, IOException, ParserConfigurationException {
@@ -92,6 +93,14 @@ public class View {
     Document getXMLdoc() { return xml.getXMLdoc(); }
 
     Document getSVGdoc() { return svg.getSVGdoc(); }
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
 
     public void setCallback(Consumer<String> callback) {
         this.callback = callback;
@@ -154,6 +163,9 @@ public class View {
     }
 
     public void addFooter(int totalDistance) {
+        if(kilometers) {
+            svg.setKilometers(true);
+        }
         svg.addFooter(totalDistance);
     }
 

@@ -16,8 +16,9 @@ public class TripCo {
     private static ArrayList<String> arguments = new ArrayList<>();
 
     private static void displayOptions(String option, Presenter presenter) {
-        switch(option) {
-            case "-m":
+        switch(option)
+        {
+            case "-d":
                 presenter.setDisplayMileage(true);
                 break;
             case "-i":
@@ -31,11 +32,12 @@ public class TripCo {
                 break;
             case "-2":
                 presenter.setTwoOpt(true);
-                //presenter.getTwoOpt();
                 break;
             case "-3":
                 presenter.setThreeOpt(true);
-                //presenter.getThreeOpt();
+                break;
+            case "-k":
+                presenter.setKilometers(true);
                 break;
             default:
                 break;
@@ -101,8 +103,8 @@ public class TripCo {
                     }
                 }, "Shutdown-thread"));
             } else if(arguments.contains("-f") && !arguments.contains("-g")) {
-                if(arguments.contains("-m")) {
-                    displayOptions("-m", presenter);
+                if(arguments.contains("-d")){
+                    displayOptions("-d", presenter);
                 }
                 if(arguments.contains("-n")) {
                     displayOptions("-n", presenter);
@@ -115,6 +117,9 @@ public class TripCo {
                 }
                 if(arguments.contains("-3")) {
                     displayOptions("-3", presenter);
+                }
+                if(arguments.contains("-k")) {
+                    displayOptions("-k", presenter);
                 }
                 presenter.planTrip(filename, selectionXml, svgMap);
                 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {

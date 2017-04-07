@@ -36,6 +36,7 @@ public class Presenter {
     private boolean displayGui;
     private String svgMap;
     private boolean readingFromXML = true;
+    private boolean kilometers;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -57,7 +58,7 @@ public class Presenter {
             if(s.equals("IDs")) {
                 toggleIds();
             }
-            if(s.equals("Mileage")) {
+            if(s.equals("Distance")) {
                 toggleMileage();
             }
             if(s.equals("2-opt")) {
@@ -129,6 +130,15 @@ public class Presenter {
             displayMileage = true;
         }
         System.out.println("[Presenter] Mileage now " + displayMileage);
+    }
+
+    private void toggleKilometers() {
+        if(kilometers) {
+            kilometers = false;
+        } else {
+            kilometers = true;
+        }
+        System.out.println("[Presenter] Kilometers now " + kilometers);
     }
 
     private void toggle2opt() {
@@ -230,6 +240,16 @@ public class Presenter {
         this.threeOpt = threeOpt;
         model.setThreeOpt(threeOpt);
     } //done
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+        view.setKilometers(kilometers);
+        model.setKilometers(kilometers);
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
 
     public void setDisplayMileage(boolean x) {
         displayMileage = x;
