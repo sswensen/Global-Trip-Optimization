@@ -37,8 +37,8 @@ public class MapGUITest {
         assertEquals(1, testing);
     }
 
-    @Test
+    /*@Test
     public void addLegToItinerary() throws Exception {
         assertEquals(1, g.addLegToItinerary("1", "a", "b", 100));
-    }
+    }*/
 }
