@@ -88,7 +88,7 @@ public class Presenter {
             }*/
         });
         view.setCallback4((ArrayList<String> s) -> {
-            ArrayList<String> locationNames = model.searchDatabase(s); //TODO push these location names back to
+            ArrayList<String> locationNames = model.searchDatabase(s);
             for(String temp : locationNames) {
                 System.out.println("[Presenter] This is callback4:\t" + temp);
             }
@@ -171,7 +171,7 @@ public class Presenter {
             model.setThreeOpt(false);
         //model.printUserLoc();
         try {
-            model.planUserTrip(fname, readingFromXML);//TODO add arraylist to planUserTrip, might need to make another method like eventUserAddLocList
+            model.planUserTrip(fname, readingFromXML);
             view.resetTrip();
             int numPairs = model.getUserPairs().size();
 
@@ -300,7 +300,7 @@ public class Presenter {
             model.setSelectedLocations(readXML(selectionXml));
         }
         model.planTrip(filename, "M");
-        //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>()); //TODO push these location names back to
+        //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>());
         //for(int i = 0; i < model.getNumLocs(); i++) {
         //    copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
         //}

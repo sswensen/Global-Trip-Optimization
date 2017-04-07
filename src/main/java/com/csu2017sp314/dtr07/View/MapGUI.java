@@ -613,7 +613,7 @@ public class MapGUI {
         /*drop.addActionListener((ActionEvent e) -> {
             JComboBox<String> combo = (JComboBox<String>) e.getSource();
             String selected = (String) combo.getSelectedItem();
-            //TODO set the returning arraylist after this method is called multiple times
+            //TODOo set the returning arraylist after this method is called multiple times
             fiveThingsForDatabase.add(index, selected);
         });*/
         return drop;
@@ -705,7 +705,6 @@ public class MapGUI {
             testingNames.add("Berlin-SchÃ¶nefeld International Airport");
             testingNames.add("Denver International Airport");
             userAddLocList(testingNames);
-            //TODO update names of the add buttons with using the ArrayList testingNames or whatever the global will be called
         });
         databaseWindow.add(testingSearching, gbc);
         setGBC(1, 7, 1);
@@ -739,9 +738,12 @@ public class MapGUI {
         setGBC(0, 9, 4);
         JButton transferToFirstWindow = new JButton("Select");
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
-            //TODOooooooooooooooooooooooooooooooooo
-            updateAddButtonsAddRemove(searchDBLocationNames());
-
+            //TODO ooooooo
+            ArrayList<String> locationNames = searchDBLocationNames();
+            updateTripLabel("Untitled trip");
+            userAddLocList(locationNames);
+            tempLoc = locationNames;
+            updateAddButtonsAddRemove(locationNames);
         });
         databaseWindow.add(transferToFirstWindow, gbc);
 

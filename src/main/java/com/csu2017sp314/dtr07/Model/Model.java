@@ -30,8 +30,6 @@ public class Model {
     private double[][] distTable;
     private boolean readingFromXML = true;
 
-    //TODO add method that takes arraylist (wheres) and returns set of strings of names of the airports
-
     public int planTrip(String filename, String units) throws FileNotFoundException {
         this.unit = units;
         LocationFactory lf = new LocationFactory();

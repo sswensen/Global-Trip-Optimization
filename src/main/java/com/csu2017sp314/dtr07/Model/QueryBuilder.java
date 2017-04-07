@@ -34,7 +34,7 @@ class QueryBuilder {
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
-    private final String limit = " LIMIT 6000";
+    private final String limit = " LIMIT 500";
     private ArrayList<Location> locations = new ArrayList<>(); //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     void searchDatabase(String type, String continent, String country, String region, String municipality, String name) {
@@ -52,7 +52,11 @@ class QueryBuilder {
         if(!ids.isEmpty()) {
             String w = "WHERE airports." + idOrName + " in (";
             for(int i = 0; i < ids.size() - 1; i++) {
-                w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
+                if(!ids.get(i).contains("'")) {
+                    w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
+                } else {
+                    w += "'" + ids.get(i).substring(0, ids.get(i).indexOf("'")) + ids.get(i).substring(ids.get(i).indexOf("'")+1) + "', ";
+                }
             }
             w += "'" + ids.get(ids.size() - 1) + "')";
             where = w;
@@ -192,7 +196,7 @@ class QueryBuilder {
         return locations;
     }
 
-    ArrayList<String> getLocationNames() { //Highly ineffient, see todo at beginning of fireQuery
+    ArrayList<String> getLocationNames() { //Highly ineffient, see beginning of fireQuery
         ArrayList<String> ret = new ArrayList<>();
         for(Location loc : locations) {
             ret.add(loc.getName());
