@@ -1163,8 +1163,13 @@ public class MapGUI {
                         if (Desktop.isDesktopSupported()) {
                             Desktop desktop = Desktop.getDesktop();
                             try {
-                                URI uri = new URI(temp3.getAirportUrl());
-                                desktop.browse(uri);
+                                if(temp3.getAirportUrl().equals("")){
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(),"Information not Available");
+                                }
+                                else{
+                                    URI uri = new URI(temp3.getAirportUrl());
+                                    desktop.browse(uri);
+                                }
                             } catch (IOException ex) {
                                 ex.printStackTrace();
                             } catch (URISyntaxException ex) {
@@ -1202,8 +1207,13 @@ public class MapGUI {
                         if (Desktop.isDesktopSupported()) {
                             Desktop desktop = Desktop.getDesktop();
                             try {
-                                URI uri = new URI(temp3.getAirportUrl());
-                                desktop.browse(uri);
+                                if(temp3.getAirportUrl().equals("")){
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(),"Information not Available");
+                                }
+                                else{
+                                    URI uri = new URI(temp3.getAirportUrl());
+                                    desktop.browse(uri);
+                                }
                             } catch (IOException ex) {
                                 ex.printStackTrace();
                             } catch (URISyntaxException ex) {
