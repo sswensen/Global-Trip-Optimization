@@ -99,10 +99,10 @@ class QueryBuilder {
 
         for(int i = 0; i < wheres.size(); i++) {
             String temp = wheres.get(i);
-            if(temp.contains("'")) {
+            /*if(temp.contains("'")) {
                 int iHateAppostrophies = temp.indexOf("'");
                 temp = temp.substring(iHateAppostrophies+1);
-            }
+            }*/
             wheres.remove(i);
             wheres.add(i, temp);
         }
