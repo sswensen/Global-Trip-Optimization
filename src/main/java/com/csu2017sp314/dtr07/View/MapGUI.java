@@ -98,6 +98,8 @@ public class MapGUI {
     private JTable table3 = new JTable(dm2);
     private ArrayList<String> databaseLocations = new ArrayList<>();
 
+    private int databaseNumberFound = 0;
+
     MapGUI() {
 
     }
@@ -160,7 +162,7 @@ public class MapGUI {
         //createOptionsGUI();
         uOp = createJFrame("User Options", width + 1, 0, options);
         //createItineraryWindow();
-        itinerary = createScrollingJFrame("Itinerary", 0, height+42);
+        itinerary = createScrollingJFrame("Itinerary", 0, height + 42);
 
         map.setVisible(true); //making the frame visible
         return 1;
@@ -637,7 +639,10 @@ public class MapGUI {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cs314", "sswensen", "830534566");
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT DISTINCT " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
+            ResultSet rs = st.executeQuery("SELECT COUNT(1) " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
+            rs.next();
+            databaseNumberFound = rs.getInt(1);
+            rs = st.executeQuery("SELECT DISTINCT " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
 
             while(rs.next()) {
                 ret.add(rs.getString(1));
@@ -661,7 +666,7 @@ public class MapGUI {
         databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenHeight = screenSize.getHeight();
-        databaseFrame.setLocation(1025, ((int)screenHeight - height)+35);
+        databaseFrame.setLocation(1025, ((int) screenHeight - height) + 35);
         databaseWindow = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
@@ -731,8 +736,8 @@ public class MapGUI {
         updateAddButtonsDatabase();
 
         JScrollPane scroll = new JScrollPane(table3);
-        setGBC(0,8,4);
-        table3.setPreferredScrollableViewportSize(new Dimension(470,  260));
+        setGBC(0, 8, 4);
+        table3.setPreferredScrollableViewportSize(new Dimension(470, 260));
         databaseWindow.add(scroll, gbc);
 
         setGBC(0, 9, 4);
@@ -757,7 +762,7 @@ public class MapGUI {
         Vector<Vector<String>> addButtons = new Vector<>();
         columnNames.addElement("Click to add Destination");
         columnNames.addElement("Location");
-        for(int i = 0; i < guiLocations.size();i++){
+        for(int i = 0; i < guiLocations.size(); i++) {
             Vector<String> temp = new Vector<>();
             temp.addElement("  ");
             temp.addElement(guiLocations.get(i).getName());
@@ -773,27 +778,26 @@ public class MapGUI {
                 //private ArrayList<String> databaseLocations = new ArrayList<>();
                 if(tick) {
                     for(int i = 0; i < guiLocations.size(); i++) {
-                        if(databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("  ")) {
+                        if(databaseLocations.contains(model.getValueAt(index, 1)) && model.getValueAt(index, 0).equals("  ")) {
                             model.setValueAt("X", index, 0);
-                        }
-                        else if(!databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("X")) {
+                        } else if(!databaseLocations.contains(model.getValueAt(index, 1)) && model.getValueAt(index, 0).equals("X")) {
                             model.setValueAt("  ", index, 0);
                         }
                     }
                 }
                 tick = false;
                 if(model.getValueAt(index, 0).equals("  ")) { //Checks if button has already been pressed
-                    if(!databaseLocations.contains(model.getValueAt(index,1))) {
-                        databaseLocations.add((String) model.getValueAt(index,1));
-                        System.out.println("Added " + model.getValueAt(index,1).toString() + " to array");
+                    if(!databaseLocations.contains(model.getValueAt(index, 1))) {
+                        databaseLocations.add((String) model.getValueAt(index, 1));
+                        System.out.println("Added " + model.getValueAt(index, 1).toString() + " to array");
                         System.out.println("databaseLocations size = " + databaseLocations.size());
                         model.setValueAt("X", index, 0);
                     }
 
                 } else if(model.getValueAt(index, 0).equals("X")) {
-                    if(databaseLocations.contains(model.getValueAt(index,1))) {
-                        databaseLocations.remove(model.getValueAt(index,1));
-                        System.out.println("Removed " + model.getValueAt(index,1).toString() + " from array");
+                    if(databaseLocations.contains(model.getValueAt(index, 1))) {
+                        databaseLocations.remove(model.getValueAt(index, 1));
+                        System.out.println("Removed " + model.getValueAt(index, 1).toString() + " from array");
                         System.out.println("databaseLocations size = " + databaseLocations.size());
                         model.setValueAt("  ", index, 0);
                     }
@@ -1065,7 +1069,7 @@ public class MapGUI {
         //
 //  Implement MouseListener interface
 //
-	/*
+    /*
 	 *  When the mouse is pressed the editor is invoked. If you then then drag
 	 *  the mouse to another cell before releasing it, the editor is still
 	 *  active. Make sure editing is stopped when the mouse is released.
@@ -1125,7 +1129,7 @@ public class MapGUI {
         }
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenHeight = screenSize.getHeight();
-        table.setPreferredScrollableViewportSize(new Dimension(width-19, ((int) screenHeight - height)-42));
+        table.setPreferredScrollableViewportSize(new Dimension(width - 19, ((int) screenHeight - height) - 42));
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {

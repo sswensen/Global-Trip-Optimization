@@ -1,9 +1,7 @@
 package com.csu2017sp314.dtr07.Model;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -186,20 +184,22 @@ public class Model {
 
     public int toggleListLocations(ArrayList<String> ids) {
         if(!ids.isEmpty()) {
-            if(readingFromXML) {
-            for(String id : ids) {
-                int f = searchLocations(id, "name");
-                if(f > -1) {
-                    userLocations.add(locations.get(f));
-                } else {
-                    System.err.println("Error searching for " + id);
-                }
+            /*if(readingFromXML) {
+                for(String id : ids) {
+                    int f = searchLocations(id, "name");
+                    if(f > -1) {
+                        userLocations.add(locations.get(f));
+                    } else {
+                        System.err.println("Error searching for " + id);
+                    }
 
-            }
+                }
             } else {
                 databaseLocationsReturned = dataBaseSearch.setSelectedAirports(ids, "name"); //Instead of searching the existing lcoations, maybe we should just do another query
                 userLocations = dataBaseSearch.getLocations(); //Thats is what i am implementing here
-            }
+            }*/
+            userLocations = (searchDatabaseLocationsReturnedForName(ids));
+
         } else {
             userLocations = new ArrayList<>(locations);
         }
@@ -225,6 +225,21 @@ public class Model {
             }
         }
         return -1;
+    }
+
+    private ArrayList<Location> searchDatabaseLocationsReturnedForName(ArrayList<String> names) {
+        ArrayList<Location> ret = new ArrayList<>();
+        for(String name : names)
+            for(Location loc : databaseLocationsReturned) {
+                if(loc.getName().equalsIgnoreCase(name)) {
+                    ret.add(loc);
+                } else {
+                    //Search database for names instead of using the ones from the last query
+                    databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name");
+                    return dataBaseSearch.getLocations();
+                }
+            }
+        return ret;
     }
 
     public void setTwoOpt(boolean twoOpt) {
@@ -294,7 +309,9 @@ public class Model {
         return pairs.size();
     }
 
-    public int getNumLocs() { return locations.size(); }
+    public int getNumLocs() {
+        return locations.size();
+    }
 
     public String getFirstName(final int i) {
         return pairs.get(i).getOne().getName();
