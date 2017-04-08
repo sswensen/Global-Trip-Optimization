@@ -34,7 +34,7 @@ class QueryBuilder {
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
-    private final String limit = " LIMIT 333";
+    private final String limit = " LIMIT 100";
     private ArrayList<Location> locations = new ArrayList<>(); //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     void searchDatabase(String type, String continent, String country, String region, String municipality, String name) {
@@ -49,12 +49,30 @@ class QueryBuilder {
     }
 
     void search4IDinDatabase(ArrayList<String> ids, String idOrName) {
-        String w = "WHERE airports." + idOrName + " in (";
-        for(int i = 0; i < ids.size() - 1; i++) {
-            w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
+        if(!ids.isEmpty()) {
+            String w = "WHERE airports." + idOrName + " in (";
+            for(int i = 0; i < ids.size() - 1; i++) {
+                /*if(!ids.get(i).contains("'")) {
+                    w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
+                } else {
+                    String[] splitonsinglequote = ids.get(i).split("'");
+                    w += "'";
+                    for(int j = 0; j < splitonsinglequote.length; j++) {
+                        if(j != 0) {
+                            w += "'" + splitonsinglequote[j];
+                        } else {
+                            w += splitonsinglequote[j];
+                        }
+                    }
+                    w += "', ";
+                }*/
+                w += "\"" + ids.get(i) + "\", ";
+            }
+            w += "\"" + ids.get(ids.size() - 1) + "\")";
+            where = w;
+        } else {
+            where = "";
         }
-        w += "'" + ids.get(ids.size() - 1) + "')";
-        where = w;
     }
 
     //TODO add function for changing limit, this is very optional as we will lkely limit to 500
@@ -81,10 +99,10 @@ class QueryBuilder {
 
         for(int i = 0; i < wheres.size(); i++) {
             String temp = wheres.get(i);
-            if(temp.contains("'")) {
+            /*if(temp.contains("'")) {
                 int iHateAppostrophies = temp.indexOf("'");
                 temp = temp.substring(iHateAppostrophies+1);
-            }
+            }*/
             wheres.remove(i);
             wheres.add(i, temp);
         }
@@ -188,7 +206,7 @@ class QueryBuilder {
         return locations;
     }
 
-    ArrayList<String> getLocationNames() { //Highly ineffient, see todo at beginning of fireQuery
+    ArrayList<String> getLocationNames() { //Highly ineffient, see beginning of fireQuery
         ArrayList<String> ret = new ArrayList<>();
         for(Location loc : locations) {
             ret.add(loc.getName());

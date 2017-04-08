@@ -1,13 +1,10 @@
 package com.csu2017sp314.dtr07.View;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.function.Consumer;
-
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,11 +14,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 //import org.w3c.dom.DOMImplementation;
 
 /**
@@ -46,7 +42,6 @@ public class View {
     private double height;
     private boolean kilometers;
 
-
     public void initializeTrip(String svgMap) throws SAXException, IOException, ParserConfigurationException {
         this.svgMap = svgMap;
         gui = new MapGUI();
@@ -55,8 +50,8 @@ public class View {
         ids = new ArrayList<>(originalIds);
         width = svg.getWidth();
         height = svg.getHeight();
-        gui.setWidth((int)width);
-        gui.setHeight((int)height+20);
+        gui.setWidth((int) width);
+        gui.setHeight((int) height + 20);
     }
 
     public void resetTrip() throws SAXException, IOException, ParserConfigurationException {
@@ -80,7 +75,7 @@ public class View {
                 Element eElement = (Element) nNode;
                 int i = 0;
                 while(eElement.getElementsByTagName("id").item(i) != null) {
-                    ids.add(eElement.getElementsByTagName("id").item(i).getTextContent()); //TODO search database for these ids and return the name
+                    ids.add(eElement.getElementsByTagName("id").item(i).getTextContent());
                     i++;
                 }
             }
@@ -90,9 +85,13 @@ public class View {
         }*/
     }
 
-    Document getXMLdoc() { return xml.getXMLdoc(); }
+    Document getXMLdoc() {
+        return xml.getXMLdoc();
+    }
 
-    Document getSVGdoc() { return svg.getSVGdoc(); }
+    Document getSVGdoc() {
+        return svg.getSVGdoc();
+    }
 
     public void setKilometers(boolean kilometers) {
         this.kilometers = kilometers;
@@ -142,12 +141,87 @@ public class View {
         xml.addLeg(id, s, f, t);
     }
 
-    public void addLine(double x1, double y1, double x2, double y2, String id) {
-        svg.addLine(x1, y1, x2, y2, id);
+    public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) { //TODO implement gui wraparound
+        if(wraparound) {
+            double originalX1 = x1;
+            double originalY1 = y1;
+            double originalX2 = x2;
+            double originalY2 = y2;
+            double m;
+            double b1;
+            double b2;
+            System.out.println("Using wraparound for " + id);
+            if(x1 > x2) {
+                x1 -= 180;
+                x2 += 180;
+                m = (y2 - y1) / (x2 - x1);
+                b1 = originalY1 - (m * originalX1);
+                b2 = originalY2 - (m * originalX2);
+            } else {
+                x1 += 180;
+                x2 -= 180;
+                m = (y1 - y2) / (x1 - x2);
+                b1 = originalY1 - (m * originalX1);
+                b2 = originalY2 - (m * originalX2);
+            }
+            double interX1;
+            double interX2;
+            if(originalX1 > originalX2) {
+                interX1 = 180;
+                interX2 = -180;
+            } else {
+                interX1 = -180;
+                interX2 = 180;
+            }
+            double interY1 = m * interX1 + b1;
+            double interY2 = m * interX2 + b2;
+
+            svg.addLine(originalX1, originalY1, interX1, interY1, id);
+            svg.addLine(originalX2, originalY2, interX2, interY2, id);
+            //svg.addLine(-179, 10, -179, -10, id);
+        } else {
+            svg.addLine(x1, y1, x2, y2, id);
+        }
     }
 
-    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id) {
-        svg.addDistance(x1, y1, x2, y2, distance, id);
+    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id, boolean wraparound) { //TODO add handling for wraparound
+        if(wraparound) {
+            double originalX1 = x1;
+            double originalY1 = y1;
+            double originalX2 = x2;
+            double originalY2 = y2;
+            double m;
+            double b1;
+            double b2;
+            if(x1 > x2) {
+                x1 -= 180;
+                x2 += 180;
+                m = (y2 - y1) / (x2 - x1);
+                b1 = originalY1 - (m * originalX1);
+                b2 = originalY2 - (m * originalX2);
+            } else {
+                x1 += 180;
+                x2 -= 180;
+                m = (y1 - y2) / (x1 - x2);
+                b1 = originalY1 - (m * originalX1);
+                b2 = originalY2 - (m * originalX2);
+            }
+            double interX1;
+            double interX2;
+            if(originalX1 > originalX2) {
+                interX1 = 180;
+                interX2 = -180;
+            } else {
+                interX1 = -180;
+                interX2 = 180;
+            }
+            double interY1 = m * interX1 + b1;
+            double interY2 = m * interX2 + b2;
+
+            svg.addDistance(originalX1, originalY1, interX1, interY1, distance, id);
+        } else {
+            svg.addDistance(x1, y1, x2, y2, distance, id);
+        }
     }
 
     public void addCityNameLabel(double lon, double lat, String city) {
@@ -188,7 +262,6 @@ public class View {
         StreamResult result2 = new StreamResult(new File(f + ".svg"));
         transformer.transform(source2, result2);
     }
-
 
     public void gui() throws Exception {
         gui.setCallback((String s) -> {

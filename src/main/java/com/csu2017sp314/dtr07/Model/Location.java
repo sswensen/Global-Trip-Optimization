@@ -22,6 +22,7 @@ public class Location {
     private int nearest = -1;
     private int nearestDistance = 9999999;
     private int tableIndex;
+    private boolean pairUsesWraparound = false;
 
     Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent, String aUrl, String rUrl, String cUrl) {
         this.id = id;
@@ -74,6 +75,38 @@ public class Location {
         return ret;
     }
 
+    private double haversine(double lat1, double lng1, double lat2, double lng2) {
+        int r = 6371; // average radius of the earth in km
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                        * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double d = r * c;
+        return d;
+    }
+
+    public double distance4(double lat1, double lat2, double lon1,
+                            double lon2, double el1, double el2) {
+
+        final int R = 6371; // Radius of the earth
+
+        Double latDistance = Math.toRadians(lat2 - lat1);
+        Double lonDistance = Math.toRadians(lon2 - lon1);
+        Double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+        double height = el1 - el2;
+
+        distance = Math.pow(distance, 2) + Math.pow(height, 2);
+
+        return Math.sqrt(distance) / 1609.34;
+    }
+
     double distance(Location in, String unit) {
         double lat1 = this.lat;
         double lon1 = this.lon;
@@ -85,6 +118,48 @@ public class Location {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515; //Default is miles ("M")
+
+        double hdist = haversine(lat1, lon1, lat2, lon2);
+        double fdist = distance4(lat1, lat2, lon1, lon2, 0, 0);
+
+        //--------------Checking for wraparound-------------//
+        double wlat1 = this.lat;
+        double wlon1 = this.lon; //We are changing longitude
+        double wlat2 = in.getLat();
+        double wlon2 = in.getLon();
+        if(wlon1 < wlon2) {
+            double wlattemp = wlat1;
+            double wlontemp = wlon1;
+            wlat1 = wlat2;
+            wlon1 = wlon2;
+            wlat2 = wlattemp;
+            wlon2 = wlontemp;
+        }
+        //wlon1 -= 180; //TODO currently dist is the distance with wraparound, wdist is just using pathagorean theorem. dist is somehow always smaller. It seems like the algorithm used is not getting the same distance, maybe it has to do with the curvature of the earth but the map is flat so that doesnt make sense.
+        //wlon2 += 180;
+        /*double wtheta = wlon1 - wlon2;
+        double wdist = Math.sin(deg2rad(wlat1)) * Math.sin(deg2rad(wlat2))
+                + Math.cos(deg2rad(wlat1)) * Math.cos(deg2rad(wlat2)) * Math.cos(deg2rad(wtheta));
+        wdist = Math.acos(wdist);
+        wdist = rad2deg(wdist); //Here the value is still in longitude/latitude*/
+        /*double wdist = Math.sqrt(Math.pow((wlat1-wlat2), 2) + Math.pow((wlon1 -wlon2), 2));
+        wdist = wdist * 60 * 1.1515; //Default is miles ("M") //We can move this line, as well as the one above to after both checks. Not done yet because of debugging purposes
+        dist = Math.round(dist);
+        wdist = Math.round(wdist);
+        System.out.println("dist: " + dist);
+        System.out.println("wdist: " + wdist);
+        System.out.println("hdist: " + hdist);
+        System.out.println("fdist: " + fdist);*/
+        //if(wdist > dist) {
+        if(wlon1 - wlon2 > 180) {
+            this.pairUsesWraparound = true;
+            //System.out.println("Using wraparound");
+        } else {
+            this.pairUsesWraparound = false;
+            //dist = wdist; //Should be equal here
+        }
+        //------------End Checking for wraparound-----------//
+
         if(unit.equals("K")) { //Kilometers
             dist = dist * 1.609344;
         } else if(unit.equals("N")) { //Nautical miles
@@ -96,13 +171,13 @@ public class Location {
 
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     /*::	This function converts decimal degrees to radians			:*/
-	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
 
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-	/*::	This function converts radians to decimal degrees			:*/
+    /*::	This function converts radians to decimal degrees			:*/
 	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
@@ -182,6 +257,10 @@ public class Location {
 
     void setNearestDistance(int nearestDistance) {
         this.nearestDistance = nearestDistance;
+    }
+
+    public boolean isPairUsesWraparound() {
+        return pairUsesWraparound;
     }
 
     @Override

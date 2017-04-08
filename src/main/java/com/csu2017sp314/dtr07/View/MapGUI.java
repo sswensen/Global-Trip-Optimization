@@ -101,6 +101,8 @@ public class MapGUI {
     private JTable table3 = new JTable(dm2);
     private ArrayList<String> databaseLocations = new ArrayList<>();
 
+    private int databaseNumberFound = 0;
+
     MapGUI() {
 
     }
@@ -163,7 +165,7 @@ public class MapGUI {
         //createOptionsGUI();
         uOp = createJFrame("User Options", width + 1, 0, options);
         //createItineraryWindow();
-        itinerary = createScrollingJFrame("Itinerary", 0, height+42);
+        itinerary = createScrollingJFrame("Itinerary", 0, height + 42);
 
         map.setVisible(true); //making the frame visible
         return 1;
@@ -616,7 +618,7 @@ public class MapGUI {
         /*drop.addActionListener((ActionEvent e) -> {
             JComboBox<String> combo = (JComboBox<String>) e.getSource();
             String selected = (String) combo.getSelectedItem();
-            //TODO set the returning arraylist after this method is called multiple times
+            //TODOo set the returning arraylist after this method is called multiple times
             fiveThingsForDatabase.add(index, selected);
         });*/
         return drop;
@@ -640,7 +642,10 @@ public class MapGUI {
             Class.forName("com.mysql.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cs314", "sswensen", "830534566");
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT DISTINCT " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
+            ResultSet rs = st.executeQuery("SELECT COUNT(1) " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
+            rs.next();
+            databaseNumberFound = rs.getInt(1);
+            rs = st.executeQuery("SELECT DISTINCT " + whatYouWant + " FROM " + table + wheres + " ORDER BY " + whatYouWant);
 
             while(rs.next()) {
                 ret.add(rs.getString(1));
@@ -664,7 +669,7 @@ public class MapGUI {
         databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenHeight = screenSize.getHeight();
-        databaseFrame.setLocation(1025, ((int)screenHeight - height)+35);
+        databaseFrame.setLocation(1025, ((int) screenHeight - height) + 35);
         databaseWindow = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         setGBC(0, 0, 4);
@@ -695,21 +700,22 @@ public class MapGUI {
             fiveThingsForDatabase.remove(3);
             fiveThingsForDatabase.add(3, (String) regions.getSelectedItem());
             //fiveThingsForDatabase.remove(4);
+            guiLocations.clear();
             searchDatabase();
+            updateAddButtonsDatabase(); //Update database selection scroll window
         });
         databaseWindow.add(searchDatabasePlease, gbc);
 
-        setGBC(0, 7, 2);
-        JButton testingSearching = new JButton("Search for hardcoded1");
+        setGBC(0, 7, 1);
+        JButton testingSearching = new JButton("Search for hardcoded 1");
         testingSearching.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
             testingNames.add("Berlin-SchÃ¶nefeld International Airport");
             testingNames.add("Denver International Airport");
             userAddLocList(testingNames);
-            //TODO update names of the add buttons with using the ArrayList testingNames or whatever the global will be called
         });
         databaseWindow.add(testingSearching, gbc);
-        setGBC(2, 7, 2);
+        setGBC(1, 7, 1);
         JButton testingSearching2 = new JButton("Search for hardcoded 2");
         testingSearching2.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
@@ -718,13 +724,48 @@ public class MapGUI {
             userAddLocList(testingNames);
         });
         databaseWindow.add(testingSearching2, gbc);
+        setGBC(3, 7, 1);
+        JButton selectAll = new JButton("Select all");
+        selectAll.addActionListener((ActionEvent e) -> {
+            databaseLocations.clear();
+            for(GUILocation loc : guiLocations) {
+                databaseLocations.add(loc.getName());
+            }
+
+        });
+        databaseWindow.add(selectAll, gbc);
 
 
+        updateAddButtonsDatabase();
+
+        JScrollPane scroll = new JScrollPane(table3);
+        setGBC(0, 8, 4);
+        table3.setPreferredScrollableViewportSize(new Dimension(470, 260));
+        databaseWindow.add(scroll, gbc);
+
+        setGBC(0, 9, 4);
+        JButton transferToFirstWindow = new JButton("Select");
+        transferToFirstWindow.addActionListener((ActionEvent e) -> {
+            //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
+            ArrayList<String> locationNames = searchDBLocationNames();
+            updateTripLabel("Untitled trip");
+            userAddLocList(locationNames);
+            tempLoc = locationNames;
+            updateAddButtonsAddRemove(locationNames);
+        });
+        databaseWindow.add(transferToFirstWindow, gbc);
+
+        databaseFrame.add(databaseWindow);
+        databaseFrame.pack();
+    }
+
+    void updateAddButtonsDatabase() {
+        dm2.setRowCount(0);
         Vector<String> columnNames = new Vector<>();
         Vector<Vector<String>> addButtons = new Vector<>();
         columnNames.addElement("Click to add Destination");
         columnNames.addElement("Location");
-        for(int i = 0; i < guiLocations.size();i++){
+        for(int i = 0; i < guiLocations.size(); i++) {
             Vector<String> temp = new Vector<>();
             temp.addElement("  ");
             temp.addElement(guiLocations.get(i).getName());
@@ -740,27 +781,26 @@ public class MapGUI {
                 //private ArrayList<String> databaseLocations = new ArrayList<>();
                 if(tick) {
                     for(int i = 0; i < guiLocations.size(); i++) {
-                        if(databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("  ")) {
+                        if(databaseLocations.contains(model.getValueAt(index, 1)) && model.getValueAt(index, 0).equals("  ")) {
                             model.setValueAt("X", index, 0);
-                        }
-                        else if(!databaseLocations.contains(model.getValueAt(index,1)) && model.getValueAt(index, 0).equals("X")) {
+                        } else if(!databaseLocations.contains(model.getValueAt(index, 1)) && model.getValueAt(index, 0).equals("X")) {
                             model.setValueAt("  ", index, 0);
                         }
                     }
                 }
                 tick = false;
                 if(model.getValueAt(index, 0).equals("  ")) { //Checks if button has already been pressed
-                    if(!databaseLocations.contains(model.getValueAt(index,1))) {
-                        databaseLocations.add((String) model.getValueAt(index,1));
-                        System.out.println("Added " + model.getValueAt(index,1).toString() + " to array");
+                    if(!databaseLocations.contains(model.getValueAt(index, 1))) {
+                        databaseLocations.add((String) model.getValueAt(index, 1));
+                        System.out.println("Added " + model.getValueAt(index, 1).toString() + " to array");
                         System.out.println("databaseLocations size = " + databaseLocations.size());
                         model.setValueAt("X", index, 0);
                     }
 
                 } else if(model.getValueAt(index, 0).equals("X")) {
-                    if(databaseLocations.contains(model.getValueAt(index,1))) {
-                        databaseLocations.remove(model.getValueAt(index,1));
-                        System.out.println("Removed " + model.getValueAt(index,1).toString() + " from array");
+                    if(databaseLocations.contains(model.getValueAt(index, 1))) {
+                        databaseLocations.remove(model.getValueAt(index, 1));
+                        System.out.println("Removed " + model.getValueAt(index, 1).toString() + " from array");
                         System.out.println("databaseLocations size = " + databaseLocations.size());
                         model.setValueAt("  ", index, 0);
                     }
@@ -769,21 +809,6 @@ public class MapGUI {
         };
 
         ButtonColumn buttonColumn = new ButtonColumn(table3, test, 0);
-
-        JScrollPane scroll = new JScrollPane(table3);
-        setGBC(0,8,4);
-        table3.setPreferredScrollableViewportSize(new Dimension(470,  260));
-        databaseWindow.add(scroll, gbc);
-
-        setGBC(0, 9, 4);
-        JButton transferToFirstWindow = new JButton("Select");
-        searchDatabasePlease.addActionListener((ActionEvent e) -> {
-            //TODO SHIT HERE
-        });
-        databaseWindow.add(transferToFirstWindow, gbc);
-
-        databaseFrame.add(databaseWindow);
-        databaseFrame.pack();
     }
 
     int displayXML(ArrayList<String> ids) throws Exception {
@@ -816,10 +841,42 @@ public class MapGUI {
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
+        updateAddButtonsAddRemove(ids);
+
+        /*
+        for(int i = 0; i < dm.getRowCount();i++){
+            JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,i, 0);
+            buttons.add(temp);
+        }
+        System.out.println(buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0).getClass());
+        JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0);
+        System.out.println(temp.getText());
+        */
+        JScrollPane scroll = new JScrollPane(table2);
+        setGBC(0, 2, 4);
+        fTemp.add(scroll, gbc);
+        ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
+        options.addTab("Locations", icon, fTemp, "Locations");
+        options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
+        options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
+        uOp.pack();
+        table.getTableHeader().setBackground(Color.BLACK);
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("Impact", Font.BOLD, 12));
+        JScrollPane scrollPane = new JScrollPane(table);
+        itinerary.getContentPane().add(scrollPane);
+        itinerary.pack();
+        ret = 1;
+        return ret;
+    }
+
+    private void updateAddButtonsAddRemove(ArrayList<String> ids) {
+        dm.setRowCount(0);
         Vector<String> columnNames = new Vector<>();
         Vector<Vector<String>> addButtons = new Vector<>();
         columnNames.addElement("Click to add Destination");
         columnNames.addElement("Location");
+
         for(String id : ids) {
             Vector<String> temp = new Vector<>();
             temp.addElement("Add");
@@ -859,33 +916,7 @@ public class MapGUI {
                 }
             }
         };
-
         ButtonColumn buttonColumn = new ButtonColumn(table2, test, 0);
-        /*
-        for(int i = 0; i < dm.getRowCount();i++){
-            JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,i, 0);
-            buttons.add(temp);
-        }
-        System.out.println(buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0).getClass());
-        JButton temp = (JButton) buttonColumn.getTableCellEditorComponent(table2,"Add",true,0,0);
-        System.out.println(temp.getText());
-        */
-        JScrollPane scroll = new JScrollPane(table2);
-        setGBC(0, 2, 4);
-        fTemp.add(scroll, gbc);
-        ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
-        options.addTab("Locations", icon, fTemp, "Locations");
-        options.addTab("Load Trips", icon, loadPanel, "Load saved trips");
-        options.addTab("Map Options", icon, generateMapDisplayOptions(), "Pane for map options");
-        uOp.pack();
-        table.getTableHeader().setBackground(Color.BLACK);
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.getTableHeader().setFont(new Font("Impact", Font.BOLD, 12));
-        JScrollPane scrollPane = new JScrollPane(table);
-        itinerary.getContentPane().add(scrollPane);
-        itinerary.pack();
-        ret = 1;
-        return ret;
     }
 
     public class ButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
@@ -1040,8 +1071,8 @@ public class MapGUI {
         //
 //  Implement MouseListener interface
 //
-	/*
-	 *  When the mouse is pressed the editor is invoked. If you then then drag
+    /*
+     *  When the mouse is pressed the editor is invoked. If you then then drag
 	 *  the mouse to another cell before releasing it, the editor is still
 	 *  active. Make sure editing is stopped when the mouse is released.
 	 */
@@ -1095,7 +1126,7 @@ public class MapGUI {
         }
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double screenHeight = screenSize.getHeight();
-        table.setPreferredScrollableViewportSize(new Dimension(width-19, ((int) screenHeight - height)-42));
+        table.setPreferredScrollableViewportSize(new Dimension(width - 19, ((int) screenHeight - height) - 42));
     }
 
     int addLegToItinerary(String seqId, String name1, String name2, int mileage) {
@@ -1272,6 +1303,18 @@ public class MapGUI {
     void makeGUILocations(ArrayList<Object> locs) {
         //System.out.println("[MapGUI] Making GUILocations");
         guiLocations.add(new GUILocation(locs));
+    }
+
+    ArrayList<String> searchDBLocationNames() {
+        ArrayList<String> ret = new ArrayList<>();
+        for(int i = 0; i < guiLocations.size(); i++) {
+            for(int j = 0; j < databaseLocations.size(); j++) {
+                if(guiLocations.get(i).getName().equals(databaseLocations.get(j))) {
+                    ret.add(guiLocations.get(i).getName());
+                }
+            }
+        }
+        return ret;
     }
 
     boolean cleanup() {
