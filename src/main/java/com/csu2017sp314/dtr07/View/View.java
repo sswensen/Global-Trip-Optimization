@@ -141,7 +141,7 @@ public class View {
         xml.addLeg(id, s, f, t);
     }
 
-    public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) { //TODO implement gui wraparound
+    public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) { //TODOdone implement gui wraparound
         if(wraparound) {
             double originalX1 = x1;
             double originalY1 = y1;
@@ -184,7 +184,7 @@ public class View {
         }
     }
 
-    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id, boolean wraparound) { //TODO add handling for wraparound
+    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id, boolean wraparound) { //TODOdone add handling for wraparound
         if(wraparound) {
             double originalX1 = x1;
             double originalY1 = y1;

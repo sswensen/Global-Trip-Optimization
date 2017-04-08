@@ -32,11 +32,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.function.Consumer;
-
 
 
 /**
@@ -59,9 +61,13 @@ public class MapGUI {
     private JTabbedPane options;
     //private JTabbedPane itineraryTabs;
     private JFrame face; //User interface with locations
-    private ArrayList<ArrayList<String>> trips = new ArrayList<>();
-    private ArrayList<String> tripNames = new ArrayList<>();
-    private ArrayList<String> tempLoc;
+    //private ArrayList<ArrayList<String>> trips = new ArrayList<>();
+    //private ArrayList<ArrayList<String>> tripIds = new ArrayList<>();
+    private ArrayList<SavedTrip> allSavedTrips = new ArrayList<>();
+    //private ArrayList<String> tripNames = new ArrayList<>();
+    //private ArrayList<String> tempLoc;
+    //private ArrayList<String> tempLocIds;
+    private SavedTrip tempTrip;
     private String workingDirectoryFilePath;
     private JFrame uOp;
     private JFrame itinerary;
@@ -82,7 +88,7 @@ public class MapGUI {
     private JPanel databaseWindow; //GUI dropdowns
     private JFrame databaseFrame; //Frame that databaseWindow goes in
     private JLabel currentTrip;
-    private ArrayList<String> lastTrip = new ArrayList<>();
+    private SavedTrip lastTrip;
     private int width;
     private int height;
     private String unit;
@@ -340,6 +346,9 @@ public class MapGUI {
         for(int i = 0; i < nList2.getLength(); i++) {
             Node a = nList2.item(i);
             tripName = a.getTextContent();
+            if(tripName.length() > 9) {
+                tripName = tripName.substring(0, 10);
+            }
         }
         for(int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
@@ -353,14 +362,15 @@ public class MapGUI {
                 }
             }
         }
-        trips.add(tempTrip);
+        tripIds.add(tempTrip);
         tripNames.add(tripName);
+        allSavedTrips.add(new SavedTrip(tempTrip,  tripName));
         addLoadButton(tripName);
         System.out.println(selectionXml);
-        for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("id at index " + i + " = " + tripNames.get(i));
-        }
-        System.out.println("trips size = " + trips.size());
+        //for(int i = 0; i < tripNames.size(); i++) {
+            //System.out.println("id at index " + i + " = " + tripNames.get(i));
+        //}
+        //System.out.println("trips size = " + trips.size());
     }
 
     private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException {
@@ -420,16 +430,18 @@ public class MapGUI {
             setGBC(0, z2, 1);
             rightTick = true;
         }
-        if(trips.size() == 0 || name.equals(" Save Trip "))
+        if(allSavedTrips.size() == 0 || name.equals(" Save Trip "))
             savedTrip = z;
         System.out.println("Trip name is " + tripName);
         JButton load = new JButton("Load Trip " + tripName);
         loadPanel.add(load, gbc);
         System.out.println("Added button " + load.getText());
         load.addActionListener((ActionEvent eee) -> {
-            System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
-            tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
-            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc));
+            //System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+            //tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
+            //tempLocIds = tripIds.get(tripNames.indexOf(load.getText().substring(10)));
+            tempTrip = searchAllSavedTripsWithName(load.getText().substring(10));
+            userAddLocList(tempTrip.getIds());
             lastTrip = new ArrayList<>(tempLoc);
             updateTripLabel(load.getText().substring(10));
             for(JButton a : buttons) {
@@ -484,6 +496,7 @@ public class MapGUI {
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(new ArrayList<>(trip));
+                    tripIds.add(searchForDatabaseIdsUsingNames(trip));
                     lastTrip = new ArrayList<>(trip);
                     userAddLocList(searchForDatabaseIdsUsingNames(trip));
                     System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
@@ -517,7 +530,9 @@ public class MapGUI {
                     System.out.println("Adding " + trip + " to trips at index 0");
                 } else{*/
                 trips.remove(savedTrip);
+                tripIds.remove(savedTrip);
                 trips.add(savedTrip, new ArrayList<>(trip));
+                tripIds.add(savedTrip, searchForDatabaseIdsUsingNames(trip));
                 userAddLocList(searchForDatabaseIdsUsingNames(trip)); //Update svg
                 try {
                     saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
@@ -1183,69 +1198,24 @@ public class MapGUI {
                 JTable temp7 = (JTable) e.getSource();
                 DefaultTableModel model = (DefaultTableModel) temp7.getModel();
                 int index = Integer.parseInt(e.getActionCommand());
-                System.out.println("value at this cell is = " + model.getValueAt(index,1));
-                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index,1));
+                System.out.println("value at this cell is = " + model.getValueAt(index, 1));
+                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index, 1));
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (Desktop.isDesktopSupported()) {
+                        if(Desktop.isDesktopSupported()) {
                             Desktop desktop = Desktop.getDesktop();
                             try {
-                                if(temp3.getAirportUrl().equals("")){
-                                    JOptionPane.showMessageDialog(popupMenu.getComponent(),"Information not Available");
-                                }
-                                else{
+                                if(temp3.getAirportUrl().equals("")) {
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(), "Information not Available");
+                                } else {
                                     URI uri = new URI(temp3.getAirportUrl());
                                     desktop.browse(uri);
                                 }
-                            } catch (IOException ex) {
+                            } catch(IOException ex) {
                                 ex.printStackTrace();
-                            } catch (URISyntaxException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }
-                }));
-                popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
-                popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
-                popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
-               System.out.println(temp3.getContinent());
-               System.out.println(temp3.getCountry());
-               System.out.println(temp3.getMunicipality());
-               temp7.addMouseListener(new MouseAdapter() {
-                   public void mouseClicked(MouseEvent evt) {
-                        popupMenu.show(evt.getComponent(),evt.getX(),evt.getY());
-                   }
-                });
-            }
-        };
-        Action testColumn2 = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JTable temp7 = (JTable) e.getSource();
-                DefaultTableModel model = (DefaultTableModel) temp7.getModel();
-                int index = Integer.parseInt(e.getActionCommand());
-                System.out.println("value at this cell is = " + model.getValueAt(index,2));
-                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index,2));
-                JPopupMenu popupMenu = new JPopupMenu();
-
-                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (Desktop.isDesktopSupported()) {
-                            Desktop desktop = Desktop.getDesktop();
-                            try {
-                                if(temp3.getAirportUrl().equals("")){
-                                    JOptionPane.showMessageDialog(popupMenu.getComponent(),"Information not Available");
-                                }
-                                else{
-                                    URI uri = new URI(temp3.getAirportUrl());
-                                    desktop.browse(uri);
-                                }
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            } catch (URISyntaxException ex) {
+                            } catch(URISyntaxException ex) {
                                 ex.printStackTrace();
                             }
                         }
@@ -1259,7 +1229,50 @@ public class MapGUI {
                 System.out.println(temp3.getMunicipality());
                 temp7.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent evt) {
-                        popupMenu.show(evt.getComponent(),evt.getX(),evt.getY());
+                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }
+                });
+            }
+        };
+        Action testColumn2 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable temp7 = (JTable) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) temp7.getModel();
+                int index = Integer.parseInt(e.getActionCommand());
+                System.out.println("value at this cell is = " + model.getValueAt(index, 2));
+                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index, 2));
+                JPopupMenu popupMenu = new JPopupMenu();
+
+                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(Desktop.isDesktopSupported()) {
+                            Desktop desktop = Desktop.getDesktop();
+                            try {
+                                if(temp3.getAirportUrl().equals("")) {
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(), "Information not Available");
+                                } else {
+                                    URI uri = new URI(temp3.getAirportUrl());
+                                    desktop.browse(uri);
+                                }
+                            } catch(IOException ex) {
+                                ex.printStackTrace();
+                            } catch(URISyntaxException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }));
+                popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
+                popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
+                popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
+                System.out.println(temp3.getContinent());
+                System.out.println(temp3.getCountry());
+                System.out.println(temp3.getMunicipality());
+                temp7.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent evt) {
+                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
                     }
                 });
             }
@@ -1361,6 +1374,15 @@ public class MapGUI {
         for(int i = 0; i < tripNames.size(); i++) {
             System.out.println("Trip Names at " + i + " is " + tripNames.get(i));
         }
+    }
+
+    private SavedTrip searchAllSavedTripsWithName(String name) {
+        for(SavedTrip t : allSavedTrips) {
+            if(t.getName().equals(name)) {
+                return t;
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) throws Exception {
