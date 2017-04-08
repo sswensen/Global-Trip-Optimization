@@ -344,6 +344,7 @@ public class MapGUI {
             Node a = nList2.item(i);
             tripName = a.getTextContent();
         }
+
         for(int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
             //System.out.println("\nCurrent Element :" + nNode.getNodeName());
@@ -1205,19 +1206,7 @@ public class MapGUI {
         if(model == null) {
             model = new DefaultTableModel();
             table = new JTable(model);
-            /*
-                private String id;
-                private String name;
-                private double lat;
-                private double lon;
-                private String municipality;
-                private String region;
-                private String country;
-                private String continent;
-                private String airportUrl;
-                private String regionUrl;
-                private String countryUrl;
-            */
+
             model.addColumn("ID");
             model.addColumn("From");
             model.addColumn("To");
