@@ -760,6 +760,12 @@ public class MapGUI {
             fiveThingsForDatabase.remove(3);
             fiveThingsForDatabase.add(3, (String) regions.getSelectedItem());
             //fiveThingsForDatabase.remove(4);
+            String text = findTextField.getText();
+            String text2 = findTextField2.getText();
+            fiveThingsForDatabase.remove(4);
+            fiveThingsForDatabase.add(4,text);
+            fiveThingsForDatabase.remove(5);
+            fiveThingsForDatabase.add(5,text2);
             guiLocations.clear();
             searchDatabase();
             updateAddButtonsDatabase(); //Update database selection scroll window
