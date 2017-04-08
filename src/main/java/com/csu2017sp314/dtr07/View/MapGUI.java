@@ -340,6 +340,9 @@ public class MapGUI {
         for(int i = 0; i < nList2.getLength(); i++) {
             Node a = nList2.item(i);
             tripName = a.getTextContent();
+            if(tripName.length() > 9) {
+                tripName = tripName.substring(0, 10);
+            }
         }
         for(int temp = 0; temp < nList.getLength(); temp++) {
             Node nNode = nList.item(temp);
