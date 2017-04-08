@@ -1,21 +1,16 @@
 package com.csu2017sp314.dtr07.Presenter;
 
-import com.csu2017sp314.dtr07.Model.*;
-import com.csu2017sp314.dtr07.View.*;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
+import com.csu2017sp314.dtr07.Model.Model;
+import com.csu2017sp314.dtr07.View.View;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -35,6 +30,8 @@ public class Presenter {
     private ArrayList<String> currentIds = new ArrayList<>();
     private boolean displayGui;
     private String svgMap;
+    private boolean readingFromXML = true;
+    private boolean kilometers;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -45,6 +42,9 @@ public class Presenter {
         });
         view.setCallback2((ArrayList<String> s) -> {
             this.eventUserAddLocList(s);
+            for(String temp : s) {
+                System.out.println("[Presenter] This is callback2:\t" + temp);
+            }
         });
         view.setCallback3((String s) -> {
             if(s.equals("Names")) {
@@ -53,7 +53,7 @@ public class Presenter {
             if(s.equals("IDs")) {
                 toggleIds();
             }
-            if(s.equals("Mileage")) {
+            if(s.equals("Distance")) {
                 toggleMileage();
             }
             if(s.equals("2-opt")) {
@@ -84,8 +84,20 @@ public class Presenter {
             }*/
         });
         view.setCallback4((ArrayList<String> s) -> {
-            ArrayList<String> locationNames = model.searchDatabase(s); //TODO push these location names back to
+            ArrayList<String> locationNames = model.searchDatabase(s);
+            for(String temp : locationNames) {
+                System.out.println("[Presenter] This is callback4:\t" + temp);
+            }
+            for(int i = 0; i < locationNames.size(); i++) {
+                copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+            }
+            System.out.println("DONE MAKING LOCATIONS");
+            readingFromXML = false;
         });
+    }
+
+    private void copyLocationsToView(ArrayList<Object> locs) {
+        view.makeGUILocations(locs);
     }
 
     private void toggleName() {
@@ -113,6 +125,15 @@ public class Presenter {
             displayMileage = true;
         }
         System.out.println("[Presenter] Mileage now " + displayMileage);
+    }
+
+    private void toggleKilometers() {
+        if(kilometers) {
+            kilometers = false;
+        } else {
+            kilometers = true;
+        }
+        System.out.println("[Presenter] Kilometers now " + kilometers);
     }
 
     private void toggle2opt() {
@@ -143,6 +164,7 @@ public class Presenter {
 
     private int eventUserAddLocList(ArrayList<String> ids) {
         currentIds = ids;
+        model.setReadingFromXML(readingFromXML);
         model.toggleListLocations(ids);
         if(twoOpt)
             model.setTwoOpt(true);
@@ -154,7 +176,7 @@ public class Presenter {
             model.setThreeOpt(false);
         //model.printUserLoc();
         try {
-            model.planUserTrip(fname);//TODO add arraylist to planUserTrip, might need to make another method like eventUserAddLocList
+            model.planUserTrip(fname, readingFromXML);
             view.resetTrip();
             int numPairs = model.getUserPairs().size();
 
@@ -168,13 +190,13 @@ public class Presenter {
                 String secondName = model.getUserSecondName(i);
                 view.addLeg(pairId, firstName, secondName, model.getUserPairDistance(i));
                 finalPairId++;
-                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId);
+                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId, model.isWraparound(i));
                 if(displayName) {
                     view.addCityNameLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstName);
                     view.addCityNameLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondName);
                 }
                 if(displayMileage) {
-                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId);
+                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId, model.isWraparound(i));
                 }
                 if(displayId) {
                     view.addIDLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstId);
@@ -182,7 +204,7 @@ public class Presenter {
                 }
             }
             view.addFooter(model.getTripDistance());
-            view.addHeader("Colorado");
+            view.addHeader("Long Live the Chief");
             view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
             makeItinerary();
@@ -213,6 +235,16 @@ public class Presenter {
         this.threeOpt = threeOpt;
         model.setThreeOpt(threeOpt);
     } //done
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+        view.setKilometers(kilometers);
+        model.setKilometers(kilometers);
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
 
     public void setDisplayMileage(boolean x) {
         displayMileage = x;
@@ -265,8 +297,8 @@ public class Presenter {
         fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
-        /*//TODO populate selectedAirports arraylist with xml
-        ArrayList selectedAirports = new ArrayList();
+
+        /*ArrayList selectedAirports = new ArrayList();
         selectedAirports.add("NZCH");
         selectedAirports.add("EHAM");
         selectedAirports.add("EDDB");
@@ -277,15 +309,23 @@ public class Presenter {
         selectedAirports.add("ZYTX");
         selectedAirports.add("BKPR");
         selectedAirports.add("CYEG");*/
-
-        model.setSelectedLocations(readXML(selectionXml));
+        if(selectionXml.equals("")) {
+            model.setSelectedLocations(new ArrayList<>());
+        } else {
+            model.setSelectedLocations(readXML(selectionXml));
+        }
         model.planTrip(filename, "M");
+        //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>());
+        //for(int i = 0; i < model.getNumLocs(); i++) {
+        //    copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+        //}
         int numPairs = model.getNumPairs();
-        view.originalIds = model.getLocationIds();
-        view.initializeTrip(selectionXml, svgMap);
-        //view.addBorders();
-        //view.addHeader("Colorado");
+        view.originalIds = model.getLocationNames();
+        view.initializeTrip(svgMap);
         view.addFooter(model.getTripDistance());
+        for(int i = 0; i < model.getDatabaseLocationsReturnedSize(); i++) {
+            copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+        }
         int finalPairId = 0;
         for(int i = 0; i < numPairs; i++) {
             double firstLon = model.getFirstLon(i);
@@ -298,15 +338,16 @@ public class Presenter {
             String secondId = model.getSecondId(i);
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
+            boolean wraparound = model.isWraparound(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
             finalPairId++;
-            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
+            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId, wraparound);
             if(displayName) {
                 view.addCityNameLabel(firstLon, firstLat, firstName);
                 view.addCityNameLabel(secondLon, secondLat, secondName);
             }
             if(displayMileage) {
-                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId);
+                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId, wraparound);
             }
             if(displayId) {
                 view.addIDLabel(firstLon, firstLat, firstId);

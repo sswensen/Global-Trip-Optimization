@@ -67,7 +67,12 @@ class LocationFactory {
         QueryBuilder qb = new QueryBuilder();
         //qb.setWhere(where);
         //qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport");
-        qb.searchDatabase(where.get(0), where.get(1), where.get(2), where.get(3), where.get(4), where.get(5));
+        //qb.searchDatabase("large_airport", "North America", "United States", "Colorado", "", "");
+        if(where.size() == 0) {
+            qb.searchDatabase("", "", "", "", "", "");
+        } else {
+            qb.searchDatabase(where.get(0), where.get(1), where.get(2), where.get(3), where.get(4), where.get(5));
+        }
         qb.fireQuery();
         locations = qb.getLocations();
         return locations;
@@ -138,12 +143,13 @@ class LocationFactory {
         this.locations = locations;
     }
 
-    public void setSelectedAirports(ArrayList<String> selectedAirports) {
-        this.selectedAirports = selectedAirports;
+    public ArrayList<Location> setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName) {
+        this.selectedAirports = selectedAirportIds;
         QueryBuilder qb = new QueryBuilder();
-        qb.search4IDinDatabase(selectedAirports);
+        qb.search4IDinDatabase(selectedAirports, idOrName);
         qb.fireQuery(); //Searches db with selectedAirports as where and sets qb's local locations
         locations = qb.getLocations(); //Need to call this to update lf's locations
+        return locations;
     }
 
     public void setUnit(String unit) {
