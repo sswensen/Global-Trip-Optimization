@@ -32,10 +32,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.function.Consumer;
@@ -432,7 +429,7 @@ public class MapGUI {
         load.addActionListener((ActionEvent eee) -> {
             System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
             tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
-            userAddLocList(tempLoc);
+            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc));
             lastTrip = new ArrayList<>(tempLoc);
             updateTripLabel(load.getText().substring(10));
             for(JButton a : buttons) {
@@ -488,7 +485,7 @@ public class MapGUI {
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
                     trips.add(new ArrayList<>(trip));
                     lastTrip = new ArrayList<>(trip);
-                    userAddLocList(trip);
+                    userAddLocList(searchForDatabaseIdsUsingNames(trip));
                     System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
                     tripNames.add(tripName);
                     try {
@@ -521,7 +518,7 @@ public class MapGUI {
                 } else{*/
                 trips.remove(savedTrip);
                 trips.add(savedTrip, new ArrayList<>(trip));
-                userAddLocList(trip); //Update svg
+                userAddLocList(searchForDatabaseIdsUsingNames(trip)); //Update svg
                 try {
                     saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
                 } catch(ParserConfigurationException parseException) {
@@ -556,7 +553,7 @@ public class MapGUI {
                 b.setText("Add " + name);
             }
             mapOptions(name);
-            userAddLocList(tempLoc); //Use to be lastTrip
+            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc)); //Use to be lastTrip
         });
         return b;
     }
@@ -572,7 +569,7 @@ public class MapGUI {
                 unit = "K";
             }
             mapOptions(unit);
-            userAddLocList(lastTrip);
+            userAddLocList(searchForDatabaseIdsUsingNames(lastTrip));
         });
         return b;
     }
@@ -749,7 +746,7 @@ public class MapGUI {
             //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
             ArrayList<String> locationNames = searchDBLocationNames();
             updateTripLabel("Untitled trip");
-            userAddLocList(locationNames);
+            userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
             tempLoc.clear();
             updateAddButtonsAddRemove(locationNames);
@@ -764,7 +761,7 @@ public class MapGUI {
         dm2.setRowCount(0);
         Vector<String> columnNames = new Vector<>();
         Vector<Vector<String>> addButtons = new Vector<>();
-        columnNames.addElement("Click to add Destination");
+        columnNames.addElement("  ");
         columnNames.addElement("Location");
         for(int i = 0; i < guiLocations.size(); i++) {
             Vector<String> temp = new Vector<>();
@@ -831,7 +828,7 @@ public class MapGUI {
 
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
-            userAddLocList(tempLoc);
+            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc));
             lastTrip = new ArrayList<>(tempLoc);
         });
         fTemp.add(q, gbc);
@@ -1312,6 +1309,18 @@ public class MapGUI {
             for(int j = 0; j < databaseLocations.size(); j++) {
                 if(guiLocations.get(i).getName().equals(databaseLocations.get(j))) {
                     ret.add(guiLocations.get(i).getName());
+                }
+            }
+        }
+        return ret;
+    }
+
+    ArrayList<String> searchForDatabaseIdsUsingNames(ArrayList<String> names) {
+        ArrayList<String> ret = new ArrayList<>();
+        for(String name : names) {
+            for(GUILocation loc : guiLocations) {
+                if(loc.getName().equalsIgnoreCase(name)) {
+                    ret.add(loc.getId());
                 }
             }
         }
