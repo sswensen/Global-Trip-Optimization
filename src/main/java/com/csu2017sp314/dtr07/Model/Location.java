@@ -100,16 +100,22 @@ public class Location {
             wlat2 = wlattemp;
             wlon2 = wlontemp;
         }
-        wlon2 += 360;
-        double wtheta = wlon1 - wlon2;
+        //wlon1 -= 180;
+        //wlon2 += 180;
+        /*double wtheta = wlon1 - wlon2;
         double wdist = Math.sin(deg2rad(wlat1)) * Math.sin(deg2rad(wlat2))
                 + Math.cos(deg2rad(wlat1)) * Math.cos(deg2rad(wlat2)) * Math.cos(deg2rad(wtheta));
         wdist = Math.acos(wdist);
-        wdist = rad2deg(wdist);
+        wdist = rad2deg(wdist); //Here the value is still in longitude/latitude*/
+        double wdist = Math.sqrt(Math.pow((wlat1-wlat2), 2) + Math.pow((wlon1 -wlon2), 2));
         wdist = wdist * 60 * 1.1515; //Default is miles ("M") //We can move this line, as well as the one above to after both checks. Not done yet because of debugging purposes
-        if(wdist < dist) {
+        dist = Math.round(dist);
+        wdist = Math.round(wdist);
+        if(wdist > dist) {
             this.pairUsesWraparound = true;
-            dist = wdist;
+        } else {
+            this.pairUsesWraparound = false;
+            dist = wdist; //Should be equal here
         }
         //------------End Checking for wraparound-----------//
 

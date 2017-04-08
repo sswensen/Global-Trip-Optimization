@@ -582,7 +582,7 @@ public class MapGUI {
         setGBC(1, 0, 1);
         panel.add(mapDisplayButtons("IDs"), gbc);
         setGBC(0, 1, 1);
-        panel.add(mapDisplayButtons("3"), gbc);
+        panel.add(mapDisplayButtons("Mileage"), gbc);
         setGBC(0, 2, 1);
         panel.add(mapDisplayButtons("2-opt"), gbc);
         setGBC(1, 2, 1);
