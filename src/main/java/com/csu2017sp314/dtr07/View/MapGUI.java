@@ -556,7 +556,7 @@ public class MapGUI {
                 b.setText("Add " + name);
             }
             mapOptions(name);
-            userAddLocList(lastTrip);
+            userAddLocList(tempLoc); //Use to be lastTrip
         });
         return b;
     }
