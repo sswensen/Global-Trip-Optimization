@@ -139,15 +139,17 @@ public class View {
             double originalY1 = y1;
             double originalX2 = x2;
             double originalY2 = y2;
+            double m;
             System.out.println("Using wraparound for " + id);
             if(x1 > x2) {
                 x1 -= 180;
                 x2 += 180;
+                m = (y2 - y1) / (x2 - x1);
             } else {
                 x1 += 180;
                 x2 -= 180;
+                m = (y1 - y2) / (x1 - x2);
             }
-            double m = (y2 - y1) / (x2 - x1);
             double b = y1 - (m * x1);
             double interX1;
             double interX2;
@@ -158,15 +160,18 @@ public class View {
                 interX1 = -180;
                 interX2 = 180;
             }
-            double interY = m*interX1 + b;
-            svg.addLine(originalX1, originalY1, interX1, interY, id);
-            svg.addLine(originalX2, originalY2, interX2, interY, id);
+            double interY1 = m*interX1 + b;
+            double interY2 = m*interX2 + b;
+
+            svg.addLine(originalX1, originalY1, interX1, interY1, id);
+            svg.addLine(originalX2, originalY2, interX2, interY2, id);
+            //svg.addLine(-179, 10, -179, -10, id);
         } else {
             svg.addLine(x1, y1, x2, y2, id);
         }
     }
 
-    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id) {
+    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id) { //TODO add handling for wraparound
         svg.addDistance(x1, y1, x2, y2, distance, id);
     }
 

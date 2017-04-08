@@ -743,7 +743,7 @@ public class MapGUI {
         setGBC(0, 9, 4);
         JButton transferToFirstWindow = new JButton("Select");
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
-            //TODO ooooooo
+            //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
             ArrayList<String> locationNames = searchDBLocationNames();
             updateTripLabel("Untitled trip");
             userAddLocList(locationNames);
