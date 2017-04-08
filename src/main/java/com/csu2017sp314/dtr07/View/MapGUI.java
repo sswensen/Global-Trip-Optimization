@@ -688,7 +688,67 @@ public class MapGUI {
         JComboBox regions = makeDropdowns(sshImCheatingDontTell("name", "regions", ""));
         databaseWindow.add(regions, gbc);
 
-        setGBC(0, 6, 4);
+        //Search Municipality textField
+        JPanel searchPanel = new JPanel();
+        JTextField findTextField;
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
+        searchPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+        //JLabel findLabel = new JLabel("Search:");
+        //searchPanel.add(findLabel);
+        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
+        findTextField = new JTextField(30);
+        TextPrompt tp = new TextPrompt("Municipality Search", findTextField);
+        findTextField.setForeground(Color.red);
+        searchPanel.add(findTextField);
+        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
+
+        JButton findButton = new JButton("Search");
+        findButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                String s = findTextField.getText().toUpperCase().trim();
+                if (!s.equals("")) {
+                    findTextField.setText(s);
+
+                }
+            }
+        });
+        //searchPanel.add(findButton);
+        setGBC(0,6,4);
+        databaseWindow.add(searchPanel,gbc);
+        //Search Municipality textField
+
+        //Search Airport textField
+        JPanel searchPanel2 = new JPanel();
+        JTextField findTextField2;
+        searchPanel2.setLayout(new BoxLayout(searchPanel2, BoxLayout.X_AXIS));
+        searchPanel2.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+        //JLabel findLabel = new JLabel("Search:");
+        //searchPanel.add(findLabel);
+        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
+        findTextField2 = new JTextField(30);
+        TextPrompt tp2 = new TextPrompt("Airport Name Search", findTextField2);
+        findTextField2.setForeground(Color.red);
+        searchPanel2.add(findTextField2);
+        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
+
+        JButton findButton2 = new JButton("Search");
+        findButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                String s = findTextField2.getText().toUpperCase().trim();
+                if (!s.equals("")) {
+                    findTextField2.setText(s);
+
+                }
+            }
+        });
+        //searchPanel.add(findButton);
+        setGBC(0,7,4);
+        databaseWindow.add(searchPanel2,gbc);
+        //Search Airport textField
+
+        setGBC(0, 8, 4);
         JButton searchDatabasePlease = new JButton("Search");
         searchDatabasePlease.addActionListener((ActionEvent e) -> {
             fiveThingsForDatabase.remove(0);
@@ -706,7 +766,7 @@ public class MapGUI {
         });
         databaseWindow.add(searchDatabasePlease, gbc);
 
-        setGBC(0, 7, 1);
+        setGBC(0, 9, 1);
         JButton testingSearching = new JButton("Search for hardcoded 1");
         testingSearching.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
@@ -715,7 +775,7 @@ public class MapGUI {
             userAddLocList(testingNames);
         });
         databaseWindow.add(testingSearching, gbc);
-        setGBC(1, 7, 1);
+        setGBC(1, 9, 1);
         JButton testingSearching2 = new JButton("Search for hardcoded 2");
         testingSearching2.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
@@ -724,7 +784,7 @@ public class MapGUI {
             userAddLocList(testingNames);
         });
         databaseWindow.add(testingSearching2, gbc);
-        setGBC(3, 7, 1);
+        setGBC(3, 9, 1);
         JButton selectAll = new JButton("Select all");
         selectAll.addActionListener((ActionEvent e) -> {
             databaseLocations.clear();
@@ -739,11 +799,11 @@ public class MapGUI {
         updateAddButtonsDatabase();
 
         JScrollPane scroll = new JScrollPane(table3);
-        setGBC(0, 8, 4);
+        setGBC(0, 10, 4);
         table3.setPreferredScrollableViewportSize(new Dimension(470, 260));
         databaseWindow.add(scroll, gbc);
 
-        setGBC(0, 9, 4);
+        setGBC(0, 11, 4);
         JButton transferToFirstWindow = new JButton("Select");
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
             //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
