@@ -22,6 +22,7 @@ public class Location {
     private int nearest = -1;
     private int nearestDistance = 9999999;
     private int tableIndex;
+    private boolean pairUsesWraparound = false;
 
     Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent, String aUrl, String rUrl, String cUrl) {
         this.id = id;
@@ -85,6 +86,33 @@ public class Location {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515; //Default is miles ("M")
+
+        //--------------Checking for wraparound-------------//
+        double wlat1 = this.lat;
+        double wlon1 = this.lon; //We are changing longitude
+        double wlat2 = in.getLat();
+        double wlon2 = in.getLon();
+        if(wlon1 < wlon2) {
+            double wlattemp = wlat1;
+            double wlontemp = wlon1;
+            wlat1 = wlat2;
+            wlon1 = wlon2;
+            wlat2 = wlattemp;
+            wlon2 = wlontemp;
+        }
+        wlon2 += 360;
+        double wtheta = wlon1 - wlon2;
+        double wdist = Math.sin(deg2rad(wlat1)) * Math.sin(deg2rad(wlat2))
+                + Math.cos(deg2rad(wlat1)) * Math.cos(deg2rad(wlat2)) * Math.cos(deg2rad(wtheta));
+        wdist = Math.acos(wdist);
+        wdist = rad2deg(wdist);
+        wdist = wdist * 60 * 1.1515; //Default is miles ("M") //We can move this line, as well as the one above to after both checks. Not done yet because of debugging purposes
+        if(wdist < dist) {
+            this.pairUsesWraparound = true;
+            dist = wdist;
+        }
+        //------------End Checking for wraparound-----------//
+
         if(unit.equals("K")) { //Kilometers
             dist = dist * 1.609344;
         } else if(unit.equals("N")) { //Nautical miles
@@ -182,6 +210,10 @@ public class Location {
 
     void setNearestDistance(int nearestDistance) {
         this.nearestDistance = nearestDistance;
+    }
+
+    public boolean isPairUsesWraparound() {
+        return pairUsesWraparound;
     }
 
     @Override

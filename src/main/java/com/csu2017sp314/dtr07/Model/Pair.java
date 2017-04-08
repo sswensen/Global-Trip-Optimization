@@ -18,6 +18,7 @@ public class Pair {
         this.one = one;
         this.two = two;
         this.distance = distance;
+        checkForWraparound();
     }
 
     Location getOne() {
@@ -46,6 +47,12 @@ public class Pair {
 
     public void setUseWraparound(boolean useWraparound) {
         this.useWraparound = useWraparound;
+    }
+
+    public boolean checkForWraparound() {
+        boolean ret = one.isPairUsesWraparound() || two.isPairUsesWraparound();
+        useWraparound = ret;
+        return ret;
     }
 
     @Override
