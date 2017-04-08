@@ -133,7 +133,7 @@ public class View {
         xml.addLeg(id, s, f, t);
     }
 
-    public void addLine(double x1, double y1, double x2, double y2, String id) {
+    public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) { //TODO implement gui wraparound
         svg.addLine(x1, y1, x2, y2, id);
     }
 

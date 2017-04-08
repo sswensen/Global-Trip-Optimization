@@ -185,7 +185,7 @@ public class Presenter {
                 String secondName = model.getUserSecondName(i);
                 view.addLeg(pairId, firstName, secondName, model.getUserPairDistance(i));
                 finalPairId++;
-                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId);
+                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId, model.isWraparound(i));
                 if(displayName) {
                     view.addCityNameLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstName);
                     view.addCityNameLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondName);
@@ -199,7 +199,7 @@ public class Presenter {
                 }
             }
             view.addFooter(model.getTripDistance());
-            view.addHeader("Colorado");
+            view.addHeader("Long Live the Chief");
             view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
             makeItinerary();
@@ -323,9 +323,10 @@ public class Presenter {
             String secondId = model.getSecondId(i);
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
+            boolean wraparound = model.isWraparound(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
             finalPairId++;
-            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
+            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId, wraparound);
             if(displayName) {
                 view.addCityNameLabel(firstLon, firstLat, firstName);
                 view.addCityNameLabel(secondLon, secondLat, secondName);
