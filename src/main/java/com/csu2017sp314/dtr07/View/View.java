@@ -176,8 +176,44 @@ public class View {
         }
     }
 
-    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id) { //TODO add handling for wraparound
-        svg.addDistance(x1, y1, x2, y2, distance, id);
+    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id, boolean wraparound) { //TODO add handling for wraparound
+        if(wraparound) {
+            double originalX1 = x1;
+            double originalY1 = y1;
+            double originalX2 = x2;
+            double originalY2 = y2;
+            double m;
+            double b1;
+            double b2;
+            if(x1 > x2) {
+                x1 -= 180;
+                x2 += 180;
+                m = (y2 - y1) / (x2 - x1);
+                b1 = originalY1 - (m * originalX1);
+                b2 = originalY2 - (m * originalX2);
+            } else {
+                x1 += 180;
+                x2 -= 180;
+                m = (y1 - y2) / (x1 - x2);
+                b1 = originalY1 - (m * originalX1);
+                b2 = originalY2 - (m * originalX2);
+            }
+            double interX1;
+            double interX2;
+            if(originalX1 > originalX2) {
+                interX1 = 180;
+                interX2 = -180;
+            } else {
+                interX1 = -180;
+                interX2 = 180;
+            }
+            double interY1 = m*interX1 + b1;
+            double interY2 = m*interX2 + b2;
+
+            svg.addDistance(originalX1, originalY1, interX1, interY1, distance, id);
+        } else {
+            svg.addDistance(x1, y1, x2, y2, distance, id);
+        }
     }
 
     public void addCityNameLabel(double lon, double lat, String city) {

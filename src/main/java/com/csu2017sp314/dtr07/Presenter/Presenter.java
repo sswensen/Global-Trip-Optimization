@@ -191,7 +191,7 @@ public class Presenter {
                     view.addCityNameLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondName);
                 }
                 if(displayMileage) {
-                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId);
+                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId, model.isWraparound(i));
                 }
                 if(displayId) {
                     view.addIDLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstId);
@@ -332,7 +332,7 @@ public class Presenter {
                 view.addCityNameLabel(secondLon, secondLat, secondName);
             }
             if(displayMileage) {
-                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId);
+                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId, wraparound);
             }
             if(displayId) {
                 view.addIDLabel(firstLon, firstLat, firstId);
