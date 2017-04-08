@@ -1,13 +1,10 @@
 package com.csu2017sp314.dtr07.View;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.function.Consumer;
-
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,11 +14,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 //import org.w3c.dom.DOMImplementation;
 
 /**
@@ -54,8 +50,8 @@ public class View {
         ids = new ArrayList<>(originalIds);
         width = svg.getWidth();
         height = svg.getHeight();
-        gui.setWidth((int)width);
-        gui.setHeight((int)height+20);
+        gui.setWidth((int) width);
+        gui.setHeight((int) height + 20);
     }
 
     public void resetTrip() throws SAXException, IOException, ParserConfigurationException {
@@ -89,9 +85,13 @@ public class View {
         }*/
     }
 
-    Document getXMLdoc() { return xml.getXMLdoc(); }
+    Document getXMLdoc() {
+        return xml.getXMLdoc();
+    }
 
-    Document getSVGdoc() { return svg.getSVGdoc(); }
+    Document getSVGdoc() {
+        return svg.getSVGdoc();
+    }
 
     public void setCallback(Consumer<String> callback) {
         this.callback = callback;
@@ -135,9 +135,35 @@ public class View {
 
     public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) { //TODO implement gui wraparound
         if(wraparound) {
+            double originalX1 = x1;
+            double originalY1 = y1;
+            double originalX2 = x2;
+            double originalY2 = y2;
             System.out.println("Using wraparound for " + id);
+            if(x1 > x2) {
+                x1 -= 180;
+                x2 += 180;
+            } else {
+                x1 += 180;
+                x2 -= 180;
+            }
+            double m = (y2 - y1) / (x2 - x1);
+            double b = y1 - (m * x1);
+            double interX1;
+            double interX2;
+            if(originalX1 > originalX2) {
+                interX1 = 180;
+                interX2 = -180;
+            } else {
+                interX1 = -180;
+                interX2 = 180;
+            }
+            double interY = m*interX1 + b;
+            svg.addLine(originalX1, originalY1, interX1, interY, id);
+            svg.addLine(originalX2, originalY2, interX2, interY, id);
+        } else {
+            svg.addLine(x1, y1, x2, y2, id);
         }
-        svg.addLine(x1, y1, x2, y2, id);
     }
 
     public void addDistance(double x1, double y1, double x2, double y2, int distance, String id) {

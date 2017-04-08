@@ -153,7 +153,7 @@ public class Location {
         //if(wdist > dist) {
         if(wlon1 - wlon2 > 180) {
             this.pairUsesWraparound = true;
-            System.out.println("Using wraparound");
+            //System.out.println("Using wraparound");
         } else {
             this.pairUsesWraparound = false;
             //dist = wdist; //Should be equal here
