@@ -54,6 +54,7 @@ public class MapGUI {
     private Consumer<ArrayList<String>> callback2;
     private Consumer<String> callback3; //Used if other callback method is used
     private Consumer<ArrayList<String>> callback4; //Used for searching database
+    private Consumer<String> callback5;
     private String filename;
     private JFrame map; //Map that displays locations
     private JTabbedPane options;
@@ -120,12 +121,20 @@ public class MapGUI {
         this.callback4 = callback4;
     }
 
+    void setCallback5(Consumer<String> callback5) {
+        this.callback5 = callback5;
+    }
+
     /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);
     }*/
 
     private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
+    }
+
+    private void presenterReadXML(String filename) {
+        callback5.accept(filename);
     }
 
     private void mapOptions(String option) {
@@ -268,7 +277,8 @@ public class MapGUI {
             if(result == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = jFileChooser.getSelectedFile();
                 try {
-                    readXML(selectedFile.getAbsolutePath());
+                    //readXML(selectedFile.getAbsolutePath());
+                    presenterReadXML(selectedFile.getAbsolutePath());
                 } catch(Exception ee) {
                     System.err.println("Error in createXMLBrowser");
                 }

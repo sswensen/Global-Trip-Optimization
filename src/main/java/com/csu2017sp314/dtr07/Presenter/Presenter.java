@@ -94,6 +94,13 @@ public class Presenter {
             System.out.println("DONE MAKING LOCATIONS");
             readingFromXML = false;
         });
+        view.setCallback5((String s) -> {
+            try {
+                this.planTrip("", s, svgMap);
+            } catch(Exception e) {
+                System.err.println("error in callback 5");
+            }
+        });
     }
 
     private void copyLocationsToView(ArrayList<Object> locs) {
@@ -294,9 +301,12 @@ public class Presenter {
     }
 
     public void planTrip(String filename, String selectionXml, String svgMap) throws Exception {
-        fname = filename;
-        this.selectionXml = selectionXml;
-        this.svgMap = svgMap;
+        if(!filename.equals(""))
+            fname = filename;
+        if(!selectionXml.equals(""))
+            this.selectionXml = selectionXml;
+        if(!svgMap.equals(""))
+            this.svgMap = svgMap;
 
         /*ArrayList selectedAirports = new ArrayList();
         selectedAirports.add("NZCH");

@@ -30,6 +30,7 @@ public class View {
     private Consumer<ArrayList<String>> callback2;
     private Consumer<String> callback3;
     private Consumer<ArrayList<String>> callback4;
+    private Consumer<String> callback5;
     private ArrayList<String> xmlIds;
     private SVGBuilder svg;
     private XMLBuilder xml;
@@ -117,6 +118,10 @@ public class View {
         this.callback4 = callback4;
     }
 
+    public void setCallback5(Consumer<String> callback5) {
+        this.callback5 = callback5;
+    }
+
     private void userAddLoc(String id) {
         callback.accept(id);
     }
@@ -131,6 +136,10 @@ public class View {
 
     private void mapOptions(String option) {
         callback3.accept(option);
+    }
+
+    private void presneterReadXML(String option) {
+        callback5.accept(option);
     }
 
     public void addLeg(String id, String start, String finish, int mileage) {
@@ -279,6 +288,11 @@ public class View {
         gui.setCallback4((ArrayList<String> s) -> {
             this.searchDatabase(s);
         });
+
+        gui.setCallback5((String s) -> {
+            this.presneterReadXML(s);
+        });
+
         try {
             gui.init(f);
         } catch(Exception e) {
