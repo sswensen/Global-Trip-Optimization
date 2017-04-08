@@ -140,17 +140,22 @@ public class View {
             double originalX2 = x2;
             double originalY2 = y2;
             double m;
+            double b1;
+            double b2;
             System.out.println("Using wraparound for " + id);
             if(x1 > x2) {
                 x1 -= 180;
                 x2 += 180;
                 m = (y2 - y1) / (x2 - x1);
+                b1 = originalY1 - (m * originalX1);
+                b2 = originalY2 - (m * originalX2);
             } else {
                 x1 += 180;
                 x2 -= 180;
                 m = (y1 - y2) / (x1 - x2);
+                b1 = originalY1 - (m * originalX1);
+                b2 = originalY2 - (m * originalX2);
             }
-            double b = y1 - (m * x1);
             double interX1;
             double interX2;
             if(originalX1 > originalX2) {
@@ -160,8 +165,8 @@ public class View {
                 interX1 = -180;
                 interX2 = 180;
             }
-            double interY1 = m*interX1 + b;
-            double interY2 = m*interX2 + b;
+            double interY1 = m*interX1 + b1;
+            double interY2 = m*interX2 + b2;
 
             svg.addLine(originalX1, originalY1, interX1, interY1, id);
             svg.addLine(originalX2, originalY2, interX2, interY2, id);
