@@ -110,19 +110,23 @@ class QueryBuilder {
         ArrayList<String> q = new ArrayList<>();
         String type = wheres.get(0);
         if(!type.equals("")) {
-            q.add("type like '%" + type + "%'");
+            //q.add("type like '%" + type + "%'");
+            q.add("type = '" + type + "'");
         }
         String continent = wheres.get(1);
         if(!continent.equals("")) {
-            q.add("continents.name like '%" + continent + "%'");
+            //q.add("continents.name like '%" + continent + "%'");
+            q.add("continents.name = '" + continent + "'");
         }
         String country = wheres.get(2);
         if(!country.equals("")) {
-            q.add("countries.name like '%" + country + "%'");
+            //q.add("countries.name like '%" + country + "%'");
+            q.add("countries.name = '" + country + "'");
         }
         String region = wheres.get(3);
         if(!region.equals("")) {
-            q.add("regions.name like '%" + region + "%'");
+            //q.add("regions.name like '%" + region + "%'");
+            q.add("regions.name = '" + region + "'");
         }
         String municipality = wheres.get(4);
         if(!municipality.equals("")) {

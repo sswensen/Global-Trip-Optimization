@@ -750,7 +750,8 @@ public class MapGUI {
             ArrayList<String> locationNames = searchDBLocationNames();
             updateTripLabel("Untitled trip");
             userAddLocList(locationNames);
-            tempLoc = locationNames;
+            //tempLoc = locationNames;
+            tempLoc.clear();
             updateAddButtonsAddRemove(locationNames);
         });
         databaseWindow.add(transferToFirstWindow, gbc);
