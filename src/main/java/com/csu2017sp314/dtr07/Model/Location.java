@@ -83,12 +83,13 @@ public class Location {
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
                         * Math.sin(dLon / 2) * Math.sin(dLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double d = r * c;;
+        double d = r * c;
+        ;
         return d;
     }
 
     public double distance4(double lat1, double lat2, double lon1,
-                                  double lon2, double el1, double el2) {
+                            double lon2, double el1, double el2) {
 
         final int R = 6371; // Radius of the earth
 
@@ -104,7 +105,7 @@ public class Location {
 
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
-        return Math.sqrt(distance)/1609.34;
+        return Math.sqrt(distance) / 1609.34;
     }
 
     double distance(Location in, String unit) {
@@ -171,7 +172,7 @@ public class Location {
 
     /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     /*::	This function converts decimal degrees to radians			:*/
-	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
     private static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }

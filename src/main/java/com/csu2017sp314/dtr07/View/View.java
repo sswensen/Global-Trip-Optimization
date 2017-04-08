@@ -41,7 +41,6 @@ public class View {
     private double width;
     private double height;
 
-
     public void initializeTrip(String svgMap) throws SAXException, IOException, ParserConfigurationException {
         this.svgMap = svgMap;
         gui = new MapGUI();
@@ -165,8 +164,8 @@ public class View {
                 interX1 = -180;
                 interX2 = 180;
             }
-            double interY1 = m*interX1 + b1;
-            double interY2 = m*interX2 + b2;
+            double interY1 = m * interX1 + b1;
+            double interY2 = m * interX2 + b2;
 
             svg.addLine(originalX1, originalY1, interX1, interY1, id);
             svg.addLine(originalX2, originalY2, interX2, interY2, id);
@@ -207,8 +206,8 @@ public class View {
                 interX1 = -180;
                 interX2 = 180;
             }
-            double interY1 = m*interX1 + b1;
-            double interY2 = m*interX2 + b2;
+            double interY1 = m * interX1 + b1;
+            double interY2 = m * interX2 + b2;
 
             svg.addDistance(originalX1, originalY1, interX1, interY1, distance, id);
         } else {
@@ -251,7 +250,6 @@ public class View {
         StreamResult result2 = new StreamResult(new File(f + ".svg"));
         transformer.transform(source2, result2);
     }
-
 
     public void gui() throws Exception {
         gui.setCallback((String s) -> {

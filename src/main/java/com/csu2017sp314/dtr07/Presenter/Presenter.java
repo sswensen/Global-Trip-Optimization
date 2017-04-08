@@ -1,21 +1,16 @@
 package com.csu2017sp314.dtr07.Presenter;
 
-import com.csu2017sp314.dtr07.Model.*;
-import com.csu2017sp314.dtr07.View.*;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
+import com.csu2017sp314.dtr07.Model.Model;
+import com.csu2017sp314.dtr07.View.View;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by SummitDrift on 2/13/17.
