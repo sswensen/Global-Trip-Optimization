@@ -1,21 +1,16 @@
 package com.csu2017sp314.dtr07.Presenter;
 
-import com.csu2017sp314.dtr07.Model.*;
-import com.csu2017sp314.dtr07.View.*;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
+import com.csu2017sp314.dtr07.Model.Model;
+import com.csu2017sp314.dtr07.View.View;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -185,13 +180,13 @@ public class Presenter {
                 String secondName = model.getUserSecondName(i);
                 view.addLeg(pairId, firstName, secondName, model.getUserPairDistance(i));
                 finalPairId++;
-                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId);
+                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId, model.isWraparound(i));
                 if(displayName) {
                     view.addCityNameLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstName);
                     view.addCityNameLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondName);
                 }
                 if(displayMileage) {
-                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId);
+                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId, model.isWraparound(i));
                 }
                 if(displayId) {
                     view.addIDLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstId);
@@ -199,7 +194,7 @@ public class Presenter {
                 }
             }
             view.addFooter(model.getTripDistance());
-            view.addHeader("Colorado");
+            view.addHeader("Long Live the Chief");
             view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
             makeItinerary();
@@ -323,15 +318,16 @@ public class Presenter {
             String secondId = model.getSecondId(i);
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
+            boolean wraparound = model.isWraparound(i);
             view.addLeg(pairId, firstName, secondName, pairDistance);
             finalPairId++;
-            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
+            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId, wraparound);
             if(displayName) {
                 view.addCityNameLabel(firstLon, firstLat, firstName);
                 view.addCityNameLabel(secondLon, secondLat, secondName);
             }
             if(displayMileage) {
-                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId);
+                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId, wraparound);
             }
             if(displayId) {
                 view.addIDLabel(firstLon, firstLat, firstId);

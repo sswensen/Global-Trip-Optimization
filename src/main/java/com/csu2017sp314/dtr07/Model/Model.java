@@ -333,6 +333,10 @@ public class Model {
         return ret;
     }
 
+    public boolean isWraparound(int i) {
+        return pairs.get(i).isUseWraparound();
+    }
+
     /*
     public int getTripDistance(ArrayList<Pair> pairs) {
         int ret = 0;

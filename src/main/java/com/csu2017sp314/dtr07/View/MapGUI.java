@@ -582,7 +582,7 @@ public class MapGUI {
         setGBC(1, 0, 1);
         panel.add(mapDisplayButtons("IDs"), gbc);
         setGBC(0, 1, 1);
-        panel.add(mapDisplayButtons("3"), gbc);
+        panel.add(mapDisplayButtons("Mileage"), gbc);
         setGBC(0, 2, 1);
         panel.add(mapDisplayButtons("2-opt"), gbc);
         setGBC(1, 2, 1);
@@ -743,7 +743,7 @@ public class MapGUI {
         setGBC(0, 9, 4);
         JButton transferToFirstWindow = new JButton("Select");
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
-            //TODO ooooooo
+            //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
             ArrayList<String> locationNames = searchDBLocationNames();
             updateTripLabel("Untitled trip");
             userAddLocList(locationNames);
@@ -1070,7 +1070,7 @@ public class MapGUI {
 //  Implement MouseListener interface
 //
     /*
-	 *  When the mouse is pressed the editor is invoked. If you then then drag
+     *  When the mouse is pressed the editor is invoked. If you then then drag
 	 *  the mouse to another cell before releasing it, the editor is still
 	 *  active. Make sure editing is stopped when the mouse is released.
 	 */
