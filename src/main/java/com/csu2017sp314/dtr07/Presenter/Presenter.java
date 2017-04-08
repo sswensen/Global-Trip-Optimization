@@ -45,6 +45,9 @@ public class Presenter {
             for(String temp : s) {
                 System.out.println("[Presenter] This is callback2:\t" + temp);
             }
+            for(int i = 0; i < s.size(); i++) {
+                copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+            }
         });
         view.setCallback3((String s) -> {
             if(s.equals("Names")) {
