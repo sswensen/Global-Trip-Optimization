@@ -15,6 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by SummitDrift on 2/13/17.
  * Main class for Presenter Package
+ * Handles all view and model data
  */
 
 public class Presenter {
@@ -104,29 +105,17 @@ public class Presenter {
     }
 
     private void toggleName() {
-        if(displayName) {
-            displayName = false;
-        } else {
-            displayName = true;
-        }
+        displayName = !displayName;
         System.out.println("[Presenter] Names now " + displayName);
     }
 
     private void toggleIds() {
-        if(displayId) {
-            displayId = false;
-        } else {
-            displayId = true;
-        }
+        displayId = !displayId;
         System.out.println("[Presenter] IDs now " + displayId);
     }
 
     private void toggleMileage() {
-        if(displayMileage) {
-            displayMileage = false;
-        } else {
-            displayMileage = true;
-        }
+        displayMileage = !displayMileage;
         System.out.println("[Presenter] Mileage now " + displayMileage);
     }
 
@@ -246,39 +235,39 @@ public class Presenter {
         model.setThreeOpt(threeOpt);
     } //done
 
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
+
     public void setKilometers(boolean kilometers) {
         this.kilometers = kilometers;
         view.setKilometers(kilometers);
         model.setKilometers(kilometers);
     }
 
-    public boolean isKilometers() {
-        return this.kilometers;
-    }
+    public boolean getDisplayMileage() {
+        return displayMileage;
+    } //done
 
     public void setDisplayMileage(boolean x) {
         displayMileage = x;
     }//done
 
-    public void setDisplayId(boolean x) {
-        displayId = x;
-    } //done
-
-    public void setDisplayName(boolean x) {
-        displayName = x;
-    } //done
-
-    public boolean getDisplayMileage() {
-        return displayMileage;
-    } //done
-
     public boolean getDisplayId() {
         return displayId;
+    } //done
+
+    public void setDisplayId(boolean x) {
+        displayId = x;
     } //done
 
     public boolean getDisplayName() {
         return displayName;
     }//done
+
+    public void setDisplayName(boolean x) {
+        displayName = x;
+    } //done
 
     public boolean displayGui(boolean x) {
         return (displayGui = x);
