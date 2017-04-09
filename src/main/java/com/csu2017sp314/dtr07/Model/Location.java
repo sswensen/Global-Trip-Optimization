@@ -119,8 +119,8 @@ public class Location {
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515; //Default is miles ("M")
 
-        double hdist = haversine(lat1, lon1, lat2, lon2);
-        double fdist = distance4(lat1, lat2, lon1, lon2, 0, 0);
+        //double hdist = haversine(lat1, lon1, lat2, lon2);
+        //double fdist = distance4(lat1, lat2, lon1, lon2, 0, 0);
 
         //--------------Checking for wraparound-------------//
         double wlat1 = this.lat;
