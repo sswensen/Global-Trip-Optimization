@@ -241,26 +241,17 @@ public class View {
     }
 
     public void finalizeTrip(String filename) throws TransformerException {
+        f = filename;
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        String[] cut = filename.split("/");
-        f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
         //XML document
         DOMSource source = new DOMSource(xml.getXMLdoc());
-
-        String fileArguments = "";
-        for(int i = 0; i < viewArguments.size();i++){
-            if(viewArguments.get(i).equals("-d") || viewArguments.get(i).equals("-n") || viewArguments.get(i).equals("-i")
-                    || viewArguments.get(i).equals("-2") || viewArguments.get(i).equals("-3") || viewArguments.get(i).equals("-k")){
-                fileArguments += viewArguments.get(i);
-            }
-        }
-        StreamResult result = new StreamResult(new File(f + fileArguments + "-t07.xml"));
+        StreamResult result = new StreamResult(new File(f + ".xml"));
         transformer.transform(source, result);
 
         //SVG document
         DOMSource source2 = new DOMSource(svg.getSVGdoc());
-        StreamResult result2 = new StreamResult(new File(f + fileArguments + "-t07.svg"));
+        StreamResult result2 = new StreamResult(new File(f + ".svg"));
         transformer.transform(source2, result2);
     }
 
@@ -301,6 +292,10 @@ public class View {
 
     public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
         gui.addLegToItinerary(seqId, name1, name2, mileage);
+    }
+
+    public ArrayList<String> getCommandLineOptions() {
+        return viewArguments;
     }
 
     public void refresh() throws Exception {

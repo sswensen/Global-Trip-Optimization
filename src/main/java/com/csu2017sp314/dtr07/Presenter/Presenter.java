@@ -305,6 +305,9 @@ public class Presenter {
         //fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
+        String[] cut = selectionXml.split("/");
+        fname = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
+
 
         /*ArrayList selectedAirports = new ArrayList();
         selectedAirports.add("NZCH");
@@ -367,7 +370,16 @@ public class Presenter {
         view.addFooter(model.getTripDistance());
         view.addHeader("Long Live the Chief");
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
-        view.finalizeTrip(selectionXml);
+        ArrayList<String> viewArguments = view.getCommandLineOptions();
+        String fileArguments = "";
+        for(int i = 0; i < viewArguments.size(); i++) {
+            if(viewArguments.get(i).equals("-d") || viewArguments.get(i).equals("-n") || viewArguments.get(i).equals("-i")
+                    || viewArguments.get(i).equals("-2") || viewArguments.get(i).equals("-3") || viewArguments.get(i).equals("-k")) {
+                fileArguments += viewArguments.get(i);
+            }
+        }
+        fname = fname + fileArguments + "-t07";
+        view.finalizeTrip(fname);
         makeItinerary();
         if(displayGui) {
             view.gui();
