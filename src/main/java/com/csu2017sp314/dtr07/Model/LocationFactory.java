@@ -63,8 +63,8 @@ class LocationFactory {
         return locations.size() > 0;
     }*/
 
-    ArrayList<Location> readFromDB(ArrayList<String> where) {
-        QueryBuilder qb = new QueryBuilder();
+    ArrayList<Location> readFromDB(ArrayList<String> where, boolean read) {
+        QueryBuilder qb = new QueryBuilder(read);
         //qb.setWhere(where);
         //qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport");
         //qb.searchDatabase("large_airport", "North America", "United States", "Colorado", "", "");
@@ -143,9 +143,9 @@ class LocationFactory {
         this.locations = locations;
     }
 
-    public ArrayList<Location> setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName) {
+    public ArrayList<Location> setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName, boolean useDB) {
         this.selectedAirports = selectedAirportIds;
-        QueryBuilder qb = new QueryBuilder();
+        QueryBuilder qb = new QueryBuilder(useDB);
         qb.search4IDinDatabase(selectedAirports, idOrName);
         qb.fireQuery(); //Searches db with selectedAirports as where and sets qb's local locations
         locations = qb.getLocations(); //Need to call this to update lf's locations
