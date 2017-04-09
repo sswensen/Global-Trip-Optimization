@@ -65,6 +65,7 @@ public class Presenter {
             }
             if(s.equals("M")) {
                 //TODO put this somewhere
+                toggleKilometers();
                 System.out.println("[Presenter] Units now M");
             }
             if(s.equals("K")) {
