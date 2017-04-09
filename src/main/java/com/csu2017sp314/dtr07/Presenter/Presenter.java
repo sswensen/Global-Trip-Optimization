@@ -298,6 +298,10 @@ public class Presenter {
         }
     }
 
+    public void setViewOptions(ArrayList<String> arguments){
+        view.setOptions(arguments);
+    }
+
     public void planTrip(String filename, String selectionXml, String svgMap) throws Exception {
         fname = filename;
         this.selectionXml = selectionXml;
