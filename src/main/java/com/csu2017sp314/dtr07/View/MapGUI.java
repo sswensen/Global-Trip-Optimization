@@ -590,6 +590,7 @@ public class MapGUI {
                 unit = "K";
             }
             mapOptions(unit);
+            userAddLocList(tempLoc.getIds());
         });
         return b;
     }
