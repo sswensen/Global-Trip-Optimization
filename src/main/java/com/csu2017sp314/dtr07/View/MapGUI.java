@@ -447,6 +447,7 @@ public class MapGUI {
             lastTrip = tempLoc;
             //updateTripLabel(load.getText().substring(10));
             updateTripLabel(tempLoc.getName());
+            updateAddButtonsAddRemove(tempLoc.getNames());
             for(JButton a : buttons) {
                 tick = true;
                 a.doClick();
