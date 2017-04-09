@@ -1,5 +1,6 @@
 package com.csu2017sp314.dtr07.View;
 
+import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -16,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Consumer;
-import org.xml.sax.SAXException;
+
 
 /**
  * Created by SummitDrift on 2/13/17.
