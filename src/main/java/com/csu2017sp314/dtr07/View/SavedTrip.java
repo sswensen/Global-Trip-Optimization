@@ -23,11 +23,17 @@ public class SavedTrip {
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
     private final String limit = " LIMIT 100";
     private String name;
-    private ArrayList<GUILocation> locations;
+    private ArrayList<GUILocation> locations = new ArrayList<>();
 
     public SavedTrip(String name, ArrayList<String> ids) {
         this.name = name;
         findNamesOrIDs(ids);
+    }
+
+    public SavedTrip() {
+        this.name = "untitiled";
+        locations = new ArrayList<>();
+
     }
 
     public String getName() {
@@ -40,16 +46,24 @@ public class SavedTrip {
 
     public ArrayList<String> getNames() {
         ArrayList<String> retNames = new ArrayList<>();
-        for(GUILocation loc : locations) {
-            retNames.add(loc.getName());
+        for(int i = 0; i < locations.size(); i++) {
+            retNames.add(locations.get(i).getName());
         }
         return retNames;
     }
 
+    public void setNames(ArrayList<String> newNames) {
+        locations.clear();
+        for(String n : newNames) {
+            addName(n);
+        }
+    }
+
     public ArrayList<String> getIds() {
         ArrayList<String> retIds = new ArrayList<>();
-        for(GUILocation loc : locations) {
-            retIds.add(loc.getId());
+        //for(GUILocation loc : locations) {
+        for(int i = 0; i < locations.size(); i++) {
+            retIds.add(locations.get(i).getId());
         }
         return retIds;
     }
@@ -74,6 +88,14 @@ public class SavedTrip {
         return false;
     }
 
+    public void removeUsingName(String name) {
+        for(int i = 0; i < locations.size(); i++) {
+            if(name.equals(locations.get(i).getName())) {
+                locations.remove(i);
+            }
+        }
+    }
+
     public int indexOfName(String name) {
         for(int i = 0; i < locations.size(); i++) {
             if(name.equals(locations.get(i).getName())) {
@@ -83,12 +105,42 @@ public class SavedTrip {
         return -1;
     }
 
+    public void addName(String name) {
+        where = "WHERE airports.name = \"" + name + "\"";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cs314", "sswensen", "830534566");
+            Statement st = conn.createStatement();
+            System.out.println(columns + continents + join + where + limit);
+            ResultSet rs = st.executeQuery(columns + continents + join + where + limit);
+
+            while(rs.next()) {
+                ArrayList<Object> tempLoc = new ArrayList<>();
+                tempLoc.add(rs.getString(1));
+                tempLoc.add(rs.getString(2));
+                tempLoc.add("");
+                tempLoc.add("");
+                tempLoc.add(rs.getString(5));
+                tempLoc.add(rs.getString(6));
+                tempLoc.add(rs.getString(7));
+                tempLoc.add(rs.getString(8));
+                tempLoc.add(rs.getString(9));
+                tempLoc.add(rs.getString(10));
+                tempLoc.add(rs.getString(11));
+                locations.add(new GUILocation(tempLoc));
+            }
+        } catch(Exception e) {
+            System.err.println("Exception: " + e);
+            System.err.println("Problem in MapGUI with database");
+        }
+    }
+
     private void findNamesOrIDs(ArrayList<String> in) {
-        String whatYouWant = "name";
+        String whatYouWant = "name ";
         if(in.get(0).length() < 5) {
             whatYouWant = "id";
         }
-        where = "airports." + whatYouWant + in + "(";
+        where = "WHERE airports." + whatYouWant + "in" + "(";
         for(int k = 0; k < in.size(); k++) {
             where += "'" + in.get(k) + "', ";
         }
@@ -105,8 +157,8 @@ public class SavedTrip {
                 ArrayList<Object> tempLoc = new ArrayList<>();
                 tempLoc.add(rs.getString(1));
                 tempLoc.add(rs.getString(2));
-                tempLoc.add(rs.getString(3));
-                tempLoc.add(rs.getString(4));
+                tempLoc.add("");
+                tempLoc.add("");
                 tempLoc.add(rs.getString(5));
                 tempLoc.add(rs.getString(6));
                 tempLoc.add(rs.getString(7));
@@ -117,7 +169,16 @@ public class SavedTrip {
                 locations.add(new GUILocation(tempLoc));
             }
         } catch(Exception e) {
-            System.err.println("Problem in MapGUI with database");
+            System.err.println("Exception: " + e);
+            System.err.println("[SavedTrip] Problem in SavedTrip with database");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "SavedTrip{" +
+                "name='" + name + '\'' +
+                "number of locations: " + locations.size() +
+                '}';
     }
 }

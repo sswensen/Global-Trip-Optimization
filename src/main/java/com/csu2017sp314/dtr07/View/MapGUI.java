@@ -67,7 +67,7 @@ public class MapGUI {
     //private ArrayList<String> tripNames = new ArrayList<>();
     //private ArrayList<String> tempLoc;
     //private ArrayList<String> tempLocIds;
-    private SavedTrip tempLoc;
+    private SavedTrip tempLoc = new SavedTrip();
     private SavedTrip tempTrip;
     private String workingDirectoryFilePath;
     private JFrame uOp;
@@ -441,7 +441,9 @@ public class MapGUI {
             tempLoc = searchAllSavedTripsWithName(load.getText().substring(10));
             //tempLocIds = tripIds.get(tripNames.indexOf(load.getText().substring(10)));
             //tempTrip = searchAllSavedTripsWithName(load.getText().substring(10));
+            guiLocations.clear();
             userAddLocList(tempTrip.getIds());
+            guiLocations = tempTrip.getLocations();
             lastTrip = tempLoc;
             updateTripLabel(load.getText().substring(10));
             for(JButton a : buttons) {
@@ -498,7 +500,9 @@ public class MapGUI {
                     SavedTrip temp = new SavedTrip(tripName, trip);
                     allSavedTrips.add(temp);
                     lastTrip = temp;
-                    userAddLocList(searchForDatabaseIdsUsingNames(trip));
+                    guiLocations.clear();
+                    userAddLocList(temp.getIds());
+                    guiLocations = temp.getLocations();
                     System.out.println("Adding " + trip + " to trips at index " + (allSavedTrips.size() - 1));
                     try {
                         saveTripToXML(tripName, trip);
@@ -508,6 +512,7 @@ public class MapGUI {
 
                     }
                     addLoadButton(name);
+                    tempTrip = temp;
                 });
                 holding.setLocation(1063, 0);
                 holding.setSize(200, 50);
@@ -532,6 +537,7 @@ public class MapGUI {
                 allSavedTrips.remove(savedTrip);
                 allSavedTrips.add(savedTrip, new SavedTrip(tripname, trip));
                 userAddLocList(allSavedTrips.get(savedTrip).getIds()); //Update svg
+                guiLocations = allSavedTrips.get(savedTrip).getLocations();
                 try {
                     saveTripToXML(allSavedTrips.get(savedTrip).getName(), trip); //Save xml and copy svg
                 } catch(ParserConfigurationException parseException) {
@@ -582,7 +588,6 @@ public class MapGUI {
                 unit = "K";
             }
             mapOptions(unit);
-            userAddLocList(lastTrip.getIds());
         });
         return b;
     }
@@ -761,7 +766,7 @@ public class MapGUI {
             updateTripLabel("Untitled trip");
             userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
-            tempLoc.clear();
+            tempLoc = new SavedTrip();
             updateAddButtonsAddRemove(locationNames);
         });
         databaseWindow.add(transferToFirstWindow, gbc);
@@ -791,7 +796,7 @@ public class MapGUI {
                 int index = Integer.parseInt(e.getActionCommand());
                 //private ArrayList<String> databaseLocations = new ArrayList<>();
                 if(tick) {
-                    for(int i = 0; i < guiLocations.size(); i++) {
+                    for(int i = 0; i < tempLoc.getNames().size(); i++) { //TODO might need to update guiloactions here, not sure yet
                         if(databaseLocations.contains(model.getValueAt(index, 1)) && model.getValueAt(index, 0).equals("  ")) {
                             model.setValueAt("X", index, 0);
                         } else if(!databaseLocations.contains(model.getValueAt(index, 1)) && model.getValueAt(index, 0).equals("X")) {
@@ -825,7 +830,7 @@ public class MapGUI {
     int displayXML(ArrayList<String> ids) throws Exception {
         displayDatabaseWindow();
         int ret = -1;
-        tempLoc = new ArrayList<>();
+        tempLoc = new SavedTrip();
         fTemp = createInnerPanel();
         loadPanel = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -841,8 +846,9 @@ public class MapGUI {
 
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
-            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc));
-            lastTrip = new ArrayList<>(tempLoc);
+            guiLocations.clear();
+            userAddLocList(tempLoc.getIds());
+            lastTrip = tempLoc;
         });
         fTemp.add(q, gbc);
 
@@ -902,25 +908,26 @@ public class MapGUI {
                 DefaultTableModel model = (DefaultTableModel) temp.getModel();
                 int index = Integer.parseInt(e.getActionCommand());
                 if(tick) {
-                    for(int i = 0; i < tempLoc.size(); i++) {
-                        if(tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Add")) {
+                    for(int i = 0; i < tempLoc.getNames().size(); i++) {
+                        if(tempLoc.containsName(ids.get(index)) && model.getValueAt(index, 0).equals("Add")) {
                             model.setValueAt("Remove", index, 0);
-                        } else if(!tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Remove")) {
+                        } else if(!tempLoc.containsName(ids.get(index)) && model.getValueAt(index, 0).equals("Remove")) {
                             model.setValueAt("Add", index, 0);
                         }
                     }
                 }
                 tick = false;
                 if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
-                    if(!tempLoc.contains(ids.get(index))) {
-                        tempLoc.add(ids.get(index));
+                    if(!tempLoc.getNames().contains(ids.get(index))) {
+                        tempLoc.addName(ids.get(index));
+                        //tempLoc.getIds().add(searchForDatabaseIdsUsingNames(ids.get(index))); //TODO need to also add the corresponding id to this
                         System.out.println("Added " + ids.get(index) + " to array");
                         model.setValueAt("Remove", index, 0);
                     }
 
                 } else if(model.getValueAt(index, 0).equals("Remove")) {
-                    if(tempLoc.contains(ids.get(index))) {
-                        tempLoc.remove(ids.get(index));
+                    if(tempLoc.containsName(ids.get(index))) {
+                        tempLoc.removeUsingName(ids.get(index)); //Remove the location at ids.get(index)
                         System.out.println("Removed " + ids.get(index) + " from array");
                         model.setValueAt("Add", index, 0);
                     }
@@ -1186,6 +1193,10 @@ public class MapGUI {
         fTemp2.add(lab, gbc);
         GUILocation temp = searchGuiLocationsWithName(name1);
         GUILocation temp2 = searchGuiLocationsWithName(name2);
+        if(temp == null || temp2 == null) {
+            System.err.println("One of the two GUILocations in addLegToItinerary is null aborting...");
+            System.exit(4);
+        }
         if(lab.getText() != null) {
             model.addRow(new Object[]{seqId, temp.getName(), temp2.getName(), mileage});
             resizeTable(table);
@@ -1212,8 +1223,10 @@ public class MapGUI {
                                     desktop.browse(uri);
                                 }
                             } catch(IOException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary");
                                 ex.printStackTrace();
                             } catch(URISyntaxException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary2");
                                 ex.printStackTrace();
                             }
                         }
@@ -1366,11 +1379,8 @@ public class MapGUI {
     }
 
     private void printAll() {
-        for(int i = 0; i < trips.size(); i++) {
-            System.out.println("Trips at " + i + " is " + trips.get(i).toString());
-        }
-        for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("Trip Names at " + i + " is " + tripNames.get(i));
+        for(int i = 0; i < allSavedTrips.size(); i++) {
+            System.out.println("Trips at " + i + " is " + allSavedTrips.get(i).toString());
         }
     }
 

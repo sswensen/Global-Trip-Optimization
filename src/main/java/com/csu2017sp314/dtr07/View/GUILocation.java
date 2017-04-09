@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class GUILocation {
     private String id;
     private String name;
-    private double lat;
-    private double lon;
+    private double lat = 0;
+    private double lon = 0;
     private String municipality;
     private String region;
     private String country;
@@ -22,8 +22,10 @@ public class GUILocation {
     GUILocation(ArrayList<Object> in) {
         this.id = (String)in.get(0);
         this.name = (String)in.get(1);
-        this.lat = (double)in.get(2);
-        this.lon = (double)in.get(3);
+        if(!in.get(2).equals(""))
+            this.lat = (double)in.get(2);
+        if(!in.get(3).equals(""))
+            this.lon = (double)in.get(3);
         this.municipality = (String)in.get(4);
         this.region = (String)in.get(5);
         this.country = (String)in.get(6);

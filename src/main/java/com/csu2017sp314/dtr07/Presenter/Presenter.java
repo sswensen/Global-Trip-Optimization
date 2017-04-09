@@ -207,12 +207,15 @@ public class Presenter {
             view.addHeader("Long Live the Chief");
             view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
+            for(int i = 0; i < model.getNumUserLocs(); i++) {
+                copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+            }
             makeItinerary();
             model.resetUserLoc();
             view.refresh();
         } catch(Exception e) {
-            //System.out.println("Exception encountered in Presenter.java");
-            //System.err.println(e);
+            System.err.println("[Presenter] Exception encountered in Presenter.java");
+            System.err.println(e);
             return -1;
         }
         return 1;

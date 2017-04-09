@@ -326,6 +326,10 @@ public class Model {
         return locations.size();
     }
 
+    public int getNumUserLocs() {
+        return userLocations.size();
+    }
+
     public String getFirstName(final int i) {
         return pairs.get(i).getOne().getName();
     }
