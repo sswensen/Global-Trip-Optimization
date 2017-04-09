@@ -189,7 +189,7 @@ public class Presenter {
                 String secondId = model.getUserSecondId(i);
                 String firstName = model.getUserFirstName(i);
                 String secondName = model.getUserSecondName(i);
-                view.addLeg(pairId, firstName, secondName, model.getUserPairDistance(i));
+                view.addLeg(model.getPairId(i),model.getFirstId(i), model.getFirstName(i),Double.toString(model.getFirstLat(i)),Double.toString(model.getFirstLon(i))," ", model.getFirstMunicipality(i),model.getFirstRegion(i),model.getFirstCountry(i),model.getFirstContinent(i),model.getFirstAirportURL(i),model.getFirstRegionUrl(i),model.getFirstCountryURL(i),model.getSecondId(i),model.getSecondName(i),Double.toString(model.getSecondLat(i)),Double.toString(model.getSecondLon(i))," ",model.getSecondMunicipality(i),model.getSecondRegion(i),model.getSecondCountry(i),model.getSecondContinent(i),model.getSecondAirportURL(i),model.getSecondRegionUrl(i),model.getSecondCountry(i),model.getPairDistance(i),"miles");
                 finalPairId++;
                 view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId, model.isWraparound(i));
                 if(displayName) {
@@ -206,7 +206,7 @@ public class Presenter {
             }
             view.addFooter(model.getTripDistance());
             view.addHeader("Long Live the Chief");
-            view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
+            //view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
             for(int i = 0; i < model.getNumDatabaseLocationsReturned(); i++) {
                 copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
@@ -351,7 +351,7 @@ public class Presenter {
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
             boolean wraparound = model.isWraparound(i);
-            view.addLeg(pairId, firstName, secondName, pairDistance);
+            view.addLeg(model.getPairId(i),model.getFirstId(i), model.getFirstName(i),Double.toString(model.getFirstLat(i)),Double.toString(model.getFirstLon(i))," ", model.getFirstMunicipality(i),model.getFirstRegion(i),model.getFirstCountry(i),model.getFirstContinent(i),model.getFirstAirportURL(i),model.getFirstRegionUrl(i),model.getFirstCountryURL(i),model.getSecondId(i),model.getSecondName(i),Double.toString(model.getSecondLat(i)),Double.toString(model.getSecondLon(i))," ",model.getSecondMunicipality(i),model.getSecondRegion(i),model.getSecondCountry(i),model.getSecondContinent(i),model.getSecondAirportURL(i),model.getSecondRegionUrl(i),model.getSecondCountry(i),model.getPairDistance(i),"miles");
             finalPairId++;
             view.addLine(firstLon, firstLat, secondLon, secondLat, pairId, wraparound);
             if(displayName) {
@@ -369,7 +369,7 @@ public class Presenter {
 
         view.addFooter(model.getTripDistance());
         view.addHeader("Long Live the Chief");
-        view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
+        //view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
         ArrayList<String> viewArguments = view.getCommandLineOptions();
         String fileArguments = "";
         for(int i = 0; i < viewArguments.size(); i++) {
