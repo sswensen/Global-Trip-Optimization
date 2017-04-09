@@ -93,7 +93,8 @@ public class View {
         return svg.getSVGdoc();
     }
 
-    public void setKilometers(boolean kilometers)                                                                              {
+    public void setKilometers(boolean kilometers)
+    {
         this.kilometers = kilometers;
     }
 
