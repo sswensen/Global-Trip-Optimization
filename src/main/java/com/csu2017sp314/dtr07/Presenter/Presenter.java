@@ -69,6 +69,7 @@ public class Presenter {
             }
             if(s.equals("K")) {
                 //TODO put this somewhere
+                toggleKilometers();
                 System.out.println("[Presenter] Units now K");
             }
             /*if(currentIds.isEmpty()) {
@@ -131,8 +132,12 @@ public class Presenter {
     private void toggleKilometers() {
         if(kilometers) {
             kilometers = false;
+            model.setKilometers(false);
+            view.setKilometers(false);
         } else {
             kilometers = true;
+            model.setKilometers(true);
+            view.setKilometers(true);
         }
         System.out.println("[Presenter] Kilometers now " + kilometers);
     }
