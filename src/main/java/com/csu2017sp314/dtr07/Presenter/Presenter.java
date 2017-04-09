@@ -299,7 +299,11 @@ public class Presenter {
         }
         for(int i = 0; i < numUserPairs; i++) {
             //System.out.println("Adding something to index " + i);
-            view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), model.getPairDistance(i));
+            if(!kilometers) {
+                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), model.getPairDistance(i));
+            } else {
+                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), convert(model.getPairDistance(i)));
+            }
         }
     }
 
@@ -360,9 +364,11 @@ public class Presenter {
             int pairDistance;
             if(!kilometers) {
                 pairDistance = model.getPairDistance(i);
+                System.out.println("Bitch");
             } else {
                 pairDistance = convert(model.getPairDistance(i));
-            }
+                System.out.println("Ho");
+           }
             String pairId = model.getPairId(i);
             String firstId = model.getFirstId(i);
             String secondId = model.getSecondId(i);

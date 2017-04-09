@@ -409,7 +409,11 @@ public class Model {
     }
 
     public int getUserPairDistance(int i) {
-        return (int) userPairs.get(i).getDistance();
+        //if(!kilometers) {
+            return (int) userPairs.get(i).getDistance();
+        //} else {
+        //    return convert((int) userPairs.get(i).getDistance());
+        //}
     }
 
     public String getUserPairId(int i) {
