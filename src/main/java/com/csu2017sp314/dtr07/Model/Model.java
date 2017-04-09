@@ -357,6 +357,13 @@ public class Model {
         }
     }
 
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
+    }
+
     public boolean isWraparound(int i) {
         return pairs.get(i).isUseWraparound();
     }
