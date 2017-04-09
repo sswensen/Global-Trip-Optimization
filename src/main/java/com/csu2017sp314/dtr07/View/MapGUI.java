@@ -356,7 +356,27 @@ public class MapGUI {
                 }
             }
         }
-        trips.add(tempTrip);
+        String list = "";
+        ArrayList<String> rettttt = new ArrayList<>();
+        for(int k = 0; k < tempTrip.size(); k++) {
+            list += "'" + tempTrip.get(k) + "', ";
+        }
+        list += "'" + tempTrip.get(tempTrip.size()-1) + "'";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/cs314", "sswensen", "830534566");
+            Statement st = conn.createStatement();
+            System.out.println("SELECT DISTINCT " + "name" + " FROM " + "airports " + "WHERE id in (" + list + ")");
+            ResultSet rs = st.executeQuery("SELECT DISTINCT " + "name" + " FROM " + "airports " + "WHERE id in (" + list + ")");
+
+            while(rs.next()) {
+                rettttt.add(rs.getString(1));
+            }
+        } catch(Exception e) {
+            System.err.println("Problem in MapGUI with database");
+        }
+        trips.add(rettttt);
+        updateTripLabel(tripName);
         tripNames.add(tripName);
         addLoadButton(tripName);
         System.out.println(selectionXml);
