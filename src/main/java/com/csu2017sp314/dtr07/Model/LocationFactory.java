@@ -139,11 +139,11 @@ class LocationFactory {
         return true;
     }
 
-    public void setLocations(ArrayList<Location> locations) {
+    void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
 
-    public ArrayList<Location> setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName, boolean useDB) {
+    ArrayList<Location> setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName, boolean useDB) {
         this.selectedAirports = selectedAirportIds;
         QueryBuilder qb = new QueryBuilder(useDB);
         qb.search4IDinDatabase(selectedAirports, idOrName);
@@ -152,7 +152,7 @@ class LocationFactory {
         return locations;
     }
 
-    public void setUnit(String unit) {
+    void setUnit(String unit) {
         this.unit = unit;
     }
 
@@ -164,11 +164,11 @@ class LocationFactory {
         return pairs;
     }
 
-    public void setTwoOpt(boolean twoOpt) {
+    void setTwoOpt(boolean twoOpt) {
         this.twoOpt = twoOpt;
     }
 
-    public void setThreeOpt(boolean threeOpt) {
+    void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
     }
 

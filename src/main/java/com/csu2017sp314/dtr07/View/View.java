@@ -37,7 +37,7 @@ public class View {
     private String f;
     private MapGUI gui;
     private String svgMap;
-    public ArrayList<String> originalIds;
+    public ArrayList<String> originalIds = new ArrayList<>();
     private double width;
     private double height;
     private boolean kilometers;

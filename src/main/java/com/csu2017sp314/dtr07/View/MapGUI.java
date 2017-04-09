@@ -1403,7 +1403,7 @@ public class MapGUI {
         return -1;
     }
 
-    public void removeUsingName(String name) {
+    private void removeUsingName(String name) {
         for(int i = 0; i < allSavedTrips.size(); i++) {
             if(allSavedTrips.get(i).getNames().equals(name)) {
                 allSavedTrips.remove(i);
