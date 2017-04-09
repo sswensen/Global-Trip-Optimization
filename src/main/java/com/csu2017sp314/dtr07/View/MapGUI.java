@@ -438,7 +438,7 @@ public class MapGUI {
         load.addActionListener((ActionEvent eee) -> {
             //System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
             //tempLoc = allSavedTrips.get(tripNames.indexOf(load.getText().substring(10)));
-            tempLoc = searchAllSavedTripsWithName(load.getText().substring(10));
+            tempLoc = new SavedTrip(searchAllSavedTripsWithName(load.getText().substring(10)));
             //tempLocIds = tripIds.get(tripNames.indexOf(load.getText().substring(10)));
             //tempTrip = searchAllSavedTripsWithName(load.getText().substring(10));
             guiLocations.clear();
