@@ -326,6 +326,10 @@ public class Model {
         return locations.size();
     }
 
+    public int getNumDatabaseLocationsReturned() {
+        return databaseLocationsReturned.size();
+    }
+
     public int getNumUserLocs() {
         return userLocations.size();
     }
