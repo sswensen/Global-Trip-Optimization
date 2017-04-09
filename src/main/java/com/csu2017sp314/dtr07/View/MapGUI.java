@@ -317,7 +317,7 @@ public class MapGUI {
     private int copySVG(String name) {
         //If ids array is changed, need to modify call in addSaveButton
         Path FROM = Paths.get(workingDirectoryFilePath + filename + ".svg");
-        Path TO = Paths.get(workingDirectoryFilePath + "png/" + name + ".svg");
+        Path TO = Paths.get(workingDirectoryFilePath + "S3/" + name + ".svg");
         CopyOption[] options = new CopyOption[]{
                 StandardCopyOption.REPLACE_EXISTING,
                 StandardCopyOption.COPY_ATTRIBUTES
@@ -414,7 +414,7 @@ public class MapGUI {
 
         //XML document
         DOMSource source = new DOMSource(saveXml);
-        StreamResult result = new StreamResult(new File(workingDirectoryFilePath + "png/" + name + ".xml"));
+        StreamResult result = new StreamResult(new File(workingDirectoryFilePath + "S3/" + name + ".xml"));
         transformer.transform(source, result);
         copySVG(name);
         return 1;
@@ -507,7 +507,7 @@ public class MapGUI {
                     guiLocations = temp.getLocations();
                     System.out.println("Adding " + trip + " to trips at index " + (allSavedTrips.size() - 1));
                     try {
-                        saveTripToXML(tripName, trip);
+                        saveTripToXML(tripName, lastTrip.getIds());
                     } catch(ParserConfigurationException parseException) {
 
                     } catch(TransformerException transException) {
