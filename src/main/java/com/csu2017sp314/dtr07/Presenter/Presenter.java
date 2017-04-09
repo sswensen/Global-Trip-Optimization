@@ -208,7 +208,6 @@ public class Presenter {
             view.addHeader("Long Live the Chief");
             view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
-            System.out.println("1");
             for(int i = 0; i < model.getNumDatabaseLocationsReturned(); i++) {
                 copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
             }
