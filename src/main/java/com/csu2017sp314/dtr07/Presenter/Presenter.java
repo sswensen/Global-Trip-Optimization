@@ -319,6 +319,7 @@ public class Presenter {
         selectedAirports.add("CYEG");*/
         if(selectionXml.equals("")) {
             model.setSelectedLocations(new ArrayList<>());
+            selectionXml = "untitled";
         } else {
             model.setSelectedLocations(readXML(selectionXml));
         }
