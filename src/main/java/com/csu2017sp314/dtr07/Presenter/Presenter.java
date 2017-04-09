@@ -299,12 +299,23 @@ public class Presenter {
         }
         for(int i = 0; i < numUserPairs; i++) {
             //System.out.println("Adding something to index " + i);
-            view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), model.getPairDistance(i));
+            if(!kilometers) {
+                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), model.getPairDistance(i));
+            } else {
+                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), convert(model.getPairDistance(i)));
+            }
         }
     }
 
     public void setViewOptions(ArrayList<String> arguments){
         view.setOptions(arguments);
+    }
+
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
     }
 
     public void planTrip(String selectionXml, String svgMap) throws Exception {

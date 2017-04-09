@@ -406,11 +406,18 @@ public class Model {
         if(!kilometers) {
             return ret;
         } else {
-            double ret2 = (double) ret;
-            ret2 *= 1.60934;
-            ret2 = Math.round(ret2);
-            return (int) ret2;
+            //double ret2 = (double) ret;
+            //ret2 *= 1.60934;
+            //ret2 = Math.round(ret2);
+            return convert(ret);
         }
+    }
+
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
     }
 
     public boolean isWraparound(int i) {
@@ -458,7 +465,11 @@ public class Model {
     }
 
     public int getUserPairDistance(int i) {
-        return (int) userPairs.get(i).getDistance();
+        //if(!kilometers) {
+            return (int) userPairs.get(i).getDistance();
+        //} else {
+        //    return convert((int) userPairs.get(i).getDistance());
+        //}
     }
 
     public String getUserPairId(int i) {
