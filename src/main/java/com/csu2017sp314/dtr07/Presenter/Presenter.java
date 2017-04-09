@@ -302,8 +302,8 @@ public class Presenter {
         view.setOptions(arguments);
     }
 
-    public void planTrip(String filename, String selectionXml, String svgMap) throws Exception {
-        fname = filename;
+    public void planTrip(String selectionXml, String svgMap) throws Exception {
+        //fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
 
@@ -323,7 +323,7 @@ public class Presenter {
         } else {
             model.setSelectedLocations(readXML(selectionXml));
         }
-        model.planTrip(filename, "M", useDatabase);
+        model.planTrip("M", useDatabase);
         //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>());
         //for(int i = 0; i < model.getNumLocs(); i++) {
         //    copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
@@ -367,7 +367,7 @@ public class Presenter {
         view.addFooter(model.getTripDistance());
         view.addHeader("Long Live the Chief");
         view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
-        view.finalizeTrip(filename);
+        view.finalizeTrip(selectionXml);
         makeItinerary();
         if(displayGui) {
             view.gui();

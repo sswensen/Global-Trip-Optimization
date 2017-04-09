@@ -29,7 +29,7 @@ public class Model {
     private boolean readingFromXML = true;
     private boolean kilometers;
 
-    public int planTrip(String filename, String units, boolean useDB) throws FileNotFoundException {
+    public int planTrip(String units, boolean useDB) throws FileNotFoundException {
         this.unit = units;
         LocationFactory lf = new LocationFactory();
         lf.setUnit(units);
