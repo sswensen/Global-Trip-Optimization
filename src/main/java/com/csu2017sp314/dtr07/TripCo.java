@@ -54,13 +54,14 @@ public class TripCo {
             for(int i = 0; i < args.length; i++) {
                 arguments.add(args[i]);
             }
+
             String filename = "";
             String selectionXml = "";
             String svgMap = "";
             Model model = new Model();
             View view = new View();
             Presenter presenter = new Presenter(model, view);
-
+            presenter.setViewOptions(arguments);
             for(int i = 0; i < arguments.size(); i++) {
                 xmlFile = arguments.get(i);
                 csvFile = arguments.get(i);

@@ -41,6 +41,7 @@ public class View {
     private double width;
     private double height;
     private boolean kilometers;
+    private ArrayList<String> viewArguments = new ArrayList<>();
 
     public void initializeTrip(String svgMap) throws SAXException, IOException, ParserConfigurationException {
         this.svgMap = svgMap;
@@ -254,13 +255,27 @@ public class View {
         f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
         //XML document
         DOMSource source = new DOMSource(xml.getXMLdoc());
-        StreamResult result = new StreamResult(new File(f + ".xml"));
+
+        String fileArguments = "";
+        for(int i = 0; i < viewArguments.size();i++){
+            if(viewArguments.get(i).equals("-d") || viewArguments.get(i).equals("-n") || viewArguments.get(i).equals("-i")
+                    || viewArguments.get(i).equals("-2") || viewArguments.get(i).equals("-3") || viewArguments.get(i).equals("-k")){
+                fileArguments += viewArguments.get(i);
+            }
+        }
+        StreamResult result = new StreamResult(new File(f + fileArguments + "-t07.xml"));
         transformer.transform(source, result);
 
         //SVG document
         DOMSource source2 = new DOMSource(svg.getSVGdoc());
-        StreamResult result2 = new StreamResult(new File(f + ".svg"));
+        StreamResult result2 = new StreamResult(new File(f + fileArguments + "-t07.svg"));
         transformer.transform(source2, result2);
+    }
+
+    public void setOptions(ArrayList<String> arguments){
+        for(int i = 0; i < arguments.size();i++){
+            viewArguments.add(arguments.get(i));
+        }
     }
 
     public void gui() throws Exception {
