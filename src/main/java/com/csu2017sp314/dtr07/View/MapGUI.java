@@ -442,8 +442,8 @@ public class MapGUI {
             //tempLocIds = tripIds.get(tripNames.indexOf(load.getText().substring(10)));
             //tempTrip = searchAllSavedTripsWithName(load.getText().substring(10));
             guiLocations.clear();
-            userAddLocList(tempTrip.getIds());
-            guiLocations = tempTrip.getLocations();
+            userAddLocList(tempLoc.getIds());
+            guiLocations = tempLoc.getLocations();
             lastTrip = tempLoc;
             updateTripLabel(load.getText().substring(10));
             for(JButton a : buttons) {
@@ -497,9 +497,9 @@ public class MapGUI {
                     textArea.setCaretPosition(textArea.getDocument().getLength());
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                    SavedTrip temp = new SavedTrip(tripName, trip);
-                    allSavedTrips.add(temp);
-                    lastTrip = temp;
+                    SavedTrip temp = new SavedTrip(tripName, new ArrayList<>(trip));
+                    allSavedTrips.add(new SavedTrip(temp));
+                    lastTrip = new SavedTrip(temp);
                     guiLocations.clear();
                     userAddLocList(temp.getIds());
                     guiLocations = temp.getLocations();
@@ -512,7 +512,7 @@ public class MapGUI {
 
                     }
                     addLoadButton(name);
-                    tempTrip = temp;
+                    tempLoc = temp;
                 });
                 holding.setLocation(1063, 0);
                 holding.setSize(200, 50);

@@ -25,6 +25,11 @@ public class SavedTrip {
     private String name;
     private ArrayList<GUILocation> locations = new ArrayList<>();
 
+    public SavedTrip(SavedTrip t1) {
+        name = t1.name;
+        locations = new ArrayList<>(t1.getLocations());
+    }
+
     public SavedTrip(String name, ArrayList<String> ids) {
         this.name = name;
         findNamesOrIDs(ids);
