@@ -39,13 +39,20 @@ public class SavedTrip {
     }
 
     public ArrayList<String> getNames() {
-        return names;
+        ArrayList<String> retNames = new ArrayList<>();
+        for(GUILocation loc : locations) {
+            retNames.add(loc.getName());
+        }
+        return retNames;
     }
 
-    public String getId(int index) {
-        return locations.get(index).getId();
+    public ArrayList<String> getIds() {
+        ArrayList<String> retIds = new ArrayList<>();
+        for(GUILocation loc : locations) {
+            retIds.add(loc.getId());
+        }
+        return retIds;
     }
-
     public String getName(int index) {
         return locations.get(index).getName();
     }
@@ -65,6 +72,15 @@ public class SavedTrip {
             }
         }
         return false;
+    }
+
+    public int indexOfName(String name) {
+        for(int i = 0; i < locations.size(); i++) {
+            if(name.equals(locations.get(i).getName())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void findNamesOrIDs(ArrayList<String> in) {

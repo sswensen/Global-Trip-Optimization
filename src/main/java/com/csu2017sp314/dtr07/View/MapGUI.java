@@ -67,6 +67,7 @@ public class MapGUI {
     //private ArrayList<String> tripNames = new ArrayList<>();
     //private ArrayList<String> tempLoc;
     //private ArrayList<String> tempLocIds;
+    private SavedTrip tempLoc;
     private SavedTrip tempTrip;
     private String workingDirectoryFilePath;
     private JFrame uOp;
@@ -362,9 +363,7 @@ public class MapGUI {
                 }
             }
         }
-        tripIds.add(tempTrip);
-        tripNames.add(tripName);
-        allSavedTrips.add(new SavedTrip(tempTrip,  tripName));
+        allSavedTrips.add(new SavedTrip(tripName, tempTrip));
         addLoadButton(tripName);
         System.out.println(selectionXml);
         //for(int i = 0; i < tripNames.size(); i++) {
@@ -438,11 +437,12 @@ public class MapGUI {
         System.out.println("Added button " + load.getText());
         load.addActionListener((ActionEvent eee) -> {
             //System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
-            //tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
+            //tempLoc = allSavedTrips.get(tripNames.indexOf(load.getText().substring(10)));
+            tempLoc = searchAllSavedTripsWithName(load.getText().substring(10));
             //tempLocIds = tripIds.get(tripNames.indexOf(load.getText().substring(10)));
-            tempTrip = searchAllSavedTripsWithName(load.getText().substring(10));
+            //tempTrip = searchAllSavedTripsWithName(load.getText().substring(10));
             userAddLocList(tempTrip.getIds());
-            lastTrip = new ArrayList<>(tempLoc);
+            lastTrip = tempLoc;
             updateTripLabel(load.getText().substring(10));
             for(JButton a : buttons) {
                 tick = true;
@@ -451,36 +451,36 @@ public class MapGUI {
             }
             for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
-                for(int j = 0; j < tempLoc.size(); j++) {
-                    if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                for(int j = 0; j < tempLoc.getNames().size(); j++) {
+                    if(tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
                         dm.setValueAt("Remove", i, 0);
-                    } else if(!tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    } else if(!tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
                         dm.setValueAt("Add", i, 0);
                     }
                 }
             }
             for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
-                for(int j = 0; j < tempLoc.size(); j++) {
-                    if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                for(int j = 0; j < tempLoc.getNames().size(); j++) {
+                    if(tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
                         dm.setValueAt("Remove", i, 0);
-                    } else if(!tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    } else if(!tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
                         dm.setValueAt("Add", i, 0);
                     }
                 }
             }
-            savedTrip = tripNames.indexOf(load.getText().substring(10));
+            savedTrip = updateSavedTripWithName(load.getText().substring(10));
         });
         updateTripLabel(load.getText().substring(10));
-        savedTrip = tripNames.indexOf(load.getText().substring(10));
-        System.out.println("Setting savedTrip to " + tripNames.indexOf(load.getText().substring(10)));
+        savedTrip = updateSavedTripWithName(load.getText().substring(10));
+        System.out.println("Setting savedTrip to " + updateSavedTripWithName(load.getText().substring(10)));
     }
 
     private JButton addSaveButton(String name) throws ParserConfigurationException, TransformerException {
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
-            ArrayList<String> trip = new ArrayList<>(tempLoc);
-            if((savedTrip < 0 || trips.size() == 0 || name.equals(" Save As "))) {
+            ArrayList<String> trip = new ArrayList<>(tempLoc.getNames());
+            if((savedTrip < 0 || allSavedTrips.size() == 0 || name.equals(" Save As "))) {
                 z++;
                 //-----
                 JFrame holding = new JFrame("Enter name for trip");
@@ -495,12 +495,11 @@ public class MapGUI {
                     textArea.setCaretPosition(textArea.getDocument().getLength());
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                    trips.add(new ArrayList<>(trip));
-                    tripIds.add(searchForDatabaseIdsUsingNames(trip));
-                    lastTrip = new ArrayList<>(trip);
+                    SavedTrip temp = new SavedTrip(tripName, trip);
+                    allSavedTrips.add(temp);
+                    lastTrip = temp;
                     userAddLocList(searchForDatabaseIdsUsingNames(trip));
-                    System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
-                    tripNames.add(tripName);
+                    System.out.println("Adding " + trip + " to trips at index " + (allSavedTrips.size() - 1));
                     try {
                         saveTripToXML(tripName, trip);
                     } catch(ParserConfigurationException parseException) {
@@ -529,13 +528,12 @@ public class MapGUI {
                     trips.add(0, trip);
                     System.out.println("Adding " + trip + " to trips at index 0");
                 } else{*/
-                trips.remove(savedTrip);
-                tripIds.remove(savedTrip);
-                trips.add(savedTrip, new ArrayList<>(trip));
-                tripIds.add(savedTrip, searchForDatabaseIdsUsingNames(trip));
-                userAddLocList(searchForDatabaseIdsUsingNames(trip)); //Update svg
+                String tripname = allSavedTrips.get(savedTrip).getName();
+                allSavedTrips.remove(savedTrip);
+                allSavedTrips.add(savedTrip, new SavedTrip(tripname, trip));
+                userAddLocList(allSavedTrips.get(savedTrip).getIds()); //Update svg
                 try {
-                    saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
+                    saveTripToXML(allSavedTrips.get(savedTrip).getName(), trip); //Save xml and copy svg
                 } catch(ParserConfigurationException parseException) {
 
                 } catch(TransformerException transException) {
@@ -568,7 +566,7 @@ public class MapGUI {
                 b.setText("Add " + name);
             }
             mapOptions(name);
-            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc)); //Use to be lastTrip
+            userAddLocList(tempLoc.getIds()); //Use to be lastTrip
         });
         return b;
     }
@@ -584,7 +582,7 @@ public class MapGUI {
                 unit = "K";
             }
             mapOptions(unit);
-            userAddLocList(searchForDatabaseIdsUsingNames(lastTrip));
+            userAddLocList(lastTrip.getIds());
         });
         return b;
     }
@@ -1383,6 +1381,24 @@ public class MapGUI {
             }
         }
         return null;
+    }
+
+    private int updateSavedTripWithName(String name) {
+        for(int i = 0; i < allSavedTrips.size(); i++) {
+            if(name.equals(allSavedTrips.get(i).getName())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void removeUsingName(String name) {
+        for(int i = 0; i < allSavedTrips.size(); i++) {
+            if(allSavedTrips.get(i).getNames().equals(name)) {
+                allSavedTrips.remove(i);
+                break;
+            }
+        }
     }
 
     public static void main(String[] args) throws Exception {
