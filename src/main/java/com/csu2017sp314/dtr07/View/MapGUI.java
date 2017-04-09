@@ -32,11 +32,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.function.Consumer;
-
 
 
 /**
@@ -59,9 +61,14 @@ public class MapGUI {
     private JTabbedPane options;
     //private JTabbedPane itineraryTabs;
     private JFrame face; //User interface with locations
-    private ArrayList<ArrayList<String>> trips = new ArrayList<>();
-    private ArrayList<String> tripNames = new ArrayList<>();
-    private ArrayList<String> tempLoc;
+    //private ArrayList<ArrayList<String>> trips = new ArrayList<>();
+    //private ArrayList<ArrayList<String>> tripIds = new ArrayList<>();
+    private ArrayList<SavedTrip> allSavedTrips = new ArrayList<>();
+    //private ArrayList<String> tripNames = new ArrayList<>();
+    //private ArrayList<String> tempLoc;
+    //private ArrayList<String> tempLocIds;
+    private SavedTrip tempLoc = new SavedTrip();
+    private SavedTrip tempTrip;
     private String workingDirectoryFilePath;
     private JFrame uOp;
     private JFrame itinerary;
@@ -82,7 +89,7 @@ public class MapGUI {
     private JPanel databaseWindow; //GUI dropdowns
     private JFrame databaseFrame; //Frame that databaseWindow goes in
     private JLabel currentTrip;
-    private ArrayList<String> lastTrip = new ArrayList<>();
+    private SavedTrip lastTrip;
     private int width;
     private int height;
     private String unit;
@@ -219,7 +226,7 @@ public class MapGUI {
         map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         map.setLocationRelativeTo(null);
         map.setLayout(new BorderLayout());
-        map.setContentPane(new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + ".png"))); //Creates png background
+        map.setContentPane(new JLabel(new ImageIcon(workingDirectoryFilePath + "S3/" + filename + ".png"))); //Creates png background
         map.setLayout(new FlowLayout());
         /*JLabel background = new JLabel(new ImageIcon("png/" + filename + ".png"));
         background.setLayout( new BorderLayout() );
@@ -310,7 +317,7 @@ public class MapGUI {
     private int copySVG(String name) {
         //If ids array is changed, need to modify call in addSaveButton
         Path FROM = Paths.get(workingDirectoryFilePath + filename + ".svg");
-        Path TO = Paths.get(workingDirectoryFilePath + "png/" + name + ".svg");
+        Path TO = Paths.get(workingDirectoryFilePath + "S3-Output/" + name + ".svg");
         CopyOption[] options = new CopyOption[]{
                 StandardCopyOption.REPLACE_EXISTING,
                 StandardCopyOption.COPY_ATTRIBUTES
@@ -357,14 +364,13 @@ public class MapGUI {
                 }
             }
         }
-        trips.add(tempTrip);
-        tripNames.add(tripName);
+        allSavedTrips.add(new SavedTrip(tripName, tempTrip));
         addLoadButton(tripName);
         System.out.println(selectionXml);
-        for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("id at index " + i + " = " + tripNames.get(i));
-        }
-        System.out.println("trips size = " + trips.size());
+        //for(int i = 0; i < tripNames.size(); i++) {
+            //System.out.println("id at index " + i + " = " + tripNames.get(i));
+        //}
+        //System.out.println("trips size = " + trips.size());
     }
 
     private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException {
@@ -409,7 +415,7 @@ public class MapGUI {
 
         //XML document
         DOMSource source = new DOMSource(saveXml);
-        StreamResult result = new StreamResult(new File(workingDirectoryFilePath + "png/" + name + ".xml"));
+        StreamResult result = new StreamResult(new File(workingDirectoryFilePath + "S3-Output/" + name + ".xml"));
         transformer.transform(source, result);
         copySVG(name);
         return 1;
@@ -424,18 +430,25 @@ public class MapGUI {
             setGBC(0, z2, 1);
             rightTick = true;
         }
-        if(trips.size() == 0 || name.equals(" Save Trip "))
+        if(allSavedTrips.size() == 0 || name.equals(" Save Trip "))
             savedTrip = z;
         System.out.println("Trip name is " + tripName);
         JButton load = new JButton("Load Trip " + tripName);
         loadPanel.add(load, gbc);
         System.out.println("Added button " + load.getText());
         load.addActionListener((ActionEvent eee) -> {
-            System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
-            tempLoc = trips.get(tripNames.indexOf(load.getText().substring(10)));
-            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc));
-            lastTrip = new ArrayList<>(tempLoc);
-            updateTripLabel(load.getText().substring(10));
+            //System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+            //tempLoc = allSavedTrips.get(tripNames.indexOf(load.getText().substring(10)));
+            tempLoc = new SavedTrip(searchAllSavedTripsWithName(load.getText().substring(10)));
+            //tempLocIds = tripIds.get(tripNames.indexOf(load.getText().substring(10)));
+            //tempTrip = searchAllSavedTripsWithName(load.getText().substring(10));
+            guiLocations.clear();
+            userAddLocList(tempLoc.getIds());
+            guiLocations = tempLoc.getLocations();
+            lastTrip = tempLoc;
+            //updateTripLabel(load.getText().substring(10));
+            updateTripLabel(tempLoc.getName());
+            updateAddButtonsAddRemove(tempLoc.getNames());
             for(JButton a : buttons) {
                 tick = true;
                 a.doClick();
@@ -443,36 +456,36 @@ public class MapGUI {
             }
             for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
-                for(int j = 0; j < tempLoc.size(); j++) {
-                    if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                for(int j = 0; j < tempLoc.getNames().size(); j++) {
+                    if(tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
                         dm.setValueAt("Remove", i, 0);
-                    } else if(!tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    } else if(!tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
                         dm.setValueAt("Add", i, 0);
                     }
                 }
             }
             for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
-                for(int j = 0; j < tempLoc.size(); j++) {
-                    if(tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                for(int j = 0; j < tempLoc.getNames().size(); j++) {
+                    if(tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
                         dm.setValueAt("Remove", i, 0);
-                    } else if(!tempLoc.contains(dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    } else if(!tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
                         dm.setValueAt("Add", i, 0);
                     }
                 }
             }
-            savedTrip = tripNames.indexOf(load.getText().substring(10));
+            savedTrip = updateSavedTripWithName(load.getText().substring(10));
         });
         updateTripLabel(load.getText().substring(10));
-        savedTrip = tripNames.indexOf(load.getText().substring(10));
-        System.out.println("Setting savedTrip to " + tripNames.indexOf(load.getText().substring(10)));
+        savedTrip = updateSavedTripWithName(load.getText().substring(10));
+        System.out.println("Setting savedTrip to " + updateSavedTripWithName(load.getText().substring(10)));
     }
 
     private JButton addSaveButton(String name) throws ParserConfigurationException, TransformerException {
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
-            ArrayList<String> trip = new ArrayList<>(tempLoc);
-            if((savedTrip < 0 || trips.size() == 0 || name.equals(" Save As "))) {
+            ArrayList<String> trip = new ArrayList<>(tempLoc.getNames());
+            if((savedTrip < 0 || allSavedTrips.size() == 0 || name.equals(" Save As "))) {
                 z++;
                 //-----
                 JFrame holding = new JFrame("Enter name for trip");
@@ -487,19 +500,22 @@ public class MapGUI {
                     textArea.setCaretPosition(textArea.getDocument().getLength());
                     tripName = text;
                     holding.dispatchEvent(new WindowEvent(holding, WindowEvent.WINDOW_CLOSING));
-                    trips.add(new ArrayList<>(trip));
-                    lastTrip = new ArrayList<>(trip);
-                    userAddLocList(searchForDatabaseIdsUsingNames(trip));
-                    System.out.println("Adding " + trip + " to trips at index " + (trips.size() - 1));
-                    tripNames.add(tripName);
+                    SavedTrip temp = new SavedTrip(tripName, new ArrayList<>(trip));
+                    allSavedTrips.add(new SavedTrip(temp));
+                    lastTrip = new SavedTrip(temp);
+                    guiLocations.clear();
+                    userAddLocList(temp.getIds());
+                    guiLocations = temp.getLocations();
+                    System.out.println("Adding " + trip + " to trips at index " + (allSavedTrips.size() - 1));
                     try {
-                        saveTripToXML(tripName, trip);
+                        saveTripToXML(tripName, lastTrip.getIds());
                     } catch(ParserConfigurationException parseException) {
 
                     } catch(TransformerException transException) {
 
                     }
                     addLoadButton(name);
+                    tempLoc = temp;
                 });
                 holding.setLocation(1063, 0);
                 holding.setSize(200, 50);
@@ -520,11 +536,13 @@ public class MapGUI {
                     trips.add(0, trip);
                     System.out.println("Adding " + trip + " to trips at index 0");
                 } else{*/
-                trips.remove(savedTrip);
-                trips.add(savedTrip, new ArrayList<>(trip));
-                userAddLocList(searchForDatabaseIdsUsingNames(trip)); //Update svg
+                String tripname = allSavedTrips.get(savedTrip).getName();
+                allSavedTrips.remove(savedTrip);
+                allSavedTrips.add(savedTrip, new SavedTrip(tripname, trip));
+                userAddLocList(allSavedTrips.get(savedTrip).getIds()); //Update svg
+                guiLocations = allSavedTrips.get(savedTrip).getLocations();
                 try {
-                    saveTripToXML(tripNames.get(savedTrip), trip); //Save xml and copy svg
+                    saveTripToXML(allSavedTrips.get(savedTrip).getName(), trip); //Save xml and copy svg
                 } catch(ParserConfigurationException parseException) {
 
                 } catch(TransformerException transException) {
@@ -557,7 +575,7 @@ public class MapGUI {
                 b.setText("Add " + name);
             }
             mapOptions(name);
-            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc)); //Use to be lastTrip
+            userAddLocList(tempLoc.getIds()); //Use to be lastTrip
         });
         return b;
     }
@@ -573,7 +591,7 @@ public class MapGUI {
                 unit = "K";
             }
             mapOptions(unit);
-            userAddLocList(searchForDatabaseIdsUsingNames(lastTrip));
+            userAddLocList(tempLoc.getIds());
         });
         return b;
     }
@@ -815,10 +833,9 @@ public class MapGUI {
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
             //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
             ArrayList<String> locationNames = searchDBLocationNames();
-            updateTripLabel("Untitled trip");
             userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
-            tempLoc.clear();
+            tempLoc = new SavedTrip();
             updateAddButtonsAddRemove(locationNames);
         });
         databaseWindow.add(transferToFirstWindow, gbc);
@@ -848,7 +865,7 @@ public class MapGUI {
                 int index = Integer.parseInt(e.getActionCommand());
                 //private ArrayList<String> databaseLocations = new ArrayList<>();
                 if(tick) {
-                    for(int i = 0; i < guiLocations.size(); i++) {
+                    for(int i = 0; i < tempLoc.getNames().size(); i++) { //TODO might need to update guiloactions here, not sure yet
                         if(databaseLocations.contains(model.getValueAt(index, 1)) && model.getValueAt(index, 0).equals("  ")) {
                             model.setValueAt("X", index, 0);
                         } else if(!databaseLocations.contains(model.getValueAt(index, 1)) && model.getValueAt(index, 0).equals("X")) {
@@ -882,7 +899,7 @@ public class MapGUI {
     int displayXML(ArrayList<String> ids) throws Exception {
         displayDatabaseWindow();
         int ret = -1;
-        tempLoc = new ArrayList<>();
+        tempLoc = new SavedTrip();
         fTemp = createInnerPanel();
         loadPanel = createInnerPanel();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -898,8 +915,9 @@ public class MapGUI {
 
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
-            userAddLocList(searchForDatabaseIdsUsingNames(tempLoc));
-            lastTrip = new ArrayList<>(tempLoc);
+            guiLocations.clear();
+            userAddLocList(tempLoc.getIds());
+            lastTrip = tempLoc;
         });
         fTemp.add(q, gbc);
 
@@ -959,25 +977,26 @@ public class MapGUI {
                 DefaultTableModel model = (DefaultTableModel) temp.getModel();
                 int index = Integer.parseInt(e.getActionCommand());
                 if(tick) {
-                    for(int i = 0; i < tempLoc.size(); i++) {
-                        if(tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Add")) {
+                    for(int i = 0; i < tempLoc.getNames().size(); i++) {
+                        if(tempLoc.containsName(ids.get(index)) && model.getValueAt(index, 0).equals("Add")) {
                             model.setValueAt("Remove", index, 0);
-                        } else if(!tempLoc.contains(ids.get(index)) && model.getValueAt(index, 0).equals("Remove")) {
+                        } else if(!tempLoc.containsName(ids.get(index)) && model.getValueAt(index, 0).equals("Remove")) {
                             model.setValueAt("Add", index, 0);
                         }
                     }
                 }
                 tick = false;
                 if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
-                    if(!tempLoc.contains(ids.get(index))) {
-                        tempLoc.add(ids.get(index));
+                    if(!tempLoc.getNames().contains(ids.get(index))) {
+                        tempLoc.addName(ids.get(index));
+                        //tempLoc.getIds().add(searchForDatabaseIdsUsingNames(ids.get(index))); //TODO need to also add the corresponding id to this
                         System.out.println("Added " + ids.get(index) + " to array");
                         model.setValueAt("Remove", index, 0);
                     }
 
                 } else if(model.getValueAt(index, 0).equals("Remove")) {
-                    if(tempLoc.contains(ids.get(index))) {
-                        tempLoc.remove(ids.get(index));
+                    if(tempLoc.containsName(ids.get(index))) {
+                        tempLoc.removeUsingName(ids.get(index)); //Remove the location at ids.get(index)
                         System.out.println("Removed " + ids.get(index) + " from array");
                         model.setValueAt("Add", index, 0);
                     }
@@ -1231,6 +1250,10 @@ public class MapGUI {
         fTemp2.add(lab, gbc);
         GUILocation temp = searchGuiLocationsWithName(name1);
         GUILocation temp2 = searchGuiLocationsWithName(name2);
+        if(temp == null || temp2 == null) {
+            System.err.println("One of the two GUILocations in addLegToItinerary is null aborting...");
+            System.exit(4);
+        }
         if(lab.getText() != null) {
             model.addRow(new Object[]{seqId, temp.getName(), temp2.getName(), mileage});
             resizeTable(table);
@@ -1241,69 +1264,26 @@ public class MapGUI {
                 JTable temp7 = (JTable) e.getSource();
                 DefaultTableModel model = (DefaultTableModel) temp7.getModel();
                 int index = Integer.parseInt(e.getActionCommand());
-                System.out.println("value at this cell is = " + model.getValueAt(index,1));
-                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index,1));
+                System.out.println("value at this cell is = " + model.getValueAt(index, 1));
+                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index, 1));
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        if (Desktop.isDesktopSupported()) {
+                        if(Desktop.isDesktopSupported()) {
                             Desktop desktop = Desktop.getDesktop();
                             try {
-                                if(temp3.getAirportUrl().equals("")){
-                                    JOptionPane.showMessageDialog(popupMenu.getComponent(),"Information not Available");
-                                }
-                                else{
+                                if(temp3.getAirportUrl().equals("")) {
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(), "Information not Available");
+                                } else {
                                     URI uri = new URI(temp3.getAirportUrl());
                                     desktop.browse(uri);
                                 }
-                            } catch (IOException ex) {
+                            } catch(IOException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary");
                                 ex.printStackTrace();
-                            } catch (URISyntaxException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }
-                }));
-                popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
-                popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
-                popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
-               System.out.println(temp3.getContinent());
-               System.out.println(temp3.getCountry());
-               System.out.println(temp3.getMunicipality());
-               temp7.addMouseListener(new MouseAdapter() {
-                   public void mouseClicked(MouseEvent evt) {
-                        popupMenu.show(evt.getComponent(),evt.getX(),evt.getY());
-                   }
-                });
-            }
-        };
-        Action testColumn2 = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JTable temp7 = (JTable) e.getSource();
-                DefaultTableModel model = (DefaultTableModel) temp7.getModel();
-                int index = Integer.parseInt(e.getActionCommand());
-                System.out.println("value at this cell is = " + model.getValueAt(index,2));
-                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index,2));
-                JPopupMenu popupMenu = new JPopupMenu();
-
-                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (Desktop.isDesktopSupported()) {
-                            Desktop desktop = Desktop.getDesktop();
-                            try {
-                                if(temp3.getAirportUrl().equals("")){
-                                    JOptionPane.showMessageDialog(popupMenu.getComponent(),"Information not Available");
-                                }
-                                else{
-                                    URI uri = new URI(temp3.getAirportUrl());
-                                    desktop.browse(uri);
-                                }
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            } catch (URISyntaxException ex) {
+                            } catch(URISyntaxException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary2");
                                 ex.printStackTrace();
                             }
                         }
@@ -1317,7 +1297,50 @@ public class MapGUI {
                 System.out.println(temp3.getMunicipality());
                 temp7.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent evt) {
-                        popupMenu.show(evt.getComponent(),evt.getX(),evt.getY());
+                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+                    }
+                });
+            }
+        };
+        Action testColumn2 = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable temp7 = (JTable) e.getSource();
+                DefaultTableModel model = (DefaultTableModel) temp7.getModel();
+                int index = Integer.parseInt(e.getActionCommand());
+                System.out.println("value at this cell is = " + model.getValueAt(index, 2));
+                GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index, 2));
+                JPopupMenu popupMenu = new JPopupMenu();
+
+                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(Desktop.isDesktopSupported()) {
+                            Desktop desktop = Desktop.getDesktop();
+                            try {
+                                if(temp3.getAirportUrl().equals("")) {
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(), "Information not Available");
+                                } else {
+                                    URI uri = new URI(temp3.getAirportUrl());
+                                    desktop.browse(uri);
+                                }
+                            } catch(IOException ex) {
+                                ex.printStackTrace();
+                            } catch(URISyntaxException ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }));
+                popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
+                popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
+                popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
+                System.out.println(temp3.getContinent());
+                System.out.println(temp3.getCountry());
+                System.out.println(temp3.getMunicipality());
+                temp7.addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent evt) {
+                        popupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
                     }
                 });
             }
@@ -1413,11 +1436,35 @@ public class MapGUI {
     }
 
     private void printAll() {
-        for(int i = 0; i < trips.size(); i++) {
-            System.out.println("Trips at " + i + " is " + trips.get(i).toString());
+        for(int i = 0; i < allSavedTrips.size(); i++) {
+            System.out.println("Trips at " + i + " is " + allSavedTrips.get(i).toString());
         }
-        for(int i = 0; i < tripNames.size(); i++) {
-            System.out.println("Trip Names at " + i + " is " + tripNames.get(i));
+    }
+
+    private SavedTrip searchAllSavedTripsWithName(String name) {
+        for(SavedTrip t : allSavedTrips) {
+            if(t.getName().equals(name)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    private int updateSavedTripWithName(String name) {
+        for(int i = 0; i < allSavedTrips.size(); i++) {
+            if(name.equals(allSavedTrips.get(i).getName())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void removeUsingName(String name) {
+        for(int i = 0; i < allSavedTrips.size(); i++) {
+            if(allSavedTrips.get(i).getNames().equals(name)) {
+                allSavedTrips.remove(i);
+                break;
+            }
         }
     }
 

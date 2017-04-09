@@ -29,11 +29,11 @@ public class Model {
     private boolean readingFromXML = true;
     private boolean kilometers;
 
-    public int planTrip(String filename, String units) throws FileNotFoundException {
+    public int planTrip(String units, boolean useDB) throws FileNotFoundException {
         this.unit = units;
         LocationFactory lf = new LocationFactory();
         lf.setUnit(units);
-        databaseLocationsReturned = lf.setSelectedAirports(selectedLocations, "id"); //THis also searches the database lol
+        databaseLocationsReturned = lf.setSelectedAirports(selectedLocations, "id", useDB); //THis also searches the database lol
         //lf.readFile(filename);
         if(twoOpt) {
             lf.setTwoOpt(true);
@@ -102,8 +102,8 @@ public class Model {
         return 1;
     }
 
-    public ArrayList<String> searchDatabase(ArrayList<String> where) {
-        databaseLocationsReturned = dataBaseSearch.readFromDB(where);
+    public ArrayList<String> searchDatabase(ArrayList<String> where, boolean read) {
+        databaseLocationsReturned = dataBaseSearch.readFromDB(where, read);
         ArrayList<String> ret = new ArrayList<>(); //Very inefficient, see begining of fireQuery for additional options
         for(Location loc : databaseLocationsReturned) {
             ret.add(loc.getName());
@@ -128,16 +128,16 @@ public class Model {
     }
 
     //This method finds the locations with the correspoinging ids after the user has selected what he wants from the database
-    public void getLocationsFromIds(ArrayList<String> ids) {
+    /*public void getLocationsFromIds(ArrayList<String> ids) {
         ArrayList<Location> locs = dataBaseSearch.getLocations();
         for(String id : ids) {
             for(int i = 0; i < locs.size(); i++) {
                 if(Integer.parseInt(id) == i) {
-                    //TODO need to make those buttons and update the itinerary, maybe use planUserTrip or something
+                    //TODOnotneeded need to make those buttons and update the itinerary, maybe use planUserTrip or something
                 }
             }
         }
-    }
+    }*/
 
     public ArrayList<Pair> getUserPairs() {
         /*LocationFactory lf = new LocationFactory();
@@ -183,7 +183,7 @@ public class Model {
         this.readingFromXML = readingFromXML;
     }
 
-    public int toggleListLocations(ArrayList<String> ids) {
+    public int toggleListLocations(ArrayList<String> ids, boolean useDB) {
         if(!ids.isEmpty()) {
             /*if(readingFromXML) {
                 for(String id : ids) {
@@ -199,7 +199,7 @@ public class Model {
                 databaseLocationsReturned = dataBaseSearch.setSelectedAirports(ids, "name"); //Instead of searching the existing lcoations, maybe we should just do another query
                 userLocations = dataBaseSearch.getLocations(); //Thats is what i am implementing here
             }*/
-            userLocations = (searchDatabaseLocationsReturnedForName(ids));
+            userLocations = (searchDatabaseLocationsReturnedForName(ids, useDB));
 
         } else {
             userLocations = new ArrayList<>(locations);
@@ -228,7 +228,7 @@ public class Model {
         return -1;
     }
 
-    private ArrayList<Location> searchDatabaseLocationsReturnedForName(ArrayList<String> names) {
+    private ArrayList<Location> searchDatabaseLocationsReturnedForName(ArrayList<String> names, boolean useDB) {
         ArrayList<Location> ret = new ArrayList<>();
         for(String name : names)
             for(Location loc : databaseLocationsReturned) {
@@ -236,10 +236,10 @@ public class Model {
                     ret.add(loc);
                 } else {
                     //Search database for names instead of using the ones from the last query
-                    if(name.length() > 6) {
-                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name");
+                    if(name.length() > 60) {
+                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name", useDB);
                     } else {
-                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "id");
+                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "id", useDB);
                     }
                     return dataBaseSearch.getLocations();
                 }
@@ -310,6 +310,62 @@ public class Model {
         return pairs.get(i).getTwo().getLat();
     }
 
+    public String getFirstMunicipality(int i) {
+        return pairs.get(i).getOne().getMunicipality();
+    }
+
+    public String getSecondMunicipality(int i) {
+        return pairs.get(i).getTwo().getMunicipality();
+    }
+
+    public String getFirstRegion(int i) {
+        return pairs.get(i).getOne().getRegion();
+    }
+
+    public String getSecondRegion(int i) {
+        return pairs.get(i).getTwo().getRegion();
+    }
+
+    public String getFirstCountry(int i){
+        return pairs.get(i).getOne().getCountry();
+    }
+
+    public String getSecondCountry(int i){
+        return pairs.get(i).getTwo().getCountry();
+    }
+
+    public String getFirstContinent(int i){
+        return pairs.get(i).getOne().getContinent();
+    }
+
+    public String getSecondContinent(int i){
+        return pairs.get(i).getTwo().getContinent();
+    }
+
+    public String getFirstAirportURL(int i){
+        return pairs.get(i).getOne().getAirportUrl();
+    }
+
+    public String getSecondAirportURL(int i){
+        return pairs.get(i).getTwo().getAirportUrl();
+    }
+
+    public String getFirstRegionUrl(int i){
+        return pairs.get(i).getOne().getRegionUrl();
+    }
+
+    public String getSecondRegionUrl(int i){
+        return pairs.get(i).getTwo().getRegionUrl();
+    }
+
+    public String getFirstCountryURL(int i){
+        return pairs.get(i).getOne().getCountryUrl();
+    }
+
+    public String getSecondCountryURl(int i){
+        return pairs.get(i).getTwo().getCountryUrl();
+    }
+
     public int getPairDistance(final int i) {
         return (int) pairs.get(i).getDistance();
     }
@@ -324,6 +380,14 @@ public class Model {
 
     public int getNumLocs() {
         return locations.size();
+    }
+
+    public int getNumDatabaseLocationsReturned() {
+        return databaseLocationsReturned.size();
+    }
+
+    public int getNumUserLocs() {
+        return userLocations.size();
     }
 
     public String getFirstName(final int i) {
@@ -342,11 +406,18 @@ public class Model {
         if(!kilometers) {
             return ret;
         } else {
-            double ret2 = (double) ret;
-            ret2 *= 1.60934;
-            ret2 = Math.round(ret2);
-            return (int) ret2;
+            //double ret2 = (double) ret;
+            //ret2 *= 1.60934;
+            //ret2 = Math.round(ret2);
+            return convert(ret);
         }
+    }
+
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
     }
 
     public boolean isWraparound(int i) {
@@ -394,7 +465,11 @@ public class Model {
     }
 
     public int getUserPairDistance(int i) {
-        return (int) userPairs.get(i).getDistance();
+        //if(!kilometers) {
+            return (int) userPairs.get(i).getDistance();
+        //} else {
+        //    return convert((int) userPairs.get(i).getDistance());
+        //}
     }
 
     public String getUserPairId(int i) {

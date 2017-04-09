@@ -37,10 +37,11 @@ public class View {
     private String f;
     private MapGUI gui;
     private String svgMap;
-    public ArrayList<String> originalIds;
+    public ArrayList<String> originalIds = new ArrayList<>();
     private double width;
     private double height;
     private boolean kilometers;
+    private ArrayList<String> viewArguments = new ArrayList<>();
 
     public void initializeTrip(String svgMap) throws SAXException, IOException, ParserConfigurationException {
         this.svgMap = svgMap;
@@ -133,15 +134,17 @@ public class View {
         callback3.accept(option);
     }
 
-    public void addLeg(String id, String start, String finish, int mileage) {
-        xml.addLeg(id, start, finish, mileage);
+    public void addLeg(String sequence, String id, String name, String latitude, String longitude, String elevation, String municipality, String region, String country, String continent, String airportURL, String regionURL, String countryURL
+            , String id2, String name2, String latitude2, String longitude2, String elevation2, String municipality2, String region2, String country2, String continent2, String airportURL2, String regionURL2, String countryURL2, int distanceBetween, String units) {
+        xml.addLeg(sequence,id,name,latitude,longitude,elevation,municipality,region,country,continent,airportURL,regionURL,countryURL,id2,name2,latitude2,longitude2,elevation2,municipality2,region2,country2,continent2,airportURL2,regionURL2,countryURL2,distanceBetween,units);
     }
 
-    public void addFinalLeg(String id, String s, String f, int t) {
-        xml.addLeg(id, s, f, t);
+    public void addFinalLeg(String sequence, String id, String name, String latitude, String longitude, String elevation, String municipality, String region, String country, String continent, String airportURL, String regionURL, String countryURL
+            , String id2, String name2, String latitude2, String longitude2, String elevation2, String municipality2, String region2, String country2, String continent2, String airportURL2, String regionURL2, String countryURL2, int distanceBetween, String units) {
+        xml.addLeg(sequence,id,name,latitude,longitude,elevation,municipality,region,country,continent,airportURL,regionURL,countryURL,id2,name2,latitude2,longitude2,elevation2,municipality2,region2,country2,continent2,airportURL2,regionURL2,countryURL2,distanceBetween,units);
     }
 
-    public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) { //TODO implement gui wraparound
+    public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) { //TODOdone implement gui wraparound
         if(wraparound) {
             double originalX1 = x1;
             double originalY1 = y1;
@@ -184,39 +187,31 @@ public class View {
         }
     }
 
-    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id, boolean wraparound) { //TODO add handling for wraparound
+    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id, boolean wraparound) { //TODOdone add handling for wraparound
         if(wraparound) {
             double originalX1 = x1;
             double originalY1 = y1;
             double originalX2 = x2;
-            double originalY2 = y2;
             double m;
             double b1;
-            double b2;
             if(x1 > x2) {
                 x1 -= 180;
                 x2 += 180;
                 m = (y2 - y1) / (x2 - x1);
                 b1 = originalY1 - (m * originalX1);
-                b2 = originalY2 - (m * originalX2);
             } else {
                 x1 += 180;
                 x2 -= 180;
                 m = (y1 - y2) / (x1 - x2);
                 b1 = originalY1 - (m * originalX1);
-                b2 = originalY2 - (m * originalX2);
             }
             double interX1;
-            double interX2;
             if(originalX1 > originalX2) {
                 interX1 = 180;
-                interX2 = -180;
             } else {
                 interX1 = -180;
-                interX2 = 180;
             }
             double interY1 = m * interX1 + b1;
-            double interY2 = m * interX2 + b2;
 
             svg.addDistance(originalX1, originalY1, interX1, interY1, distance, id);
         } else {
@@ -248,10 +243,9 @@ public class View {
     }
 
     public void finalizeTrip(String filename) throws TransformerException {
+        f = filename;
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        String[] cut = filename.split("/");
-        f = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
         //XML document
         DOMSource source = new DOMSource(xml.getXMLdoc());
         StreamResult result = new StreamResult(new File(f + ".xml"));
@@ -261,6 +255,12 @@ public class View {
         DOMSource source2 = new DOMSource(svg.getSVGdoc());
         StreamResult result2 = new StreamResult(new File(f + ".svg"));
         transformer.transform(source2, result2);
+    }
+
+    public void setOptions(ArrayList<String> arguments){
+        for(int i = 0; i < arguments.size();i++){
+            viewArguments.add(arguments.get(i));
+        }
     }
 
     public void gui() throws Exception {
@@ -294,6 +294,10 @@ public class View {
 
     public void addLegToItinerary(String seqId, String name1, String name2, int mileage) {
         gui.addLegToItinerary(seqId, name1, name2, mileage);
+    }
+
+    public ArrayList<String> getCommandLineOptions() {
+        return viewArguments;
     }
 
     public void refresh() throws Exception {

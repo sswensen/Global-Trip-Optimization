@@ -119,8 +119,8 @@ public class Location {
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515; //Default is miles ("M")
 
-        double hdist = haversine(lat1, lon1, lat2, lon2);
-        double fdist = distance4(lat1, lat2, lon1, lon2, 0, 0);
+        //double hdist = haversine(lat1, lon1, lat2, lon2);
+        //double fdist = distance4(lat1, lat2, lon1, lon2, 0, 0);
 
         //--------------Checking for wraparound-------------//
         double wlat1 = this.lat;
@@ -135,7 +135,7 @@ public class Location {
             wlat2 = wlattemp;
             wlon2 = wlontemp;
         }
-        //wlon1 -= 180; //TODO currently dist is the distance with wraparound, wdist is just using pathagorean theorem. dist is somehow always smaller. It seems like the algorithm used is not getting the same distance, maybe it has to do with the curvature of the earth but the map is flat so that doesnt make sense.
+        //wlon1 -= 180; //TODOdone currently dist is the distance with wraparound, wdist is just using pathagorean theorem. dist is somehow always smaller. It seems like the algorithm used is not getting the same distance, maybe it has to do with the curvature of the earth but the map is flat so that doesnt make sense.
         //wlon2 += 180;
         /*double wtheta = wlon1 - wlon2;
         double wdist = Math.sin(deg2rad(wlat1)) * Math.sin(deg2rad(wlat2))
@@ -159,6 +159,7 @@ public class Location {
             //dist = wdist; //Should be equal here
         }
         //------------End Checking for wraparound-----------//
+
 
         if(unit.equals("K")) { //Kilometers
             dist = dist * 1.609344;

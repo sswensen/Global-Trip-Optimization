@@ -54,13 +54,15 @@ public class TripCo {
             for(int i = 0; i < args.length; i++) {
                 arguments.add(args[i]);
             }
+
             String filename = "";
             String selectionXml = "";
             String svgMap = "";
             Model model = new Model();
             View view = new View();
             Presenter presenter = new Presenter(model, view);
-
+            presenter.setViewOptions(arguments);
+            presenter.setUseDatabase(true);
             for(int i = 0; i < arguments.size(); i++) {
                 xmlFile = arguments.get(i);
                 csvFile = arguments.get(i);
@@ -96,7 +98,7 @@ public class TripCo {
             }
             if(arguments.contains("-g") && !arguments.contains("-f")) {
                 displayOptions("-g", presenter);
-                presenter.planTrip(filename, selectionXml, svgMap);
+                presenter.planTrip(selectionXml, svgMap);
                 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                     public void run() {
                         //presenter.cleanup();
@@ -121,7 +123,7 @@ public class TripCo {
                 if(arguments.contains("-k")) {
                     displayOptions("-k", presenter);
                 }
-                presenter.planTrip(filename, selectionXml, svgMap);
+                presenter.planTrip(selectionXml, svgMap);
                 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                     public void run() {
                         //presenter.cleanup();
