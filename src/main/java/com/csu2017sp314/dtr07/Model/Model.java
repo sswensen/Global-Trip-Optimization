@@ -350,10 +350,10 @@ public class Model {
         if(!kilometers) {
             return ret;
         } else {
-            double ret2 = (double) ret;
-            ret2 *= 1.60934;
-            ret2 = Math.round(ret2);
-            return (int) ret2;
+            //double ret2 = (double) ret;
+            //ret2 *= 1.60934;
+            //ret2 = Math.round(ret2);
+            return convert(ret);
         }
     }
 

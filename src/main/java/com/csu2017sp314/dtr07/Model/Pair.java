@@ -38,6 +38,13 @@ public class Pair {
         return distance;
     }
 
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
+    }
+
     public String getId() {
         return id;
     }

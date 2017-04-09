@@ -124,13 +124,20 @@ class SVGBuilder {
             distance.setTextContent(Integer.toString(distanceBetween));
 
         } else {
-            double kDist = (double) distanceBetween;
-            kDist *= 1.60934;
-            kDist = Math.round(kDist);
-            int kInt = (int) kDist;
-            distance.setTextContent(Integer.toString(kInt));
+            //double kDist = (double) distanceBetween;
+            //kDist *= 1.60934;
+            //kDist = Math.round(kDist);
+            //int kInt = (int) kDist;
+            distance.setTextContent(Integer.toString(convert(distanceBetween)));
         }
         SVGdoc.getDocumentElement().appendChild(distance);
+    }
+
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
     }
 
     void addCityNameLabel(double longitude, double latitude, String city) {
