@@ -36,6 +36,14 @@ URL - change team number
   <build>
     <plugins>
         <plugin>
+            <groupId>org.eluder.coveralls</groupId>
+            <artifactId>coveralls-maven-plugin</artifactId>
+            <version>4.3.0</version>
+            <configuration>
+                <repoToken>q9VB0PC0mgqkNkCknTGROzT89h8n5a4OE</repoToken>
+            </configuration>
+        </plugin>
+        <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>2.3.2</version>
