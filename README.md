@@ -8,6 +8,8 @@
 
 [![BCH compliance](https://bettercodehub.com/edge/badge/csu2017sp314/DTR-07)](https://bettercodehub.com/)
 
+[![Coverage Status](https://coveralls.io/repos/github/csu2017sp314/class/badge.svg?branch=startBrewTour)](https://coveralls.io/github/csu2017sp314/class?branch=startBrewTour)
+
 Scott
 Jesse
 Sandeep
