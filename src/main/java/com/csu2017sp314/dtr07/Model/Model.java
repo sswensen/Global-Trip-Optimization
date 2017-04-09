@@ -310,6 +310,62 @@ public class Model {
         return pairs.get(i).getTwo().getLat();
     }
 
+    public String getFirstMunicipality(int i) {
+        return pairs.get(i).getOne().getMunicipality();
+    }
+
+    public String getSecondMunicipality(int i) {
+        return pairs.get(i).getTwo().getMunicipality();
+    }
+
+    public String getFirstRegion(int i) {
+        return pairs.get(i).getOne().getRegion();
+    }
+
+    public String getSecondRegion(int i) {
+        return pairs.get(i).getTwo().getRegion();
+    }
+
+    public String getFirstCountry(int i){
+        return pairs.get(i).getOne().getCountry();
+    }
+
+    public String getSecondCountry(int i){
+        return pairs.get(i).getTwo().getCountry();
+    }
+
+    public String getFirstContinent(int i){
+        return pairs.get(i).getOne().getContinent();
+    }
+
+    public String getSecondContinent(int i){
+        return pairs.get(i).getTwo().getContinent();
+    }
+
+    public String getFirstAirportURL(int i){
+        return pairs.get(i).getOne().getAirportUrl();
+    }
+
+    public String getSecondAirportURL(int i){
+        return pairs.get(i).getTwo().getAirportUrl();
+    }
+
+    public String getFirstRegionUrl(int i){
+        return pairs.get(i).getOne().getRegionUrl();
+    }
+
+    public String getSecondRegionUrl(int i){
+        return pairs.get(i).getTwo().getRegionUrl();
+    }
+
+    public String getFirstCountryURL(int i){
+        return pairs.get(i).getOne().getCountryUrl();
+    }
+
+    public String getSecondCountryURl(int i){
+        return pairs.get(i).getTwo().getCountryUrl();
+    }
+
     public int getPairDistance(final int i) {
         return (int) pairs.get(i).getDistance();
     }
