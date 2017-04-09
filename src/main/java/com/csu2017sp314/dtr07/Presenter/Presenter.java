@@ -104,29 +104,17 @@ public class Presenter {
     }
 
     private void toggleName() {
-        if(displayName) {
-            displayName = false;
-        } else {
-            displayName = true;
-        }
+        displayName = !displayName;
         System.out.println("[Presenter] Names now " + displayName);
     }
 
     private void toggleIds() {
-        if(displayId) {
-            displayId = false;
-        } else {
-            displayId = true;
-        }
+        displayId = !displayId;
         System.out.println("[Presenter] IDs now " + displayId);
     }
 
     private void toggleMileage() {
-        if(displayMileage) {
-            displayMileage = false;
-        } else {
-            displayMileage = true;
-        }
+        displayMileage = !displayMileage;
         System.out.println("[Presenter] Mileage now " + displayMileage);
     }
 
@@ -173,14 +161,16 @@ public class Presenter {
         currentIds = ids;
         model.setReadingFromXML(readingFromXML);
         model.toggleListLocations(ids, useDatabase);
-        if(twoOpt)
+        if(twoOpt) {
             model.setTwoOpt(true);
-        else
+        } else {
             model.setTwoOpt(false);
-        if(threeOpt)
+        }
+        if(threeOpt) {
             model.setThreeOpt(true);
-        else
+        } else {
             model.setThreeOpt(false);
+        }
         //model.printUserLoc();
         try {
             model.planUserTrip(fname, readingFromXML);
