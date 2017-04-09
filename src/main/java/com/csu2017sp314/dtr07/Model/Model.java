@@ -236,7 +236,7 @@ public class Model {
                     ret.add(loc);
                 } else {
                     //Search database for names instead of using the ones from the last query
-                    if(name.length() > 5) {
+                    if(name.length() > 60) {
                         databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name");
                     } else {
                         databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "id");

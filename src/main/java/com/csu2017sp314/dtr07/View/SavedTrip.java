@@ -141,13 +141,16 @@ public class SavedTrip {
     }
 
     private void findNamesOrIDs(ArrayList<String> in) {
+        if(in.size() == 0) {
+            return;
+        }
         String whatYouWant = "name ";
-        if(in.get(0).length() < 5) {
-            whatYouWant = "id";
+        if(in.get(0).length() < 7) {
+            whatYouWant = "id ";
         }
         where = "WHERE airports." + whatYouWant + "in" + "(";
         for(int k = 0; k < in.size(); k++) {
-            where += "'" + in.get(k) + "', ";
+            where += "\"" + in.get(k) + "\", ";
         }
         where += "'" + in.get(in.size()-1) + "')";
 
