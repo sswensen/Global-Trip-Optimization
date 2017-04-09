@@ -50,7 +50,7 @@ public class Pair {
     }
 
     public boolean checkForWraparound() {
-        boolean ret = one.isPairUsesWraparound() || two.isPairUsesWraparound();
+        boolean ret = one.isPairUsesWraparound() && two.isPairUsesWraparound();
         useWraparound = ret;
         return ret;
     }
