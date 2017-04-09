@@ -98,7 +98,7 @@ public class TripCo {
             }
             if(arguments.contains("-g") && !arguments.contains("-f")) {
                 displayOptions("-g", presenter);
-                presenter.planTrip(filename, selectionXml, svgMap);
+                presenter.planTrip(selectionXml, svgMap);
                 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                     public void run() {
                         //presenter.cleanup();
@@ -123,7 +123,7 @@ public class TripCo {
                 if(arguments.contains("-k")) {
                     displayOptions("-k", presenter);
                 }
-                presenter.planTrip(filename, selectionXml, svgMap);
+                presenter.planTrip(selectionXml, svgMap);
                 Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
                     public void run() {
                         //presenter.cleanup();
