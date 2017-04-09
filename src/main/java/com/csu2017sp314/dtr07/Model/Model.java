@@ -29,11 +29,11 @@ public class Model {
     private boolean readingFromXML = true;
     private boolean kilometers;
 
-    public int planTrip(String filename, String units) throws FileNotFoundException {
+    public int planTrip(String filename, String units, boolean useDB) throws FileNotFoundException {
         this.unit = units;
         LocationFactory lf = new LocationFactory();
         lf.setUnit(units);
-        databaseLocationsReturned = lf.setSelectedAirports(selectedLocations, "id"); //THis also searches the database lol
+        databaseLocationsReturned = lf.setSelectedAirports(selectedLocations, "id", useDB); //THis also searches the database lol
         //lf.readFile(filename);
         if(twoOpt) {
             lf.setTwoOpt(true);
@@ -102,8 +102,8 @@ public class Model {
         return 1;
     }
 
-    public ArrayList<String> searchDatabase(ArrayList<String> where) {
-        databaseLocationsReturned = dataBaseSearch.readFromDB(where);
+    public ArrayList<String> searchDatabase(ArrayList<String> where, boolean read) {
+        databaseLocationsReturned = dataBaseSearch.readFromDB(where, read);
         ArrayList<String> ret = new ArrayList<>(); //Very inefficient, see begining of fireQuery for additional options
         for(Location loc : databaseLocationsReturned) {
             ret.add(loc.getName());
@@ -183,7 +183,7 @@ public class Model {
         this.readingFromXML = readingFromXML;
     }
 
-    public int toggleListLocations(ArrayList<String> ids) {
+    public int toggleListLocations(ArrayList<String> ids, boolean useDB) {
         if(!ids.isEmpty()) {
             /*if(readingFromXML) {
                 for(String id : ids) {
@@ -199,7 +199,7 @@ public class Model {
                 databaseLocationsReturned = dataBaseSearch.setSelectedAirports(ids, "name"); //Instead of searching the existing lcoations, maybe we should just do another query
                 userLocations = dataBaseSearch.getLocations(); //Thats is what i am implementing here
             }*/
-            userLocations = (searchDatabaseLocationsReturnedForName(ids));
+            userLocations = (searchDatabaseLocationsReturnedForName(ids, useDB));
 
         } else {
             userLocations = new ArrayList<>(locations);
@@ -228,7 +228,7 @@ public class Model {
         return -1;
     }
 
-    private ArrayList<Location> searchDatabaseLocationsReturnedForName(ArrayList<String> names) {
+    private ArrayList<Location> searchDatabaseLocationsReturnedForName(ArrayList<String> names, boolean useDB) {
         ArrayList<Location> ret = new ArrayList<>();
         for(String name : names)
             for(Location loc : databaseLocationsReturned) {
@@ -237,9 +237,9 @@ public class Model {
                 } else {
                     //Search database for names instead of using the ones from the last query
                     if(name.length() > 60) {
-                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name");
+                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name", useDB);
                     } else {
-                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "id");
+                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "id", useDB);
                     }
                     return dataBaseSearch.getLocations();
                 }
@@ -324,6 +324,10 @@ public class Model {
 
     public int getNumLocs() {
         return locations.size();
+    }
+
+    public int getNumDatabaseLocationsReturned() {
+        return databaseLocationsReturned.size();
     }
 
     public int getNumUserLocs() {

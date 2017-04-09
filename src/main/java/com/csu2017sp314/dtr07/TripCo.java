@@ -62,6 +62,7 @@ public class TripCo {
             View view = new View();
             Presenter presenter = new Presenter(model, view);
             presenter.setViewOptions(arguments);
+            presenter.setUseDatabase(true);
             for(int i = 0; i < arguments.size(); i++) {
                 xmlFile = arguments.get(i);
                 csvFile = arguments.get(i);

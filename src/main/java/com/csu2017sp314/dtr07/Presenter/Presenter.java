@@ -32,6 +32,7 @@ public class Presenter {
     private String svgMap;
     private boolean readingFromXML = true;
     private boolean kilometers;
+    private boolean useDatabase = false;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -84,7 +85,7 @@ public class Presenter {
             }*/
         });
         view.setCallback4((ArrayList<String> s) -> {
-            ArrayList<String> locationNames = model.searchDatabase(s);
+            ArrayList<String> locationNames = model.searchDatabase(s, useDatabase);
             for(String temp : locationNames) {
                 System.out.println("[Presenter] This is callback4:\t" + temp);
             }
@@ -165,7 +166,7 @@ public class Presenter {
     private int eventUserAddLocList(ArrayList<String> ids) {
         currentIds = ids;
         model.setReadingFromXML(readingFromXML);
-        model.toggleListLocations(ids);
+        model.toggleListLocations(ids, useDatabase);
         if(twoOpt)
             model.setTwoOpt(true);
         else
@@ -207,7 +208,8 @@ public class Presenter {
             view.addHeader("Long Live the Chief");
             view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
-            for(int i = 0; i < model.getNumUserLocs(); i++) {
+            System.out.println("1");
+            for(int i = 0; i < model.getNumDatabaseLocationsReturned(); i++) {
                 copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
             }
             makeItinerary();
@@ -321,7 +323,7 @@ public class Presenter {
         } else {
             model.setSelectedLocations(readXML(selectionXml));
         }
-        model.planTrip(filename, "M");
+        model.planTrip(filename, "M", useDatabase);
         //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>());
         //for(int i = 0; i < model.getNumLocs(); i++) {
         //    copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
@@ -401,5 +403,9 @@ public class Presenter {
             }
         }
         return ret;
+    }
+
+    public void setUseDatabase(boolean useDatabase) {
+        this.useDatabase = useDatabase;
     }
 }
