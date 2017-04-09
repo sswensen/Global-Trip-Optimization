@@ -60,6 +60,7 @@ public class TripCo {
             Model model = new Model();
             View view = new View();
             Presenter presenter = new Presenter(model, view);
+            presenter.setUseDatabase(true);
 
             for(int i = 0; i < arguments.size(); i++) {
                 xmlFile = arguments.get(i);
