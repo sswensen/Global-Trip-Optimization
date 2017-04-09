@@ -87,7 +87,7 @@ public class TestPresenter {
     public void planTrip(){
         try{
             presenter.planTrip("src/test/resources/Testing/selectionXml.xml", "src/test/resources/coloradoMap.svg");
-            assertEquals("exampleFile", presenter.getFname());
+            assertEquals("selectionXml-t07", presenter.getFname());
         }catch(Exception e){}
     }
 
