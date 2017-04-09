@@ -200,13 +200,16 @@ public class Presenter {
                         model.getSecondAirportURL(i), model.getSecondRegionUrl(i),
                         model.getSecondCountry(i), model.getPairDistance(i), "miles");
                 finalPairId++;
-                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId, model.isWraparound(i));
+                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i),
+                        model.getUserSecondLon(i), model.getUserSecondLat(i), pairId, model.isWraparound(i));
                 if(displayName) {
                     view.addCityNameLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstName);
                     view.addCityNameLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondName);
                 }
                 if(displayMileage) {
-                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId, model.isWraparound(i));
+                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i),
+                            model.getUserSecondLon(i), model.getUserSecondLat(i),
+                            model.getUserPairDistance(i), pairId, model.isWraparound(i));
                 }
                 if(displayId) {
                     view.addIDLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstId);
@@ -249,39 +252,39 @@ public class Presenter {
         model.setThreeOpt(threeOpt);
     } //done
 
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
+
     public void setKilometers(boolean kilometers) {
         this.kilometers = kilometers;
         view.setKilometers(kilometers);
         model.setKilometers(kilometers);
     }
 
-    public boolean isKilometers() {
-        return this.kilometers;
-    }
+    public boolean getDisplayMileage() {
+        return displayMileage;
+    } //done
 
     public void setDisplayMileage(boolean x) {
         displayMileage = x;
     }//done
 
-    public void setDisplayId(boolean x) {
-        displayId = x;
-    } //done
-
-    public void setDisplayName(boolean x) {
-        displayName = x;
-    } //done
-
-    public boolean getDisplayMileage() {
-        return displayMileage;
-    } //done
-
     public boolean getDisplayId() {
         return displayId;
+    } //done
+
+    public void setDisplayId(boolean x) {
+        displayId = x;
     } //done
 
     public boolean getDisplayName() {
         return displayName;
     }//done
+
+    public void setDisplayName(boolean x) {
+        displayName = x;
+    } //done
 
     public boolean displayGui(boolean x) {
         return (displayGui = x);
@@ -303,9 +306,11 @@ public class Presenter {
         for(int i = 0; i < numUserPairs; i++) {
             //System.out.println("Adding something to index " + i);
             if(!kilometers) {
-                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), model.getPairDistance(i));
+                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i),
+                        model.getSecondName(i), model.getPairDistance(i));
             } else {
-                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), convert(model.getPairDistance(i)));
+                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i),
+                        model.getSecondName(i), convert(model.getPairDistance(i)));
             }
         }
     }
@@ -349,14 +354,16 @@ public class Presenter {
         model.planTrip("M", useDatabase);
         //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>());
         //for(int i = 0; i < model.getNumLocs(); i++) {
-        //    copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+        //    copyLocationsToView(model.copyDBLocationsToView(i)); /
+        // /This gets the location data and pushes it into copyLoctaions
         //}
         int numPairs = model.getNumPairs();
         view.originalIds = model.getLocationNames();
         view.initializeTrip(svgMap);
         view.addFooter(model.getTripDistance());
         for(int i = 0; i < model.getDatabaseLocationsReturnedSize(); i++) {
-            copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+            copyLocationsToView(model.copyDBLocationsToView(i));
+            //This gets the location data and pushes it into copyLoctaions
         }
         int finalPairId = 0;
         for(int i = 0; i < numPairs; i++) {
@@ -371,7 +378,16 @@ public class Presenter {
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
             boolean wraparound = model.isWraparound(i);
-            view.addLeg(model.getPairId(i),model.getFirstId(i), model.getFirstName(i),Double.toString(model.getFirstLat(i)),Double.toString(model.getFirstLon(i))," ", model.getFirstMunicipality(i),model.getFirstRegion(i),model.getFirstCountry(i),model.getFirstContinent(i),model.getFirstAirportURL(i),model.getFirstRegionUrl(i),model.getFirstCountryURL(i),model.getSecondId(i),model.getSecondName(i),Double.toString(model.getSecondLat(i)),Double.toString(model.getSecondLon(i))," ",model.getSecondMunicipality(i),model.getSecondRegion(i),model.getSecondCountry(i),model.getSecondContinent(i),model.getSecondAirportURL(i),model.getSecondRegionUrl(i),model.getSecondCountry(i),model.getPairDistance(i),"miles");
+            view.addLeg(model.getPairId(i), model.getFirstId(i), model.getFirstName(i),
+                    Double.toString(model.getFirstLat(i)), Double.toString(model.getFirstLon(i)),
+                    " ", model.getFirstMunicipality(i), model.getFirstRegion(i),
+                    model.getFirstCountry(i), model.getFirstContinent(i), model.getFirstAirportURL(i),
+                    model.getFirstRegionUrl(i), model.getFirstCountryURL(i), model.getSecondId(i),
+                    model.getSecondName(i), Double.toString(model.getSecondLat(i)),
+                    Double.toString(model.getSecondLon(i)),
+                    " ", model.getSecondMunicipality(i), model.getSecondRegion(i),
+                    model.getSecondCountry(i), model.getSecondContinent(i), model.getSecondAirportURL(i),
+                    model.getSecondRegionUrl(i), model.getSecondCountry(i), model.getPairDistance(i), "miles");
             finalPairId++;
             view.addLine(firstLon, firstLat, secondLon, secondLat, pairId, wraparound);
             if(displayName) {
@@ -389,12 +405,14 @@ public class Presenter {
 
         view.addFooter(model.getTripDistance());
         view.addHeader("Long Live the Chief");
-        //view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
+        //view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(),
+        // model.getLegFinishLocation(), model.getTripDistance());
         ArrayList<String> viewArguments = view.getCommandLineOptions();
         String fileArguments = "";
         for(int i = 0; i < viewArguments.size(); i++) {
-            if(viewArguments.get(i).equals("-d") || viewArguments.get(i).equals("-n") || viewArguments.get(i).equals("-i")
-                    || viewArguments.get(i).equals("-2") || viewArguments.get(i).equals("-3") || viewArguments.get(i).equals("-k")) {
+            if(viewArguments.get(i).equals("-d") || viewArguments.get(i).equals("-n")
+                    || viewArguments.get(i).equals("-i") || viewArguments.get(i).equals("-2")
+                    || viewArguments.get(i).equals("-3") || viewArguments.get(i).equals("-k")) {
                 fileArguments += viewArguments.get(i);
             }
         }
