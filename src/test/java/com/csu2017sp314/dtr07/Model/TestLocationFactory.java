@@ -16,6 +16,8 @@ public class TestLocationFactory {
     public void initialize() {
     }
 
+    private LocationFactory lf = new LocationFactory();
+
     @Test
     public void readTest() {
         /*LocationFactory lf = new LocationFactory();
@@ -30,5 +32,23 @@ public class TestLocationFactory {
         } catch (FileNotFoundException a) {
             System.out.println("Error eccountered: " + a);
         }*/
+    }
+
+    @Test
+    public void setTotalImprovements() {
+        lf.setTotalImprovements(20);
+        Assert.assertEquals(20, lf.getTotalImprovements());
+    }
+
+    @Test
+    public void setTwoOpt() {
+        lf.setTwoOpt(true);
+        Assert.assertEquals(true, lf.getTwoOpt());
+    }
+
+    @Test
+    public void setThreeOpt() {
+        lf.setThreeOpt(true);
+        Assert.assertEquals(true, lf.getThreeOpt());
     }
 }

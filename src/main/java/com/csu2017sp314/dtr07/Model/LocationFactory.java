@@ -113,13 +113,13 @@ class LocationFactory {
             pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0), unit)));
             if(twoOpt) {
                 if(threeOpt) {
-                    betterThreeOpt();
+                    threeOpt();
                 } else {
-                    betterTwoOpt();
+                    twoOpt();
                 }
             }
             if(threeOpt) {
-                betterThreeOpt();
+                threeOpt();
             }
             double total = 0;
             for(Pair p : pairs) {
@@ -139,7 +139,15 @@ class LocationFactory {
         return true;
     }
 
-    void setLocations(ArrayList<Location> locations) {
+    public void setTotalImprovements(int totalImprovements) {
+        this.totalImprovements = totalImprovements;
+    }
+
+    public int getTotalImprovements() {
+        return this.totalImprovements;
+    }
+
+    public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
 
@@ -168,19 +176,28 @@ class LocationFactory {
         this.twoOpt = twoOpt;
     }
 
-    void setThreeOpt(boolean threeOpt) {
+
+    public boolean getTwoOpt() {
+        return this.twoOpt;
+    }
+
+    public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
     }
 
-    private ArrayList<Pair> betterGeneratePairs(Location[] route, ArrayList<Pair> newPairs) {
+    public boolean getThreeOpt() {
+        return this.threeOpt;
+    }
+
+    private ArrayList<Pair> generatePairs(Location[] route, ArrayList<Pair> newPairs) {
         for(int a = 0; a < route.length - 1; a++) {
             newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1], unit)));
         }
         return newPairs;
     }
 
-    private Location[] betterGenerateRoute() {
-        Location[] route = new Location[pairs.size() + 1];
+    private Location[] generateRoute() {
+        Location[] route = new Location[pairs.size()+1];
         int i = 0;
         for(Pair pair : pairs) {
             route[i] = pair.getOne();
@@ -250,8 +267,8 @@ class LocationFactory {
         return newRoute;
     }
 
-    protected int betterTwoOpt() {
-        Location[] route = betterGenerateRoute();
+    protected int twoOpt() {
+        Location[] route = generateRoute();
         generateDistanceTable(route);
         int totalImprovements = 0;
         this.totalImprovements = 0;
@@ -260,10 +277,11 @@ class LocationFactory {
         ArrayList<Pair> newPairs = new ArrayList<>();
         while(improvements > 0) {
             improvements = 0;
-            for(int i = 0; i <= n - 3; i++) {
-                for(int j = i + 2; j <= n - 1; j++) {
-                    if((dist(route[i], route[i + 1]) + dist(route[j], route[j + 1])) > (dist(route[i], route[j]) + dist(route[i + 1], route[j + 1]))) {
-                        reverseSegment(route, i + 1, j);
+            for(int i=0; i<=n-3; i++) {
+                for(int j=i+2; j<=n-1; j++) {
+                    if((dist(route[i], route[i+1])+dist(route[j], route[j+1]))
+                            > (dist(route[i], route[j])+dist(route[i+1], route[j+1]))) {
+                        reverseSegment(route, i+1, j);
                         improvements++;
                         totalImprovements++;
                     }
@@ -271,7 +289,7 @@ class LocationFactory {
             }
         }
         this.totalImprovements = totalImprovements;
-        pairs = betterGeneratePairs(route, newPairs);
+        pairs = generatePairs(route, newPairs);
         return totalImprovements;
     }
 
@@ -307,28 +325,43 @@ class LocationFactory {
     }
 
     private int improved(Location[] route, int i, int j, int k) {
-        double originalDist = dist(route[i], route[i + 1]) + dist(route[j], route[j + 1]) + dist(route[k], route[k + 1]);
-        if(originalDist > (dist(route[i], route[i + 1]) + dist(route[j], route[k]) + dist(route[j + 1], route[k + 1]))) {
+        double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1])
+                + dist(route[k], route[k+1]);
+        double distOne = (dist(route[i], route[i+1]) + dist(route[j], route[k])
+                + dist(route[j+1], route[k+1]));
+        double distTwo = (dist(route[i], route[j]) + dist(route[i+1], route[j+1])
+                + dist(route[k], route[k+1]));
+        double distThree = (dist(route[i], route[k]) + dist(route[j+1], route[j])
+                + dist(route[i+1], route[k+1]));
+        double distFour = (dist(route[i], route[j+1]) + dist(route[k], route[i+1])
+                + dist(route[j], route[k+1]));
+        double distFive = (dist(route[i], route[j]) + dist(route[i+1], route[k])
+                + dist(route[j+1], route[k+1]));
+        double distSix = (dist(route[i], route[k]) + dist(route[j+1], route[i+1])
+                + dist(route[j], route[k+1]));
+        double distSeven = (dist(route[i], route[j+1]) + dist(route[k], route[j])
+                + dist(route[i+1], route[k+1]));
+        if(originalDist > distOne) {
             return 1;
-        } else if(originalDist > (dist(route[i], route[j]) + dist(route[i + 1], route[j + 1]) + dist(route[k], route[k + 1]))) {
+        } else if(originalDist > distTwo) {
             return 2;
-        } else if(originalDist > (dist(route[i], route[k]) + dist(route[j + 1], route[j]) + dist(route[i + 1], route[k + 1]))) {
+        } else if(originalDist > distThree) {
             return 3;
-        } else if(originalDist > (dist(route[i], route[j + 1]) + dist(route[k], route[i + 1]) + dist(route[j], route[k + 1]))) {
+        } else if(originalDist > distFour) {
             return 4;
-        } else if(originalDist > (dist(route[i], route[j]) + dist(route[i + 1], route[k]) + dist(route[j + 1], route[k + 1]))) {
+        } else if(originalDist > distFive) {
             return 5;
-        } else if(originalDist > (dist(route[i], route[k]) + dist(route[j + 1], route[i + 1]) + dist(route[j], route[k + 1]))) {
+        } else if(originalDist > distSix) {
             return 6;
-        } else if(originalDist > (dist(route[i], route[j + 1]) + dist(route[k], route[j]) + dist(route[i + 1], route[k + 1]))) {
+        } else if(originalDist > distSeven) {
             return 7;
         } else {
             return 0;
         }
     }
 
-    protected int betterThreeOpt() {
-        Location[] route = betterGenerateRoute();
+    protected int threeOpt() {
+        Location[] route = generateRoute();
         generateDistanceTable(route);
         int totalImprovements = 0;
         this.totalImprovements = 0;
@@ -351,7 +384,7 @@ class LocationFactory {
             }
         }
         this.totalImprovements = totalImprovements;
-        pairs = betterGeneratePairs(route, newPairs);
+        pairs = generatePairs(route, newPairs);
         return totalImprovements;
     }
 }
