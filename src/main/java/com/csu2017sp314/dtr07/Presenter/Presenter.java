@@ -185,7 +185,20 @@ public class Presenter {
                 String secondId = model.getUserSecondId(i);
                 String firstName = model.getUserFirstName(i);
                 String secondName = model.getUserSecondName(i);
-                view.addLeg(model.getPairId(i),model.getFirstId(i), model.getFirstName(i),Double.toString(model.getFirstLat(i)),Double.toString(model.getFirstLon(i))," ", model.getFirstMunicipality(i),model.getFirstRegion(i),model.getFirstCountry(i),model.getFirstContinent(i),model.getFirstAirportURL(i),model.getFirstRegionUrl(i),model.getFirstCountryURL(i),model.getSecondId(i),model.getSecondName(i),Double.toString(model.getSecondLat(i)),Double.toString(model.getSecondLon(i))," ",model.getSecondMunicipality(i),model.getSecondRegion(i),model.getSecondCountry(i),model.getSecondContinent(i),model.getSecondAirportURL(i),model.getSecondRegionUrl(i),model.getSecondCountry(i),model.getPairDistance(i),"miles");
+                view.addLeg(model.getPairId(i), model.getFirstId(i),
+                        model.getFirstName(i), Double.toString(model.getFirstLat(i)),
+                        Double.toString(model.getFirstLon(i)), " ",
+                        model.getFirstMunicipality(i),
+                        model.getFirstRegion(i), model.getFirstCountry(i),
+                        model.getFirstContinent(i), model.getFirstAirportURL(i),
+                        model.getFirstRegionUrl(i), model.getFirstCountryURL(i),
+                        model.getSecondId(i), model.getSecondName(i),
+                        Double.toString(model.getSecondLat(i)),
+                        Double.toString(model.getSecondLon(i)), " ",
+                        model.getSecondMunicipality(i), model.getSecondRegion(i),
+                        model.getSecondCountry(i), model.getSecondContinent(i),
+                        model.getSecondAirportURL(i), model.getSecondRegionUrl(i),
+                        model.getSecondCountry(i), model.getPairDistance(i), "miles");
                 finalPairId++;
                 view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId, model.isWraparound(i));
                 if(displayName) {
