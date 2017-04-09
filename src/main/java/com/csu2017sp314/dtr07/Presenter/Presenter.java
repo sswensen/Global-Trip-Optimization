@@ -307,6 +307,13 @@ public class Presenter {
         view.setOptions(arguments);
     }
 
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
+    }
+
     public void planTrip(String selectionXml, String svgMap) throws Exception {
         //fname = filename;
         this.selectionXml = selectionXml;
@@ -350,7 +357,12 @@ public class Presenter {
             double firstLat = model.getFirstLat(i);
             double secondLon = model.getSecondLon(i);
             double secondLat = model.getSecondLat(i);
-            int pairDistance = model.getPairDistance(i);
+            int pairDistance;
+            if(!kilometers) {
+                pairDistance = model.getPairDistance(i);
+            } else {
+                pairDistance = convert(model.getPairDistance(i));
+            }
             String pairId = model.getPairId(i);
             String firstId = model.getFirstId(i);
             String secondId = model.getSecondId(i);
