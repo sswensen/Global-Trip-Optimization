@@ -361,14 +361,7 @@ public class Presenter {
             double firstLat = model.getFirstLat(i);
             double secondLon = model.getSecondLon(i);
             double secondLat = model.getSecondLat(i);
-            int pairDistance;
-            if(!kilometers) {
-                pairDistance = model.getPairDistance(i);
-                System.out.println("Bitch");
-            } else {
-                pairDistance = convert(model.getPairDistance(i));
-                System.out.println("Ho");
-           }
+            int pairDistance = model.getPairDistance(i);
             String pairId = model.getPairId(i);
             String firstId = model.getFirstId(i);
             String secondId = model.getSecondId(i);
