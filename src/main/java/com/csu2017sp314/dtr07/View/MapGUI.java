@@ -368,7 +368,7 @@ public class MapGUI {
         addLoadButton(tripName);
         System.out.println(selectionXml);
         //for(int i = 0; i < tripNames.size(); i++) {
-            //System.out.println("id at index " + i + " = " + tripNames.get(i));
+        //System.out.println("id at index " + i + " = " + tripNames.get(i));
         //}
         //System.out.println("trips size = " + trips.size());
     }
@@ -457,9 +457,9 @@ public class MapGUI {
             for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
                 for(int j = 0; j < tempLoc.getNames().size(); j++) {
-                    if(tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                    if(tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
                         dm.setValueAt("Remove", i, 0);
-                    } else if(!tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    } else if(!tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
                         dm.setValueAt("Add", i, 0);
                     }
                 }
@@ -467,9 +467,9 @@ public class MapGUI {
             for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
                 for(int j = 0; j < tempLoc.getNames().size(); j++) {
-                    if(tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                    if(tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
                         dm.setValueAt("Remove", i, 0);
-                    } else if(!tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    } else if(!tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
                         dm.setValueAt("Add", i, 0);
                     }
                 }
@@ -726,15 +726,15 @@ public class MapGUI {
             @Override
             public void actionPerformed(ActionEvent event) {
                 String s = findTextField.getText().toUpperCase().trim();
-                if (!s.equals("")) {
+                if(!s.equals("")) {
                     findTextField.setText(s);
 
                 }
             }
         });
         //searchPanel.add(findButton);
-        setGBC(0,6,4);
-        databaseWindow.add(searchPanel,gbc);
+        setGBC(0, 6, 4);
+        databaseWindow.add(searchPanel, gbc);
         //Search Municipality textField
 
         //Search Airport textField
@@ -756,15 +756,15 @@ public class MapGUI {
             @Override
             public void actionPerformed(ActionEvent event) {
                 String s = findTextField2.getText().toUpperCase().trim();
-                if (!s.equals("")) {
+                if(!s.equals("")) {
                     findTextField2.setText(s);
 
                 }
             }
         });
         //searchPanel.add(findButton);
-        setGBC(0,7,4);
-        databaseWindow.add(searchPanel2,gbc);
+        setGBC(0, 7, 4);
+        databaseWindow.add(searchPanel2, gbc);
         //Search Airport textField
 
         setGBC(0, 8, 4);
@@ -782,9 +782,9 @@ public class MapGUI {
             String text = findTextField.getText();
             String text2 = findTextField2.getText();
             fiveThingsForDatabase.remove(4);
-            fiveThingsForDatabase.add(4,text);
+            fiveThingsForDatabase.add(4, text);
             fiveThingsForDatabase.remove(5);
-            fiveThingsForDatabase.add(5,text2);
+            fiveThingsForDatabase.add(5, text2);
             guiLocations.clear();
             searchDatabase();
             updateAddButtonsDatabase(); //Update database selection scroll window
