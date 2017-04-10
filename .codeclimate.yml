@@ -39,7 +39,7 @@ engines:
       com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck:
         enabled: true
       com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck:
-        enabled: true
+        enabled: false
   csslint:
     enabled: false
 # ... CONFIG CONTENT ...

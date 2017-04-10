@@ -203,7 +203,8 @@ public class MapGUI {
             System.err.println("Error reading URL of background image");
         }
         //webEngine.load("file://" + workingDirectoryFilePath + filename + ".svg");
-        System.out.println("Attempting to display \"" + workingDirectoryFilePath + filename + ".svg\"");
+        System.out.println("Attempting to display \""
+                + workingDirectoryFilePath + filename + ".svg\"");
         root.getChildren().add(browser);
         return (scene);
     }
@@ -226,7 +227,8 @@ public class MapGUI {
         map.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //Closes app if window closes
         map.setLocationRelativeTo(null);
         map.setLayout(new BorderLayout());
-        map.setContentPane(new JLabel(new ImageIcon(workingDirectoryFilePath + "S3/" + filename + ".png"))); //Creates png background
+        map.setContentPane(new JLabel(new ImageIcon(workingDirectoryFilePath
+                + "S3/" + filename + ".png"))); //Creates png background
         map.setLayout(new FlowLayout());
         /*JLabel background = new JLabel(new ImageIcon("png/" + filename + ".png"));
         background.setLayout( new BorderLayout() );
@@ -332,14 +334,16 @@ public class MapGUI {
         return 1;
     }
 
-    private void readXML(String selectionXml) throws SAXException, IOException, ParserConfigurationException {
+    private void readXML(String selectionXml)
+            throws SAXException, IOException, ParserConfigurationException {
         Document readXml;
         File xmlFile = new File(selectionXml);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         readXml = dBuilder.parse(xmlFile);
         readXml.getDocumentElement().normalize();
-        //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        //System.out.println("*Testing*   Root element :"
+        // + readXml.getDocumentElement().getNodeName());
         ArrayList<String> tempTrip = new ArrayList<>();
         NodeList nList = readXml.getElementsByTagName("destinations");
         NodeList nList2 = readXml.getElementsByTagName("title");
@@ -368,12 +372,13 @@ public class MapGUI {
         addLoadButton(tripName);
         System.out.println(selectionXml);
         //for(int i = 0; i < tripNames.size(); i++) {
-            //System.out.println("id at index " + i + " = " + tripNames.get(i));
+        //System.out.println("id at index " + i + " = " + tripNames.get(i));
         //}
         //System.out.println("trips size = " + trips.size());
     }
 
-    private int saveTripToXML(String name, ArrayList ids) throws ParserConfigurationException, TransformerException {
+    private int saveTripToXML(String name, ArrayList ids)
+            throws ParserConfigurationException, TransformerException {
         Document saveXml;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
@@ -430,14 +435,16 @@ public class MapGUI {
             setGBC(0, z2, 1);
             rightTick = true;
         }
-        if(allSavedTrips.size() == 0 || name.equals(" Save Trip "))
+        if(allSavedTrips.size() == 0 || name.equals(" Save Trip ")) {
             savedTrip = z;
+        }
         System.out.println("Trip name is " + tripName);
         JButton load = new JButton("Load Trip " + tripName);
         loadPanel.add(load, gbc);
         System.out.println("Added button " + load.getText());
         load.addActionListener((ActionEvent eee) -> {
-            //System.out.println("Attempting to load trip " + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
+            //System.out.println("Attempting to load trip "
+            // + load.getText().substring(10) + " containing " + trips.get(tripNames.indexOf(load.getText().substring(10))));
             //tempLoc = allSavedTrips.get(tripNames.indexOf(load.getText().substring(10)));
             tempLoc = new SavedTrip(searchAllSavedTripsWithName(load.getText().substring(10)));
             //tempLocIds = tripIds.get(tripNames.indexOf(load.getText().substring(10)));
@@ -457,9 +464,9 @@ public class MapGUI {
             for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
                 for(int j = 0; j < tempLoc.getNames().size(); j++) {
-                    if(tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                    if(tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
                         dm.setValueAt("Remove", i, 0);
-                    } else if(!tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    } else if(!tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
                         dm.setValueAt("Add", i, 0);
                     }
                 }
@@ -467,9 +474,9 @@ public class MapGUI {
             for(int i = 0; i < dm.getRowCount(); i++) {
                 System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
                 for(int j = 0; j < tempLoc.getNames().size(); j++) {
-                    if(tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                    if(tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
                         dm.setValueAt("Remove", i, 0);
-                    } else if(!tempLoc.containsName((String)dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    } else if(!tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
                         dm.setValueAt("Add", i, 0);
                     }
                 }
@@ -478,10 +485,12 @@ public class MapGUI {
         });
         updateTripLabel(load.getText().substring(10));
         savedTrip = updateSavedTripWithName(load.getText().substring(10));
-        System.out.println("Setting savedTrip to " + updateSavedTripWithName(load.getText().substring(10)));
+        System.out.println("Setting savedTrip to "
+                + updateSavedTripWithName(load.getText().substring(10)));
     }
 
-    private JButton addSaveButton(String name) throws ParserConfigurationException, TransformerException {
+    private JButton addSaveButton(String name)
+            throws ParserConfigurationException, TransformerException {
         JButton sa = new JButton(name);
         sa.addActionListener((ActionEvent e) -> {
             ArrayList<String> trip = new ArrayList<>(tempLoc.getNames());
@@ -506,13 +515,12 @@ public class MapGUI {
                     guiLocations.clear();
                     userAddLocList(temp.getIds());
                     guiLocations = temp.getLocations();
-                    System.out.println("Adding " + trip + " to trips at index " + (allSavedTrips.size() - 1));
+                    System.out.println("Adding " + trip + " to trips at index "
+                            + (allSavedTrips.size() - 1));
                     try {
                         saveTripToXML(tripName, lastTrip.getIds());
-                    } catch(ParserConfigurationException parseException) {
-
-                    } catch(TransformerException transException) {
-
+                    } catch(Exception eee) {
+                        System.err.println("Error writing to new xml");
                     }
                     addLoadButton(name);
                     tempLoc = temp;
@@ -543,10 +551,8 @@ public class MapGUI {
                 guiLocations = allSavedTrips.get(savedTrip).getLocations();
                 try {
                     saveTripToXML(allSavedTrips.get(savedTrip).getName(), trip); //Save xml and copy svg
-                } catch(ParserConfigurationException parseException) {
-
-                } catch(TransformerException transException) {
-
+                } catch(Exception eee) {
+                    System.err.println("Error writing to new xml");
                 }
                 System.out.println("Adding " + trip + " to trips at index " + savedTrip);
                 //}
@@ -726,15 +732,15 @@ public class MapGUI {
             @Override
             public void actionPerformed(ActionEvent event) {
                 String s = findTextField.getText().toUpperCase().trim();
-                if (!s.equals("")) {
+                if(!s.equals("")) {
                     findTextField.setText(s);
 
                 }
             }
         });
         //searchPanel.add(findButton);
-        setGBC(0,6,4);
-        databaseWindow.add(searchPanel,gbc);
+        setGBC(0, 6, 4);
+        databaseWindow.add(searchPanel, gbc);
         //Search Municipality textField
 
         //Search Airport textField
@@ -756,15 +762,15 @@ public class MapGUI {
             @Override
             public void actionPerformed(ActionEvent event) {
                 String s = findTextField2.getText().toUpperCase().trim();
-                if (!s.equals("")) {
+                if(!s.equals("")) {
                     findTextField2.setText(s);
 
                 }
             }
         });
         //searchPanel.add(findButton);
-        setGBC(0,7,4);
-        databaseWindow.add(searchPanel2,gbc);
+        setGBC(0, 7, 4);
+        databaseWindow.add(searchPanel2, gbc);
         //Search Airport textField
 
         setGBC(0, 8, 4);
@@ -782,9 +788,9 @@ public class MapGUI {
             String text = findTextField.getText();
             String text2 = findTextField2.getText();
             fiveThingsForDatabase.remove(4);
-            fiveThingsForDatabase.add(4,text);
+            fiveThingsForDatabase.add(4, text);
             fiveThingsForDatabase.remove(5);
-            fiveThingsForDatabase.add(5,text2);
+            fiveThingsForDatabase.add(5, text2);
             guiLocations.clear();
             searchDatabase();
             updateAddButtonsDatabase(); //Update database selection scroll window
@@ -1245,7 +1251,8 @@ public class MapGUI {
         }
 
         setGBC(0, Integer.parseInt(seqId), 4);
-        JLabel lab = new JLabel("ID: " + seqId + "   " + name1 + " to " + name2 + "   " + mileage + " miles");
+        JLabel lab = new JLabel("ID: " + seqId + "   " + name1
+                + " to " + name2 + "   " + mileage + " miles");
         lab.setHorizontalAlignment(2);
         fTemp2.add(lab, gbc);
         GUILocation temp = searchGuiLocationsWithName(name1);
@@ -1365,8 +1372,10 @@ public class MapGUI {
         });
         /*map.setVisible(false);
         new Convert(filename, filenameIncrementer);
-        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath + "png/" + filename + filenameIncrementer + "_User.png"));
-        File temp = new File(workingDirectoryFilePath + "png/" + filename + (filenameIncrementer - 1) + "_User.png");
+        JLabel background = new JLabel(new ImageIcon(workingDirectoryFilePath
+        + "png/" + filename + filenameIncrementer + "_User.png"));
+        File temp = new File(workingDirectoryFilePath + "png/"
+        + filename + (filenameIncrementer - 1) + "_User.png");
         if(!temp.delete() && filenameIncrementer != 1) {
             System.out.println("Error deleting " + temp.getPath());
         }
@@ -1410,7 +1419,8 @@ public class MapGUI {
 
     boolean cleanup() {
         boolean ret;
-        File t = new File(workingDirectoryFilePath + "output/" + filename + (filenameIncrementer - 1) + "_User.png");
+        File t = new File(workingDirectoryFilePath + "output/"
+                + filename + (filenameIncrementer - 1) + "_User.png");
         ret = t.delete();
         File temp = new File(workingDirectoryFilePath + "output/" + filename + ".png");
         Boolean ret2 = temp.delete();

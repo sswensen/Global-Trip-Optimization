@@ -15,6 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by SummitDrift on 2/13/17.
  * Main class for Presenter Package
+ * Handles all view and model data
  */
 
 public class Presenter {
