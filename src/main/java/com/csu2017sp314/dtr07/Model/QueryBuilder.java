@@ -24,25 +24,29 @@ import java.util.ArrayList;
  */
 
 class QueryBuilder {
-    private boolean useDatabase;
     private final String myDriver = "com.mysql.jdbc.Driver";
     //private final static String myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314"; //Original
     private final String myUrl = "jdbc:mysql://127.0.0.1:3306/cs314"; //Using tunneling
     private final String count = "SELECT COUNT(1) ";
-    private final String columns = "SELECT airports.id,airports.name,latitude,longitude,municipality,regions.name,countries.name,continents.name,airports.wikipedia_link,regions.wikipedia_link,countries.wikipedia_link ";
+    private final String columns = "SELECT airports.id,airports.name,latitude,longitude,municipality,"
+            + "regions.name,countries.name,continents.name,airports.wikipedia_link,regions.wikipedia_link,"
+            + "countries.wikipedia_link ";
     private final String continents = "FROM continents ";
-    private String where = "";
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
     private final String limit = " LIMIT 333";
-    private ArrayList<Location> locations = new ArrayList<>(); //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
+    private boolean useDatabase;
+    private String where = "";
+    private ArrayList<Location> locations = new ArrayList<>();
+    //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     public QueryBuilder(boolean useDB) {
         useDatabase = useDB;
     }
 
-    void searchDatabase(String type, String continent, String country, String region, String municipality, String name) {
+    void searchDatabase(String type, String continent, String country,
+                        String region, String municipality, String name) {
         ArrayList<String> w = new ArrayList<>();
         w.add(type);
         w.add(continent);
@@ -82,7 +86,8 @@ class QueryBuilder {
 
     //TODO add function for changing limit, this is very optional as we will lkely limit to 500
 
-    //TODO add function that returns the number of items found, actually this can be accomplished by calling the size function on the ids returned to the db selection window
+    //TODO add function that returns the number of items found, actually this can be accomplished
+    // by calling the size function on the ids returned to the db selection window
 
     private void setWhere(ArrayList<String> wheres) {
         if(wheres.get(0).equalsIgnoreCase("All airports")) {
@@ -154,7 +159,7 @@ class QueryBuilder {
         where = ret;
     }
 
-    void fireQuery() { //String whatDoYouWantBack) { //if "locations" is passed in as parameter, make locations with db stuff, else just return the names
+    void fireQuery() { //String whatDoYouWantBack) {
         /*boolean makeLocationsQuestionMark = false;
         if(whatDoYouWantBack.equals("locations")) {
             makeLocationsQuestionMark = true;
@@ -191,8 +196,12 @@ class QueryBuilder {
                                 System.out.printf("%s,", rs.getString(i));
                             System.out.printf("%s\n", rs.getString(8));*/
                                 //System.out.println("Creating location with id [" + rs.getString(1) + "]");
-                                locations.add(new Location(rs.getString(1), rs.getString(2), rs.getString(3),
-                                        rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10), rs.getString(11)));
+                                locations.add(new Location(rs.getString(1),
+                                        rs.getString(2), rs.getString(3),
+                                        rs.getString(4), rs.getString(5),
+                                        rs.getString(6), rs.getString(7),
+                                        rs.getString(8), rs.getString(9),
+                                        rs.getString(10), rs.getString(11)));
                             }
                         } finally {
                             rs.close();
@@ -210,8 +219,18 @@ class QueryBuilder {
                 System.exit(33); //Something broke in the database :/
             }
         } else {
-            locations.add(new Location("KBKF",	"Buckley Air Force Base",	"39.701698303200004",	"-104.751998901",	"Aurora",	"Colorado",	"United States",	 "North America",	"http://en.wikipedia.org/wiki/Buckley_Air_Force_Base",	"http://en.wikipedia.org/wiki/Colorado",	"http://en.wikipedia.org/wiki/United_States"));
-            locations.add(new Location("KEGE",	"Eagle County Regional Airport",	"39.64260101",	"-106.9179993",	"Eagle",	"Colorado",	"United States",	 "North America",	"http://en.wikipedia.org/wiki/Eagle_County_Regional_Airport",	"http://en.wikipedia.org/wiki/Colorado",	"http://en.wikipedia.org/wiki/United_States"));
+            locations.add(new Location("KBKF", "Buckley Air Force Base",
+                    "39.701698303200004", "-104.751998901", "Aurora",
+                    "Colorado", "United States", "North America",
+                    "http://en.wikipedia.org/wiki/Buckley_Air_Force_Base",
+                    "http://en.wikipedia.org/wiki/Colorado",
+                    "http://en.wikipedia.org/wiki/United_States"));
+            locations.add(new Location("KEGE", "Eagle County Regional Airport",
+                    "39.64260101", "-106.9179993", "Eagle",
+                    "Colorado", "United States", "North America",
+                    "http://en.wikipedia.org/wiki/Eagle_County_Regional_Airport",
+                    "http://en.wikipedia.org/wiki/Colorado",
+                    "http://en.wikipedia.org/wiki/United_States"));
         }
     }
 
