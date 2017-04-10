@@ -3,7 +3,6 @@ package com.csu2017sp314.dtr07.View;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -133,26 +133,32 @@ public class View {
         callback3.accept(option);
     }
 
-    public void addLeg(String sequence, String id, String name, String latitude, String longitude,
-                       String elevation, String municipality, String region, String country,
-                       String continent, String airportURL, String regionURL, String countryURL,
-                       String id2, String name2, String latitude2, String longitude2, String elevation2,
-                       String municipality2, String region2, String country2, String continent2,
-                       String airportURL2, String regionURL2, String countryURL2, int distanceBetween, String units) {
+    public void addLeg(String sequence, String id, String name, String latitude,
+                       String longitude, String elevation, String municipality,
+                       String region, String country, String continent, String airportURL,
+                       String regionURL, String countryURL, String id2, String name2,
+                       String latitude2, String longitude2, String elevation2,
+                       String municipality2, String region2, String country2,
+                       String continent2, String airportURL2, String regionURL2,
+                       String countryURL2, int distanceBetween, String units) {
         xml.addLeg(sequence,id,name,latitude,longitude,elevation,municipality,region,country,
-                continent,airportURL,regionURL,countryURL,id2,name2,latitude2,longitude2,elevation2,
-                municipality2,region2,country2,continent2,airportURL2,regionURL2,countryURL2,distanceBetween,units);
+                continent,airportURL,regionURL,countryURL,id2,name2,latitude2,longitude2,
+                elevation2, municipality2,region2,country2,continent2,airportURL2,regionURL2,
+                countryURL2,distanceBetween,units);
     }
 
-    public void addFinalLeg(String sequence, String id, String name, String latitude, String longitude,
-                            String elevation, String municipality, String region, String country,
-                            String continent, String airportURL, String regionURL, String countryURL,
-                            String id2, String name2, String latitude2, String longitude2, String elevation2,
-                            String municipality2, String region2, String country2, String continent2,
-                            String airportURL2, String regionURL2, String countryURL2, int distanceBetween, String units) {
-        xml.addLeg(sequence,id,name,latitude,longitude,elevation,municipality,region,country,continent,
-                airportURL,regionURL,countryURL,id2,name2,latitude2,longitude2,elevation2,municipality2,
-                region2,country2,continent2,airportURL2,regionURL2,countryURL2,distanceBetween,units);
+    public void addFinalLeg(String sequence, String id, String name, String latitude,
+                            String longitude, String elevation, String municipality,
+                            String region, String country, String continent, String airportURL,
+                            String regionURL, String countryURL, String id2, String name2,
+                            String latitude2, String longitude2, String elevation2,
+                            String municipality2, String region2, String country2,
+                            String continent2, String airportURL2, String regionURL2,
+                            String countryURL2, int distanceBetween, String units) {
+        xml.addLeg(sequence,id,name,latitude,longitude,elevation,municipality,region,country,
+                continent,airportURL,regionURL,countryURL,id2,name2,latitude2,longitude2,
+                elevation2,municipality2,region2,country2,continent2,airportURL2,regionURL2,
+                countryURL2,distanceBetween,units);
     }
 
     public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) {
@@ -198,7 +204,8 @@ public class View {
         }
     }
 
-    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id, boolean wraparound) {
+    public void addDistance(double x1, double y1, double x2, double y2, int distance,
+                            String id, boolean wraparound) {
         if(wraparound) {
             double originalX1 = x1;
             double originalY1 = y1;
