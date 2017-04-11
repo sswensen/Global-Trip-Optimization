@@ -94,18 +94,6 @@ class LocationFactory {
         return true;
     }
 
-    public int getTotalImprovements() {
-        return this.totalImprovements;
-    }
-
-    public void setTotalImprovements(int totalImprovements) {
-        this.totalImprovements = totalImprovements;
-    }
-  
-    public void setLocations(ArrayList<Location> locations) {
-        this.locations = locations;
-    }
-
     ArrayList<Location> setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName, boolean useDB) {
         this.selectedAirports = selectedAirportIds;
         QueryBuilder qb = new QueryBuilder(useDB);
@@ -131,19 +119,11 @@ class LocationFactory {
         return new ArrayList<>(pairs);
     }
 
-    public void setTwoOpt(boolean twoOpt) {
-        this.twoOpt = twoOpt;
-    }
-
-    public void setThreeOpt(boolean threeOpt) {
-        this.threeOpt = threeOpt;
-    }
-
     public boolean getTwoOpt() {
         return this.twoOpt;
     }
 
-    void setTwoOpt(boolean twoOpt) {
+    public void setTwoOpt(boolean twoOpt) {
         this.twoOpt = twoOpt;
     }
 

@@ -1,9 +1,11 @@
 package com.csu2017sp314.dtr07.View;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.function.Consumer;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -12,11 +14,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -97,10 +98,6 @@ public class View {
 
     Document getSVGdoc() {
         return svg.getSVGdoc();
-    }
-
-    public void setKilometers(boolean kilometers) {
-        this.kilometers = kilometers;
     }
 
     public boolean getKilometers() {
@@ -284,14 +281,16 @@ public class View {
         transformer.transform(source2, result2);
     }
 
+    public ArrayList<String> getOptions() {
+        return viewArguments;
+    }
+
     public void setOptions(ArrayList<String> arguments){
         for(int i = 0; i < arguments.size();i++){
             viewArguments.add(arguments.get(i));
         }
     }
-    public ArrayList<String> getOptions(){
-        return viewArguments;
-    }
+
     public void gui() throws Exception {
         gui.setCallback((String s) -> {
             this.userAddLoc(s);

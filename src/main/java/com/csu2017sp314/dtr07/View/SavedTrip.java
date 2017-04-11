@@ -42,11 +42,6 @@ public class SavedTrip {
         this.name = name;
         findNamesOrIDs(ids);
     }
-
-    public SavedTrip() {
-        this.name = "untitiled";
-        locations = new ArrayList<>();
-    }
   
     public String getName() {
         return name;
