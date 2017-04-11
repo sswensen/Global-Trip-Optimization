@@ -743,7 +743,6 @@ public class MapGUI {
                 String s = findTextField.getText().toUpperCase().trim();
                 if(!s.equals("")) {
                     findTextField.setText(s);
-
                 }
             }
         });
@@ -773,7 +772,6 @@ public class MapGUI {
                 String s = findTextField2.getText().toUpperCase().trim();
                 if(!s.equals("")) {
                     findTextField2.setText(s);
-
                 }
             }
         });
@@ -837,6 +835,7 @@ public class MapGUI {
             userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
             tempLoc = new SavedTrip();
+            tempLoc.setLocations(new ArrayList<>(guiLocations));
             updateAddButtonsAddRemove(locationNames);
         });
         databaseWindow.add(selectAll, gbc);
@@ -859,7 +858,7 @@ public class MapGUI {
             ArrayList<String> locationNames = searchDBLocationNames();
             userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
-            tempLoc = new SavedTrip();
+            tempLoc = new SavedTrip("untitled", locationNames);
             updateAddButtonsAddRemove(locationNames);
         });
         databaseWindow.add(transferToFirstWindow, gbc);
@@ -1033,6 +1032,26 @@ public class MapGUI {
             }
         };
         ButtonColumn buttonColumn = new ButtonColumn(table2, test, 0);
+        for(int i = 0; i < dm.getRowCount(); i++) {
+            System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
+            for(int j = 0; j < tempLoc.getNames().size(); j++) {
+                if(tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                    dm.setValueAt("Remove", i, 0);
+                } else if(!tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    dm.setValueAt("Add", i, 0);
+                }
+            }
+        }
+        for(int i = 0; i < dm.getRowCount(); i++) {
+            System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
+            for(int j = 0; j < tempLoc.getNames().size(); j++) {
+                if(tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                    dm.setValueAt("Remove", i, 0);
+                } else if(!tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    dm.setValueAt("Add", i, 0);
+                }
+            }
+        }
     }
 
     void resizeTable(JTable table) {
@@ -1101,7 +1120,14 @@ public class MapGUI {
         GUILocation temp2 = searchGuiLocationsWithName(name2);
         if(temp == null || temp2 == null) {
             System.err.println("One of the two GUILocations in addLegToItinerary is null aborting...");
-            System.exit(4);
+        }
+        if(temp == null && temp2 == null) {
+            return -1;
+        }
+        if(temp == null) {
+            temp = temp2;
+        } else {
+            temp2 = temp;
         }
         if(lab.getText() != null) {
             model.addRow(new Object[]{seqId, temp.getName(), temp2.getName(), mileage});
@@ -1478,7 +1504,9 @@ public class MapGUI {
 
             isButtonColumnEditor = false;
         }//
-    /*
+
+        public void mouseEntered(MouseEvent e) {
+        }    /*
      *	The button has been pressed. Stop editing and invoke the custom Action
 	 */
         public void actionPerformed(ActionEvent e) {
@@ -1492,9 +1520,6 @@ public class MapGUI {
                     ActionEvent.ACTION_PERFORMED,
                     "" + row);
             action.actionPerformed(event);
-        }
-
-        public void mouseEntered(MouseEvent e) {
         }
 
         public void mouseExited(MouseEvent e) {

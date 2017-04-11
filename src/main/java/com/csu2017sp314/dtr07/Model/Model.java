@@ -64,7 +64,7 @@ public class Model {
         if(!threeOpt && !tick) {
             userLocations = new ArrayList<>(previousLocations);
         }
-        lf.setLocations(userLocations);//TODOdone read from database
+        lf.setLocations(new ArrayList<>(userLocations));//TODOdone read from database
         //List locations is not the ids of the selected airports
         lf.thirdTry();
         userLocations = lf.getLocations();

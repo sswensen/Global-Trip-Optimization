@@ -160,7 +160,7 @@ class LocationFactory {
     }
 
     ArrayList<Location> getLocations() {
-        return locations;
+        return new ArrayList<>(locations);
     }
 
     public void setLocations(ArrayList<Location> locations) {
@@ -168,7 +168,7 @@ class LocationFactory {
     }
 
     ArrayList<Pair> getPairs() {
-        return pairs;
+        return new ArrayList<>(pairs);
     }
 
     public boolean getTwoOpt() {
