@@ -858,7 +858,8 @@ public class MapGUI {
             ArrayList<String> locationNames = searchDBLocationNames();
             userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
-            tempLoc = new SavedTrip("untitled", locationNames);
+            tempLoc = new SavedTrip();
+            tempLoc.setLocations(new ArrayList<>(getDatabaseIdsUsingNames(locationNames)));
             updateAddButtonsAddRemove(locationNames);
         });
         databaseWindow.add(transferToFirstWindow, gbc);
@@ -1285,6 +1286,18 @@ public class MapGUI {
         return ret;
     }
 
+    ArrayList<GUILocation> getDatabaseIdsUsingNames(ArrayList<String> names) {
+        ArrayList<GUILocation> ret = new ArrayList<>();
+        for(String name : names) {
+            for(GUILocation loc : guiLocations) {
+                if(loc.getName().equalsIgnoreCase(name)) {
+                    ret.add(loc);
+                }
+            }
+        }
+        return ret;
+    }
+
     boolean cleanup() {
         boolean ret;
         File t = new File(workingDirectoryFilePath + "output/"
@@ -1509,6 +1522,10 @@ public class MapGUI {
         }    /*
      *	The button has been pressed. Stop editing and invoke the custom Action
 	 */
+
+        public void mouseExited(MouseEvent e) {
+        }
+
         public void actionPerformed(ActionEvent e) {
             int row = table.convertRowIndexToModel(table.getEditingRow());
             fireEditingStopped();
@@ -1520,9 +1537,6 @@ public class MapGUI {
                     ActionEvent.ACTION_PERFORMED,
                     "" + row);
             action.actionPerformed(event);
-        }
-
-        public void mouseExited(MouseEvent e) {
         }
 
 
