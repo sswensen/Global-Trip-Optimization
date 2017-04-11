@@ -2,10 +2,13 @@ package com.csu2017sp314.dtr07.View;
 
 
 import static org.junit.Assert.*;
+
+import jdk.nashorn.internal.runtime.ECMAException;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.util.ArrayList;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -16,6 +19,31 @@ public class TestView {
 
     @Before
     public void initialize() throws ParserConfigurationException {
+
+    }
+
+    @Test
+    public void setOptions() throws Exception{
+        ArrayList<String> temp = v.getOptions();
+        temp.add("hello");
+        assertEquals("hello", temp.get(0));
+    }
+
+    @Test
+    public void getOptions() throws Exception{
+        ArrayList<String> temp = v.getOptions();
+        assertEquals(temp.size(), v.getOptions().size());
+    }
+
+    @Test
+    public void setKilometers() throws Exception{
+        v.setKilometers(true);
+        assertEquals(true, v.getKilometers());
+    }
+
+    @Test
+    public void getKilometers() throws Exception{
+        assertEquals(false, v.getKilometers());
     }
 
     @Test
