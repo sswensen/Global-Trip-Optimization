@@ -88,6 +88,7 @@ public class MapGUI {
     private JPanel fTemp2; //Itinerary
     private JPanel databaseWindow; //GUI dropdowns
     private JFrame databaseFrame; //Frame that databaseWindow goes in
+    private JLabel numberReturned;
     private JLabel currentTrip;
     private SavedTrip lastTrip;
     private int width;
@@ -96,6 +97,7 @@ public class MapGUI {
     private ArrayList<String> fiveThingsForDatabase = new ArrayList<>(); //Used for callback
     private int index = 0; //I inked...
     private ArrayList<GUILocation> guiLocations = new ArrayList<>();
+    private int numberFromDatabase = 0;
 
     private DefaultTableModel model;
     private JTable table;
@@ -111,6 +113,13 @@ public class MapGUI {
 
     }
 
+    public static void main(String[] args) throws Exception {
+        MapGUI g = new MapGUI();
+        g.readXML("src/test/resources/Testing/selectionXml.xml");
+        g.readXML("testing.xml");
+        g.readXML("testing3.xml");
+    }
+
     void setCallback(Consumer<String> callback) {
         this.callback = callback;
     }
@@ -123,13 +132,13 @@ public class MapGUI {
         this.callback3 = callback3;
     }
 
-    void setCallback4(Consumer<ArrayList<String>> callback4) {
-        this.callback4 = callback4;
-    }
-
     /*public void userAddLoc(String id) { //Used if other callback method is used
         callback.accept(id);
     }*/
+
+    void setCallback4(Consumer<ArrayList<String>> callback4) {
+        this.callback4 = callback4;
+    }
 
     private void userAddLocList(ArrayList<String> ids) {
         callback2.accept(ids);
@@ -452,7 +461,7 @@ public class MapGUI {
             guiLocations.clear();
             userAddLocList(tempLoc.getIds());
             guiLocations = tempLoc.getLocations();
-            lastTrip = tempLoc;
+            lastTrip = new SavedTrip(tempLoc);
             //updateTripLabel(load.getText().substring(10));
             updateTripLabel(tempLoc.getName());
             updateAddButtonsAddRemove(tempLoc.getNames());
@@ -689,7 +698,7 @@ public class MapGUI {
         fiveThingsForDatabase.add("");
         fiveThingsForDatabase.add("");
         fiveThingsForDatabase.add("");
-        databaseFrame = new JFrame("Testing dropdowns");
+        databaseFrame = new JFrame("Search Database");
         databaseFrame.setVisible(true);
         databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -722,6 +731,19 @@ public class MapGUI {
         TextPrompt tp = new TextPrompt("Municipality Search", findTextField);
         findTextField.setForeground(Color.red);
         searchPanel.add(findTextField);
+        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
+
+        JButton findButton = new JButton("Search");
+        findButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                String s = findTextField.getText().toUpperCase().trim();
+                if(!s.equals("")) {
+                    findTextField.setText(s);
+                }
+            }
+        });
+        //searchPanel.add(findButton);
         setGBC(0, 6, 4);
         databaseWindow.add(searchPanel, gbc);
         //Search Municipality textField
@@ -735,6 +757,18 @@ public class MapGUI {
         TextPrompt tp2 = new TextPrompt("Airport Name Search", findTextField2);
         findTextField2.setForeground(Color.red);
         searchPanel2.add(findTextField2);
+        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
+
+        JButton findButton2 = new JButton("Search");
+        findButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                String s = findTextField2.getText().toUpperCase().trim();
+                if(!s.equals("")) {
+                    findTextField2.setText(s);
+                }
+            }
+        });
         setGBC(0, 7, 4);
         databaseWindow.add(searchPanel2, gbc);
         //Search Airport textField
@@ -760,10 +794,11 @@ public class MapGUI {
             guiLocations.clear();
             searchDatabase();
             updateAddButtonsDatabase(); //Update database selection scroll window
+            updateNumberReturnedLabel(guiLocations.size());
         });
         databaseWindow.add(searchDatabasePlease, gbc);
 
-        setGBC(0, 9, 1);
+        /*setGBC(0, 9, 1);
         JButton testingSearching = new JButton("Search for hardcoded 1");
         testingSearching.addActionListener((ActionEvent e) -> {
             ArrayList<String> testingNames = new ArrayList<>();
@@ -781,39 +816,57 @@ public class MapGUI {
             userAddLocList(testingNames);
         });
         databaseWindow.add(testingSearching2, gbc);
-        setGBC(3, 9, 1);
-        JButton selectAll = new JButton("Select all");
+        setGBC(3, 9, 1);*/
+        setGBC(0, 9, 3);
+        JButton selectAll = new JButton("Check all locations");
         selectAll.addActionListener((ActionEvent e) -> {
-            databaseLocations.clear();
             for(GUILocation loc : guiLocations) {
                 databaseLocations.add(loc.getName());
             }
-
+            /*ArrayList<String> locationNames = searchDBLocationNames();
+            userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
+            //tempLoc = locationNames;
+            tempLoc = new SavedTrip();
+            tempLoc.setLocations(new ArrayList<>(guiLocations));
+            updateAddButtonsAddRemove(locationNames);
+            locationNames.clear();*/
         });
         databaseWindow.add(selectAll, gbc);
 
+        setGBC(3, 9, 1);
+        numberReturned = new JLabel("");
+        databaseWindow.add(numberReturned, gbc);
 
         updateAddButtonsDatabase();
 
         JScrollPane scroll = new JScrollPane(table3);
         setGBC(0, 10, 4);
-        table3.setPreferredScrollableViewportSize(new Dimension(470, 260));
+        table3.setPreferredScrollableViewportSize(new Dimension(470, 184));
         databaseWindow.add(scroll, gbc);
 
         setGBC(0, 11, 4);
-        JButton transferToFirstWindow = new JButton("Select");
+        JButton transferToFirstWindow = new JButton("Plan trip/Draw map");
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
             //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
-            ArrayList<String> locationNames = searchDBLocationNames();
-            userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
+            //ArrayList<String> locationNames = searchDBLocationNames();
+            ArrayList<String> locationNames = new ArrayList<>(databaseLocations);
+            //userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
-            tempLoc = new SavedTrip();
-            updateAddButtonsAddRemove(locationNames);
+            tempLoc = new SavedTrip("untitled", new ArrayList<>(databaseLocations));
+            userAddLocList(tempLoc.getIds());
+            //tempLoc.setLocations(new ArrayList<>(getDatabaseIdsUsingNames(locationNames)));
+            updateAddButtonsAddRemove(databaseLocations);
+            databaseLocations.clear();
         });
         databaseWindow.add(transferToFirstWindow, gbc);
 
         databaseFrame.add(databaseWindow);
         databaseFrame.pack();
+    }
+
+    private void updateNumberReturnedLabel(int a) {
+        numberReturned.setText("Showing " + a + " out of " + numberFromDatabase + " locations");
+        System.out.println("Showing " + a + " out of " + numberFromDatabase + " locations");
     }
 
     void updateAddButtonsDatabase() {
@@ -883,7 +936,7 @@ public class MapGUI {
         JButton loadFromXML = createXMLBrowser();
         loadPanel.add(loadFromXML, gbc);
 
-        setGBC(0, 1, 2);
+        setGBC(0, 1, 1);
 
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
@@ -899,6 +952,16 @@ public class MapGUI {
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
+        setGBC(4, 1, 1);
+
+        JButton sa = new JButton("Clear");
+        sa.addActionListener((ActionEvent e) -> {
+            System.out.println(this.databaseLocations);
+            tempLoc = new SavedTrip();
+            updateAddButtonsAddRemove(new ArrayList<>());
+        });
+        fTemp.add(sa, gbc);
+
         updateAddButtonsAddRemove(ids);
 
         /*
@@ -911,7 +974,7 @@ public class MapGUI {
         System.out.println(temp.getText());
         */
         JScrollPane scroll = new JScrollPane(table2);
-        setGBC(0, 2, 4);
+        setGBC(0, 2, 5);
         fTemp.add(scroll, gbc);
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
@@ -959,7 +1022,7 @@ public class MapGUI {
                 }
                 tick = false;
                 if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
-                    if(!tempLoc.getNames().contains(ids.get(index))) {
+                    if(!tempLoc.containsName(ids.get(index))) {
                         tempLoc.addName(ids.get(index));
                         //tempLoc.getIds().add(searchForDatabaseIdsUsingNames(ids.get(index))); //TODO need to also add the corresponding id to this
                         System.out.println("Added " + ids.get(index) + " to array");
@@ -976,186 +1039,25 @@ public class MapGUI {
             }
         };
         ButtonColumn buttonColumn = new ButtonColumn(table2, test, 0);
-    }
-
-    public class ButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
-        private JTable table;
-        private Action action;
-        private int mnemonic;
-        private Border originalBorder;
-        private Border focusBorder;
-
-        private JButton renderButton;
-        private JButton editButton;
-        private Object editorValue;
-        private boolean isButtonColumnEditor;
-
-        /**
-         * Create the ButtonColumn to be used as a renderer and editor. The
-         * renderer and editor will automatically be installed on the TableColumn
-         * of the specified column.
-         *
-         * @param table  the table containing the button renderer/editor
-         * @param action the Action to be invoked when the button is invoked
-         * @param column the column to which the button renderer/editor is added
-         */
-        public ButtonColumn(JTable table, Action action, int column) {
-            this.table = table;
-            this.action = action;
-
-            renderButton = new JButton();
-            editButton = new JButton();
-            editButton.setFocusPainted(false);
-            editButton.addActionListener(this);
-            originalBorder = editButton.getBorder();
-            setFocusBorder(new LineBorder(Color.BLUE));
-
-            TableColumnModel columnModel = table.getColumnModel();
-            columnModel.getColumn(column).setCellRenderer(this);
-            columnModel.getColumn(column).setCellEditor(this);
-            table.addMouseListener(this);
-        }
-
-
-        /**
-         * Get foreground color of the button when the cell has focus
-         *
-         * @return the foreground color
-         */
-        public Border getFocusBorder() {
-            return focusBorder;
-        }
-
-        /**
-         * The foreground color of the button when the cell has focus
-         *
-         * @param focusBorder the foreground color
-         */
-        public void setFocusBorder(Border focusBorder) {
-            this.focusBorder = focusBorder;
-            editButton.setBorder(focusBorder);
-        }
-
-        public int getMnemonic() {
-            return mnemonic;
-        }
-
-        /**
-         * The mnemonic to activate the button when the cell has focus
-         *
-         * @param mnemonic the mnemonic
-         */
-        public void setMnemonic(int mnemonic) {
-            this.mnemonic = mnemonic;
-            renderButton.setMnemonic(mnemonic);
-            editButton.setMnemonic(mnemonic);
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(
-                JTable table, Object value, boolean isSelected, int row, int column) {
-            if(value == null) {
-                editButton.setText("");
-                editButton.setIcon(null);
-            } else if(value instanceof Icon) {
-                editButton.setText("");
-                editButton.setIcon((Icon) value);
-            } else {
-                editButton.setText(value.toString());
-                editButton.setIcon(null);
+        for(int i = 0; i < dm.getRowCount(); i++) {
+            System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
+            for(int j = 0; j < tempLoc.getNames().size(); j++) {
+                if(tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                    dm.setValueAt("Remove", i, 0);
+                } else if(!tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    dm.setValueAt("Add", i, 0);
+                }
             }
-
-            this.editorValue = value;
-            return editButton;
         }
-
-        @Override
-        public Object getCellEditorValue() {
-            return editorValue;
-        }
-
-        //
-//  Implement TableCellRenderer interface
-//
-        public Component getTableCellRendererComponent(
-                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            if(isSelected) {
-                renderButton.setForeground(table.getSelectionForeground());
-                renderButton.setBackground(table.getSelectionBackground());
-            } else {
-                renderButton.setForeground(table.getForeground());
-                renderButton.setBackground(UIManager.getColor("Button.background"));
+        for(int i = 0; i < dm.getRowCount(); i++) {
+            System.out.println(dm.getValueAt(i, 0) + " " + dm.getValueAt(i, 1));
+            for(int j = 0; j < tempLoc.getNames().size(); j++) {
+                if(tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Add")) {
+                    dm.setValueAt("Remove", i, 0);
+                } else if(!tempLoc.containsName((String) dm.getValueAt(i, 1)) && dm.getValueAt(i, 0).equals("Remove")) {
+                    dm.setValueAt("Add", i, 0);
+                }
             }
-
-            if(hasFocus) {
-                renderButton.setBorder(focusBorder);
-            } else {
-                renderButton.setBorder(originalBorder);
-            }
-
-//		renderButton.setText( (value == null) ? "" : value.toString() );
-            if(value == null) {
-                renderButton.setText("");
-                renderButton.setIcon(null);
-            } else if(value instanceof Icon) {
-                renderButton.setText("");
-                renderButton.setIcon((Icon) value);
-            } else {
-                renderButton.setText(value.toString());
-                renderButton.setIcon(null);
-            }
-
-            return renderButton;
-        }
-
-        //
-//  Implement ActionListener interface
-//
-    /*
-     *	The button has been pressed. Stop editing and invoke the custom Action
-	 */
-        public void actionPerformed(ActionEvent e) {
-            int row = table.convertRowIndexToModel(table.getEditingRow());
-            fireEditingStopped();
-
-            //  Invoke the Action
-
-            ActionEvent event = new ActionEvent(
-                    table,
-                    ActionEvent.ACTION_PERFORMED,
-                    "" + row);
-            action.actionPerformed(event);
-        }
-
-        //
-//  Implement MouseListener interface
-//
-    /*
-     *  When the mouse is pressed the editor is invoked. If you then then drag
-	 *  the mouse to another cell before releasing it, the editor is still
-	 *  active. Make sure editing is stopped when the mouse is released.
-	 */
-        public void mousePressed(MouseEvent e) {
-            if(table.isEditing()
-                    && table.getCellEditor() == this)
-                isButtonColumnEditor = true;
-        }
-
-        public void mouseReleased(MouseEvent e) {
-            if(isButtonColumnEditor
-                    && table.isEditing())
-                table.getCellEditor().stopCellEditing();
-
-            isButtonColumnEditor = false;
-        }
-
-        public void mouseClicked(MouseEvent e) {
-        }
-
-        public void mouseEntered(MouseEvent e) {
-        }
-
-        public void mouseExited(MouseEvent e) {
         }
     }
 
@@ -1225,7 +1127,15 @@ public class MapGUI {
         GUILocation temp2 = searchGuiLocationsWithName(name2);
         if(temp == null || temp2 == null) {
             System.err.println("One of the two GUILocations in addLegToItinerary is null aborting...");
-            System.exit(4);
+        }
+        if(temp == null && temp2 == null) {
+            return -1;
+        }
+        if(temp == null) {
+            temp = temp2;
+        }
+        if(temp2 == null) {
+            temp2 = temp;
         }
         if(lab.getText() != null) {
             model.addRow(new Object[]{seqId, temp.getName(), temp2.getName(), mileage});
@@ -1383,6 +1293,18 @@ public class MapGUI {
         return ret;
     }
 
+    ArrayList<GUILocation> getDatabaseIdsUsingNames(ArrayList<String> names) {
+        ArrayList<GUILocation> ret = new ArrayList<>();
+        for(String name : names) {
+            for(GUILocation loc : guiLocations) {
+                if(loc.getName().equalsIgnoreCase(name)) {
+                    ret.add(loc);
+                }
+            }
+        }
+        return ret;
+    }
+
     boolean cleanup() {
         boolean ret;
         File t = new File(workingDirectoryFilePath + "output/"
@@ -1444,10 +1366,186 @@ public class MapGUI {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        MapGUI g = new MapGUI();
-        g.readXML("src/test/resources/Testing/selectionXml.xml");
-        g.readXML("testing.xml");
-        g.readXML("testing3.xml");
+    public void setNumberReturnedFromDatabase(int n) {
+        numberFromDatabase = n;
+    }
+
+    public class ButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
+        private JTable table;
+        private Action action;
+        private int mnemonic;
+        private Border originalBorder;
+        private Border focusBorder;
+
+        private JButton renderButton;
+        private JButton editButton;
+        private Object editorValue;
+        private boolean isButtonColumnEditor;
+
+        /**
+         * Create the ButtonColumn to be used as a renderer and editor. The
+         * renderer and editor will automatically be installed on the TableColumn
+         * of the specified column.
+         *
+         * @param table  the table containing the button renderer/editor
+         * @param action the Action to be invoked when the button is invoked
+         * @param column the column to which the button renderer/editor is added
+         */
+        public ButtonColumn(JTable table, Action action, int column) {
+            this.table = table;
+            this.action = action;
+
+            renderButton = new JButton();
+            editButton = new JButton();
+            editButton.setFocusPainted(false);
+            editButton.addActionListener(this);
+            originalBorder = editButton.getBorder();
+            setFocusBorder(new LineBorder(Color.BLUE));
+
+            TableColumnModel columnModel = table.getColumnModel();
+            columnModel.getColumn(column).setCellRenderer(this);
+            columnModel.getColumn(column).setCellEditor(this);
+            table.addMouseListener(this);
+        }
+
+
+        /**
+         * Get foreground color of the button when the cell has focus
+         *
+         * @return the foreground color
+         */
+        public Border getFocusBorder() {
+            return focusBorder;
+        }
+
+        /**
+         * The foreground color of the button when the cell has focus
+         *
+         * @param focusBorder the foreground color
+         */
+        public void setFocusBorder(Border focusBorder) {
+            this.focusBorder = focusBorder;
+            editButton.setBorder(focusBorder);
+        }
+
+        public int getMnemonic() {
+            return mnemonic;
+        }
+
+        /**
+         * The mnemonic to activate the button when the cell has focus
+         *
+         * @param mnemonic the mnemonic
+         */
+        public void setMnemonic(int mnemonic) {
+            this.mnemonic = mnemonic;
+            renderButton.setMnemonic(mnemonic);
+            editButton.setMnemonic(mnemonic);
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(
+                JTable table, Object value, boolean isSelected, int row, int column) {
+            if(value == null) {
+                editButton.setText("");
+                editButton.setIcon(null);
+            } else if(value instanceof Icon) {
+                editButton.setText("");
+                editButton.setIcon((Icon) value);
+            } else {
+                editButton.setText(value.toString());
+                editButton.setIcon(null);
+            }
+
+            this.editorValue = value;
+            return editButton;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return editorValue;
+        }
+
+        //
+//  Implement TableCellRenderer interface
+//
+        public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            if(isSelected) {
+                renderButton.setForeground(table.getSelectionForeground());
+                renderButton.setBackground(table.getSelectionBackground());
+            } else {
+                renderButton.setForeground(table.getForeground());
+                renderButton.setBackground(UIManager.getColor("Button.background"));
+            }
+
+            if(hasFocus) {
+                renderButton.setBorder(focusBorder);
+            } else {
+                renderButton.setBorder(originalBorder);
+            }
+
+//		renderButton.setText( (value == null) ? "" : value.toString() );
+            if(value == null) {
+                renderButton.setText("");
+                renderButton.setIcon(null);
+            } else if(value instanceof Icon) {
+                renderButton.setText("");
+                renderButton.setIcon((Icon) value);
+            } else {
+                renderButton.setText(value.toString());
+                renderButton.setIcon(null);
+            }
+
+            return renderButton;
+        }
+
+        public void mouseClicked(MouseEvent e) {
+        }        //
+
+        //
+//  Implement MouseListener interface
+//
+    /*
+     *  When the mouse is pressed the editor is invoked. If you then then drag
+	 *  the mouse to another cell before releasing it, the editor is still
+	 *  active. Make sure editing is stopped when the mouse is released.
+	 */
+        public void mousePressed(MouseEvent e) {
+            if(table.isEditing()
+                    && table.getCellEditor() == this)
+                isButtonColumnEditor = true;
+        }        //  Implement ActionListener interface
+
+        public void mouseReleased(MouseEvent e) {
+            if(isButtonColumnEditor
+                    && table.isEditing())
+                table.getCellEditor().stopCellEditing();
+
+            isButtonColumnEditor = false;
+        }//
+
+        public void mouseEntered(MouseEvent e) {
+        }    /*
+     *	The button has been pressed. Stop editing and invoke the custom Action
+	 */
+
+        public void mouseExited(MouseEvent e) {
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            int row = table.convertRowIndexToModel(table.getEditingRow());
+            fireEditingStopped();
+
+            //  Invoke the Action
+
+            ActionEvent event = new ActionEvent(
+                    table,
+                    ActionEvent.ACTION_PERFORMED,
+                    "" + row);
+            action.actionPerformed(event);
+        }
+
+
     }
 }

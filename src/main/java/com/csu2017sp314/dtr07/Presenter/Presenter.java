@@ -80,6 +80,7 @@ public class Presenter {
             for(String temp : locationNames) {
                 System.out.println("[Presenter] This is callback4:\t" + temp);
             }
+            view.setNumberReturnedFromDatabase(model.getNumberReturnedFromDatabase());
             for(int i = 0; i < locationNames.size(); i++) {
                 copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
             }
@@ -205,7 +206,7 @@ public class Presenter {
                 }
             }
             view.addFooter(model.getTripDistance());
-            view.addHeader("Long Live the Chief");
+            view.addHeader("The Earth");
             view.finalizeTrip(fname);
             for(int i = 0; i < model.getNumDatabaseLocationsReturned(); i++) {
                 copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
@@ -317,9 +318,6 @@ public class Presenter {
         //fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
-        String[] cut = selectionXml.split("/");
-        fname = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
-
 
         /*ArrayList selectedAirports = new ArrayList();
         selectedAirports.add("NZCH");
@@ -335,8 +333,11 @@ public class Presenter {
         if(selectionXml.equals("")) {
             model.setSelectedLocations(new ArrayList<>());
             selectionXml = "untitled";
+            fname = "untitled";
         } else {
             model.setSelectedLocations(readXML(selectionXml));
+            String[] cut = selectionXml.split("/");
+            fname = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
         }
         model.planTrip("M", useDatabase);
         //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>());
@@ -391,7 +392,7 @@ public class Presenter {
         }
 
         view.addFooter(model.getTripDistance());
-        view.addHeader("Long Live the Chief");
+        view.addHeader("The Earth");
         //view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(),
         // model.getLegFinishLocation(), model.getTripDistance());
         ArrayList<String> viewArguments = view.getCommandLineOptions();

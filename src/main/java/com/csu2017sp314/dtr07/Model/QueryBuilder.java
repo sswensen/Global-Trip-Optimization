@@ -35,11 +35,12 @@ class QueryBuilder {
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
-    private final String limit = " LIMIT 333";
+    private final String limit = " LIMIT 100";
     private boolean useDatabase;
     private String where = "";
-    private ArrayList<Location> locations = new ArrayList<>();
-    //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
+    private int numberReturnedFromDatabase = 0;
+    private ArrayList<Location> locations = new ArrayList<>(); 
+  //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     public QueryBuilder(boolean useDB) {
         useDatabase = useDB;
@@ -180,6 +181,7 @@ class QueryBuilder {
                         try { // print the number of rows
                             rs.next();
                             int rows = rs.getInt(1);
+                            numberReturnedFromDatabase = rows;
                             System.out.printf("[QueryBuilder] Selected rows = %d\n", rows);
                         } finally {
                             rs.close();
@@ -232,6 +234,10 @@ class QueryBuilder {
                     "http://en.wikipedia.org/wiki/Colorado",
                     "http://en.wikipedia.org/wiki/United_States"));
         }
+    }
+
+    public int getNumberReturnedFromDatabase() {
+        return numberReturnedFromDatabase;
     }
 
     ArrayList<Location> getLocations() {

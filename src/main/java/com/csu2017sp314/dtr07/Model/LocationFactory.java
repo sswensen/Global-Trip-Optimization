@@ -18,6 +18,7 @@ class LocationFactory {
     private boolean twoOpt;
     private boolean threeOpt;
     private double[][] distTable;
+    private int numberReturnedFromDatabase = 0;
 
     ArrayList<Location> readFromDB(ArrayList<String> where, boolean read) {
         QueryBuilder qb = new QueryBuilder(read);
@@ -31,6 +32,7 @@ class LocationFactory {
         }
         qb.fireQuery();
         locations = qb.getLocations();
+        numberReturnedFromDatabase = qb.getNumberReturnedFromDatabase();
         return locations;
     }
 
@@ -38,10 +40,7 @@ class LocationFactory {
         for(int i = 0; i < userLoc.size(); i++) {
             locations.add(userLoc.get(i));
         }
-        if(locations.size() == userLoc.size()) {
-            return true;
-        }
-        return false;
+        return locations.size() == userLoc.size();
     }
 
     boolean thirdTry() {
@@ -95,7 +94,15 @@ class LocationFactory {
         return true;
     }
 
-   public void setLocations(ArrayList<Location> locations) {
+    public int getTotalImprovements() {
+        return this.totalImprovements;
+    }
+
+    public void setTotalImprovements(int totalImprovements) {
+        this.totalImprovements = totalImprovements;
+    }
+  
+    public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
 
@@ -113,11 +120,15 @@ class LocationFactory {
     }
 
     ArrayList<Location> getLocations() {
-        return locations;
+        return new ArrayList<>(locations);
+    }
+
+    public void setLocations(ArrayList<Location> locations) {
+        this.locations = locations;
     }
 
     ArrayList<Pair> getPairs() {
-        return pairs;
+        return new ArrayList<>(pairs);
     }
 
     public void setTwoOpt(boolean twoOpt) {
@@ -132,8 +143,16 @@ class LocationFactory {
         return this.twoOpt;
     }
 
+    void setTwoOpt(boolean twoOpt) {
+        this.twoOpt = twoOpt;
+    }
+
     public boolean getThreeOpt() {
         return this.threeOpt;
+    }
+
+    public void setThreeOpt(boolean threeOpt) {
+        this.threeOpt = threeOpt;
     }
 
     private ArrayList<Pair> generatePairs(Location[] route, ArrayList<Pair> newPairs) {
@@ -329,5 +348,9 @@ class LocationFactory {
         }
         pairs = generatePairs(route, newPairs);
         return totalImprovements;
+    }
+
+    public int getNumberReturnedFromDatabase() {
+        return numberReturnedFromDatabase;
     }
 }

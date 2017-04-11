@@ -18,6 +18,7 @@ public class Model {
     private ArrayList<Location> previousLocations = new ArrayList<>();
     private ArrayList<String> selectedLocations;
     private ArrayList<Location> databaseLocationsReturned;
+    private int numberFromDatabase = 0;
     private LocationFactory dataBaseSearch = new LocationFactory(); //This is for populating the second GUI window and getting locations once the user has selected what he wnats
     private boolean twoOpt;
     private boolean threeOpt;
@@ -62,7 +63,7 @@ public class Model {
         if(!threeOpt && !tick) {
             userLocations = new ArrayList<>(previousLocations);
         }
-        lf.setLocations(userLocations);//TODOdone read from database
+        lf.setLocations(new ArrayList<>(userLocations));//TODOdone read from database
         //List locations is not the ids of the selected airports
         lf.thirdTry();
         userLocations = lf.getLocations();
@@ -84,6 +85,7 @@ public class Model {
 
     public ArrayList<String> searchDatabase(ArrayList<String> where, boolean read) {
         databaseLocationsReturned = dataBaseSearch.readFromDB(where, read);
+        numberFromDatabase = dataBaseSearch.getNumberReturnedFromDatabase();
         ArrayList<String> ret = new ArrayList<>(); //Very inefficient, see begining of fireQuery for additional options
         for(Location loc : databaseLocationsReturned) {
             ret.add(loc.getName());
@@ -215,28 +217,28 @@ public class Model {
         return ret;
     }
 
-    public void setTwoOpt(boolean twoOpt) {
-        this.twoOpt = twoOpt;
-    }
-
     public boolean getTwoOpt() {
         return twoOpt;
     }
 
-    public void setThreeOpt(boolean threeOpt) {
-        this.threeOpt = threeOpt;
+    public void setTwoOpt(boolean twoOpt) {
+        this.twoOpt = twoOpt;
     }
 
     public boolean getThreeOpt() {
         return threeOpt;
     }
 
-    public void setKilometers(boolean kilometers) {
-        this.kilometers = kilometers;
+    public void setThreeOpt(boolean threeOpt) {
+        this.threeOpt = threeOpt;
     }
 
     public boolean isKilometers() {
         return this.kilometers;
+    }
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
     }
 
     public int getDatabaseLocationsReturnedSize() {
@@ -445,12 +447,16 @@ public class Model {
         return userPairs.get(i).getTwo().getId();
     }
 
-    public void setSelectedLocations(ArrayList<String> selectedLocations) {
-        this.selectedLocations = selectedLocations;
+    public int getNumberReturnedFromDatabase() {
+        return dataBaseSearch.getNumberReturnedFromDatabase();
     }
 
     public ArrayList<String> getSelectedLocations() {
         return selectedLocations;
+    }
+
+    public void setSelectedLocations(ArrayList<String> selectedLocations) {
+        this.selectedLocations = selectedLocations;
     }
 
     public void printUserLoc() {
