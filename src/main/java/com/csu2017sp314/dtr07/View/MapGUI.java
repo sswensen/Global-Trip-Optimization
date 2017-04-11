@@ -855,12 +855,14 @@ public class MapGUI {
         JButton transferToFirstWindow = new JButton("Select");
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
             //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
-            ArrayList<String> locationNames = searchDBLocationNames();
-            userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
+            //ArrayList<String> locationNames = searchDBLocationNames();
+            ArrayList<String> locationNames = new ArrayList<>(databaseLocations);
+            //userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
-            tempLoc = new SavedTrip();
-            tempLoc.setLocations(new ArrayList<>(getDatabaseIdsUsingNames(locationNames)));
-            updateAddButtonsAddRemove(locationNames);
+            tempLoc = new SavedTrip("untitled", new ArrayList<>(databaseLocations));
+            userAddLocList(tempLoc.getIds());
+            //tempLoc.setLocations(new ArrayList<>(getDatabaseIdsUsingNames(locationNames)));
+            updateAddButtonsAddRemove(databaseLocations);
         });
         databaseWindow.add(transferToFirstWindow, gbc);
 
