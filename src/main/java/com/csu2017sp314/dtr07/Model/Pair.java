@@ -12,7 +12,6 @@ public class Pair {
     private double distance;
     private String id;
     private boolean useWraparound = false;
-    private boolean kilometers;
 
     Pair(String id, Location one, Location two, double distance) {
         this.id = id;
@@ -28,10 +27,6 @@ public class Pair {
 
     Location getTwo() {
         return two;
-    }
-
-    public void setKilometers(boolean kilometers) {
-        this.kilometers = kilometers;
     }
 
     double getDistance() {

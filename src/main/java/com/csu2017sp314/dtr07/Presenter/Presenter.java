@@ -74,18 +74,6 @@ public class Presenter {
                 toggleKilometers();
                 System.out.println("[Presenter] Units now K");
             }
-            /*if(currentIds.isEmpty()) {
-                try {
-                    System.out.println("Using original map");
-                    planTrip(fname, selectionXml);
-                } catch(Exception e) {
-                    System.err.printf("Error encountered in callback 3");
-                    System.err.println(e);
-                }
-            } else {
-                eventUserAddLocList(currentIds);
-                System.out.println("Using new map");
-            }*/
         });
         view.setCallback4((ArrayList<String> s) -> {
             ArrayList<String> locationNames = model.searchDatabase(s, useDatabase);
@@ -173,7 +161,6 @@ public class Presenter {
         } else {
             model.setThreeOpt(false);
         }
-        //model.printUserLoc();
         try {
             model.planUserTrip(fname, readingFromXML);
             view.resetTrip();
@@ -220,7 +207,6 @@ public class Presenter {
             }
             view.addFooter(model.getTripDistance());
             view.addHeader("The Earth");
-            //view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
             view.finalizeTrip(fname);
             for(int i = 0; i < model.getNumDatabaseLocationsReturned(); i++) {
                 copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
@@ -238,21 +224,21 @@ public class Presenter {
 
     public boolean getTwoOpt() {
         return twoOpt;
-    } //done
+    }
 
     public void setTwoOpt(boolean twoOpt) {
         this.twoOpt = twoOpt;
         model.setTwoOpt(twoOpt);
-    } //done
+    }
 
     public boolean getThreeOpt() {
         return threeOpt;
-    } //done
+    }
 
     public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
         model.setThreeOpt(threeOpt);
-    } //done
+    }
 
     public boolean isKilometers() {
         return this.kilometers;

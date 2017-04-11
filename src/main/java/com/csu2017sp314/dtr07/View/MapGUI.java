@@ -727,9 +727,6 @@ public class MapGUI {
         JTextField findTextField;
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
         searchPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
-        //JLabel findLabel = new JLabel("Search:");
-        //searchPanel.add(findLabel);
-        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
         findTextField = new JTextField(30);
         TextPrompt tp = new TextPrompt("Municipality Search", findTextField);
         findTextField.setForeground(Color.red);
@@ -756,9 +753,6 @@ public class MapGUI {
         JTextField findTextField2;
         searchPanel2.setLayout(new BoxLayout(searchPanel2, BoxLayout.X_AXIS));
         searchPanel2.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
-        //JLabel findLabel = new JLabel("Search:");
-        //searchPanel.add(findLabel);
-        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
         findTextField2 = new JTextField(30);
         TextPrompt tp2 = new TextPrompt("Airport Name Search", findTextField2);
         findTextField2.setForeground(Color.red);
@@ -775,7 +769,6 @@ public class MapGUI {
                 }
             }
         });
-        //searchPanel.add(findButton);
         setGBC(0, 7, 4);
         databaseWindow.add(searchPanel2, gbc);
         //Search Airport textField

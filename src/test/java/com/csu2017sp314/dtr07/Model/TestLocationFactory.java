@@ -5,8 +5,6 @@ package com.csu2017sp314.dtr07.Model;
  * Testing file for LocationFactory.java
  */
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,12 +30,6 @@ public class TestLocationFactory {
         } catch (FileNotFoundException a) {
             System.out.println("Error eccountered: " + a);
         }*/
-    }
-
-    @Test
-    public void setTotalImprovements() {
-        lf.setTotalImprovements(20);
-        Assert.assertEquals(20, lf.getTotalImprovements());
     }
 
     @Test

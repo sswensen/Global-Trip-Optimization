@@ -23,9 +23,7 @@ public class Model {
     private boolean twoOpt;
     private boolean threeOpt;
     private boolean tick = false;
-    private int totalImprovements;
     private String unit;
-    private double[][] distTable;
     private boolean readingFromXML = true;
     private boolean kilometers;
 
@@ -46,6 +44,7 @@ public class Model {
         pairs = lf.getPairs();
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
+
         return 1;
     }
 
@@ -109,18 +108,6 @@ public class Model {
         ret.add(databaseLocationsReturned.get(index).getCountryUrl());
         return ret;
     }
-
-    //This method finds the locations with the correspoinging ids after the user has selected what he wants from the database
-    /*public void getLocationsFromIds(ArrayList<String> ids) {
-        ArrayList<Location> locs = dataBaseSearch.getLocations();
-        for(String id : ids) {
-            for(int i = 0; i < locs.size(); i++) {
-                if(Integer.parseInt(id) == i) {
-                    //TODOnotneeded need to make those buttons and update the itinerary, maybe use planUserTrip or something
-                }
-            }
-        }
-    }*/
 
     public ArrayList<Pair> getUserPairs() {
         /*LocationFactory lf = new LocationFactory();
@@ -258,10 +245,6 @@ public class Model {
         return databaseLocationsReturned.size();
     }
 
-    public int getTotalImprovements() {
-        return totalImprovements;
-    }
-
     public String getLegStartLocation() {
         return pairs.get(0).getOne().getName();
     }
@@ -382,9 +365,6 @@ public class Model {
         if(!kilometers) {
             return ret;
         } else {
-            //double ret2 = (double) ret;
-            //ret2 *= 1.60934;
-            //ret2 = Math.round(ret2);
             return convert(ret);
         }
     }

@@ -91,10 +91,14 @@ public class TestPresenter {
         }catch(Exception e){}
     }
 
+    @Test
+    public void isKilometers() {
+        assertEquals(false, presenter.isKilometers());
+    }
 
-
-
-
-
-
+    @Test
+    public void setKilometers() {
+        presenter.setKilometers(true);
+        assertEquals(true, presenter.isKilometers());
+    }
 }
