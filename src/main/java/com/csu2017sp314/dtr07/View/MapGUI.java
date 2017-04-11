@@ -698,7 +698,7 @@ public class MapGUI {
         fiveThingsForDatabase.add("");
         fiveThingsForDatabase.add("");
         fiveThingsForDatabase.add("");
-        databaseFrame = new JFrame("Testing dropdowns");
+        databaseFrame = new JFrame("Search Database");
         databaseFrame.setVisible(true);
         databaseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
