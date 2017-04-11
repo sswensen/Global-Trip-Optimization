@@ -461,7 +461,7 @@ public class MapGUI {
             guiLocations.clear();
             userAddLocList(tempLoc.getIds());
             guiLocations = tempLoc.getLocations();
-            lastTrip = tempLoc;
+            lastTrip = new SavedTrip(tempLoc);
             //updateTripLabel(load.getText().substring(10));
             updateTripLabel(tempLoc.getName());
             updateAddButtonsAddRemove(tempLoc.getNames());
@@ -837,6 +837,7 @@ public class MapGUI {
             tempLoc = new SavedTrip();
             tempLoc.setLocations(new ArrayList<>(guiLocations));
             updateAddButtonsAddRemove(locationNames);
+            locationNames.clear();
         });
         databaseWindow.add(selectAll, gbc);
 
@@ -863,6 +864,7 @@ public class MapGUI {
             userAddLocList(tempLoc.getIds());
             //tempLoc.setLocations(new ArrayList<>(getDatabaseIdsUsingNames(locationNames)));
             updateAddButtonsAddRemove(databaseLocations);
+            databaseLocations.clear();
         });
         databaseWindow.add(transferToFirstWindow, gbc);
 
@@ -1018,7 +1020,7 @@ public class MapGUI {
                 }
                 tick = false;
                 if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
-                    if(!tempLoc.getNames().contains(ids.get(index))) {
+                    if(!tempLoc.containsName(ids.get(index))) {
                         tempLoc.addName(ids.get(index));
                         //tempLoc.getIds().add(searchForDatabaseIdsUsingNames(ids.get(index))); //TODO need to also add the corresponding id to this
                         System.out.println("Added " + ids.get(index) + " to array");
