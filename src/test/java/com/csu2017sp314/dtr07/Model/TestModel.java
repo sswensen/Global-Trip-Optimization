@@ -10,7 +10,7 @@ import org.junit.Test;
  */
 public class TestModel {
 
-    /*@Before
+    @Before
     public void initialize() {
     }
 
@@ -112,5 +112,5 @@ public class TestModel {
         m.planTrip("./src/test/resources/Testing/ColoradoSkiResorts.csv");
         int newDist = m.getTripDistance();
         assertEquals(true, origDist>newDist);
-    }*/
+    }
 }
