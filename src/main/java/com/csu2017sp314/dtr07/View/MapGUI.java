@@ -943,7 +943,7 @@ public class MapGUI {
         JButton loadFromXML = createXMLBrowser();
         loadPanel.add(loadFromXML, gbc);
 
-        setGBC(0, 1, 2);
+        setGBC(0, 1, 1);
 
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
@@ -959,6 +959,16 @@ public class MapGUI {
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
+        setGBC(4, 1, 1);
+
+        JButton sa = new JButton("Clear");
+        sa.addActionListener((ActionEvent e) -> {
+            System.out.println(this.databaseLocations);
+            tempLoc = new SavedTrip();
+            updateAddButtonsAddRemove(new ArrayList<>());
+        });
+        fTemp.add(sa, gbc);
+
         updateAddButtonsAddRemove(ids);
 
         /*
@@ -971,7 +981,7 @@ public class MapGUI {
         System.out.println(temp.getText());
         */
         JScrollPane scroll = new JScrollPane(table2);
-        setGBC(0, 2, 4);
+        setGBC(0, 2, 5);
         fTemp.add(scroll, gbc);
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
