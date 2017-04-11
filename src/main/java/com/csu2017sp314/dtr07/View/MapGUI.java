@@ -461,7 +461,7 @@ public class MapGUI {
             guiLocations.clear();
             userAddLocList(tempLoc.getIds());
             guiLocations = tempLoc.getLocations();
-            lastTrip = tempLoc;
+            lastTrip = new SavedTrip(tempLoc);
             //updateTripLabel(load.getText().substring(10));
             updateTripLabel(tempLoc.getName());
             updateAddButtonsAddRemove(tempLoc.getNames());
@@ -818,18 +818,18 @@ public class MapGUI {
         databaseWindow.add(testingSearching2, gbc);
         setGBC(3, 9, 1);*/
         setGBC(0, 9, 3);
-        JButton selectAll = new JButton("Select all locations");
+        JButton selectAll = new JButton("Check all locations");
         selectAll.addActionListener((ActionEvent e) -> {
-            databaseLocations.clear();
             for(GUILocation loc : guiLocations) {
                 databaseLocations.add(loc.getName());
             }
-            ArrayList<String> locationNames = searchDBLocationNames();
+            /*ArrayList<String> locationNames = searchDBLocationNames();
             userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
             tempLoc = new SavedTrip();
             tempLoc.setLocations(new ArrayList<>(guiLocations));
             updateAddButtonsAddRemove(locationNames);
+            locationNames.clear();*/
         });
         databaseWindow.add(selectAll, gbc);
 
@@ -845,15 +845,18 @@ public class MapGUI {
         databaseWindow.add(scroll, gbc);
 
         setGBC(0, 11, 4);
-        JButton transferToFirstWindow = new JButton("Select");
+        JButton transferToFirstWindow = new JButton("Plan trip/Draw map");
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
             //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
-            ArrayList<String> locationNames = searchDBLocationNames();
-            userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
+            //ArrayList<String> locationNames = searchDBLocationNames();
+            ArrayList<String> locationNames = new ArrayList<>(databaseLocations);
+            //userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
-            tempLoc = new SavedTrip();
-            tempLoc.setLocations(new ArrayList<>(getDatabaseIdsUsingNames(locationNames)));
-            updateAddButtonsAddRemove(locationNames);
+            tempLoc = new SavedTrip("untitled", new ArrayList<>(databaseLocations));
+            userAddLocList(tempLoc.getIds());
+            //tempLoc.setLocations(new ArrayList<>(getDatabaseIdsUsingNames(locationNames)));
+            updateAddButtonsAddRemove(databaseLocations);
+            databaseLocations.clear();
         });
         databaseWindow.add(transferToFirstWindow, gbc);
 
@@ -933,7 +936,7 @@ public class MapGUI {
         JButton loadFromXML = createXMLBrowser();
         loadPanel.add(loadFromXML, gbc);
 
-        setGBC(0, 1, 2);
+        setGBC(0, 1, 1);
 
         JButton q = new JButton("  Display  ");
         q.addActionListener((ActionEvent e) -> {
@@ -949,6 +952,16 @@ public class MapGUI {
         setGBC(3, 1, 1);
         fTemp.add(addSaveButton(" Save As "), gbc);
 
+        setGBC(4, 1, 1);
+
+        JButton sa = new JButton("Clear");
+        sa.addActionListener((ActionEvent e) -> {
+            System.out.println(this.databaseLocations);
+            tempLoc = new SavedTrip();
+            updateAddButtonsAddRemove(new ArrayList<>());
+        });
+        fTemp.add(sa, gbc);
+
         updateAddButtonsAddRemove(ids);
 
         /*
@@ -961,7 +974,7 @@ public class MapGUI {
         System.out.println(temp.getText());
         */
         JScrollPane scroll = new JScrollPane(table2);
-        setGBC(0, 2, 4);
+        setGBC(0, 2, 5);
         fTemp.add(scroll, gbc);
         ImageIcon icon = new ImageIcon(workingDirectoryFilePath + "/" + "favicon.ico", "HELP2");
         options.addTab("Locations", icon, fTemp, "Locations");
@@ -1009,7 +1022,7 @@ public class MapGUI {
                 }
                 tick = false;
                 if(model.getValueAt(index, 0).equals("Add")) { //Checks if button has already been pressed
-                    if(!tempLoc.getNames().contains(ids.get(index))) {
+                    if(!tempLoc.containsName(ids.get(index))) {
                         tempLoc.addName(ids.get(index));
                         //tempLoc.getIds().add(searchForDatabaseIdsUsingNames(ids.get(index))); //TODO need to also add the corresponding id to this
                         System.out.println("Added " + ids.get(index) + " to array");
@@ -1120,7 +1133,8 @@ public class MapGUI {
         }
         if(temp == null) {
             temp = temp2;
-        } else {
+        }
+        if(temp2 == null) {
             temp2 = temp;
         }
         if(lab.getText() != null) {

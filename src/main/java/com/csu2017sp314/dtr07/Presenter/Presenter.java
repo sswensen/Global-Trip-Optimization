@@ -392,7 +392,7 @@ public class Presenter {
         }
 
         view.addFooter(model.getTripDistance());
-        view.addHeader("Long Live the Chief");
+        view.addHeader("The Earth");
         //view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(),
         // model.getLegFinishLocation(), model.getTripDistance());
         ArrayList<String> viewArguments = view.getCommandLineOptions();
