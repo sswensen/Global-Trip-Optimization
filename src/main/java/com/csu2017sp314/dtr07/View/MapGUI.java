@@ -827,17 +827,16 @@ public class MapGUI {
         setGBC(0, 9, 3);
         JButton selectAll = new JButton("Select all locations");
         selectAll.addActionListener((ActionEvent e) -> {
-            databaseLocations.clear();
             for(GUILocation loc : guiLocations) {
                 databaseLocations.add(loc.getName());
             }
-            ArrayList<String> locationNames = searchDBLocationNames();
+            /*ArrayList<String> locationNames = searchDBLocationNames();
             userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
             //tempLoc = locationNames;
             tempLoc = new SavedTrip();
             tempLoc.setLocations(new ArrayList<>(guiLocations));
             updateAddButtonsAddRemove(locationNames);
-            locationNames.clear();
+            locationNames.clear();*/
         });
         databaseWindow.add(selectAll, gbc);
 
