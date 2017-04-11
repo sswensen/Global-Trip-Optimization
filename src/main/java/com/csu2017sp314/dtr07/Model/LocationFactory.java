@@ -17,51 +17,7 @@ class LocationFactory {
     private String unit = "";
     private boolean twoOpt;
     private boolean threeOpt;
-    private int totalImprovements;
     private double[][] distTable;
-
-    /*boolean readFile(String in) throws FileNotFoundException {
-        Scanner scan = new Scanner(new File(in));
-        int id = -1;
-        int name = -1;
-        int latitude = -1;
-        int longitude = -1;
-        if(scan.hasNext()) {
-            String[] line = scan.nextLine().replaceAll("\"", "").split(",");
-            for(int x = 0; x < line.length; x++) {
-                String temp = line[x];
-                if(temp.equalsIgnoreCase("id")) {
-                    id = x;
-                }
-                if(temp.equalsIgnoreCase("name")) {
-                    name = x;
-                }
-                if(temp.equalsIgnoreCase("latitude")) {
-                    latitude = x;
-                }
-                if(temp.equalsIgnoreCase("longitude")) {
-                    longitude = x;
-                }
-            }
-        }
-        while(scan.hasNext()) {
-            String[] line = scan.nextLine().split(",");
-            if(selectedAirports.contains(line[id])) {
-                Location temp = new Location(line[id], line[name], line[latitude].replaceAll("\\s+", ""), line[longitude].replaceAll("\\s+", ""));
-                locations.add(temp);
-            }
-        }
-        scan.close();
-        locations.add(new Location("NZCH", "Christchurch International Airport", "-43.48939896", "172.5319977"));
-        locations.add(new Location("00A", "Total Rf Heliport", "40.07080078", "-74.93360138"));
-        locations.add(new Location("00IL", "Hammer Airport", "41.97840118", "-89.56040192"));
-        locations.add(new Location("00LA", "Shell Chemical East Site Heliport", "30.191944", "-90.980833"));
-        locations.add(new Location("00NK", "Cliche Cove Seaplane Base", "44.8118612", "-73.3698057"));
-        locations.add(new Location("01CO", "St Vincent General Hospital Heliport", "39.24530029", "-106.2460022"));
-        locations.add(new Location("02GA", "Doug Bolton Field", "34.20259857", "-83.42900085"));
-        locations.add(new Location("CN24", "Flying R Airport", "38.28300095", "-121.2549973"));
-        return locations.size() > 0;
-    }*/
 
     ArrayList<Location> readFromDB(ArrayList<String> where, boolean read) {
         QueryBuilder qb = new QueryBuilder(read);
@@ -139,15 +95,7 @@ class LocationFactory {
         return true;
     }
 
-    public void setTotalImprovements(int totalImprovements) {
-        this.totalImprovements = totalImprovements;
-    }
-
-    public int getTotalImprovements() {
-        return this.totalImprovements;
-    }
-
-    public void setLocations(ArrayList<Location> locations) {
+   public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
 
@@ -172,10 +120,9 @@ class LocationFactory {
         return pairs;
     }
 
-    void setTwoOpt(boolean twoOpt) {
+    public void setTwoOpt(boolean twoOpt) {
         this.twoOpt = twoOpt;
     }
-
 
     public boolean getTwoOpt() {
         return this.twoOpt;
@@ -271,7 +218,6 @@ class LocationFactory {
         Location[] route = generateRoute();
         generateDistanceTable(route);
         int totalImprovements = 0;
-        this.totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
         ArrayList<Pair> newPairs = new ArrayList<>();
@@ -288,7 +234,6 @@ class LocationFactory {
                 }
             }
         }
-        this.totalImprovements = totalImprovements;
         pairs = generatePairs(route, newPairs);
         return totalImprovements;
     }
@@ -364,7 +309,6 @@ class LocationFactory {
         Location[] route = generateRoute();
         generateDistanceTable(route);
         int totalImprovements = 0;
-        this.totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
         ArrayList<Pair> newPairs = new ArrayList<>();
@@ -383,7 +327,6 @@ class LocationFactory {
                 }
             }
         }
-        this.totalImprovements = totalImprovements;
         pairs = generatePairs(route, newPairs);
         return totalImprovements;
     }
