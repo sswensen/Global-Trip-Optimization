@@ -17,11 +17,11 @@ public class SavedTrip {
     private final String count = "SELECT COUNT(1) ";
     private final String columns = "SELECT airports.id,airports.name,latitude,longitude,municipality,regions.name,countries.name,continents.name,airports.wikipedia_link,regions.wikipedia_link,countries.wikipedia_link ";
     private final String continents = "FROM continents ";
-    private String where = "";
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
-    private final String limit = " LIMIT 333";
+    private final String limit = " LIMIT 301";
+    private String where = "";
     private String name;
     private ArrayList<GUILocation> locations = new ArrayList<>();
 

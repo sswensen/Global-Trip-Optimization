@@ -833,12 +833,16 @@ public class MapGUI {
             for(GUILocation loc : guiLocations) {
                 databaseLocations.add(loc.getName());
             }
-
+            ArrayList<String> locationNames = searchDBLocationNames();
+            userAddLocList(searchForDatabaseIdsUsingNames(locationNames));
+            //tempLoc = locationNames;
+            tempLoc = new SavedTrip();
+            updateAddButtonsAddRemove(locationNames);
         });
         databaseWindow.add(selectAll, gbc);
 
         setGBC(3, 9, 1);
-        numberReturned = new JLabel("Showing 0 locations");
+        numberReturned = new JLabel("");
         databaseWindow.add(numberReturned, gbc);
 
         updateAddButtonsDatabase();
@@ -865,8 +869,8 @@ public class MapGUI {
     }
 
     private void updateNumberReturnedLabel(int a) {
-        numberReturned.setText("Showing " + a + " locations");
-        System.out.println("Showing " + a + " locations");
+        numberReturned.setText("Showing " + a + " out of " + numberFromDatabase + " locations");
+        System.out.println("Showing " + a + " out of " + numberFromDatabase + " locations");
     }
 
     void updateAddButtonsDatabase() {
@@ -1466,7 +1470,14 @@ public class MapGUI {
                     && table.getCellEditor() == this)
                 isButtonColumnEditor = true;
         }        //  Implement ActionListener interface
-//
+
+        public void mouseReleased(MouseEvent e) {
+            if(isButtonColumnEditor
+                    && table.isEditing())
+                table.getCellEditor().stopCellEditing();
+
+            isButtonColumnEditor = false;
+        }//
     /*
      *	The button has been pressed. Stop editing and invoke the custom Action
 	 */
@@ -1481,14 +1492,6 @@ public class MapGUI {
                     ActionEvent.ACTION_PERFORMED,
                     "" + row);
             action.actionPerformed(event);
-        }
-
-        public void mouseReleased(MouseEvent e) {
-            if(isButtonColumnEditor
-                    && table.isEditing())
-                table.getCellEditor().stopCellEditing();
-
-            isButtonColumnEditor = false;
         }
 
         public void mouseEntered(MouseEvent e) {
