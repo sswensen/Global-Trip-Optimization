@@ -124,12 +124,12 @@ class LocationFactory {
         this.twoOpt = twoOpt;
     }
 
-    public boolean getTwoOpt() {
-        return this.twoOpt;
-    }
-
     public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
+    }
+
+    public boolean getTwoOpt() {
+        return this.twoOpt;
     }
 
     public boolean getThreeOpt() {
