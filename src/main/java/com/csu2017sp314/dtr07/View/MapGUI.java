@@ -718,27 +718,10 @@ public class MapGUI {
         JTextField findTextField;
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.X_AXIS));
         searchPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
-        //JLabel findLabel = new JLabel("Search:");
-        //searchPanel.add(findLabel);
-        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
         findTextField = new JTextField(30);
         TextPrompt tp = new TextPrompt("Municipality Search", findTextField);
         findTextField.setForeground(Color.red);
         searchPanel.add(findTextField);
-        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
-
-        JButton findButton = new JButton("Search");
-        findButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                String s = findTextField.getText().toUpperCase().trim();
-                if(!s.equals("")) {
-                    findTextField.setText(s);
-
-                }
-            }
-        });
-        //searchPanel.add(findButton);
         setGBC(0, 6, 4);
         databaseWindow.add(searchPanel, gbc);
         //Search Municipality textField
@@ -748,27 +731,10 @@ public class MapGUI {
         JTextField findTextField2;
         searchPanel2.setLayout(new BoxLayout(searchPanel2, BoxLayout.X_AXIS));
         searchPanel2.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
-        //JLabel findLabel = new JLabel("Search:");
-        //searchPanel.add(findLabel);
-        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
         findTextField2 = new JTextField(30);
         TextPrompt tp2 = new TextPrompt("Airport Name Search", findTextField2);
         findTextField2.setForeground(Color.red);
         searchPanel2.add(findTextField2);
-        //searchPanel.add(Box.createRigidArea(new Dimension(6, 0)));
-
-        JButton findButton2 = new JButton("Search");
-        findButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                String s = findTextField2.getText().toUpperCase().trim();
-                if(!s.equals("")) {
-                    findTextField2.setText(s);
-
-                }
-            }
-        });
-        //searchPanel.add(findButton);
         setGBC(0, 7, 4);
         databaseWindow.add(searchPanel2, gbc);
         //Search Airport textField
