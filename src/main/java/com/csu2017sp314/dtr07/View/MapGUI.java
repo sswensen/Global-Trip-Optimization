@@ -825,7 +825,7 @@ public class MapGUI {
         databaseWindow.add(testingSearching2, gbc);
         setGBC(3, 9, 1);*/
         setGBC(0, 9, 3);
-        JButton selectAll = new JButton("Select all locations");
+        JButton selectAll = new JButton("Check all locations");
         selectAll.addActionListener((ActionEvent e) -> {
             for(GUILocation loc : guiLocations) {
                 databaseLocations.add(loc.getName());
@@ -852,7 +852,7 @@ public class MapGUI {
         databaseWindow.add(scroll, gbc);
 
         setGBC(0, 11, 4);
-        JButton transferToFirstWindow = new JButton("Select");
+        JButton transferToFirstWindow = new JButton("Plan trip/Draw map");
         transferToFirstWindow.addActionListener((ActionEvent e) -> {
             //TODO instead of replacing the existing tempLoc/locationNames, maybe just add them to the list and add a clear button to the first window
             //ArrayList<String> locationNames = searchDBLocationNames();
