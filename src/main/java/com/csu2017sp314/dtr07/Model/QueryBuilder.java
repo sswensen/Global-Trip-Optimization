@@ -24,18 +24,19 @@ import java.util.ArrayList;
  */
 
 class QueryBuilder {
-    private boolean useDatabase;
     private final String myDriver = "com.mysql.jdbc.Driver";
     //private final static String myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314"; //Original
     private final String myUrl = "jdbc:mysql://127.0.0.1:3306/cs314"; //Using tunneling
     private final String count = "SELECT COUNT(1) ";
     private final String columns = "SELECT airports.id,airports.name,latitude,longitude,municipality,regions.name,countries.name,continents.name,airports.wikipedia_link,regions.wikipedia_link,countries.wikipedia_link ";
     private final String continents = "FROM continents ";
-    private String where = "";
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
     private final String limit = " LIMIT 333";
+    private boolean useDatabase;
+    private String where = "";
+    private int numberReturnedFromDatabase = 0;
     private ArrayList<Location> locations = new ArrayList<>(); //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     public QueryBuilder(boolean useDB) {
@@ -175,6 +176,7 @@ class QueryBuilder {
                         try { // print the number of rows
                             rs.next();
                             int rows = rs.getInt(1);
+                            numberReturnedFromDatabase = rows;
                             System.out.printf("[QueryBuilder] Selected rows = %d\n", rows);
                         } finally {
                             rs.close();
@@ -213,6 +215,10 @@ class QueryBuilder {
             locations.add(new Location("KBKF",	"Buckley Air Force Base",	"39.701698303200004",	"-104.751998901",	"Aurora",	"Colorado",	"United States",	 "North America",	"http://en.wikipedia.org/wiki/Buckley_Air_Force_Base",	"http://en.wikipedia.org/wiki/Colorado",	"http://en.wikipedia.org/wiki/United_States"));
             locations.add(new Location("KEGE",	"Eagle County Regional Airport",	"39.64260101",	"-106.9179993",	"Eagle",	"Colorado",	"United States",	 "North America",	"http://en.wikipedia.org/wiki/Eagle_County_Regional_Airport",	"http://en.wikipedia.org/wiki/Colorado",	"http://en.wikipedia.org/wiki/United_States"));
         }
+    }
+
+    public int getNumberReturnedFromDatabase() {
+        return numberReturnedFromDatabase;
     }
 
     ArrayList<Location> getLocations() {

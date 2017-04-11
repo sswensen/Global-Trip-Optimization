@@ -26,6 +26,7 @@ import java.util.function.Consumer;
  */
 
 public class View {
+    public ArrayList<String> originalIds = new ArrayList<>();
     private Consumer<String> callback;
     private Consumer<ArrayList<String>> callback2;
     private Consumer<String> callback3;
@@ -37,11 +38,15 @@ public class View {
     private String f;
     private MapGUI gui;
     private String svgMap;
-    public ArrayList<String> originalIds = new ArrayList<>();
     private double width;
     private double height;
     private boolean kilometers;
     private ArrayList<String> viewArguments = new ArrayList<>();
+
+    public static void main(String[] argv) throws Exception {
+        MapGUI gui = new MapGUI();
+        gui.displayDatabaseWindow();
+    }
 
     public void initializeTrip(String svgMap) throws SAXException, IOException, ParserConfigurationException {
         this.svgMap = svgMap;
@@ -94,12 +99,12 @@ public class View {
         return svg.getSVGdoc();
     }
 
-    public void setKilometers(boolean kilometers) {
-        this.kilometers = kilometers;
-    }
-
     public boolean isKilometers() {
         return this.kilometers;
+    }
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
     }
 
     public void setCallback(Consumer<String> callback) {
@@ -288,6 +293,10 @@ public class View {
         gui.displayXML(ids);
     }
 
+    public void setNumberReturnedFromDatabase(int n) {
+        gui.setNumberReturnedFromDatabase(n);
+    }
+
     public void makeGUILocations(ArrayList<Object> locs) {
         gui.makeGUILocations(locs);
     }
@@ -306,10 +315,5 @@ public class View {
 
     public boolean cleanup() {
         return gui.cleanup();
-    }
-
-    public static void main(String[] argv) throws Exception {
-        MapGUI gui = new MapGUI();
-        gui.displayDatabaseWindow();
     }
 }

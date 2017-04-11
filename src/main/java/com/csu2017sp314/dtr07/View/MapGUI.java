@@ -97,6 +97,7 @@ public class MapGUI {
     private ArrayList<String> fiveThingsForDatabase = new ArrayList<>(); //Used for callback
     private int index = 0; //I inked...
     private ArrayList<GUILocation> guiLocations = new ArrayList<>();
+    private int numberFromDatabase = 0;
 
     private DefaultTableModel model;
     private JTable table;
@@ -1315,6 +1316,10 @@ public class MapGUI {
         }
     }
 
+    public void setNumberReturnedFromDatabase(int n) {
+        numberFromDatabase = n;
+    }
+
     public class ButtonColumn extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
         private JTable table;
         private Action action;
@@ -1448,7 +1453,19 @@ public class MapGUI {
         public void mouseClicked(MouseEvent e) {
         }        //
 
-        //  Implement ActionListener interface
+        //
+//  Implement MouseListener interface
+//
+    /*
+     *  When the mouse is pressed the editor is invoked. If you then then drag
+	 *  the mouse to another cell before releasing it, the editor is still
+	 *  active. Make sure editing is stopped when the mouse is released.
+	 */
+        public void mousePressed(MouseEvent e) {
+            if(table.isEditing()
+                    && table.getCellEditor() == this)
+                isButtonColumnEditor = true;
+        }        //  Implement ActionListener interface
 //
     /*
      *	The button has been pressed. Stop editing and invoke the custom Action
@@ -1464,20 +1481,6 @@ public class MapGUI {
                     ActionEvent.ACTION_PERFORMED,
                     "" + row);
             action.actionPerformed(event);
-        }
-
-        //
-//  Implement MouseListener interface
-//
-    /*
-     *  When the mouse is pressed the editor is invoked. If you then then drag
-	 *  the mouse to another cell before releasing it, the editor is still
-	 *  active. Make sure editing is stopped when the mouse is released.
-	 */
-        public void mousePressed(MouseEvent e) {
-            if(table.isEditing()
-                    && table.getCellEditor() == this)
-                isButtonColumnEditor = true;
         }
 
         public void mouseReleased(MouseEvent e) {

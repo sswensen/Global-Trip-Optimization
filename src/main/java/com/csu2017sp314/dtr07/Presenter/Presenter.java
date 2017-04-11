@@ -92,6 +92,7 @@ public class Presenter {
             for(String temp : locationNames) {
                 System.out.println("[Presenter] This is callback4:\t" + temp);
             }
+            view.setNumberReturnedFromDatabase(model.getNumberReturnedFromDatabase());
             for(int i = 0; i < locationNames.size(); i++) {
                 copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
             }
