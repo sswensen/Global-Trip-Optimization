@@ -1150,6 +1150,7 @@ public class MapGUI {
                 System.out.println("value at this cell is = " + model.getValueAt(index, 1));
                 GUILocation temp3 = searchGuiLocationsWithName((String) model.getValueAt(index, 1));
                 JPopupMenu popupMenu = new JPopupMenu();
+
                 popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getName()) {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -1172,9 +1173,51 @@ public class MapGUI {
                         }
                     }
                 }));
-                popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
-                popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
                 popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
+                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getRegion()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(Desktop.isDesktopSupported()) {
+                            Desktop desktop = Desktop.getDesktop();
+                            try {
+                                if(temp3.getAirportUrl().equals("")) {
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(), "Information not Available");
+                                } else {
+                                    URI uri = new URI(temp3.getRegionUrl());
+                                    desktop.browse(uri);
+                                }
+                            } catch(IOException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary");
+                                ex.printStackTrace();
+                            } catch(URISyntaxException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary2");
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }));
+                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getCountry()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(Desktop.isDesktopSupported()) {
+                            Desktop desktop = Desktop.getDesktop();
+                            try {
+                                if(temp3.getAirportUrl().equals("")) {
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(), "Information not Available");
+                                } else {
+                                    URI uri = new URI(temp3.getCountryUrl());
+                                    desktop.browse(uri);
+                                }
+                            } catch(IOException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary");
+                                ex.printStackTrace();
+                            } catch(URISyntaxException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary2");
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }));
                 System.out.println(temp3.getContinent());
                 System.out.println(temp3.getCountry());
                 System.out.println(temp3.getMunicipality());
@@ -1208,16 +1251,60 @@ public class MapGUI {
                                     desktop.browse(uri);
                                 }
                             } catch(IOException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary");
                                 ex.printStackTrace();
                             } catch(URISyntaxException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary2");
                                 ex.printStackTrace();
                             }
                         }
                     }
                 }));
-                popupMenu.add(new JMenuItem("Continent: " + temp3.getContinent()));
-                popupMenu.add(new JMenuItem("Country: " + temp3.getCountry()));
                 popupMenu.add(new JMenuItem("Municipality: " + temp3.getMunicipality()));
+                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getRegion()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(Desktop.isDesktopSupported()) {
+                            Desktop desktop = Desktop.getDesktop();
+                            try {
+                                if(temp3.getAirportUrl().equals("")) {
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(), "Information not Available");
+                                } else {
+                                    URI uri = new URI(temp3.getRegionUrl());
+                                    desktop.browse(uri);
+                                }
+                            } catch(IOException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary");
+                                ex.printStackTrace();
+                            } catch(URISyntaxException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary2");
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }));
+                popupMenu.add(new JMenuItem(new AbstractAction("Click here to learn more about " + temp3.getCountry()) {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(Desktop.isDesktopSupported()) {
+                            Desktop desktop = Desktop.getDesktop();
+                            try {
+                                if(temp3.getAirportUrl().equals("")) {
+                                    JOptionPane.showMessageDialog(popupMenu.getComponent(), "Information not Available");
+                                } else {
+                                    URI uri = new URI(temp3.getCountryUrl());
+                                    desktop.browse(uri);
+                                }
+                            } catch(IOException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary");
+                                ex.printStackTrace();
+                            } catch(URISyntaxException ex) {
+                                System.err.println("[MapGUI] error in addLegToItinerary2");
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }));
                 System.out.println(temp3.getContinent());
                 System.out.println(temp3.getCountry());
                 System.out.println(temp3.getMunicipality());
