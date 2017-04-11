@@ -1140,7 +1140,8 @@ public class MapGUI {
         }
         if(temp == null) {
             temp = temp2;
-        } else {
+        }
+        if(temp2 == null) {
             temp2 = temp;
         }
         if(lab.getText() != null) {
