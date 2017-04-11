@@ -48,6 +48,7 @@ public class View {
 
     public void initializeTrip(String svgMap)
             throws SAXException, IOException, ParserConfigurationException {
+
         this.svgMap = svgMap;
         gui = new MapGUI();
         svg = new SVGBuilder(svgMap);
@@ -98,7 +99,11 @@ public class View {
         return svg.getSVGdoc();
     }
 
-    public boolean isKilometers() {
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+    }
+
+    public boolean getKilometers() {
         return this.kilometers;
     }
 
@@ -209,8 +214,7 @@ public class View {
         }
     }
 
-    public void addDistance(double x1, double y1, double x2, double y2, int distance,
-                            String id, boolean wraparound) {
+    public void addDistance(double x1, double y1, double x2, double y2, int distance, String id, boolean wraparound) {
         if(wraparound) {
             double originalX1 = x1;
             double originalY1 = y1;
@@ -285,7 +289,9 @@ public class View {
             viewArguments.add(arguments.get(i));
         }
     }
-
+    public ArrayList<String> getOptions(){
+        return viewArguments;
+    }
     public void gui() throws Exception {
         gui.setCallback((String s) -> {
             this.userAddLoc(s);
