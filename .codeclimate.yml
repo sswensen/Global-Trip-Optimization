@@ -1,5 +1,23 @@
 engines:
-  # ... CONFIG CONTENT ...
+  # L
+  # O
+  # N
+  # G
+  #
+  # L
+  # I
+  # V
+  # E
+  # 
+  # T
+  # H
+  # E
+  #
+  # C
+  # H
+  # I
+  # E
+  # F
   checkstyle:
     enabled: true
     channel: "beta"
@@ -21,7 +39,7 @@ engines:
       com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck:
         enabled: true
       com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck:
-        enabled: true
+        enabled: false
   csslint:
     enabled: false
 # ... CONFIG CONTENT ...
@@ -29,8 +47,8 @@ ratings:
   paths:
   - "**.java"
 exclude_paths:
-- "png/*"
+- "output/*"
 - "target/*"
-- "coverage/*"
-- "src/test/coverage/*"
+- "demo/*"
+- "S3/*"
 - "src/test/resources/lib/*"

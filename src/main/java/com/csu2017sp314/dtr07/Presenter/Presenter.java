@@ -1,18 +1,21 @@
 package com.csu2017sp314.dtr07.Presenter;
 
-import com.csu2017sp314.dtr07.Model.*;
-import com.csu2017sp314.dtr07.View.*;
+import com.csu2017sp314.dtr07.Model.Model;
+import com.csu2017sp314.dtr07.View.View;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.util.ArrayList;
-
-import org.xml.sax.SAXException;
 
 /**
  * Created by SummitDrift on 2/13/17.
  * Main class for Presenter Package
+ * Handles all view and model data
  */
 
 public class Presenter {
@@ -28,6 +31,9 @@ public class Presenter {
     private ArrayList<String> currentIds = new ArrayList<>();
     private boolean displayGui;
     private String svgMap;
+    private boolean readingFromXML = true;
+    private boolean kilometers;
+    private boolean useDatabase = false;
 
     public Presenter(Model model, View view) {
         this.model = model;
@@ -38,6 +44,9 @@ public class Presenter {
         });
         view.setCallback2((ArrayList<String> s) -> {
             this.eventUserAddLocList(s);
+            for(String temp : s) {
+                System.out.println("[Presenter] This is callback2:\t" + temp);
+            }
         });
         view.setCallback3((String s) -> {
             if(s.equals("Names")) {
@@ -46,7 +55,7 @@ public class Presenter {
             if(s.equals("IDs")) {
                 toggleIds();
             }
-            if(s.equals("Mileage")) {
+            if(s.equals("Distance")) {
                 toggleMileage();
             }
             if(s.equals("2-opt")) {
@@ -55,46 +64,61 @@ public class Presenter {
             if(s.equals("3-opt")) {
                 toggle3opt();
             }
-            /*if(currentIds.isEmpty()) {
-                try {
-                    System.out.println("Using original map");
-                    planTrip(fname, selectionXml);
-                } catch(Exception e) {
-                    System.err.printf("Error encountered in callback 3");
-                    System.err.println(e);
-                }
-            } else {
-                eventUserAddLocList(currentIds);
-                System.out.println("Using new map");
-            }*/
+            if(s.equals("M")) {
+                //TODO put this somewhere
+                toggleKilometers();
+                System.out.println("[Presenter] Units now M");
+            }
+            if(s.equals("K")) {
+                //TODO put this somewhere
+                toggleKilometers();
+                System.out.println("[Presenter] Units now K");
+            }
+        });
+        view.setCallback4((ArrayList<String> s) -> {
+            ArrayList<String> locationNames = model.searchDatabase(s, useDatabase);
+            for(String temp : locationNames) {
+                System.out.println("[Presenter] This is callback4:\t" + temp);
+            }
+            view.setNumberReturnedFromDatabase(model.getNumberReturnedFromDatabase());
+            for(int i = 0; i < locationNames.size(); i++) {
+                copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+            }
+            System.out.println("DONE MAKING LOCATIONS");
+            readingFromXML = false;
         });
     }
 
+    private void copyLocationsToView(ArrayList<Object> locs) {
+        view.makeGUILocations(locs);
+    }
+
     private void toggleName() {
-        if(displayName) {
-            displayName = false;
-        } else {
-            displayName = true;
-        }
-        System.out.println("Names now " + displayName);
+        displayName = !displayName;
+        System.out.println("[Presenter] Names now " + displayName);
     }
 
     private void toggleIds() {
-        if(displayId) {
-            displayId = false;
-        } else {
-            displayId = true;
-        }
-        System.out.println("IDs now " + displayId);
+        displayId = !displayId;
+        System.out.println("[Presenter] IDs now " + displayId);
     }
 
     private void toggleMileage() {
-        if(displayMileage) {
-            displayMileage = false;
+        displayMileage = !displayMileage;
+        System.out.println("[Presenter] Mileage now " + displayMileage);
+    }
+
+    private void toggleKilometers() {
+        if(kilometers) {
+            kilometers = false;
+            model.setKilometers(false);
+            view.setKilometers(false);
         } else {
-            displayMileage = true;
+            kilometers = true;
+            model.setKilometers(true);
+            view.setKilometers(true);
         }
-        System.out.println("Mileage now " + displayMileage);
+        System.out.println("[Presenter] Kilometers now " + kilometers);
     }
 
     private void toggle2opt() {
@@ -105,7 +129,7 @@ public class Presenter {
             twoOpt = true;
             model.setTwoOpt(true);
         }
-        System.out.println("2-opt now " + twoOpt);
+        System.out.println("[Presenter] 2-opt now " + twoOpt);
     }
 
     private void toggle3opt() {
@@ -116,7 +140,7 @@ public class Presenter {
             threeOpt = true;
             model.setThreeOpt(true);
         }
-        System.out.println("3-opt now " + threeOpt);
+        System.out.println("[Presenter] 3-opt now " + threeOpt);
     }
 
     private int eventUserAddLoc(String id) {
@@ -125,18 +149,20 @@ public class Presenter {
 
     private int eventUserAddLocList(ArrayList<String> ids) {
         currentIds = ids;
-        model.toggleListLocations(ids);
-        if(twoOpt)
+        model.setReadingFromXML(readingFromXML);
+        model.toggleListLocations(ids, useDatabase);
+        if(twoOpt) {
             model.setTwoOpt(true);
-        else
+        } else {
             model.setTwoOpt(false);
-        if(threeOpt)
+        }
+        if(threeOpt) {
             model.setThreeOpt(true);
-        else
+        } else {
             model.setThreeOpt(false);
-        //model.printUserLoc();
+        }
         try {
-            model.planUserTrip(fname);
+            model.planUserTrip(fname, readingFromXML);
             view.resetTrip();
             int numPairs = model.getUserPairs().size();
 
@@ -148,15 +174,31 @@ public class Presenter {
                 String secondId = model.getUserSecondId(i);
                 String firstName = model.getUserFirstName(i);
                 String secondName = model.getUserSecondName(i);
-                view.addLeg(pairId, firstName, secondName, model.getUserPairDistance(i));
+                view.addLeg(model.getPairId(i), model.getFirstId(i),
+                        model.getFirstName(i), Double.toString(model.getFirstLat(i)),
+                        Double.toString(model.getFirstLon(i)), " ",
+                        model.getFirstMunicipality(i),
+                        model.getFirstRegion(i), model.getFirstCountry(i),
+                        model.getFirstContinent(i), model.getFirstAirportURL(i),
+                        model.getFirstRegionUrl(i), model.getFirstCountryURL(i),
+                        model.getSecondId(i), model.getSecondName(i),
+                        Double.toString(model.getSecondLat(i)),
+                        Double.toString(model.getSecondLon(i)), " ",
+                        model.getSecondMunicipality(i), model.getSecondRegion(i),
+                        model.getSecondCountry(i), model.getSecondContinent(i),
+                        model.getSecondAirportURL(i), model.getSecondRegionUrl(i),
+                        model.getSecondCountry(i), model.getPairDistance(i), "miles");
                 finalPairId++;
-                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), pairId);
+                view.addLine(model.getUserFirstLon(i), model.getUserFirstLat(i),
+                        model.getUserSecondLon(i), model.getUserSecondLat(i), pairId, model.isWraparound(i));
                 if(displayName) {
                     view.addCityNameLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstName);
                     view.addCityNameLabel(model.getUserSecondLon(i), model.getUserSecondLat(i), secondName);
                 }
                 if(displayMileage) {
-                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i), model.getUserSecondLon(i), model.getUserSecondLat(i), model.getUserPairDistance(i), pairId);
+                    view.addDistance(model.getUserFirstLon(i), model.getUserFirstLat(i),
+                            model.getUserSecondLon(i), model.getUserSecondLat(i),
+                            model.getUserPairDistance(i), pairId, model.isWraparound(i));
                 }
                 if(displayId) {
                     view.addIDLabel(model.getUserFirstLon(i), model.getUserFirstLat(i), firstId);
@@ -164,15 +206,17 @@ public class Presenter {
                 }
             }
             view.addFooter(model.getTripDistance());
-            view.addHeader("Colorado");
-            view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
+            view.addHeader("The Earth");
             view.finalizeTrip(fname);
+            for(int i = 0; i < model.getNumDatabaseLocationsReturned(); i++) {
+                copyLocationsToView(model.copyDBLocationsToView(i)); //This gets the location data and pushes it into copyLoctaions
+            }
             makeItinerary();
             model.resetUserLoc();
             view.refresh();
         } catch(Exception e) {
-            //System.out.println("Exception encountered in Presenter.java");
-            //System.err.println(e);
+            System.err.println("[Presenter] Exception encountered in Presenter.java");
+            System.err.println(e);
             return -1;
         }
         return 1;
@@ -180,45 +224,55 @@ public class Presenter {
 
     public boolean getTwoOpt() {
         return twoOpt;
-    } //done
+    }
 
     public void setTwoOpt(boolean twoOpt) {
         this.twoOpt = twoOpt;
         model.setTwoOpt(twoOpt);
-    } //done
+    }
 
     public boolean getThreeOpt() {
         return threeOpt;
-    } //done
+    }
 
     public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
         model.setThreeOpt(threeOpt);
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+        view.setKilometers(kilometers);
+        model.setKilometers(kilometers);
+    }
+
+    public boolean getDisplayMileage() {
+        return displayMileage;
     } //done
 
     public void setDisplayMileage(boolean x) {
         displayMileage = x;
     }//done
 
-    public void setDisplayId(boolean x) {
-        displayId = x;
-    } //done
-
-    public void setDisplayName(boolean x) {
-        displayName = x;
-    } //done
-
-    public boolean getDisplayMileage() {
-        return displayMileage;
-    } //done
-
     public boolean getDisplayId() {
         return displayId;
+    } //done
+
+    public void setDisplayId(boolean x) {
+        displayId = x;
     } //done
 
     public boolean getDisplayName() {
         return displayName;
     }//done
+
+    public void setDisplayName(boolean x) {
+        displayName = x;
+    } //done
 
     public boolean displayGui(boolean x) {
         return (displayGui = x);
@@ -228,7 +282,7 @@ public class Presenter {
         return displayGui;
     }
 
-    public String getFname(){
+    public String getFname() {
         return fname;
     }
 
@@ -239,21 +293,66 @@ public class Presenter {
         }
         for(int i = 0; i < numUserPairs; i++) {
             //System.out.println("Adding something to index " + i);
-            view.addLegToItinerary(model.getPairId(i), model.getFirstName(i), model.getSecondName(i), model.getPairDistance(i));
+            if(!kilometers) {
+                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i),
+                        model.getSecondName(i), model.getPairDistance(i));
+            } else {
+                view.addLegToItinerary(model.getPairId(i), model.getFirstName(i),
+                        model.getSecondName(i), convert(model.getPairDistance(i)));
+            }
         }
     }
 
-    public void planTrip(String filename, String selectionXml, String svgMap) throws Exception {
-        fname = filename;
+    public void setViewOptions(ArrayList<String> arguments){
+        view.setOptions(arguments);
+    }
+
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
+    }
+
+    public void planTrip(String selectionXml, String svgMap) throws Exception {
+        //fname = filename;
         this.selectionXml = selectionXml;
         this.svgMap = svgMap;
-        model.planTrip(filename);
+
+        /*ArrayList selectedAirports = new ArrayList();
+        selectedAirports.add("NZCH");
+        selectedAirports.add("EHAM");
+        selectedAirports.add("EDDB");
+        selectedAirports.add("VDPP");
+        selectedAirports.add("BIKF");
+        selectedAirports.add("AYPY");
+        selectedAirports.add("ZYHB");
+        selectedAirports.add("ZYTX");
+        selectedAirports.add("BKPR");
+        selectedAirports.add("CYEG");*/
+        if(selectionXml.equals("")) {
+            model.setSelectedLocations(new ArrayList<>());
+            selectionXml = "untitled";
+            fname = "untitled";
+        } else {
+            model.setSelectedLocations(readXML(selectionXml));
+            String[] cut = selectionXml.split("/");
+            fname = cut[cut.length - 1].substring(0, cut[cut.length - 1].length() - 4);
+        }
+        model.planTrip("M", useDatabase);
+        //ArrayList<String> locationNames = model.searchDatabase(new ArrayList<>());
+        //for(int i = 0; i < model.getNumLocs(); i++) {
+        //    copyLocationsToView(model.copyDBLocationsToView(i)); /
+        // /This gets the location data and pushes it into copyLoctaions
+        //}
         int numPairs = model.getNumPairs();
-        view.originalIds = model.getLocationIds();
-        view.initializeTrip(selectionXml, svgMap);
-        //view.addBorders();
-        //view.addHeader("Colorado");
+        view.originalIds = model.getLocationNames();
+        view.initializeTrip(svgMap);
         view.addFooter(model.getTripDistance());
+        for(int i = 0; i < model.getDatabaseLocationsReturnedSize(); i++) {
+            copyLocationsToView(model.copyDBLocationsToView(i));
+            //This gets the location data and pushes it into copyLoctaions
+        }
         int finalPairId = 0;
         for(int i = 0; i < numPairs; i++) {
             double firstLon = model.getFirstLon(i);
@@ -266,15 +365,25 @@ public class Presenter {
             String secondId = model.getSecondId(i);
             String firstName = model.getFirstName(i);
             String secondName = model.getSecondName(i);
-            view.addLeg(pairId, firstName, secondName, pairDistance);
+            boolean wraparound = model.isWraparound(i);
+            view.addLeg(model.getPairId(i), model.getFirstId(i), model.getFirstName(i),
+                    Double.toString(model.getFirstLat(i)), Double.toString(model.getFirstLon(i)),
+                    " ", model.getFirstMunicipality(i), model.getFirstRegion(i),
+                    model.getFirstCountry(i), model.getFirstContinent(i), model.getFirstAirportURL(i),
+                    model.getFirstRegionUrl(i), model.getFirstCountryURL(i), model.getSecondId(i),
+                    model.getSecondName(i), Double.toString(model.getSecondLat(i)),
+                    Double.toString(model.getSecondLon(i)),
+                    " ", model.getSecondMunicipality(i), model.getSecondRegion(i),
+                    model.getSecondCountry(i), model.getSecondContinent(i), model.getSecondAirportURL(i),
+                    model.getSecondRegionUrl(i), model.getSecondCountry(i), model.getPairDistance(i), "miles");
             finalPairId++;
-            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId);
+            view.addLine(firstLon, firstLat, secondLon, secondLat, pairId, wraparound);
             if(displayName) {
                 view.addCityNameLabel(firstLon, firstLat, firstName);
                 view.addCityNameLabel(secondLon, secondLat, secondName);
             }
             if(displayMileage) {
-                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId);
+                view.addDistance(firstLon, firstLat, secondLon, secondLat, pairDistance, pairId, wraparound);
             }
             if(displayId) {
                 view.addIDLabel(firstLon, firstLat, firstId);
@@ -283,12 +392,58 @@ public class Presenter {
         }
 
         view.addFooter(model.getTripDistance());
-        view.addHeader("Colorado");
-        view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(), model.getLegFinishLocation(), model.getTripDistance());
-        view.finalizeTrip(filename);
+        view.addHeader("The Earth");
+        //view.addFinalLeg(Integer.toString(finalPairId), model.getLegStartLocation(),
+        // model.getLegFinishLocation(), model.getTripDistance());
+        ArrayList<String> viewArguments = view.getCommandLineOptions();
+        String fileArguments = "";
+        for(int i = 0; i < viewArguments.size(); i++) {
+            if(viewArguments.get(i).equals("-d") || viewArguments.get(i).equals("-n")
+                    || viewArguments.get(i).equals("-i") || viewArguments.get(i).equals("-2")
+                    || viewArguments.get(i).equals("-3") || viewArguments.get(i).equals("-k")) {
+                fileArguments += viewArguments.get(i);
+            }
+        }
+        fname = fname + fileArguments + "-t07";
+        view.finalizeTrip(fname);
         makeItinerary();
         if(displayGui) {
             view.gui();
         }
+    }
+
+    private ArrayList<String> readXML(String selectionXml) throws Exception {
+        Document readXml;
+        String name = "";
+        File xmlFile = new File(selectionXml);
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        readXml = dBuilder.parse(xmlFile);
+        readXml.getDocumentElement().normalize();
+        //System.out.println("*Testing*   Root element :" + readXml.getDocumentElement().getNodeName());
+        ArrayList<String> ret = new ArrayList<>();
+        NodeList nList = readXml.getElementsByTagName("destinations");
+        NodeList nList2 = readXml.getElementsByTagName("title");
+        for(int i = 0; i < nList2.getLength(); i++) {
+            Node a = nList2.item(i);
+            name = a.getTextContent();
+        }
+        for(int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            if(nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                int i = 0;
+                while(eElement.getElementsByTagName("id").item(i) != null) {
+                    ret.add(eElement.getElementsByTagName("id").item(i).getTextContent());
+                    i++;
+                }
+            }
+        }
+        return ret;
+    }
+
+    public void setUseDatabase(boolean useDatabase) {
+        this.useDatabase = useDatabase;
     }
 }

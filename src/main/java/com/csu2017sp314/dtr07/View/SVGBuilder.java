@@ -2,11 +2,15 @@ package com.csu2017sp314.dtr07.View;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -17,6 +21,9 @@ import java.io.IOException;
 
 class SVGBuilder {
     private Document SVGdoc;
+    private boolean kilometers;
+    private double width;
+    private double height;
     private int labelID = 1;
 
     SVGBuilder(String svgMap) throws ParserConfigurationException, SAXException, IOException {
@@ -26,11 +33,12 @@ class SVGBuilder {
         //Creating the SVG document
         String filepath = "";
         if(!svgMap.isEmpty()) {
-             filepath = svgMap;
+            filepath = svgMap;
         } else {
             filepath = "src/test/resources/coloradoMap.svg";
         }
         SVGdoc = docBuilder.parse(filepath);
+        readSVG();
         /*String svgNS = "http://www.w3.org/2000/svg";
 		DOMImplementation impl = docBuilder.getDOMImplementation();
 		SVGdoc = impl.createDocument(svgNS, "svg", null);
@@ -41,26 +49,56 @@ class SVGBuilder {
 		svgRoot.setAttribute("xmlns:svg", "http://www.w3.org/2000/svg");*/
     }
 
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+    }
+
+    private void readSVG() throws SAXException, IOException, ParserConfigurationException {
+        Document readSVG = SVGdoc;
+        readSVG.getDocumentElement().normalize();
+        //System.out.println("*Testing*   Root element :" + readSVG.getDocumentElement().getNodeName());
+        NodeList nList = readSVG.getElementsByTagName("svg");
+        for(int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            //System.out.println("\nCurrent Element :" + nNode.getNodeName());
+            if(nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                if(eElement.getAttribute("width") != null) {
+                    //System.out.println("width = " + eElement.getAttribute("width"));
+                    width = Double.parseDouble(eElement.getAttribute("width"));
+                }
+                if(eElement.getAttribute("height") != null) {
+                    //System.out.println("height = " + eElement.getAttribute("height"));
+                    height = Double.parseDouble(eElement.getAttribute("height"));
+                }
+            }
+        }
+    }
+
     private double convertLongitudeCoordinates(double x) {
-        double xPixels = 993.54946; //Width of colorado map
-        double startX = -109;
-        double endX = -102;
+        double xPixels = width; //Width of colorado map
+        double startX = -180;
+        double endX = 180;
         //Convert to SVG 'x' coordinate
         double strideX = endX - startX;
         double relativeX = (x - startX);
         double realX = relativeX * (xPixels / strideX);
-        return (realX + 34.72952);
+        return (realX);
     }
 
     private double convertLatitudeCoordinates(double y) {
-        double yPixels = 709.98902; //Height of colorado map
-        double startY = 41;
-        double endY = 37;
+        double yPixels = height; //Height of colorado map
+        double startY = 90;
+        double endY = -90;
         //Convert to SVG 'y' coordinate
         double strideY = endY - startY;
         double relativeY = (y - startY);
         double realY = relativeY * (yPixels / strideY);
-        return (realY + 34.76269);
+        return (realY);
     }
 
     void addLine(double x1, double y1, double x2, double y2, String id) {
@@ -82,8 +120,24 @@ class SVGBuilder {
         distance.setAttribute("id", ("leg" + id));
         distance.setAttribute("x", Double.toString((convertLongitudeCoordinates(x1) + convertLongitudeCoordinates(x2)) / 2));
         distance.setAttribute("y", Double.toString((convertLatitudeCoordinates(y1) + convertLatitudeCoordinates(y2)) / 2));
-        distance.setTextContent(Integer.toString(distanceBetween));
+        if(!kilometers) {
+            distance.setTextContent(Integer.toString(distanceBetween));
+
+        } else {
+            //double kDist = (double) distanceBetween;
+            //kDist *= 1.60934;
+            //kDist = Math.round(kDist);
+            //int kInt = (int) kDist;
+            distance.setTextContent(Integer.toString(convert(distanceBetween)));
+        }
         SVGdoc.getDocumentElement().appendChild(distance);
+    }
+
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
     }
 
     void addCityNameLabel(double longitude, double latitude, String city) {
@@ -115,10 +169,10 @@ class SVGBuilder {
         Element header = SVGdoc.createElement("text");
         header.setAttribute("text-anchor", "middle");
         header.setAttribute("font-family", "Sans-serif");
-        header.setAttribute("font-size", "24");
+        header.setAttribute("font-size", "18");
         header.setAttribute("id", "state");
-        header.setAttribute("x", "532");
-        header.setAttribute("y", "28");
+        header.setAttribute("x", "512");
+        header.setAttribute("y", "20");
         header.setTextContent(title);
         SVGdoc.getDocumentElement().appendChild(header);
     }
@@ -127,11 +181,16 @@ class SVGBuilder {
         Element footer = SVGdoc.createElement("text");
         footer.setAttribute("text-anchor", "middle");
         footer.setAttribute("font-family", "Sans-serif");
-        footer.setAttribute("font-size", "24");
+        footer.setAttribute("font-size", "18");
         footer.setAttribute("id", "distance");
-        footer.setAttribute("x", "532");
-        footer.setAttribute("y", "773");
-        footer.setTextContent(totalDistance + " miles");
+        footer.setAttribute("x", "512");
+        footer.setAttribute("y", "505");
+        if (!kilometers) {
+            footer.setTextContent(totalDistance + " miles");
+        }
+        else {
+            footer.setTextContent(totalDistance + " kilometers");
+        }
         SVGdoc.getDocumentElement().appendChild(footer);
     }
 
@@ -186,4 +245,26 @@ class SVGBuilder {
     Document getSVGdoc() {
         return SVGdoc;
     }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public static void main(String[] argv) throws Exception {
+        SVGBuilder svg = new SVGBuilder("");
+        svg.readSVG();
+    }
 }
+

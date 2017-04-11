@@ -73,4 +73,11 @@ public class SVGBuilderTest {
         svg2.addBorders();
         assertEquals(svg1.getSVGdoc().getDocumentElement().getFirstChild().getNodeName(), svg2.getSVGdoc().getDocumentElement().getFirstChild().getNodeName());
     }
+
+    @Test
+    public void isKilometers() throws Exception {
+        SVGBuilder svg = new SVGBuilder("");
+        svg.setKilometers(true);
+        assertEquals(true, svg.isKilometers());
+    }
 }

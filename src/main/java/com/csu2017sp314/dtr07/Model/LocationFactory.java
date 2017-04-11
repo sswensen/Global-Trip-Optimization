@@ -1,10 +1,6 @@
 package com.csu2017sp314.dtr07.Model;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -14,57 +10,37 @@ import java.util.Scanner;
  */
 
 class LocationFactory {
-    private ArrayList<Location> locations = new ArrayList<Location>();
+    private ArrayList<Location> locations = new ArrayList<>();
     private ArrayList<Pair> pairs = new ArrayList<>();
     private ArrayList<Pair> bestPairs = new ArrayList<>();
+    private ArrayList<String> selectedAirports = new ArrayList<>();
+    private String unit = "";
     private boolean twoOpt;
     private boolean threeOpt;
-    private int totalImprovements;
     private double[][] distTable;
+    private int numberReturnedFromDatabase = 0;
 
-    boolean readFile(String in) throws FileNotFoundException {
-        Scanner scan = new Scanner(new File(in));
-        int id = -1;
-        int name = -1;
-        int latitude = -1;
-        int longitude = -1;
-        if(scan.hasNext()) {
-            String[] line = scan.nextLine().split(",");
-            for(int x = 0; x < line.length; x++) {
-                String temp = line[x];
-                if(temp.equalsIgnoreCase("id")) {
-                    id = x;
-                }
-                if(temp.equalsIgnoreCase("name")) {
-                    name = x;
-                }
-                if(temp.equalsIgnoreCase("latitude")) {
-                    latitude = x;
-                }
-                if(temp.equalsIgnoreCase("longitude")) {
-                    longitude = x;
-                }
-            }
+    ArrayList<Location> readFromDB(ArrayList<String> where, boolean read) {
+        QueryBuilder qb = new QueryBuilder(read);
+        //qb.setWhere(where);
+        //qb.searchDatabase("heliport", "AS", "AE", "AE-DU", "Dubai", "Schumacher Heliport");
+        //qb.searchDatabase("large_airport", "North America", "United States", "Colorado", "", "");
+        if(where.size() == 0) {
+            qb.searchDatabase("", "", "", "", "", "");
+        } else {
+            qb.searchDatabase(where.get(0), where.get(1), where.get(2), where.get(3), where.get(4), where.get(5));
         }
-        while(scan.hasNext()) {
-            String[] line = scan.nextLine().split(",");
-            Location temp = new Location(line[id], line[name],
-                    line[latitude].replaceAll("\\s+", ""),
-                    line[longitude].replaceAll("\\s+", ""));
-            locations.add(temp);
-        }
-        scan.close();
-        return locations.size() > 0;
+        qb.fireQuery();
+        locations = qb.getLocations();
+        numberReturnedFromDatabase = qb.getNumberReturnedFromDatabase();
+        return locations;
     }
 
     boolean readUserLocations(ArrayList<Location> userLoc) {
         for(int i = 0; i < userLoc.size(); i++) {
             locations.add(userLoc.get(i));
         }
-        if(locations.size() == userLoc.size()) {
-            return true;
-        }
-        return false;
+        return locations.size() == userLoc.size();
     }
 
     boolean thirdTry() {
@@ -77,7 +53,7 @@ class LocationFactory {
                 double distance = 999999999;
                 int index = -1;
                 for(int y = x + 1; y < locations.size(); y++) {
-                    double temp = locations.get(x).distance(locations.get(y));
+                    double temp = locations.get(x).distance(locations.get(y), unit);
                     if(distance > temp) {
                         distance = temp;
                         index = y;
@@ -86,13 +62,10 @@ class LocationFactory {
                 Location temploc = locations.get(x + 1);
                 locations.set(x + 1, locations.get(index));
                 locations.set(index, temploc);
-                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1),
-                        locations.get(x).distance(locations.get(x + 1))));
+                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1), unit)));
             }
-            pairs.add(new Pair(Integer.toString(locations.size() - 1),
-                    locations.get(locations.size() - 1),
-                    locations.get(0),
-                    locations.get(locations.size() - 1).distance(locations.get(0))));
+
+            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0), unit)));
             if(twoOpt) {
                 if(threeOpt) {
                     threeOpt();
@@ -121,47 +94,50 @@ class LocationFactory {
         return true;
     }
 
-    public void setTotalImprovements(int totalImprovements) {
-        this.totalImprovements = totalImprovements;
+    ArrayList<Location> setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName, boolean useDB) {
+        this.selectedAirports = selectedAirportIds;
+        QueryBuilder qb = new QueryBuilder(useDB);
+        qb.search4IDinDatabase(selectedAirports, idOrName);
+        qb.fireQuery(); //Searches db with selectedAirports as where and sets qb's local locations
+        locations = qb.getLocations(); //Need to call this to update lf's locations
+        return locations;
     }
 
-    public int getTotalImprovements() {
-        return this.totalImprovements;
+    void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    ArrayList<Location> getLocations() {
+        return new ArrayList<>(locations);
     }
 
     public void setLocations(ArrayList<Location> locations) {
         this.locations = locations;
     }
 
-    ArrayList<Location> getLocations() {
-        return locations;
-    }
-
     ArrayList<Pair> getPairs() {
-        return pairs;
-    }
-
-    public void setTwoOpt(boolean twoOpt) {
-        this.twoOpt = twoOpt;
+        return new ArrayList<>(pairs);
     }
 
     public boolean getTwoOpt() {
         return this.twoOpt;
     }
 
-    public void setThreeOpt(boolean threeOpt) {
-        this.threeOpt = threeOpt;
+    public void setTwoOpt(boolean twoOpt) {
+        this.twoOpt = twoOpt;
     }
 
     public boolean getThreeOpt() {
         return this.threeOpt;
     }
 
+    public void setThreeOpt(boolean threeOpt) {
+        this.threeOpt = threeOpt;
+    }
+
     private ArrayList<Pair> generatePairs(Location[] route, ArrayList<Pair> newPairs) {
         for(int a = 0; a < route.length - 1; a++) {
-            newPairs.add(new Pair(Integer.toString(a),
-                    route[a], route[a + 1],
-                    route[a].distance(route[a + 1])));
+            newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1], unit)));
         }
         return newPairs;
     }
@@ -173,7 +149,7 @@ class LocationFactory {
             route[i] = pair.getOne();
             i++;
         }
-        route[route.length-1] = pairs.get(0).getOne();
+        route[route.length - 1] = pairs.get(0).getOne();
         return route;
     }
 
@@ -181,8 +157,8 @@ class LocationFactory {
         double[][] distTable = new double[route.length][route.length];
         for(int i = 0; i < route.length; i++) {
             route[i].setTableIndex(i);
-            for (int j = 0; j < route.length; j++) {
-                distTable[i][j] = route[i].distance(route[j]);
+            for(int j = 0; j < route.length; j++) {
+                distTable[i][j] = route[i].distance(route[j], unit);
             }
         }
         this.distTable = distTable;
@@ -200,7 +176,7 @@ class LocationFactory {
             route[j] = temp;
             i++;
             j--;
-            if(i==j || j<i) {
+            if(i == j || j < i) {
                 break;
             }
         }
@@ -210,27 +186,27 @@ class LocationFactory {
         Location[] newRoute = new Location[route.length];
         //Copy up to a in order
         int index = 0;
-        for(int i=0; i<a; i++) {
+        for(int i = 0; i < a; i++) {
             newRoute[index] = route[i];
             index++;
         }
         //Add c->d to newRoute
-        for(int i=c; i<=d; i++) {
+        for(int i = c; i <= d; i++) {
             newRoute[index] = route[i];
             index++;
         }
         //Add b+1->c to newRoute
-        for(int i=b+1; i<c; i++) {
+        for(int i = b + 1; i < c; i++) {
             newRoute[index] = route[i];
             index++;
         }
         //Add a->b to newRoute
-        for(int i=a; i<=b; i++) {
+        for(int i = a; i <= b; i++) {
             newRoute[index] = route[i];
             index++;
         }
         //Add d->n to newRoute
-        for(int i=d+1; i<route.length; i++) {
+        for(int i = d + 1; i < route.length; i++) {
             newRoute[index] = route[i];
             index++;
         }
@@ -241,9 +217,8 @@ class LocationFactory {
         Location[] route = generateRoute();
         generateDistanceTable(route);
         int totalImprovements = 0;
-        this.totalImprovements = 0;
         int improvements = 1;
-        int n = route.length-1;
+        int n = route.length - 1;
         ArrayList<Pair> newPairs = new ArrayList<>();
         while(improvements > 0) {
             improvements = 0;
@@ -258,7 +233,6 @@ class LocationFactory {
                 }
             }
         }
-        this.totalImprovements = totalImprovements;
         pairs = generatePairs(route, newPairs);
         return totalImprovements;
     }
@@ -266,28 +240,28 @@ class LocationFactory {
     private Location[] improve(Location[] route, int num, int i, int j, int k) {
         switch(num) {
             case 1:
-                reverseSegment(route, j+1, k);
+                reverseSegment(route, j + 1, k);
                 return route;
             case 2:
-                reverseSegment(route, i+1, j);
+                reverseSegment(route, i + 1, j);
                 return route;
             case 3:
-                reverseSegment(route, i+1, k);
+                reverseSegment(route, i + 1, k);
                 return route;
             case 4:
-                route = swapSegments(route, i+1, j, j+1, k);
+                route = swapSegments(route, i + 1, j, j + 1, k);
                 return route;
             case 5:
-                reverseSegment(route, i+1, j);
-                reverseSegment(route, j+1, k);
+                reverseSegment(route, i + 1, j);
+                reverseSegment(route, j + 1, k);
                 return route;
             case 6:
-                reverseSegment(route, j+1, k);
-                route = swapSegments(route, i+1, j, j+1, k);
+                reverseSegment(route, j + 1, k);
+                route = swapSegments(route, i + 1, j, j + 1, k);
                 return route;
             case 7:
-                reverseSegment(route, i+1, j);
-                route = swapSegments(route, i+1, j, j+1, k);
+                reverseSegment(route, i + 1, j);
+                route = swapSegments(route, i + 1, j, j + 1, k);
                 return route;
             default:
                 return route;
@@ -334,17 +308,16 @@ class LocationFactory {
         Location[] route = generateRoute();
         generateDistanceTable(route);
         int totalImprovements = 0;
-        this.totalImprovements = 0;
         int improvements = 1;
-        int n = route.length-1;
+        int n = route.length - 1;
         ArrayList<Pair> newPairs = new ArrayList<>();
         while(improvements > 0) {
             improvements = 0;
-            for(int i=0; i<=n-5; i++) {
-                for(int j=i+2; j<=n-3; j++) {
-                    for(int k=j+2; k<=n-1; k++) {
-                        int improved = improved(route, i, j ,k);
-                        if (improved>0) {
+            for(int i = 0; i <= n - 5; i++) {
+                for(int j = i + 2; j <= n - 3; j++) {
+                    for(int k = j + 2; k <= n - 1; k++) {
+                        int improved = improved(route, i, j, k);
+                        if(improved > 0) {
                             route = improve(route, improved, i, j, k);
                             improvements++;
                             totalImprovements++;
@@ -353,8 +326,11 @@ class LocationFactory {
                 }
             }
         }
-        this.totalImprovements = totalImprovements;
         pairs = generatePairs(route, newPairs);
         return totalImprovements;
+    }
+
+    public int getNumberReturnedFromDatabase() {
+        return numberReturnedFromDatabase;
     }
 }

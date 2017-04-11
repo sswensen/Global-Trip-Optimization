@@ -1,9 +1,7 @@
 package com.csu2017sp314.dtr07.Model;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -18,13 +16,23 @@ public class Model {
     private ArrayList<Location> locations;
     private ArrayList<Location> userLocations = new ArrayList<>();
     private ArrayList<Location> previousLocations = new ArrayList<>();
+    private ArrayList<String> selectedLocations;
+    private ArrayList<Location> databaseLocationsReturned;
+    private int numberFromDatabase = 0;
+    private LocationFactory dataBaseSearch = new LocationFactory(); //This is for populating the second GUI window and getting locations once the user has selected what he wnats
     private boolean twoOpt;
     private boolean threeOpt;
     private boolean tick = false;
+    private String unit;
+    private boolean readingFromXML = true;
+    private boolean kilometers;
 
-    public int planTrip(String filename) throws FileNotFoundException {
+    public int planTrip(String units, boolean useDB) throws FileNotFoundException {
+        this.unit = units;
         LocationFactory lf = new LocationFactory();
-        lf.readFile(filename);
+        lf.setUnit(units);
+        databaseLocationsReturned = lf.setSelectedAirports(selectedLocations, "id", useDB); //THis also searches the database lol
+        //lf.readFile(filename);
         if(twoOpt) {
             lf.setTwoOpt(true);
         }
@@ -36,10 +44,12 @@ public class Model {
         pairs = lf.getPairs();
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
+
         return 1;
     }
 
-    public int planUserTrip(String filename) throws FileNotFoundException {
+    public int planUserTrip(String filename, boolean readingFromXML) throws FileNotFoundException {
+        this.readingFromXML = readingFromXML;
         LocationFactory lf = new LocationFactory();
         if(twoOpt) {
             lf.setTwoOpt(true);
@@ -53,7 +63,8 @@ public class Model {
         if(!threeOpt && !tick) {
             userLocations = new ArrayList<>(previousLocations);
         }
-        lf.setLocations(userLocations);
+        lf.setLocations(new ArrayList<>(userLocations));//TODOdone read from database
+        //List locations is not the ids of the selected airports
         lf.thirdTry();
         userLocations = lf.getLocations();
         pairs = lf.getPairs();
@@ -70,6 +81,32 @@ public class Model {
         userPairs.clear();
         userPairs = new ArrayList<>(pairs);
         return 1;
+    }
+
+    public ArrayList<String> searchDatabase(ArrayList<String> where, boolean read) {
+        databaseLocationsReturned = dataBaseSearch.readFromDB(where, read);
+        numberFromDatabase = dataBaseSearch.getNumberReturnedFromDatabase();
+        ArrayList<String> ret = new ArrayList<>(); //Very inefficient, see begining of fireQuery for additional options
+        for(Location loc : databaseLocationsReturned) {
+            ret.add(loc.getName());
+        }
+        return ret;
+    }
+
+    public ArrayList<Object> copyDBLocationsToView(int index) {
+        ArrayList<Object> ret = new ArrayList<>();
+        ret.add(databaseLocationsReturned.get(index).getId());
+        ret.add(databaseLocationsReturned.get(index).getName());
+        ret.add(databaseLocationsReturned.get(index).getLat());
+        ret.add(databaseLocationsReturned.get(index).getLon());
+        ret.add(databaseLocationsReturned.get(index).getMunicipality());
+        ret.add(databaseLocationsReturned.get(index).getRegion());
+        ret.add(databaseLocationsReturned.get(index).getCountry());
+        ret.add(databaseLocationsReturned.get(index).getContinent());
+        ret.add(databaseLocationsReturned.get(index).getAirportUrl());
+        ret.add(databaseLocationsReturned.get(index).getRegionUrl());
+        ret.add(databaseLocationsReturned.get(index).getCountryUrl());
+        return ret;
     }
 
     public ArrayList<Pair> getUserPairs() {
@@ -89,6 +126,14 @@ public class Model {
         return ret;
     }
 
+    public ArrayList<String> getLocationNames() {
+        ArrayList<String> ret = new ArrayList<>();
+        for(Location l : locations) {
+            ret.add(l.getName());
+        }
+        return ret;
+    }
+
     public void resetUserLoc() {
         userLocations.clear();
     }
@@ -104,16 +149,28 @@ public class Model {
         }
     }
 
-    public int toggleListLocations(ArrayList<String> ids) {
+    public void setReadingFromXML(boolean readingFromXML) {
+        this.readingFromXML = readingFromXML;
+    }
+
+    public int toggleListLocations(ArrayList<String> ids, boolean useDB) {
         if(!ids.isEmpty()) {
-            for(String id : ids) {
-                int f = searchLocations(id, "id");
-                if(f > -1) {
-                    userLocations.add(locations.get(f));
-                } else {
-                    System.err.println("Error searching for " + id);
+            /*if(readingFromXML) {
+                for(String id : ids) {
+                    int f = searchLocations(id, "name");
+                    if(f > -1) {
+                        userLocations.add(locations.get(f));
+                    } else {
+                        System.err.println("Error searching for " + id);
+                    }
+
                 }
-            }
+            } else {
+                databaseLocationsReturned = dataBaseSearch.setSelectedAirports(ids, "name"); //Instead of searching the existing lcoations, maybe we should just do another query
+                userLocations = dataBaseSearch.getLocations(); //Thats is what i am implementing here
+            }*/
+            userLocations = (searchDatabaseLocationsReturnedForName(ids, useDB));
+
         } else {
             userLocations = new ArrayList<>(locations);
         }
@@ -141,20 +198,51 @@ public class Model {
         return -1;
     }
 
-    public void setTwoOpt(boolean twoOpt) {
-        this.twoOpt = twoOpt;
+    private ArrayList<Location> searchDatabaseLocationsReturnedForName(ArrayList<String> names, boolean useDB) {
+        ArrayList<Location> ret = new ArrayList<>();
+        for(String name : names)
+            for(Location loc : databaseLocationsReturned) {
+                if(loc.getName().equalsIgnoreCase(name)) {
+                    ret.add(loc);
+                } else {
+                    //Search database for names instead of using the ones from the last query
+                    if(name.length() > 60) {
+                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "name", useDB);
+                    } else {
+                        databaseLocationsReturned = dataBaseSearch.setSelectedAirports(names, "id", useDB);
+                    }
+                    return dataBaseSearch.getLocations();
+                }
+            }
+        return ret;
     }
 
     public boolean getTwoOpt() {
         return twoOpt;
     }
 
-    public void setThreeOpt(boolean threeOpt) {
-        this.threeOpt = threeOpt;
+    public void setTwoOpt(boolean twoOpt) {
+        this.twoOpt = twoOpt;
     }
 
     public boolean getThreeOpt() {
         return threeOpt;
+    }
+
+    public void setThreeOpt(boolean threeOpt) {
+        this.threeOpt = threeOpt;
+    }
+
+    public boolean isKilometers() {
+        return this.kilometers;
+    }
+
+    public void setKilometers(boolean kilometers) {
+        this.kilometers = kilometers;
+    }
+
+    public int getDatabaseLocationsReturnedSize() {
+        return databaseLocationsReturned.size();
     }
 
     public String getLegStartLocation() {
@@ -181,6 +269,62 @@ public class Model {
         return pairs.get(i).getTwo().getLat();
     }
 
+    public String getFirstMunicipality(int i) {
+        return pairs.get(i).getOne().getMunicipality();
+    }
+
+    public String getSecondMunicipality(int i) {
+        return pairs.get(i).getTwo().getMunicipality();
+    }
+
+    public String getFirstRegion(int i) {
+        return pairs.get(i).getOne().getRegion();
+    }
+
+    public String getSecondRegion(int i) {
+        return pairs.get(i).getTwo().getRegion();
+    }
+
+    public String getFirstCountry(int i){
+        return pairs.get(i).getOne().getCountry();
+    }
+
+    public String getSecondCountry(int i){
+        return pairs.get(i).getTwo().getCountry();
+    }
+
+    public String getFirstContinent(int i){
+        return pairs.get(i).getOne().getContinent();
+    }
+
+    public String getSecondContinent(int i){
+        return pairs.get(i).getTwo().getContinent();
+    }
+
+    public String getFirstAirportURL(int i){
+        return pairs.get(i).getOne().getAirportUrl();
+    }
+
+    public String getSecondAirportURL(int i){
+        return pairs.get(i).getTwo().getAirportUrl();
+    }
+
+    public String getFirstRegionUrl(int i){
+        return pairs.get(i).getOne().getRegionUrl();
+    }
+
+    public String getSecondRegionUrl(int i){
+        return pairs.get(i).getTwo().getRegionUrl();
+    }
+
+    public String getFirstCountryURL(int i){
+        return pairs.get(i).getOne().getCountryUrl();
+    }
+
+    public String getSecondCountryURl(int i){
+        return pairs.get(i).getTwo().getCountryUrl();
+    }
+
     public int getPairDistance(final int i) {
         return (int) pairs.get(i).getDistance();
     }
@@ -191,6 +335,18 @@ public class Model {
 
     public int getNumPairs() {
         return pairs.size();
+    }
+
+    public int getNumLocs() {
+        return locations.size();
+    }
+
+    public int getNumDatabaseLocationsReturned() {
+        return databaseLocationsReturned.size();
+    }
+
+    public int getNumUserLocs() {
+        return userLocations.size();
     }
 
     public String getFirstName(final int i) {
@@ -206,7 +362,22 @@ public class Model {
         for(Pair p : pairs) {
             ret += p.getDistance();
         }
-        return ret;
+        if(!kilometers) {
+            return ret;
+        } else {
+            return convert(ret);
+        }
+    }
+
+    private int convert(int in) {
+        double out = (double) in;
+        out *= 1.60934;
+        out = Math.round(out);
+        return (int) out;
+    }
+
+    public boolean isWraparound(int i) {
+        return pairs.get(i).isUseWraparound();
     }
 
     public String getFirstId(int i) {
@@ -237,7 +408,11 @@ public class Model {
     }
 
     public int getUserPairDistance(int i) {
-        return (int) userPairs.get(i).getDistance();
+        //if(!kilometers) {
+            return (int) userPairs.get(i).getDistance();
+        //} else {
+        //    return convert((int) userPairs.get(i).getDistance());
+        //}
     }
 
     public String getUserPairId(int i) {
@@ -270,6 +445,18 @@ public class Model {
 
     public String getUserSecondId(int i) {
         return userPairs.get(i).getTwo().getId();
+    }
+
+    public int getNumberReturnedFromDatabase() {
+        return dataBaseSearch.getNumberReturnedFromDatabase();
+    }
+
+    public ArrayList<String> getSelectedLocations() {
+        return selectedLocations;
+    }
+
+    public void setSelectedLocations(ArrayList<String> selectedLocations) {
+        this.selectedLocations = selectedLocations;
     }
 
     public void printUserLoc() {

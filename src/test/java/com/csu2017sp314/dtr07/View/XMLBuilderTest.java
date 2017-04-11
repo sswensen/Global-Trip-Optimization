@@ -12,8 +12,8 @@ public class XMLBuilderTest {
     public void addLeg() throws Exception {
         XMLBuilder xml1 = new XMLBuilder();
         XMLBuilder xml2 = new XMLBuilder();
-        xml1.addLeg("", "", "", 1);
-        xml2.addLeg("", "", "", 1);
+        xml1.addLeg("","","","","","","","","","","","","","","","","","","","","","","","","",1,"");
+        xml2.addLeg("","","","","","","","","","","","","","","","","","","","","","","","","",1,"");
         assertEquals(xml1.getXMLdoc().getDocumentElement().getFirstChild().getNodeName(), xml2.getXMLdoc().getDocumentElement().getFirstChild().getNodeName());
 
     }

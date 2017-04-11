@@ -14,7 +14,7 @@ public class TestLocation {
     public void initialize() {
     }
 
-    private Location one = new Location("0", "A", "37°28'20\"N","106°47'35\"W");
+    Location one = (new Location("0", "A", "39.701698303200004", "-104.751998901", "Aurora", "Colorado", "United States", "North America", "http://en.wikipedia.org/wiki/Buckley_Air_Force_Base", "http://en.wikipedia.org/wiki/Colorado", "http://en.wikipedia.org/wiki/United_States"));
 
     @Test
     public void getId() throws Exception {
@@ -41,7 +41,7 @@ public class TestLocation {
 
     @Test
     public void getLat() throws Exception {
-        assertEquals(37.47222222222222, one.getLat(), 0);
+        assertEquals(39.701698303200004, one.getLat(), 0);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class TestLocation {
 
     @Test
     public void getLon() throws Exception {
-        assertEquals(-106.79305555555555, one.getLon(), 0);
+        assertEquals(-104.751998901, one.getLon(), 0);
     }
 
     @Test

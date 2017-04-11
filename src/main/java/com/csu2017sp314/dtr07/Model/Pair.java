@@ -11,12 +11,14 @@ public class Pair {
     private Location two;
     private double distance;
     private String id;
+    private boolean useWraparound = false;
 
     Pair(String id, Location one, Location two, double distance) {
         this.id = id;
         this.one = one;
         this.two = two;
         this.distance = distance;
+        checkForWraparound();
     }
 
     Location getOne() {
@@ -37,6 +39,20 @@ public class Pair {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isUseWraparound() {
+        return useWraparound;
+    }
+
+    public void setUseWraparound(boolean useWraparound) {
+        this.useWraparound = useWraparound;
+    }
+
+    public boolean checkForWraparound() {
+        boolean ret = one.isPairUsesWraparound() && two.isPairUsesWraparound();
+        useWraparound = ret;
+        return ret;
     }
 
     @Override
