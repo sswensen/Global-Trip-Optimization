@@ -49,7 +49,7 @@ public class TripCo {
         String csvFile = "";
         String svgFile = "";
         if(args.length == 0) {
-            System.out.println("Usage: TripCo [options] file.csv [map.svg] [selection.xml]");
+            System.out.println("Usage: TripCo [options] [map.svg]");
         } else {
             for(int i = 0; i < args.length; i++) {
                 arguments.add(args[i]);
