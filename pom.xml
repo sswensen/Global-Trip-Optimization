@@ -32,6 +32,11 @@ URL - change team number
 	  <type>jar</type>
 	  <scope>compile</scope>
 	</dependency>
+    <dependency>
+        <groupId>com.sparkjava</groupId>
+        <artifactId>spark-core</artifactId>
+        <version>2.5.5</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
