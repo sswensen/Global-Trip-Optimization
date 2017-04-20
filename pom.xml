@@ -19,6 +19,11 @@ URL - change team number
     <jdk.version>1.7</jdk.version>
   </properties>
   <dependencies>
+  	<dependency>
+	  <groupId>com.sparkjava</groupId>
+	  <artifactId>spark-core</artifactId>
+	  <version>1.0</version>
+	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
