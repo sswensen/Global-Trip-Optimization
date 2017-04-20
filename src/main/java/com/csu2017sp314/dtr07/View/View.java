@@ -185,7 +185,6 @@ public class View {
                 x21 = x1 + 360;
                 x22 = x2;
             }
-
             svg.addLine(x11, y1, x12, y2, id);
             svg.addLine(x21, y1, x22, y2, id);
             /*double originalX1 = x1;
