@@ -243,7 +243,7 @@ class LocationFactory {
 
     protected int twoOpt() {
         Location[] route = generateRoute();
-        generateDistanceTable(route);
+        //generateDistanceTable(route);
         int totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
@@ -334,7 +334,7 @@ class LocationFactory {
 
     protected int threeOpt() {
         Location[] route = generateRoute();
-        generateDistanceTable(route);
+        //generateDistanceTable(route);
         int totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
