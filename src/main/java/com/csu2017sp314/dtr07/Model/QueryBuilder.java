@@ -10,10 +10,7 @@ package com.csu2017sp314.dtr07.Model;
  * java -cp ".:./com.mysql.jdbc_5.1.5.jar" Sprint3Example2 eID password
  */
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -39,7 +36,82 @@ public class QueryBuilder {
     private boolean useDatabase;
     private String where = "";
     private int numberReturnedFromDatabase = 0;
-    private ArrayList<Location> locations = new ArrayList<>(); 
+    private ArrayList<Location> locations = new ArrayList<>();
+    private String bigassfuckingstring = "(SELECT\n" +
+            "  airports.id,\n" +
+            "  airports.name,\n" +
+            "  latitude,\n" +
+            "  longitude,\n" +
+            "  municipality,\n" +
+            "  regions.name,\n" +
+            "  countries.name,\n" +
+            "  continents.name,\n" +
+            "  airports.wikipedia_link,\n" +
+            "  regions.wikipedia_link,\n" +
+            "  countries.wikipedia_link\n" +
+            "FROM continents\n" +
+            "  INNER JOIN countries ON countries.continent = continents.id\n" +
+            "  INNER JOIN regions ON regions.iso_country = countries.code\n" +
+            "  INNER JOIN airports ON airports.iso_region = regions.code\n" +
+            "WHERE MATCH (airports.name) AGAINST (?)\n" +
+            "LIMIT 50)\n" +
+            "UNION\n" +
+            "(SELECT\n" +
+            "  airports.id,\n" +
+            "  airports.name,\n" +
+            "  latitude,\n" +
+            "  longitude,\n" +
+            "  municipality,\n" +
+            "  regions.name,\n" +
+            "  countries.name,\n" +
+            "  continents.name,\n" +
+            "  airports.wikipedia_link,\n" +
+            "  regions.wikipedia_link,\n" +
+            "  countries.wikipedia_link\n" +
+            "FROM continents\n" +
+            "  INNER JOIN countries ON countries.continent = continents.id\n" +
+            "  INNER JOIN regions ON regions.iso_country = countries.code\n" +
+            "  INNER JOIN airports ON airports.iso_region = regions.code\n" +
+            "WHERE MATCH (airports.municipality) AGAINST (?)\n" +
+            "LIMIT 50)\n" +
+            "UNION\n" +
+            "(SELECT\n" +
+            "   airports.id,\n" +
+            "   airports.name,\n" +
+            "   latitude,\n" +
+            "   longitude,\n" +
+            "   municipality,\n" +
+            "   regions.name,\n" +
+            "   countries.name,\n" +
+            "   continents.name,\n" +
+            "   airports.wikipedia_link,\n" +
+            "   regions.wikipedia_link,\n" +
+            "   countries.wikipedia_link\n" +
+            " FROM continents\n" +
+            "   INNER JOIN countries ON countries.continent = continents.id\n" +
+            "   INNER JOIN regions ON regions.iso_country = countries.code\n" +
+            "   INNER JOIN airports ON airports.iso_region = regions.code\n" +
+            " WHERE MATCH (regions.name) AGAINST (?)\n" +
+            " LIMIT 50)\n" +
+            "UNION\n" +
+            "(SELECT\n" +
+            "   airports.id,\n" +
+            "   airports.name,\n" +
+            "   latitude,\n" +
+            "   longitude,\n" +
+            "   municipality,\n" +
+            "   regions.name,\n" +
+            "   countries.name,\n" +
+            "   continents.name,\n" +
+            "   airports.wikipedia_link,\n" +
+            "   regions.wikipedia_link,\n" +
+            "   countries.wikipedia_link\n" +
+            " FROM continents\n" +
+            "   INNER JOIN countries ON countries.continent = continents.id\n" +
+            "   INNER JOIN regions ON regions.iso_country = countries.code\n" +
+            "   INNER JOIN airports ON airports.iso_region = regions.code\n" +
+            " WHERE MATCH (countries.name) AGAINST (?)\n" +
+            " LIMIT 50)";
   //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     public QueryBuilder(boolean useDB) {
@@ -55,7 +127,7 @@ public class QueryBuilder {
         w.add(region);
         w.add(municipality);
         w.add(name);
-        setWhere(w);
+        //setWhere(w);
     }
 
     public void search4IDinDatabase(ArrayList<String> ids, String idOrName) {
@@ -90,77 +162,15 @@ public class QueryBuilder {
     //TODO add function that returns the number of items found, actually this can be accomplished
     // by calling the size function on the ids returned to the db selection window
 
-    private void setWhere(ArrayList<String> wheres) {
-        if(wheres.get(0).equalsIgnoreCase("All airports")) {
-            wheres.remove(0);
-            wheres.add(0, "");
-        }
-        if(wheres.get(1).equalsIgnoreCase("All continents")) {
-            wheres.remove(1);
-            wheres.add(1, "");
-        }
-        if(wheres.get(2).equalsIgnoreCase("All countries")) {
-            wheres.remove(2);
-            wheres.add(2, "");
-        }
-        if(wheres.get(3).equalsIgnoreCase("All regions")) {
-            wheres.remove(3);
-            wheres.add(3, "");
-        }
-
-        for(int i = 0; i < wheres.size(); i++) {
-            String temp = wheres.get(i);
-            /*if(temp.contains("'")) {
-                int iHateAppostrophies = temp.indexOf("'");
-                temp = temp.substring(iHateAppostrophies+1);
-            }*/
-            wheres.remove(i);
-            wheres.add(i, temp);
-        }
-
-        ArrayList<String> q = new ArrayList<>();
-        String type = wheres.get(0);
-        if(!type.equals("")) {
-            //q.add("type like '%" + type + "%'");
-            q.add("type = '" + type + "'");
-        }
-        String continent = wheres.get(1);
-        if(!continent.equals("")) {
-            //q.add("continents.name like '%" + continent + "%'");
-            q.add("continents.name = '" + continent + "'");
-        }
-        String country = wheres.get(2);
-        if(!country.equals("")) {
-            //q.add("countries.name like '%" + country + "%'");
-            q.add("countries.name = '" + country + "'");
-        }
-        String region = wheres.get(3);
-        if(!region.equals("")) {
-            //q.add("regions.name like '%" + region + "%'");
-            q.add("regions.name = '" + region + "'");
-        }
-        String municipality = wheres.get(4);
-        if(!municipality.equals("")) {
-            q.add("municipality like '%" + municipality + "%'");
-        }
-        String airportName = wheres.get(5);
-        if(!airportName.equals("")) {
-            q.add("airports.name like '%" + airportName + "%'");
-        }
-
-        String ret = "";
-        for(int i = 0; i < q.size(); i++) {
-            if(ret.equals("")) {
-                ret = "WHERE ";
-            } else {
-                ret += " and "; //TODO replace with StringBuilder.append
-            }
-            ret += q.get(i);
-        }
-        where = ret;
+    private void setWhere(String where) {
+        this.where = where;
     }
 
-    public void fireQuery() { //String whatDoYouWantBack) {
+    public void fireQuery() {
+        this.fireQuery("Denver");
+    }
+
+    public void fireQuery(String query) { //String whatDoYouWantBack) {
         /*boolean makeLocationsQuestionMark = false;
         if(whatDoYouWantBack.equals("locations")) {
             makeLocationsQuestionMark = true;
@@ -172,24 +182,15 @@ public class QueryBuilder {
                 Connection conn = DriverManager.getConnection(myUrl, "sswensen", "830534566");
 
                 try { // create a statement
-                    Statement st = conn.createStatement();
+                    PreparedStatement st = conn.prepareStatement(bigassfuckingstring);
+                    for(int i = 1; i < 5; i++) {
+                        st.setString(i, query);
+                    }
 
                     try { // submit a query to count the results
-                        /*System.out.println(count + continents + join + where);
-                        rs = st.executeQuery(count + continents + join + where);
-
-                        try { // print the number of rows
-                            rs.next();
-                            int rows = rs.getInt(1);
-                            numberReturnedFromDatabase = rows;
-                            System.out.printf("[QueryBuilder] Selected rows = %d\n", rows);
-                        } finally {
-                            rs.close();
-                        }*/
-
-                        // submit a query to list all large airports
-                        System.out.println(columns + continents + join + where + limit);
-                        rs = st.executeQuery(columns + continents + join + where + limit);
+                        //System.out.println(columns + continents + join + where + limit);
+                        //rs = st.executeQuery(columns + continents + join + where + limit);
+                        rs = st.executeQuery();
 
                         try { // iterate through query results and print using column numbers
                             //System.out.println("id,name,latitude,longitude,municipality,region,country,continent");

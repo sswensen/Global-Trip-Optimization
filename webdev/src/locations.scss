@@ -1,0 +1,20 @@
+.location {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 10px;
+  border: 1px solid black;
+
+
+  h5 {
+    font-weight: normal;
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .other-info {
+    color: grey;
+  }
+
+
+}
