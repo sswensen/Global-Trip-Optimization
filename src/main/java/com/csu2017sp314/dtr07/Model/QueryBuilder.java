@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * @author SummitDrift
  */
 
-class QueryBuilder {
+public class QueryBuilder {
     private final String myDriver = "com.mysql.jdbc.Driver";
     //private final static String myUrl = "jdbc:mysql://faure.cs.colostate.edu/cs314"; //Original
     private final String myUrl = "jdbc:mysql://127.0.0.1:3306/cs314"; //Using tunneling
@@ -35,7 +35,7 @@ class QueryBuilder {
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
-    private final String limit = "";
+    private String limit = "";
     private boolean useDatabase;
     private String where = "";
     private int numberReturnedFromDatabase = 0;
@@ -46,7 +46,7 @@ class QueryBuilder {
         useDatabase = useDB;
     }
 
-    void searchDatabase(String type, String continent, String country,
+    public void searchDatabase(String type, String continent, String country,
                         String region, String municipality, String name) {
         ArrayList<String> w = new ArrayList<>();
         w.add(type);
@@ -58,7 +58,7 @@ class QueryBuilder {
         setWhere(w);
     }
 
-    void search4IDinDatabase(ArrayList<String> ids, String idOrName) {
+    public void search4IDinDatabase(ArrayList<String> ids, String idOrName) {
         if(!ids.isEmpty()) {
             String w = "WHERE airports." + idOrName + " in (";
             for(int i = 0; i < ids.size() - 1; i++) {
@@ -160,7 +160,7 @@ class QueryBuilder {
         where = ret;
     }
 
-    void fireQuery() { //String whatDoYouWantBack) {
+    public void fireQuery() { //String whatDoYouWantBack) {
         /*boolean makeLocationsQuestionMark = false;
         if(whatDoYouWantBack.equals("locations")) {
             makeLocationsQuestionMark = true;
@@ -175,7 +175,7 @@ class QueryBuilder {
                     Statement st = conn.createStatement();
 
                     try { // submit a query to count the results
-                        System.out.println(count + continents + join + where);
+                        /*System.out.println(count + continents + join + where);
                         rs = st.executeQuery(count + continents + join + where);
 
                         try { // print the number of rows
@@ -185,7 +185,7 @@ class QueryBuilder {
                             System.out.printf("[QueryBuilder] Selected rows = %d\n", rows);
                         } finally {
                             rs.close();
-                        }
+                        }*/
 
                         // submit a query to list all large airports
                         System.out.println(columns + continents + join + where + limit);
@@ -236,15 +236,19 @@ class QueryBuilder {
         }
     }
 
+    public void setLimit(String limit) {
+        this.limit = limit;
+    }
+
     public int getNumberReturnedFromDatabase() {
         return numberReturnedFromDatabase;
     }
 
-    ArrayList<Location> getLocations() {
+    public ArrayList<Location> getLocations() {
         return locations;
     }
 
-    ArrayList<String> getLocationNames() { //Highly ineffient, see beginning of fireQuery
+    public ArrayList<String> getLocationNames() { //Highly ineffient, see beginning of fireQuery
         ArrayList<String> ret = new ArrayList<>();
         for(Location loc : locations) {
             ret.add(loc.getName());
