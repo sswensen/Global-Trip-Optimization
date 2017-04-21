@@ -1,7 +1,7 @@
 .location {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 38%;
   padding: 10px;
   border: 1px solid black;
 
@@ -16,5 +16,28 @@
     color: grey;
   }
 
+  .location-info {
+    display: inline-block;
+    position: relative;
+    margin-left: 13px;
+  }
 
+  .add-button-div {
+    display: inline-block;
+  }
+
+  .add-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 8px;
+    font-size: 16px;
+    float: left;
+    height: 40px;
+    position: relative;
+  }
 }
