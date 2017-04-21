@@ -43,7 +43,7 @@ class LocationSearch extends Component {
     async fetch(query) {
         try {
             console.log("Fetching...");
-            let stuff = await fetch(`http://localhost:4567/hello?q=${query}`);
+            let stuff = await fetch(`http://localhost:4567/locations?q=${query}`);
             console.log("Fetched");
             let json = await stuff.json();
             let obj = {};
