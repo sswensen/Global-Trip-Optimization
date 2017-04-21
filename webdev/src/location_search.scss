@@ -1,0 +1,23 @@
+.location_search {
+
+  .search-div {
+    input {
+      width: 37%;
+      padding: 12px 20px;
+      margin: 15px 10px;
+      display: inline-block;
+      border: 1px solid #1a55cb;
+      border-radius: 8px;
+      box-sizing: border-box;
+      background-color: #80d4ff;
+    }
+    input:focus {
+      outline: none;
+      border-color: #333;
+      background-color: deepskyblue;
+    }
+    input:hover {
+      background-color: #2fd0ff;
+    }
+  }
+}

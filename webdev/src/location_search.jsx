@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Location from './location.jsx';
 
 class LocationSearch extends Component {
@@ -15,27 +15,29 @@ class LocationSearch extends Component {
         let locations = Object.values(this.state.locations);
         let items = locations.map((loc) => {
             let select = this.props.selectLocation.bind(undefined, loc);
-            return <Location {...loc} key={loc.id} select={select} />; //Calls to location.jsx
+            return <Location {...loc} key={loc.id} select={select}/>; //Calls to location.jsx
         });
         let array = [];
         /*
-        let foo = locations.map(function(location) {
-            return <li>location</li>;
-        })
-        */
+         let foo = locations.map(function(location) {
+         return <li>location</li>;
+         })
+         */
 
-        return <div>
-            <input type="text"
-                   onKeyUp={this.keyUp.bind(this)} />
+        return <div className="location_search">
+            <div className="search-div">
+                <input className="search-button" type="text" placeholder="Search database"
+                       onKeyUp={this.keyUp.bind(this)}/>
+            </div>
             <ul className="locations-list">
                 {items}
             </ul>
-          <button onClick={this.fetch.bind(this)}>Click me</button>
+            <button onClick={this.fetch.bind(this)}>Click me</button>
         </div>;
     }
 
     keyUp(event) {
-        if(event.which == 13) {
+        if (event.which == 13) {
             this.fetch(event.target.value);
         }
     }
@@ -52,7 +54,7 @@ class LocationSearch extends Component {
                 locations: obj
             });
         }
-        catch(e) {
+        catch (e) {
             console.error(e);
         }
     }
