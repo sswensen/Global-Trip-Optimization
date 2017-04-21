@@ -8,7 +8,7 @@
 
 [![BCH compliance](https://bettercodehub.com/edge/badge/csu2017sp314/DTR-07)](https://bettercodehub.com/)
 
-[![SummitDrift](http://summitdrift.com/img/assets/cs314/madewithtears.svg)](http://summitdrift.com)
+[![SummitDrift](http://summitdrift.com/img/assets/cs314/madewithtears.png)](http://summitdrift.com)
 
 Scott
 Jesse
