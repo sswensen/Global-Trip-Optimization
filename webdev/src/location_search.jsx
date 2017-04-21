@@ -22,6 +22,7 @@ class LocationSearch extends Component {
          let foo = locations.map(function(location) {
          return <li>location</li>;
          })
+         <button onClick={this.fetch.bind(this)}>Click me</button>
          */
 
         return <div className="location_search">
@@ -32,7 +33,6 @@ class LocationSearch extends Component {
             <ul className="locations-list">
                 {items}
             </ul>
-            <button onClick={this.fetch.bind(this)}>Click me</button>
         </div>;
     }
 

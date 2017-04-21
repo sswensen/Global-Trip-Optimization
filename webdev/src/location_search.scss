@@ -1,16 +1,25 @@
 .location_search {
+  float: left;
+  width: 50%;
+  height: 77%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid #37adea;
 
+  .locations-list {
+  }
   .search-div {
     input {
-      width: 38%;
       padding: 12px 20px;
       margin: 15px 10px;
       display: inline-block;
+      position: relative;
       border: 1px solid #1a55cb;
       border-radius: 8px;
       box-sizing: border-box;
       background-color: #80d4ff;
       height: 50px;
+      width: 97%;
     }
     input:focus {
       outline: none;

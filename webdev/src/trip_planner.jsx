@@ -4,7 +4,6 @@ class TripPlanner extends Component {
     constructor(props) {
         super(props); // this is required
         this.state = {
-            name: "",
             locations: {}
         }
     }
@@ -22,31 +21,8 @@ class TripPlanner extends Component {
          */
 
         return <div className="trip-planner">
-
+            <h1>HAY</h1>
         </div>;
-    }
-
-    keyUp(event) {
-        if (event.which == 13) {
-            this.fetch(event.target.value);
-        }
-    }
-
-    async fetch(query) {
-        try {
-            console.log("Fetching...");
-            let stuff = await fetch(`http://localhost:4567/locations?q=${query}`);
-            console.log("Fetched");
-            let json = await stuff.json();
-            let obj = {};
-            json.forEach(elem => obj[elem.id] = elem);
-            this.setState({
-                locations: obj
-            });
-        }
-        catch (e) {
-            console.error(e);
-        }
     }
 
     remove(id) {
