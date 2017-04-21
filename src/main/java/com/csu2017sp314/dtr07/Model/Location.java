@@ -137,20 +137,20 @@ public class Location {
         }
         //wlon1 -= 180; //TODOdone currently dist is the distance with wraparound, wdist is just using pathagorean theorem. dist is somehow always smaller. It seems like the algorithm used is not getting the same distance, maybe it has to do with the curvature of the earth but the map is flat so that doesnt make sense.
         //wlon2 += 180;
-        /*double wtheta = wlon1 - wlon2;
-        double wdist = Math.sin(deg2rad(wlat1)) * Math.sin(deg2rad(wlat2))
-                + Math.cos(deg2rad(wlat1)) * Math.cos(deg2rad(wlat2)) * Math.cos(deg2rad(wtheta));
-        wdist = Math.acos(wdist);
-        wdist = rad2deg(wdist); //Here the value is still in longitude/latitude*/
-        /*double wdist = Math.sqrt(Math.pow((wlat1-wlat2), 2) + Math.pow((wlon1 -wlon2), 2));
-        wdist = wdist * 60 * 1.1515; //Default is miles ("M") //We can move this line, as well as the one above to after both checks. Not done yet because of debugging purposes
-        dist = Math.round(dist);
-        wdist = Math.round(wdist);
-        System.out.println("dist: " + dist);
-        System.out.println("wdist: " + wdist);
-        System.out.println("hdist: " + hdist);
-        System.out.println("fdist: " + fdist);*/
-        //if(wdist > dist) {
+//        /*double wtheta = wlon1 - wlon2;
+//        double wdist = Math.sin(deg2rad(wlat1)) * Math.sin(deg2rad(wlat2))
+//                + Math.cos(deg2rad(wlat1)) * Math.cos(deg2rad(wlat2)) * Math.cos(deg2rad(wtheta));
+//        wdist = Math.acos(wdist);
+//        wdist = rad2deg(wdist); //Here the value is still in longitude/latitude*/
+//        /*double wdist = Math.sqrt(Math.pow((wlat1-wlat2), 2) + Math.pow((wlon1 -wlon2), 2));
+//        wdist = wdist * 60 * 1.1515; //Default is miles ("M") //We can move this line, as well as the one above to after both checks. Not done yet because of debugging purposes
+//        dist = Math.round(dist);
+//        wdist = Math.round(wdist);
+//        System.out.println("dist: " + dist);
+//        System.out.println("wdist: " + wdist);
+//        System.out.println("hdist: " + hdist);
+//        System.out.println("fdist: " + fdist);
+//        if(wdist > dist) {*/
         if(wlon1 - wlon2 > 180) {
             this.pairUsesWraparound = true;
             //System.out.println("Using wraparound");
