@@ -19,7 +19,7 @@ class App extends React.Component {
         return <div>
             <div>
                 <LocationSearch selectLocation={this.selectLocation.bind(this)}/>
-                <TripPlanner locations={Object.values(this.state.selectedLocations)}/>
+                <TripPlanner setLocations={Object.values(this.state.selectedLocations)}/>
             </div>
             <Sel locations={Object.values(this.state.selectedLocations)}/>
         </div>

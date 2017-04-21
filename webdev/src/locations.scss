@@ -15,12 +15,14 @@
 
   .other-info {
     color: grey;
+    font-weight: lighter;
   }
 
   .location-info {
     display: inline-block;
     position: relative;
-    margin-left: 13px;
+    height: 40px;
+    margin-left: 10px;
   }
 
   .add-button-div {

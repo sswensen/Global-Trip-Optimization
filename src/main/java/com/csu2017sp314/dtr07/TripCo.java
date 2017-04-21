@@ -11,6 +11,8 @@ import java.io.IOException;
 
 import org.xml.sax.SAXException;
 
+import com.csu2017sp314.dtr07.Server.Server;
+
 
 public class TripCo {
     private static ArrayList<String> arguments = new ArrayList<>();
@@ -45,7 +47,9 @@ public class TripCo {
     }
 
     public static void main(String[] args) throws Exception {
-        String xmlFile = "";
+        Server s = new Server();
+        s.serve();
+        /*String xmlFile = "";
         String csvFile = "";
         String svgFile = "";
         if(args.length == 0) {
@@ -130,6 +134,6 @@ public class TripCo {
                     }
                 }, "Shutdown-thread"));
             }
-        }
+        }*/
     }
 }

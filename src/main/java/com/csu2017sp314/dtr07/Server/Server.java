@@ -18,7 +18,7 @@ public class Server {
         s.serve();
     }
 
-    private void serve() {
+    public void serve() {
         Gson g = new Gson();
         get("/locations", this::hello, g::toJson);
     }
