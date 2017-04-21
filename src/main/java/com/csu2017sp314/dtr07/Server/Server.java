@@ -20,7 +20,7 @@ public class Server {
 
     private void serve() {
         Gson g = new Gson();
-        get("/hello", this::hello, g::toJson);
+        get("/locations", this::hello, g::toJson);
     }
 
     public Object hello(Request rec, Response res) {

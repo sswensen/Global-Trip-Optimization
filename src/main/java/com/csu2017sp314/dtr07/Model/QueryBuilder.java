@@ -190,6 +190,8 @@ public class QueryBuilder {
                     try { // submit a query to count the results
                         //System.out.println(columns + continents + join + where + limit);
                         //rs = st.executeQuery(columns + continents + join + where + limit);
+
+                        System.out.println(st);
                         rs = st.executeQuery();
 
                         try { // iterate through query results and print using column numbers
