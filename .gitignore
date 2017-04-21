@@ -1,6 +1,7 @@
 .*
 !/.gitignore
 !/.css
+!./webdev/
 out/*
 target/*
 coverage/*
@@ -14,5 +15,4 @@ DTR-07.iml
 *.htm*
 *.css
 *.jar
-!./webdev/*
 TESTING/*

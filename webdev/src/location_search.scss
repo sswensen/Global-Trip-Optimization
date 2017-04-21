@@ -2,7 +2,7 @@
 
   .search-div {
     input {
-      width: 37%;
+      width: 38%;
       padding: 12px 20px;
       margin: 15px 10px;
       display: inline-block;
@@ -10,6 +10,7 @@
       border-radius: 8px;
       box-sizing: border-box;
       background-color: #80d4ff;
+      height: 50px;
     }
     input:focus {
       outline: none;

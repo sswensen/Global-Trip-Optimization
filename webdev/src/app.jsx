@@ -1,5 +1,6 @@
 import React from 'react';
 import LocationSearch from './location_search.jsx';
+import TripMap from './trip_map.jsx';
 
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}
