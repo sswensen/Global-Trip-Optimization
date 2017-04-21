@@ -26,7 +26,7 @@ public class Server {
     public Object hello(Request rec, Response res) {
         setHeaders(res);
         QueryBuilder q = new QueryBuilder(true);
-        System.out.println(rec.queryParams("q"));
+        //System.out.println(rec.queryParams("q"));
         q.fireQuery(rec.queryParams("q"));
         return q.getLocations();
     }
