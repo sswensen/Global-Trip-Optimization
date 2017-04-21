@@ -12,7 +12,6 @@ DTR-07.iml
 *.png
 *.svg
 *.xml
-*.htm*
 *.css
 *.jar
 TESTING/*
