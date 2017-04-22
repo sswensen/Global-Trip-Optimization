@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import GettingStartedGoogleMap from './GettingStartedWithGoogleMaps/GettingStartedWithGoogleMaps.jsx';
 
 class TripMap extends Component {
     constructor(props) {
@@ -10,14 +11,22 @@ class TripMap extends Component {
     }
 
     render() {
-        /*async defer src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAV3Y3HUCh0kF9imtHmRBqq28j3Opd29l8&callback=initMap" >*/
-        this.initMap();
-        return <div id="map" className="trip-map">
-        </div>;
+        return <GettingStartedGoogleMap
+            containerElement={
+                <div style={{ height: `100%` }} />
+            }
+            mapElement={
+                <div style={{ height: `100%` }} />
+            }
+            onMapLoad={_.noop}
+            onMapClick={_.noop}
+            markers={markers}
+            onMarkerRightClick={_.noop}
+        />;
     }
 
     initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        var gmap = new google.maps.Map(document.getElementById('map'), {
             zoom: 3,
             center: {lat: 0, lng: -180},
             mapTypeId: 'terrain'
@@ -37,7 +46,7 @@ class TripMap extends Component {
             strokeWeight: 2
         });
 
-        flightPath.setMap(map);
+        flightPath.setMap(gmap);
     }
 }
 
