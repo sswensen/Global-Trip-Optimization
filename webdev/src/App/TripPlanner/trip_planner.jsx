@@ -13,7 +13,15 @@ class TripPlanner extends Component {
             {locations.map(l => <li key={l.id}>{l.name}</li>)}
         </div>*/
 
-        let locations = Object.values(this.state.setLocations);
+        let locations = Object.values(this.props.setLocations);
+
+        let items = locations.map((l) => <li key={l.id}>{l.name}</li>)
+
+        /*console.log("Locations is: " + {locations});
+        var aLen = locations.length;
+        for (var i = 0; i < aLen; i++) {
+            console.log("ID at index " + i + " is " + locations[i].id);
+        }
         let items = locations.map(() => {
             return {locations:map(l => <li key={l.id}>{l.name}</li>)}
         });

@@ -15,7 +15,7 @@ class LocationSearch extends Component {
         let locations = Object.values(this.state.locations);
         let items = locations.map((loc) => {
             let select = this.props.selectLocation.bind(undefined, loc);
-            console.log({loc});
+            //console.log({loc});
             return <Location {...loc} key={loc.id} select={select}/>; //Calls to location.jsx
         });
         let array = [];
@@ -29,7 +29,7 @@ class LocationSearch extends Component {
         return <div className="location_search">
             <div className="search-div">
                 <input className="search-button" type="text" placeholder="Search database"
-                       onKeyUp={this.keyUp.bind(this)}/>
+                       onKeyUp={this.keyUp.bind(this)} autoFocus/>
             </div>
             <ul className="locations-list">
                 {items}

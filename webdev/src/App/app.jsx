@@ -6,8 +6,11 @@ import TripPlanner from "./TripPlanner/trip_planner.jsx";
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}
 </div>
+/*
+<Sel locations={Object.values(this.state.selectedLocations)}/>
+ */
 
-class App extends React.Component {
+ class App extends React.Component {
     constructor(props) {
         super(props); // this is required
         this.state = {
@@ -21,7 +24,6 @@ class App extends React.Component {
                 <LocationSearch selectLocation={this.selectLocation.bind(this)}/>
                 <TripPlanner setLocations={Object.values(this.state.selectedLocations)}/>
             </div>
-            <Sel locations={Object.values(this.state.selectedLocations)}/>
         </div>
     }
 
