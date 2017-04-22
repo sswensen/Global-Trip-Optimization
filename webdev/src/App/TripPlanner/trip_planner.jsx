@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import SelectedLocation from './SelectedLocation/selected_location.jsx';
 
 class TripPlanner extends Component {
     constructor(props) {
@@ -15,7 +16,13 @@ class TripPlanner extends Component {
 
         let locations = Object.values(this.props.setLocations);
 
-        let items = locations.map((l) => <li key={l.id}>{l.name}</li>)
+        /*let items = locations.map((l) => <li key={l.id}>{l.name}</li>);*/
+
+        let items = locations.map((loc) => {
+            let remove = this.props.removeLocation.bind(undefined, loc);
+            //console.log({loc});
+            return <SelectedLocation {...loc} key={loc.id} remove={remove}/>; //Calls to location.jsx
+        });
 
         /*console.log("Locations is: " + {locations});
         var aLen = locations.length;
@@ -34,7 +41,7 @@ class TripPlanner extends Component {
 
         return <div className="trip-planner">
             <div>
-                <ul>
+                <ul className="selectedLocations-list">
                     {items}
                 </ul>
             </div>

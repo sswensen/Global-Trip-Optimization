@@ -22,12 +22,24 @@ let Sel = ({locations}) => <div>
         return <div>
             <div>
                 <LocationSearch selectLocation={this.selectLocation.bind(this)}/>
-                <TripPlanner setLocations={Object.values(this.state.selectedLocations)}/>
+                <TripPlanner setLocations={Object.values(this.state.selectedLocations)}
+                removeLocation={this.removeLocation.bind(this)} />
             </div>
         </div>
     }
 
     selectLocation(loc) {
+        let obj = {};
+        obj[loc.id] = loc;
+        let newMap = Object.assign({},
+            this.state.selectedLocations,
+            obj);
+        this.setState({
+            selectedLocations: newMap
+        })
+    }
+
+    removeLocation(loc) {
         let obj = {};
         obj[loc.id] = loc;
         let newMap = Object.assign({},
