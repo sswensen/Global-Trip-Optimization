@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 class TripPlanner extends Component {
     constructor(props) {
         super(props); // this is required
-        this.setState({setLocations: this.props.selectedLocations})
         this.state = {
             setLocations: {}
         }
@@ -13,7 +12,6 @@ class TripPlanner extends Component {
         /*let TripPlanner = ({locations}) => <div>
             {locations.map(l => <li key={l.id}>{l.name}</li>)}
         </div>*/
-        console.log(this.state.setLocations);
 
         let locations = Object.values(this.state.setLocations);
         let items = locations.map(() => {

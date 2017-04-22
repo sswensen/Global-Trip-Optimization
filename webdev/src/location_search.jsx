@@ -15,6 +15,7 @@ class LocationSearch extends Component {
         let locations = Object.values(this.state.locations);
         let items = locations.map((loc) => {
             let select = this.props.selectLocation.bind(undefined, loc);
+            console.log({loc});
             return <Location {...loc} key={loc.id} select={select}/>; //Calls to location.jsx
         });
         let array = [];

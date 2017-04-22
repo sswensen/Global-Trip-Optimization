@@ -13,16 +13,24 @@
     font-size: 16px;
   }
 
-  .other-info {
-    color: grey;
-    font-weight: lighter;
-  }
-
   .location-info {
     display: inline-block;
     position: relative;
     height: 40px;
     margin-left: 10px;
+    a {
+      text-decoration: none;
+      color: black;
+    }
+  }
+
+  .other-info {
+    color: grey;
+    font-weight: lighter;
+    a {
+      text-decoration: none;
+      color: grey;
+    }
   }
 
   .add-button-div {
