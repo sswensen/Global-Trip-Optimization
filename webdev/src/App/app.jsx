@@ -1,7 +1,7 @@
 import React from 'react';
-import LocationSearch from './location_search.jsx';
-import TripMap from './trip_map.jsx';
-import TripPlanner from "./trip_planner.jsx";
+import LocationSearch from './LocationSearch/location_search.jsx';
+import TripMap from './TripMap/trip_map.jsx';
+import TripPlanner from "./TripPlanner/trip_planner.jsx";
 
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}

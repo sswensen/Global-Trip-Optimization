@@ -1,6 +1,6 @@
-@import "./locations.scss";
-@import "./location_search.scss";
-@import "./trip_planner.scss";
+@import "LocationSearch/Location/locations";
+@import "LocationSearch/location_search";
+@import "TripPlanner/trip_planner";
 *,
 *::after,
 *::before {

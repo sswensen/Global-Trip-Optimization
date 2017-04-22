@@ -1,8 +1,8 @@
 import React from 'react';
-import App from './src/app.jsx';
+import App from './src/App/app.jsx';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux'
-import './src/style.scss';
+import './src/App/style.scss';
 
 
 // run the function when the webpage finishes loading

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Location from './location.jsx';
+import Location from './Location/location.jsx';
 
 class LocationSearch extends Component {
     constructor(props) {
