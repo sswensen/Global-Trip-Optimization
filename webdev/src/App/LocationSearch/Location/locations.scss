@@ -56,6 +56,11 @@
     background-color: #3bdf47;
     cursor: pointer;
   }
+
+  .add-button:active {
+    content: "Added";
+    background-color: #43ff51;
+  }
 }
 
 .location:hover {

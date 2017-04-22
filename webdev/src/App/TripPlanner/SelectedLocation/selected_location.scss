@@ -52,9 +52,13 @@
     position: relative;
   }
 
-  .add-button:hover {
+  .remove-button:hover {
     background-color: #f43b43;
     cursor: pointer;
+  }
+
+  .remove-button:active {
+    background-color: #8d2326;
   }
 }
 
