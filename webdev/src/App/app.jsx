@@ -14,7 +14,8 @@ let Sel = ({locations}) => <div>
     constructor(props) {
         super(props); // this is required
         this.state = {
-            selectedLocations: {}
+            selectedLocations: {},
+            savedTrips: {}
         }
     }
 
@@ -23,8 +24,9 @@ let Sel = ({locations}) => <div>
             <div>
                 <LocationSearch selectLocation={this.selectLocation.bind(this)}/>
                 <TripPlanner setLocations={Object.values(this.state.selectedLocations)}
-                removeLocation={this.removeLocation.bind(this)} />
+                removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)} />
             </div>
+            <button className="testing" onClick={this.test.bind(this)}>test</button>
         </div>
     }
 
@@ -47,6 +49,22 @@ let Sel = ({locations}) => <div>
         this.setState({
             selectedLocations: newMap
         })
+    }
+
+    saveTrip(trip) {
+        console.log("[app]: saveTrip: in saveTrip with name " + trip.name);
+        let obj = {};
+        obj[trip.name] = trip;
+        let newMap = Object.assign({},
+            this.state.savedTrips,
+            obj);
+        this.setState({
+            savedTrips: newMap
+        })
+    }
+
+    test() {
+        console.log("[app]: selectedLocations:",this.state.selectedLocations," savedTrips:",this.state.savedTrips);
     }
 }
 

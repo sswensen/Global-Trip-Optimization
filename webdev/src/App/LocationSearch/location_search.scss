@@ -2,11 +2,13 @@
   float: left;
   width: 50%;
   height: 77%;
-  overflow-y: auto;
-  overflow-x: hidden;
   border: 1px solid #37adea;
 
   .locations-list {
+    height: 82%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #329dd4;
   }
   .search-div {
     input {
