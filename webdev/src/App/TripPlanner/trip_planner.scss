@@ -6,7 +6,38 @@
   height: 77%;
 
   .map-options {
+    height: 70px;
+  }
 
+  .save-button {
+    padding: 12px 12px;
+    margin: 10px 5px 10px 0px;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #1a55cb;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #80d4ff;
+  }
+
+  .save-button:hover {
+    background-color: #75c3ea;
+  }
+
+  .trip-name-input {
+    padding: 12px 12px;
+    margin: 10px 5px;
+    margin-left: 10px;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #1a55cb;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #80d4ff;
+  }
+
+  .trip-name-input:focus {
+    background-color: deepskyblue;
   }
 
   .selectedLocations-list {

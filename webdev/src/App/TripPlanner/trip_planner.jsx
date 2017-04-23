@@ -43,8 +43,8 @@ class TripPlanner extends Component {
 
         return <div className="trip-planner">
             <div className="map-options">
-                <button className="save-button" onClick={save}>Save</button>
                 <input className="trip-name-input" onKeyUp={this.keyUp.bind(this)} type="text" placeholder="Enter Trip Name" />
+                <button className="save-button" onClick={save}>Save</button>
             </div>
             <div>
                 <ul className="selectedLocations-list">
