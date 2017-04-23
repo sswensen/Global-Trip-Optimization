@@ -45,7 +45,6 @@ let Sel = ({locations}) => <div>
     removeLocation(loc) {
         console.log("Removing location with id: " + loc.id);
         let newMap = this.state.selectedLocations;
-        console.log(newMap);
         delete newMap[loc.id];
         this.setState({
             selectedLocations: newMap
