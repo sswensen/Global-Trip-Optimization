@@ -21,6 +21,7 @@ class TripPlanner extends Component {
         let trip = this.state.trip;
         let save = this.props.saveTrip.bind(undefined, trip);
         let clear = this.props.clear.bind(undefined);
+        let numSel = Object.values(this.state.setLocations).length;
         let items = locations.map((loc) => {
             let remove = this.props.removeLocation.bind(undefined, loc);
             //console.log({loc});
@@ -47,6 +48,7 @@ class TripPlanner extends Component {
                 <input className="trip-name-input" onKeyUp={this.keyUp.bind(this)} type="text" placeholder="Enter Trip Name" />
                 <button className="save-button" onClick={save}>Save</button>
                 <button className="clear-selected-locations" onClick={clear}>Clear</button>
+                <span className="selected-location-counter"># Selected: {numSel}</span>
             </div>
             <div>
                 <ul className="selectedLocations-list">
