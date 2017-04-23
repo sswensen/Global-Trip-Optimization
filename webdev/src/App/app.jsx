@@ -24,7 +24,8 @@ let Sel = ({locations}) => <div>
             <div>
                 <LocationSearch selectLocation={this.selectLocation.bind(this)}/>
                 <TripPlanner setLocations={Object.values(this.state.selectedLocations)}
-                removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)} />
+                removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
+                clear={this.clearSelectedLocations.bind(this)} />
             </div>
             <button className="testing" onClick={this.test.bind(this)}>test</button>
         </div>
@@ -52,7 +53,6 @@ let Sel = ({locations}) => <div>
     }
 
     saveTrip(trip) {
-        console.log("[app]: saveTrip: in saveTrip with name " + trip.name);
         let obj = {};
         obj[trip.name] = trip;
         let newMap = Object.assign({},
@@ -63,8 +63,14 @@ let Sel = ({locations}) => <div>
         })
     }
 
+    clearSelectedLocations() {
+        this.setState ({
+            selectedLocations: {}
+        })
+    }
+
     test() {
-        console.log("[app]: selectedLocations:",this.state.selectedLocations," savedTrips:",this.state.savedTrips);
+        console.log("[app]: selectedLocations:",this.state.selectedLocations," \n[app]: savedTrips:",this.state.savedTrips);
     }
 }
 

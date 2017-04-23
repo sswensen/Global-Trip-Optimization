@@ -20,6 +20,7 @@ class TripPlanner extends Component {
         /*let items = locations.map((l) => <li key={l.id}>{l.name}</li>);*/
         let trip = this.state.trip;
         let save = this.props.saveTrip.bind(undefined, trip);
+        let clear = this.props.clear.bind(undefined);
         let items = locations.map((loc) => {
             let remove = this.props.removeLocation.bind(undefined, loc);
             //console.log({loc});
@@ -45,6 +46,7 @@ class TripPlanner extends Component {
             <div className="map-options">
                 <input className="trip-name-input" onKeyUp={this.keyUp.bind(this)} type="text" placeholder="Enter Trip Name" />
                 <button className="save-button" onClick={save}>Save</button>
+                <button className="clear-selected-locations" onClick={clear}>Clear</button>
             </div>
             <div>
                 <ul className="selectedLocations-list">
@@ -55,6 +57,7 @@ class TripPlanner extends Component {
     }
 
     saveTrip(event) {
+        let tName = event.target.value;
         let locations = Object.values(this.props.setLocations);
         this.setState({
             name: event.target.value,
@@ -65,11 +68,6 @@ class TripPlanner extends Component {
         this.setState({
             trip: trip,
         });
-        //return this.props.saveTrip.bind(undefined, trip);
-    }
-
-    setTripName(name) {
-
     }
 
     keyUp(event) {

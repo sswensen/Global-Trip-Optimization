@@ -5,7 +5,7 @@
   border: 1px solid #37adea;
 
   .locations-list {
-    height: 82%;
+    height: 85%;
     overflow-y: auto;
     overflow-x: hidden;
     border: 1px solid #329dd4;
@@ -27,8 +27,8 @@
       border-color: #333;
       background-color: deepskyblue;
     }
-    input:hover {
+    /*input:hover {
       background-color: #2fd0ff;
-    }
+    }*/
   }
 }
