@@ -72,6 +72,10 @@ let Sel = ({locations}) => <div>
     test() {
         console.log("[app]: selectedLocations:",this.state.selectedLocations," \n[app]: savedTrips:",this.state.savedTrips);
     }
+
+    isDead() {
+        return true;
+    }
 }
 
 export default App;
