@@ -12,8 +12,13 @@ class TripMap extends Component {
 
     render() {
         return <div style={{height: "100%"}}>
-            <Map />
+            <Map ref={instance => { this.child = instance; }}
+                 selectedLocations={this.props.selectedLocations} />
         </div>
+    }
+
+    updateMarkers(locs) {
+        this.child.updateMarkers(locs);
     }
 
     /*render() {

@@ -30,7 +30,8 @@ let Sel = ({locations}) => <div>
                 tripDistance={this.state.tripDistance} />
             </div>
             <button className="testing" onClick={this.test.bind(this)}>test</button>
-            <TripMap/>
+            <TripMap ref={instance => { this.child = instance; }}
+                     selectedLocations={Object.values(this.state.selectedLocations)}/>
         </div>
     }
 
@@ -51,7 +52,8 @@ let Sel = ({locations}) => <div>
             obj);
         this.setState({
             selectedLocations: newMap
-        })
+        });
+        this.child.updateMarkers(newMap);
         //Need to update total trip distance here
     }
 

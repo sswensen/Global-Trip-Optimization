@@ -10,6 +10,7 @@ import {
     withGoogleMap,
     GoogleMap,
     Marker,
+    InfoWindow,
 } from "react-google-maps";
 
 /*
@@ -25,6 +26,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
         onClick={props.onMapClick}
     >
+        {props.update}
         {props.markers.map(marker => (
             <Marker
                 {...marker}
@@ -48,7 +50,9 @@ export default class GettingStartedExample extends Component {
             }],
             handleMapLoad: this.handleMapLoad.bind(this),
             handleMapClick: this.handleMapClick.bind(this),
-            handleMarkerRightClick: this.handleMarkerRightClick.bind(this)
+            handleMarkerClick: this.handleMarkerClick(this),
+            handleMarkerRightClick: this.handleMarkerRightClick.bind(this),
+            selectedLocations: {}
         };
     }
 
@@ -85,6 +89,10 @@ export default class GettingStartedExample extends Component {
         }
     }
 
+    handleMarkerClick(targetMarker) {
+        //make shit popup using InfoWindow
+    }
+
     handleMarkerRightClick(targetMarker) {
         /*
          * All you modify is data, and the view is driven by data.
@@ -97,10 +105,35 @@ export default class GettingStartedExample extends Component {
         });
     }
 
+    updateMarkers(locs) {
+        console.log("Making new markers...");
+        let locations = Object.values(locs);
+        let newMarkers = [];
+        for(let i = 0; i < locations.length; i++) {
+            console.log("Marker at", i, "is", locations[i]);
+            let ps = {
+                lat: locations[i].lat,
+                lng: locations[i].lon,
+            };
+            let obj = {
+                position: ps,
+                key: locations[i].id,
+                defaultAnimation: 2.
+            };
+            newMarkers.push(obj);
+            console.log("New marker created:", Object.values(obj));
+        }
+        this.setState({
+            markers: newMarkers
+        });
+    }
+
     render() {
+        let updateMe = this.updateMarkers.bind(this);
         return (
             <div style={{height: '100%'}}>
                 <GettingStartedGoogleMap
+                    update={updateMe}
                     containerElement={
                         <div style={{ height: '100%' }} />
                     }
