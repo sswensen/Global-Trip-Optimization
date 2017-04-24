@@ -1,11 +1,16 @@
 .location_search {
   float: left;
   width: 50%;
-  height: 77%;
+  height: 100%;
   border: 1px solid #37adea;
 
+  .locations-list-div {
+    position: relative;
+    height: 88%;
+  }
+
   .locations-list {
-    height: 85%;
+    height: inherit;
     overflow-y: auto;
     overflow-x: hidden;
     border: 1px solid #329dd4;

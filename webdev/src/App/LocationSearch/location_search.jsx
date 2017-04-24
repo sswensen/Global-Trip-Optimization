@@ -31,9 +31,11 @@ class LocationSearch extends Component {
                 <input className="search-button" type="text" placeholder="Search database"
                        onKeyUp={this.keyUp.bind(this)} autoFocus/>
             </div>
-            <ul className="locations-list">
-                {items}
-            </ul>
+            <div className="locations-list-div">
+                <ul className="locations-list">
+                    {items}
+                </ul>
+            </div>
         </div>;
     }
 

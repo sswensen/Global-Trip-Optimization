@@ -3,7 +3,7 @@
   position: relative;
   border: 1px solid #37adea;
   width: 50%;
-  height: 77%;
+  height: 100%;
 
   .map-options {
     button {
@@ -67,8 +67,13 @@
     background-color: #0099cd;
   }*/
 
+  .selectedLocations-list-div {
+    height: 88%;
+
+  }
+
   .selectedLocations-list {
-    height: 85%;
+    height: inherit;
     overflow-y: auto;
     overflow-x: hidden;
     border: 1px solid #329dd4;
