@@ -24,7 +24,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
         defaultZoom={2}
-        defaultCenter={{ lat: -50, lng: 0 }}
+        defaultCenter={{lat: -50, lng: 0}}
         onClick={props.onMapClick}
     >
         {props.update}
@@ -64,7 +64,7 @@ export default class GettingStartedExample extends Component {
                 ],
                 geodesic: true,
                 strokeColor: '#FF0000',
-                strokeOpacity: 1.0,
+                strokeOpacity: 0.5,
                 strokeWeight: 2
             }],
             handleMapLoad: this.handleMapLoad.bind(this),
@@ -74,7 +74,6 @@ export default class GettingStartedExample extends Component {
             selectedLocations: {}
         };
     }
-
 
 
     handleMapLoad(map) {
@@ -132,7 +131,7 @@ export default class GettingStartedExample extends Component {
         console.log("Making new markers...");
         let locations = Object.values(locs);
         let newMarkers = [];
-        for(let i = 0; i < locations.length; i++) {
+        for (let i = 0; i < locations.length; i++) {
             console.log("Marker at", i, "is", locations[i]);
             let ps = {
                 lat: locations[i].lat,
@@ -149,11 +148,31 @@ export default class GettingStartedExample extends Component {
         this.setState({
             markers: newMarkers
         });
+        this.updatePolyLines(locs);
     }
 
     updatePolyLines(locs) {
         console.log("Making new polylines...");
-
+        let locations = Object.values(locs);
+        let ps = [];
+        for (let i = 0; i < locations.length; i++) {
+            let lCoords = {
+                lat: locations[i].lat,
+                lng: locations[i].lon,
+            };
+            ps.push(lCoords);
+        }
+        let newPolylines = [{
+            path: ps,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.5,
+            strokeWeight: 2
+        }];
+        this.setState({
+            polylines: newPolylines
+        });
+        console.log("New polylines created:", Object.values(newPolylines));
     }
 
     render() {
@@ -163,10 +182,10 @@ export default class GettingStartedExample extends Component {
                 <GettingStartedGoogleMap
                     update={updateMe}
                     containerElement={
-                        <div style={{ height: '100%' }} />
+                        <div style={{height: '100%'}}/>
                     }
                     mapElement={
-                        <div style={{ height: '100%' }} />
+                        <div style={{height: '100%'}}/>
                     }
                     onMapLoad={this.handleMapLoad}
                     onMapClick={this.handleMapClick}
