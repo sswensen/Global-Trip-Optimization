@@ -162,6 +162,11 @@ export default class GettingStartedExample extends Component {
             };
             ps.push(lCoords);
         }
+        ps.push({ //This accounts for returning to first
+            lat: locations[0].lat,
+            lng: locations[0].lon,
+        });
+
         let newPolylines = [{
             path: ps,
             geodesic: true,
