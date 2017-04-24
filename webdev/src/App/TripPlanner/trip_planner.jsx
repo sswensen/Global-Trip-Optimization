@@ -21,7 +21,7 @@ class TripPlanner extends Component {
         let trip = this.state.trip;
         let save = this.props.saveTrip.bind(undefined, trip);
         let clear = this.props.clear.bind(undefined);
-        let numSel = Object.values(this.state.setLocations).length;
+        let numSel = Object.values(this.props.setLocations).length;
         let items = locations.map((loc) => {
             let remove = this.props.removeLocation.bind(undefined, loc);
             //console.log({loc});
@@ -67,6 +67,7 @@ class TripPlanner extends Component {
         let trip = new Object();
         trip.name = event.target.value;
         trip.locations = locations;
+        trip.totalDistance = this.props.tripDistance;
         this.setState({
             trip: trip,
         });

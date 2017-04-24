@@ -15,7 +15,8 @@ let Sel = ({locations}) => <div>
         super(props); // this is required
         this.state = {
             selectedLocations: {},
-            savedTrips: {}
+            savedTrips: {},
+            tripDistance: 0
         }
     }
 
@@ -25,7 +26,8 @@ let Sel = ({locations}) => <div>
                 <LocationSearch selectLocation={this.selectLocation.bind(this)}/>
                 <TripPlanner setLocations={Object.values(this.state.selectedLocations)}
                 removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
-                clear={this.clearSelectedLocations.bind(this)} />
+                clear={this.clearSelectedLocations.bind(this)}
+                tripDistance={this.state.tripDistance} />
             </div>
             <button className="testing" onClick={this.test.bind(this)}>test</button>
         </div>
@@ -51,6 +53,13 @@ let Sel = ({locations}) => <div>
     }
 
     selectLocation(loc) {
+        let currentLocations = Object.values(this.state.selectedLocations);
+        for(let i = 0; i < currentLocations.length; ++i) {
+            console.log(currentLocations[i].name);
+            //Figure out where the best place to put the location is
+            //Need to also measure between the first and the last locations
+            //This will account for nearestNeighbor
+        }
         let obj = {};
         obj[loc.id] = loc;
         let newMap = Object.assign({},
@@ -59,6 +68,7 @@ let Sel = ({locations}) => <div>
         this.setState({
             selectedLocations: newMap
         })
+        //Need to update total trip distance here
     }
 
     removeLocation(loc) {
