@@ -20,24 +20,6 @@ class TripMap extends Component {
     updateMarkers(locs) {
         this.child.updateMarkers(locs);
     }
-
-    /*render() {
-        return <div style={{height: "100%"}}>
-            <GettingStartedGoogleMap
-                containerElement={
-                    <div style={{height: `100%`}}/>
-                }
-                mapElement={
-                    <div style={{height: `100%`}}/>
-                }
-                onMapLoad={_.noop}
-                onMapClick={_.noop}
-                markers={markers}
-                onMarkerRightClick={_.noop}
-            />
-        </div>;
-    }*/
-
 }
 
 export default TripMap;

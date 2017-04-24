@@ -41,6 +41,7 @@ let Sel = ({locations}) => <div>
         let currentLocations = Object.values(this.state.selectedLocations);
         for(let i = 0; i < currentLocations.length; ++i) {
             console.log(currentLocations[i].name);
+            //TODO
             //Figure out where the best place to put the location is
             //Need to also measure between the first and the last locations
             //This will account for nearestNeighbor
@@ -86,7 +87,7 @@ let Sel = ({locations}) => <div>
     }
 
     updateMarkers(map) {
-        this.child.updateMarkers(map);
+        this.child.updateMarkers(map); //double comp callback
     }
 
     test() {

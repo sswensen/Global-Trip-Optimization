@@ -10,6 +10,7 @@ import {
     withGoogleMap,
     GoogleMap,
     Marker,
+    Polyline,
     InfoWindow,
 } from "react-google-maps";
 
@@ -22,8 +23,8 @@ import {
 const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
-        defaultZoom={3}
-        defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
+        defaultZoom={2}
+        defaultCenter={{ lat: -50, lng: 0 }}
         onClick={props.onMapClick}
     >
         {props.update}
@@ -31,6 +32,12 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
             <Marker
                 {...marker}
                 onRightClick={() => props.onMarkerRightClick(marker)}
+            />
+        ))}
+        {props.polylines.map(polyline => (
+            <Polyline
+                {...polyline}
+                onHover={() => props.onPolylineHover(polyline)}
             />
         ))}
     </GoogleMap>
@@ -47,6 +54,18 @@ export default class GettingStartedExample extends Component {
                 },
                 key: 'Taiwan',
                 defaultAnimation: 2,
+            }],
+            polylines: [{
+                path: [
+                    {lat: 37.772, lng: -122.214},
+                    {lat: 21.291, lng: -157.821},
+                    {lat: -18.142, lng: 178.431},
+                    {lat: -27.467, lng: 153.027}
+                ],
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 2
             }],
             handleMapLoad: this.handleMapLoad.bind(this),
             handleMapClick: this.handleMapClick.bind(this),
@@ -90,10 +109,10 @@ export default class GettingStartedExample extends Component {
     }
 
     handleMarkerClick(targetMarker) {
-        //make shit popup using InfoWindow
+        //TODO make shit popup using InfoWindow
     }
 
-    handleMarkerRightClick(targetMarker) {
+    handleMarkerRightClick(targetMarker) { //TODO Still need to fix this
         /*
          * All you modify is data, and the view is driven by data.
          * This is so called data-driven-development. (And yes, it's now in
@@ -103,6 +122,10 @@ export default class GettingStartedExample extends Component {
         this.setState({
             markers: nextMarkers,
         });
+    }
+
+    onPolylineHover(polyline) {
+        //TODO popup on polyline that displays distance and other info
     }
 
     updateMarkers(locs) {
@@ -128,6 +151,11 @@ export default class GettingStartedExample extends Component {
         });
     }
 
+    updatePolyLines(locs) {
+        console.log("Making new polylines...");
+
+    }
+
     render() {
         let updateMe = this.updateMarkers.bind(this);
         return (
@@ -143,6 +171,7 @@ export default class GettingStartedExample extends Component {
                     onMapLoad={this.handleMapLoad}
                     onMapClick={this.handleMapClick}
                     markers={this.state.markers}
+                    polylines={this.state.polylines}
                     onMarkerRightClick={this.handleMarkerRightClick}
                 />
             </div>
