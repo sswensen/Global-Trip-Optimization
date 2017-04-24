@@ -27,7 +27,8 @@ class App extends React.Component {
                 <TripPlanner setLocations={Object.values(this.state.selectedLocations)}
                              removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                              clear={this.clearSelectedLocations.bind(this)}
-                             tripDistance={this.state.tripDistance}/>
+                             tripDistance={this.state.tripDistance}
+                />
             </div>
             <button className="testing" onClick={this.test.bind(this)}>test</button>
             <TripMap ref={instance => {
@@ -44,9 +45,9 @@ class App extends React.Component {
         let bestDist = 9999999;
         let whereToInsert = 0;
         let totalTripDistance = 0;
-        if (numLocs > 2) {
+        if (numLocs > 1) {
             //console.log("Now calculating distances for insertion")
-            for (let i = 0; i < numLocs; ++i) {
+            for (let i = 0; i < numLocs; i++) {
                 //console.log(currentLocations[i].name);
                 //console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
                 //TODO
@@ -54,14 +55,20 @@ class App extends React.Component {
                 //Need to also measure between the first and the last locations
                 //This will account for nearestNeighbor
                 let loc1 = currentLocations[i];
-                let loc2 = currentLocations[(i + 1) % (numLocs - 1)];
+                let loc2 = currentLocations[(i + 1) % (numLocs)];
                 let dist = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon);
-                totalTripDistance += dist;
+                totalTripDistance += dist; //TODO this doesnt work because we are not calculating the entire trip yet
                 console.log("Distance between", loc1.name, "and", loc2.name, "is", dist);
                 if (dist < bestDist) {
                     whereToInsert = i;
                 }
             }
+        } else if(numLocs === 2) {
+            let loc1 = currentLocations[0];
+            let loc2 = currentLocations[1];
+            this.setState({
+                tripDistance: this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon),
+            });
         }
         //TODO can I insert at an index here?
         let obj = {};
@@ -74,7 +81,7 @@ class App extends React.Component {
             tripDistance: totalTripDistance,
         });
         this.updateMarkers(newMap);
-        //console.log(Object.values(newMap));
+        console.log(Object.values(newMap));
         //Need to update total trip distance here
     }
 
