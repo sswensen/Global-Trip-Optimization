@@ -53,7 +53,7 @@ let Sel = ({locations}) => <div>
         this.setState({
             selectedLocations: newMap
         });
-        this.child.updateMarkers(newMap);
+        this.updateMarkers(newMap);
         //Need to update total trip distance here
     }
 
@@ -63,7 +63,8 @@ let Sel = ({locations}) => <div>
         delete newMap[loc.id];
         this.setState({
             selectedLocations: newMap
-        })
+        });
+        this.updateMarkers(newMap);
     }
 
     saveTrip(trip) {
@@ -80,7 +81,12 @@ let Sel = ({locations}) => <div>
     clearSelectedLocations() {
         this.setState ({
             selectedLocations: {}
-        })
+        });
+        this.updateMarkers({});
+    }
+
+    updateMarkers(map) {
+        this.child.updateMarkers(map);
     }
 
     test() {
