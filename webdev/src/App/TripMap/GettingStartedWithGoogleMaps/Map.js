@@ -71,7 +71,8 @@ export default class GettingStartedExample extends Component {
             handleMapClick: this.handleMapClick.bind(this),
             handleMarkerClick: this.handleMarkerClick(this),
             handleMarkerRightClick: this.handleMarkerRightClick.bind(this),
-            selectedLocations: {}
+            selectedLocations: {},
+            sortedLocationIds: {},
         };
     }
 
@@ -127,19 +128,20 @@ export default class GettingStartedExample extends Component {
         //TODO popup on polyline that displays distance and other info
     }
 
-    updateMarkers(locs) {
+    updateMarkers(locs, sorted) {
         console.log("Making new markers...");
         let locations = Object.values(locs);
         let newMarkers = [];
         for (let i = 0; i < locations.length; i++) {
-            console.log("Marker at", i, "is", locations[i]);
+            let currentLoc = this.searchSelectedLocationsWithId(locs, sorted[i]);
+            console.log("Marker at", i, "is", currentLoc);
             let ps = {
-                lat: locations[i].lat,
-                lng: locations[i].lon,
+                lat: currentLoc.lat,
+                lng: currentLoc.lon,
             };
             let obj = {
                 position: ps,
-                key: locations[i].id,
+                key: currentLoc.id,
                 defaultAnimation: 2.
             };
             newMarkers.push(obj);
@@ -148,23 +150,25 @@ export default class GettingStartedExample extends Component {
         this.setState({
             markers: newMarkers
         });
-        this.updatePolyLines(locs);
+        this.updatePolyLines(locs, sorted);
     }
 
-    updatePolyLines(locs) {
+    updatePolyLines(locs, sorted) {
         console.log("Making new polylines...");
         let locations = Object.values(locs);
         let ps = [];
         for (let i = 0; i < locations.length; i++) {
+            let currentLoc = this.searchSelectedLocationsWithId(locs, sorted[i]);
             let lCoords = {
-                lat: locations[i].lat,
-                lng: locations[i].lon,
+                lat: currentLoc.lat,
+                lng: currentLoc.lon,
             };
             ps.push(lCoords);
         }
+        let currentLoc = this.searchSelectedLocationsWithId(locs, sorted[0]);
         ps.push({ //This accounts for returning to first
-            lat: locations[0].lat,
-            lng: locations[0].lon,
+            lat: currentLoc.lat,
+            lng: currentLoc.lon,
         });
 
         let newPolylines = [{
@@ -178,6 +182,16 @@ export default class GettingStartedExample extends Component {
             polylines: newPolylines
         });
         console.log("New polylines created:", Object.values(newPolylines));
+    }
+
+    searchSelectedLocationsWithId(locs, id) {
+        let locations = Object.values(locs);
+        for(let i = 0; i < locations.length; i++) {
+            if(id === locations[i].id) {
+                return locations[i];
+            }
+        }
+        return undefined;
     }
 
     render() {

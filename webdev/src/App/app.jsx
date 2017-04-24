@@ -16,7 +16,8 @@ class App extends React.Component {
         this.state = {
             selectedLocations: {},
             savedTrips: {},
-            tripDistance: 0
+            tripDistance: 0,
+            sortedLocationIds: [],
         }
     }
 
@@ -30,11 +31,13 @@ class App extends React.Component {
                              tripDistance={this.state.tripDistance}
                 />
             </div>
-            <button className="testing" onClick={this.test.bind(this)}>test</button>
             <TripMap ref={instance => {
                 this.child = instance;
             }}
-                     selectedLocations={Object.values(this.state.selectedLocations)}/>
+                     selectedLocations={Object.values(this.state.selectedLocations)}
+                     sortedLocationIds={this.state.sortedLocationIds}
+            />
+            <button className="testing" onClick={this.test.bind(this)}>test</button>
         </div>
     }
 
@@ -42,10 +45,45 @@ class App extends React.Component {
         console.log("Adding location with name", loc.name);
         let currentLocations = Object.values(this.state.selectedLocations);
         let numLocs = currentLocations.length;
-        let bestDist = 9999999;
+        let tempLocationList = [];
+        for(let i = 0; i < numLocs; i++) {
+            let currentId = this.state.sortedLocationIds[i];
+            let currentLocation = this.searchSelectedLocationsWithId(currentId);
+            tempLocationList.push(currentLocation)
+        }
+        //Find where to insert into tempLocationList
         let whereToInsert = 0;
-        let totalTripDistance = 0;
         if (numLocs > 1) {
+            let bestDist = 9999999;
+            console.log("Now calculating distances for insertion")
+            for (let i = 0; i < numLocs; i++) {
+                console.log(currentLocations[i].name);
+                console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
+                //TODO
+                //Figure out where the best place to put the location is
+                //Need to also measure between the first and the last locations
+                //This will account for nearestNeighbor
+                let loc1 = tempLocationList[i];
+                let loc2 = tempLocationList[(i + 1) % (numLocs)];
+                let dist1 = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc.lat, loc.lon);
+                let dist2 = this.distanceBetweenCoords(loc.lat, loc.lon, loc2.lat, loc2.lon);
+                let dist = dist1 + dist2;
+                console.log("Distance added between", loc1.name, "and", loc2.name, "is", dist);
+                if (dist < bestDist) {
+                    whereToInsert = i;
+                    bestDist = dist;
+                }
+            }
+        }
+        let newSortedLocationIds = this.state.sortedLocationIds;
+        newSortedLocationIds.splice(whereToInsert+1, 0, loc.id);
+        this.setState ({
+            sortedLocationIds: newSortedLocationIds,
+        });
+        console.log("Should be inserted at index:", whereToInsert+1, this.state.sortedLocationIds);
+
+        let totalTripDistance = 0;
+        /*if (numLocs > 1) {
             //console.log("Now calculating distances for insertion")
             for (let i = 0; i < numLocs; i++) {
                 //console.log(currentLocations[i].name);
@@ -69,7 +107,7 @@ class App extends React.Component {
             this.setState({
                 tripDistance: this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon),
             });
-        }
+        }*/
         //TODO can I insert at an index here?
         let obj = {};
         obj[loc.id] = loc;
@@ -80,9 +118,19 @@ class App extends React.Component {
             selectedLocations: newMap,
             tripDistance: totalTripDistance,
         });
-        this.updateMarkers(newMap);
-        console.log(Object.values(newMap));
+        this.updateMarkers(newMap, newSortedLocationIds);
         //Need to update total trip distance here
+    }
+
+    searchSelectedLocationsWithId(id) {
+        let locations = Object.values(this.state.selectedLocations);
+        for(let i = 0; i < locations.length; i++) {
+            if(id === locations[i].id) {
+                return locations[i];
+            }
+        }
+        console.log("[app]: searchSelectedLocationsWithId: No locations with id:", id, "in selectedLocations")
+        return undefined;
     }
 
     removeLocation(loc) {
@@ -92,7 +140,15 @@ class App extends React.Component {
         this.setState({
             selectedLocations: newMap
         });
-        this.updateMarkers(newMap);
+        let tempSortedLocations = this.state.sortedLocationIds;
+        let index = tempSortedLocations.indexOf(loc.id);
+        if (index > -1) {
+            tempSortedLocations.splice(index, 1);
+        }
+        this.setState({
+            sortedLocationIds: tempSortedLocations,
+        })
+        this.updateMarkers(newMap, tempSortedLocations);
     }
 
     saveTrip(trip) {
@@ -110,11 +166,11 @@ class App extends React.Component {
         this.setState({
             selectedLocations: {}
         });
-        this.updateMarkers({});
+        this.updateMarkers({}, []);
     }
 
-    updateMarkers(map) {
-        this.child.updateMarkers(map); //double comp callback
+    updateMarkers(map, sorted) {
+        this.child.updateMarkers(map, sorted); //double comp callback
     }
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
@@ -136,7 +192,7 @@ class App extends React.Component {
     }
 
     test() {
-        console.log("[app]: selectedLocations:", this.state.selectedLocations, " \n[app]: savedTrips:", this.state.savedTrips);
+        console.log("[app]: selectedLocations:", this.state.selectedLocations, " \n[app]: savedTrips:", this.state.savedTrips, " \n[app]: tripDistance:", this.state.tripDistance, " \n[app]: sortedLocationIds:", this.state.sortedLocationIds);
     }
 
     isDead() {
