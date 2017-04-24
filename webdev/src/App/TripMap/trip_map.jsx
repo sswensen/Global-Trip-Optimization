@@ -11,7 +11,7 @@ class TripMap extends Component {
     }
 
     render() {
-        return <div style={{height: "100%"}}>
+        return <div style={{height: "55%"}}>
             <Map ref={instance => { this.child = instance; }}
                  selectedLocations={this.props.selectedLocations}
                  sortedLocationIds={this.props.sortedLocationIds}

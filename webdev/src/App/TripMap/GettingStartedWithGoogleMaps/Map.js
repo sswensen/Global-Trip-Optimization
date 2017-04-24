@@ -24,7 +24,7 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
         defaultZoom={2}
-        defaultCenter={{lat: -50, lng: 0}}
+        defaultCenter={{lat: 30, lng: 0}}
         onClick={props.onMapClick}
     >
         {props.update}
@@ -47,7 +47,7 @@ export default class GettingStartedExample extends Component {
     constructor(props) {
         super(props); // this is required
         this.state = {
-            markers: [{
+            /*markers: [{
                 position: {
                     lat: 25.0112183,
                     lng: 121.52067570000001,
@@ -66,7 +66,9 @@ export default class GettingStartedExample extends Component {
                 strokeColor: '#FF0000',
                 strokeOpacity: 0.5,
                 strokeWeight: 2
-            }],
+            }],*/
+            markers: [],
+            polylines: [],
             handleMapLoad: this.handleMapLoad.bind(this),
             handleMapClick: this.handleMapClick.bind(this),
             handleMarkerClick: this.handleMarkerClick(this),
