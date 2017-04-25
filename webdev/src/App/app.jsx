@@ -53,37 +53,46 @@ class App extends React.Component {
         }
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
+        let totalDist = 0;
         if (numLocs > 1) {
             let bestDist = 9999999;
+            let minusDist = 0;
+            let plusDist = 0;
             console.log("Now calculating distances for insertion")
             for (let i = 0; i < numLocs; i++) {
-                console.log(currentLocations[i].name);
-                console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
-                //TODO
+                //console.log(currentLocations[i].name);
+                //console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
+                //TODOdone
                 //Figure out where the best place to put the location is
                 //Need to also measure between the first and the last locations
                 //This will account for nearestNeighbor
                 let loc1 = tempLocationList[i];
                 let loc2 = tempLocationList[(i + 1) % (numLocs)];
+                let originalDist = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon);
                 let dist1 = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc.lat, loc.lon);
                 let dist2 = this.distanceBetweenCoords(loc.lat, loc.lon, loc2.lat, loc2.lon);
                 let dist = dist1 + dist2;
+                totalDist += originalDist;
                 console.log("Distance added between", loc1.name, "and", loc2.name, "is", dist);
                 if (dist < bestDist) {
                     whereToInsert = i;
                     bestDist = dist;
+                    minusDist = originalDist;
+                    plusDist = dist;
                 }
             }
+            totalDist = totalDist - minusDist + plusDist;
         }
         let newSortedLocationIds = this.state.sortedLocationIds;
         newSortedLocationIds.splice(whereToInsert+1, 0, loc.id);
         this.setState ({
             sortedLocationIds: newSortedLocationIds,
+            tripDistance: totalDist
         });
         console.log("Should be inserted at index:", whereToInsert+1, this.state.sortedLocationIds);
 
-        let totalTripDistance = 0;
-        /*if (numLocs > 1) {
+        /*let totalTripDistance = 0;
+        if (numLocs > 1) {
             //console.log("Now calculating distances for insertion")
             for (let i = 0; i < numLocs; i++) {
                 //console.log(currentLocations[i].name);
@@ -108,7 +117,6 @@ class App extends React.Component {
                 tripDistance: this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon),
             });
         }*/
-        //TODO can I insert at an index here?
         let obj = {};
         obj[loc.id] = loc;
         let newMap = Object.assign({},
@@ -116,10 +124,8 @@ class App extends React.Component {
             obj);
         this.setState({
             selectedLocations: newMap,
-            tripDistance: totalTripDistance,
         });
         this.updateMarkers(newMap, newSortedLocationIds);
-        //Need to update total trip distance here
     }
 
     searchSelectedLocationsWithId(id) {
@@ -164,7 +170,8 @@ class App extends React.Component {
 
     clearSelectedLocations() {
         this.setState({
-            selectedLocations: {}
+            selectedLocations: {},
+            tripDistance: 0,
         });
         this.updateMarkers({}, []);
     }

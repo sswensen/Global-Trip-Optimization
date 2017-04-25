@@ -73,6 +73,13 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
                 onClick={() => props.onMarkerClick(marker)}
                 onRightClick={() => props.onMarkerRightClick(marker)}
             >
+                {false ? (
+                    <InfoWindow>
+                        hay
+                    </InfoWindow>
+                ) : (
+                    ""
+                )}
             </Marker>
         ))}
         {props.polylines.map(polyline => (
@@ -181,7 +188,7 @@ export default class GettingStartedExample extends Component {
         let newMarkers = [];
         for (let i = 0; i < locations.length; i++) {
             let currentLoc = this.searchSelectedLocationsWithId(locs, sorted[i]);
-            console.log("Marker at", i, "is", currentLoc);
+            //console.log("Marker at", i, "is", currentLoc);
             let ps = {
                 lat: currentLoc.lat,
                 lng: currentLoc.lon,
@@ -192,7 +199,7 @@ export default class GettingStartedExample extends Component {
                 defaultAnimation: 2.
             };
             newMarkers.push(obj);
-            console.log("New marker created:", Object.values(obj));
+            //console.log("New marker created:", Object.values(obj));
         }
         this.setState({
             markers: newMarkers
