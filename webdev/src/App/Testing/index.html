@@ -6,14 +6,62 @@
 
 </head>
 <body>
-<div class="left-menu">
-    <h3>Left Menu</h3>
-</div>
-<div class="right-menu">
-    <h3>Right Menu</h3>
-</div>
-<div class="background">
-    <h3>This needs to</h3>
-</div>
+    <!----------------------------------------------------------------------------------------------------------------->
+    <div id="myLeftSidenav" class="leftsidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeLeftNav()">&times;</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact</a>
+    </div>
+
+    <span onclick="openLeftNav()">open left</span>
+
+    <script>
+        function openLeftNav() {
+            document.getElementById("myLeftSidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+        function closeLeftNav() {
+            document.getElementById("myLeftSidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+    <!----------------------------------------------------------------------------------------------------------------->
+    <!----------------------------------------------------------------------------------------------------------------->
+    <div id="myRightSidenav" class="righttsidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeRightNav()">&times;</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact</a>
+    </div>
+
+    <span onclick="openRightNav()">open right</span>
+
+    <script>
+        function openRightNav() {
+            document.getElementById("myRightSidenav").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+        function closeRightNav() {
+            document.getElementById("myRightSidenav").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        }
+    </script>
+    <!----------------------------------------------------------------------------------------------------------------->
+    <!-- Add all page content inside this div if you want the side nav to push page content to the
+        right (not used if you only want the sidenav to sit on top of the page -->
+    <div id="main">
+        <div class="background">
+            <h3>This needs to be floating</h3>
+        </div>
+    </div>
+
+
 </body>
 </html>

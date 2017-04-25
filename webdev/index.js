@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux'
 import './src/App/style.scss';
 
-
 // run the function when the webpage finishes loading
 document.addEventListener("DOMContentLoaded", (event) => {
 	console.log("Loaded");
