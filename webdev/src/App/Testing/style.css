@@ -77,14 +77,15 @@
     margin-left: 50px;
 }
 
-.buttonRight {
+#buttonRight {
     float: right;
-}
-#main {
-    transition: margin-right .5s;
-    padding: 20px;
+    transisition: margin-left .5s;
 }
 
+#main {
+    transition: margin-left .5s;
+    padding: 16px;
+}
 
 .background {
     background-color: #37adea;
