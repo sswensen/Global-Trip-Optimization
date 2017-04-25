@@ -14,12 +14,51 @@ import {
     InfoWindow,
 } from "react-google-maps";
 
+import GMap from './GoogleMap.jsx';
+
 /*
  * This is the modify version of:
  * https://developers.google.com/maps/documentation/javascript/examples/event-arguments
  *
  * Add <script src="https://maps.googleapis.com/maps/api/js"></script> to your HTML to provide google.maps reference
  */
+
+function withGoogleMaps(WrappedComponent) {
+    return class extends React.Component {
+        componentWillReceiveProps(nextProps) {
+
+        }
+
+        render() {
+            return <GoogleMap
+                ref={this.props.onMapLoad}
+                defaultZoom={2}
+                defaultCenter={{lat: 30, lng: 0}}
+                onClick={this.props.onMapClick}
+            >
+                {this.props.update}
+                {this.props.markers.map(marker => (
+                    <Marker
+                        {...marker}
+                        onClick={() => this.props.onMarkerClick(marker)}
+                        onRightClick={() => this.props.onMarkerRightClick(marker)}
+                    >
+                        <InfoWindow />
+                    </Marker>
+                ))}
+                {this.props.polylines.map(polyline => (
+                    <Polyline
+                        {...polyline}
+                        onHover={() => this.props.onPolylineHover(polyline)}
+                    />
+                ))}
+            </GoogleMap>;
+        }
+    }
+}
+
+const GettingStartedGoogleMap1 = withGoogleMaps(); //TODO update this
+
 const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
@@ -31,8 +70,10 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         {props.markers.map(marker => (
             <Marker
                 {...marker}
+                onClick={() => props.onMarkerClick(marker)}
                 onRightClick={() => props.onMarkerRightClick(marker)}
-            />
+            >
+            </Marker>
         ))}
         {props.polylines.map(polyline => (
             <Polyline
@@ -48,25 +89,25 @@ export default class GettingStartedExample extends Component {
         super(props); // this is required
         this.state = {
             /*markers: [{
-                position: {
-                    lat: 25.0112183,
-                    lng: 121.52067570000001,
-                },
-                key: 'Taiwan',
-                defaultAnimation: 2,
-            }],
-            polylines: [{
-                path: [
-                    {lat: 37.772, lng: -122.214},
-                    {lat: 21.291, lng: -157.821},
-                    {lat: -18.142, lng: 178.431},
-                    {lat: -27.467, lng: 153.027}
-                ],
-                geodesic: true,
-                strokeColor: '#FF0000',
-                strokeOpacity: 0.5,
-                strokeWeight: 2
-            }],*/
+             position: {
+             lat: 25.0112183,
+             lng: 121.52067570000001,
+             },
+             key: 'Taiwan',
+             defaultAnimation: 2,
+             }],
+             polylines: [{
+             path: [
+             {lat: 37.772, lng: -122.214},
+             {lat: 21.291, lng: -157.821},
+             {lat: -18.142, lng: 178.431},
+             {lat: -27.467, lng: 153.027}
+             ],
+             geodesic: true,
+             strokeColor: '#FF0000',
+             strokeOpacity: 0.5,
+             strokeWeight: 2
+             }],*/
             markers: [],
             polylines: [],
             handleMapLoad: this.handleMapLoad.bind(this),
@@ -75,6 +116,7 @@ export default class GettingStartedExample extends Component {
             handleMarkerRightClick: this.handleMarkerRightClick.bind(this),
             selectedLocations: {},
             sortedLocationIds: {},
+            showWindows: {},
         };
     }
 
@@ -112,6 +154,9 @@ export default class GettingStartedExample extends Component {
 
     handleMarkerClick(targetMarker) {
         //TODO make shit popup using InfoWindow
+        console.log("Came in with", targetMarker);
+        //this.showWindow(targetMarker.key);
+        //Probably need to make a new data set that holds all the info window data
     }
 
     handleMarkerRightClick(targetMarker) { //TODO Still need to fix this
@@ -152,7 +197,8 @@ export default class GettingStartedExample extends Component {
         this.setState({
             markers: newMarkers
         });
-        this.updatePolyLines(locs, sorted);
+        this.updatePolyLines(locs, sorted); //Updates polylines
+        this.updateInfoWindows(sorted); //Updates all windows to false
     }
 
     updatePolyLines(locs, sorted) {
@@ -186,10 +232,28 @@ export default class GettingStartedExample extends Component {
         console.log("New polylines created:", Object.values(newPolylines));
     }
 
+    updateInfoWindows(sorted) {
+        let newMap = {};
+        for (let i = 0; i < sorted.length; i++) {
+            newMap[sorted[i]] = false;
+        }
+        this.setState({
+            showWindows: newMap,
+        });
+    }
+
+    showWindow(id) {
+        map[id] = true;
+        this.setState({
+            showWindows: map,
+        });
+        console.log("Id:", id, "now true");
+    }
+
     searchSelectedLocationsWithId(locs, id) {
         let locations = Object.values(locs);
-        for(let i = 0; i < locations.length; i++) {
-            if(id === locations[i].id) {
+        for (let i = 0; i < locations.length; i++) {
+            if (id === locations[i].id) {
                 return locations[i];
             }
         }
@@ -198,6 +262,7 @@ export default class GettingStartedExample extends Component {
 
     render() {
         let updateMe = this.updateMarkers.bind(this);
+        let popup;
         return (
             <div style={{height: '100%'}}>
                 <GettingStartedGoogleMap
@@ -212,7 +277,9 @@ export default class GettingStartedExample extends Component {
                     onMapClick={this.handleMapClick}
                     markers={this.state.markers}
                     polylines={this.state.polylines}
+                    onMarkerClick={this.handleMarkerClick}
                     onMarkerRightClick={this.handleMarkerRightClick}
+                    infoWindowBools={this.state.showWindows}
                 />
             </div>
         );

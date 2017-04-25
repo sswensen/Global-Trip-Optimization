@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import GettingStartedGoogleMap from './GettingStartedWithGoogleMaps/GettingStartedWithGoogleMaps.jsx';
 import Map from './GettingStartedWithGoogleMaps/Map.js';
 class TripMap extends Component {
     constructor(props) {
