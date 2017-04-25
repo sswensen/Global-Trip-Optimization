@@ -79,9 +79,12 @@
 
 #buttonRight {
     float: right;
-    transisition: margin-left .5s;
+    transition: .5s;
 }
 
+#buttonLeft {
+    transition: .5s;
+}
 #main {
     transition: margin-left .5s;
     padding: 16px;
