@@ -81,6 +81,10 @@
     transition: margin-left .5s;
     padding: 20px;
 }
+#main2 {
+    transition: margin-right .5s;
+    padding: 20px;
+}
 
 .background {
     background-color: #37adea;

@@ -15,7 +15,7 @@
         <a href="#">Contact</a>
     </div>
 
-    <span onclick="openLeftNav()">open left</span>
+    <span style="font-size:30px;cursor:pointer" onclick="openLeftNav()">&#9776; Open Left Nav Bar</span>
 
     <script>
         function openLeftNav() {
@@ -39,18 +39,18 @@
         <a href="#">Contact</a>
     </div>
 
-    <span onclick="openRightNav()">open right</span>
+    <span style="font-size:30px;cursor:pointer" onclick="openRightNav()">&#9776; Open Right Nav Bar</span>
 
     <script>
         function openRightNav() {
             document.getElementById("myRightSidenav").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
+            document.getElementById("main2").style.marginRight = "250px";
         }
 
         /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
         function closeRightNav() {
             document.getElementById("myRightSidenav").style.width = "0";
-            document.getElementById("main").style.marginLeft = "0";
+            document.getElementById("main2").style.marginRight = "0";
         }
     </script>
     <!----------------------------------------------------------------------------------------------------------------->
@@ -59,6 +59,11 @@
     <div id="main">
         <div class="background">
             <h3>This needs to be floating</h3>
+        </div>
+    </div>
+    <div id="main2">
+        <div class="background">
+            <h3>This needs to be floating This needs to be floating This needs to be floating This needs to be floating</h3>
         </div>
     </div>
 
