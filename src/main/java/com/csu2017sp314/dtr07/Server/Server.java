@@ -22,6 +22,7 @@ public class Server {
     public void serve() {
         Gson g = new Gson();
         get("/locations", this::hello, g::toJson);
+        get("/toOptimize", this::optimize, g::toJson);
     }
 
     public Object hello(Request rec, Response res) {
@@ -30,6 +31,12 @@ public class Server {
         //System.out.println(rec.queryParams("q"));
         q.fireQuery(rec.queryParams("q"));
         return q.getLocations();
+    }
+
+    public Object optimize(Request rec, Response res) {
+        setHeaders(res);
+        System.out.println(rec.queryParams("locs"));
+        return null;
     }
 
     private void setHeaders(Response res) {
