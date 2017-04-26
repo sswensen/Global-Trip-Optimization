@@ -29,6 +29,8 @@ body {
 .planning-stuff {
   height: 100%;
   width: 100%;
+  transition: margin .5s;
+  position: relative;
 }
 
 .inner {
@@ -39,26 +41,61 @@ body {
   tab-index: 0;
 }
 .left-menu-button-div {
-  float: left;
+  position: absolute;
+  left: 0;
+  margin-top: 37.4%;
+  transition: .5s;
   z-index: 1;
+  background: rgba(0, 0, 0, 0.10);
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.left-menu-button-div:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.left-menu-button-div:active {
+  background: rgba(0, 0, 0, 0.50);
 }
 
 .left-menu-button  {
+  float: left;
   font-size:30px;
   cursor:pointer;
-  position: absolute;
-  z-index: 1;
+  position: relative;
+  z-index: 10;
+  margin-left: 0;
+  padding: 5px;
+  padding-left: 0;
 }
 
 .right-menu-button-div {
-  float: right;
-  padding-right: 200px;
+  position: absolute;
+  right: 0;
+  margin-top: 37.4%;
+  transition: .5s;
   z-index: 1;
+  background: rgba(0, 0, 0, 0.10);
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+}
+
+.right-menu-button-div:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.right-menu-button-div:active {
+  background: rgba(0, 0, 0, 0.50);
 }
 
 .right-menu-button {
+  float: right;
   font-size:30px;
   cursor:pointer;
-  position: absolute;
-  z-index: 1;
+  position: relative;
+  z-index: 10;
+  margin-right: 0;
+  padding: 5px;
+  padding-right: 0;
 }
