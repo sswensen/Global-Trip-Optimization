@@ -27,14 +27,24 @@ body {
 }
 
 .planning-stuff {
-  height: 45%;
+  height: 100%;
+  width: 100%;
+  position: static;
 }
 
 .testing {
   tab-index: 0;
 }
 
-.left-menu-button .right-menu-button {
+.left-menu-button  {
   font-size:30px;
   cursor:pointer;
+  position: absolute;
+  z-index: 1;
+}
+.right-menu-button {
+  font-size:30px;
+  cursor:pointer;
+  position: absolute;
+  z-index: 1;
 }

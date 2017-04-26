@@ -47,7 +47,7 @@
 
 .sidenav-right .closebtn-right { //TODO update this
   position: absolute;
-  top: 100%;
+  top: 0;
   left: 25px;
   font-size: 36px;
   margin-left: 50px;
@@ -55,7 +55,7 @@
 
 #main {
   transition: margin-left .5s;
-  padding: 16px;
+  padding: 0px;
 }
 
 .leftSideChick .rightSideChick {
