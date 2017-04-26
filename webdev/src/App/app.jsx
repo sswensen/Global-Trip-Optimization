@@ -80,9 +80,8 @@ class App extends React.Component {
                     open</span>
                 </div>
                 <div className="inner">
-                    <TripMap ref={instance => {
-                        this.child = instance;
-                    }}
+                    <TripMap locations={this.state.selectedLocations}
+                             trip={this.state.sortedLocationIds}
                              selectedLocations={Object.values(this.state.selectedLocations)}
                              sortedLocationIds={this.state.sortedLocationIds}
                     />
