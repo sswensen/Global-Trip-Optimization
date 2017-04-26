@@ -111,7 +111,6 @@
     border-right: 1px solid #333;
     border-top: 1px solid #000;
     border-radius: 10px 10px 0px 0px;
-    transition: bottom linear .7s;
     text-align: center;
     font-family: "Times New Roman", Times, serif;
     font-weight: bolder;
@@ -126,27 +125,21 @@
     position: fixed;
     left: 0px;
     bottom: -250px;
-    border-top: 1px solid #000;
-    z-index: 3;
-    transition: bottom ease-in .7s;
+    z-index: 10;
     font-family: "Times New Roman", Times, serif;
-    font-size: 72px;
-    font-style: oblique;
-    line-height: 300px;
-    font-weight: bold;
+    font-size: 36px;
+    line-height: 100%;
     text-align: center;
-    text-shadow: -1px -1px 1px #666, 2px 2px 4px #333;
     transition: .5s;
 }
 
 #brownTab {
-    background-image: linear-gradient(to bottom, #C7A052 0%, #8A6E3E 30%);
+    background-image: linear-gradient(to bottom, #fff 0%, #000 30%);
     left: 43%;
 }
 
 #brownBody {
-    background-image: linear-gradient(to bottom, #8A6E3E 0%, #573B0B 100%);
-    color: #C96;
+    background-image: linear-gradient(to bottom, #fff 0%, #000 100%);
 }
 
 html, body {
