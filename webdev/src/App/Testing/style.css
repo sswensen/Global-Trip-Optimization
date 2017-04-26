@@ -1,13 +1,108 @@
 @charset "UTF-8";
 /* CSS Document */
 
-.left-menu {
-    float: right;
-    color: #43ff51;
+/* The LEFT side navigation menu */
+.leftsidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
-.background {
+/* The navigation menu links */
+.leftsidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+/* When you mouse over the navigation links, change their color */
+.leftsidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.leftsidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* The RIGHT side navigation menu */
+.righttsidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    right: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.righttsidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+/* When you mouse over the navigation links, change their color */
+.righttsidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.righttsidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#buttonRight {
+    float: right;
+    position: relative;
+    background-color: #111;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-right: -10px;
+    transition: .5s;
+}
+
+#buttonLeft {
+    float: left;
+    position: relative;
+    background-color: #111;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: -10px;
+    transition: .5s;
+}
+#main {
+    transition: margin .5s;
     background-color: #37adea;
+}
+
+html, body {
     height: 100%;
     width: 100%;
+    margin: 0px;
 }
