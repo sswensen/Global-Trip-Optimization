@@ -5,7 +5,6 @@
         <link rel="stylesheet" type="text/css" href="./style.css">
     </head>
     <body>
-        <!----------------------------------------------------------------------------------------------------------------->
         <div id="myLeftSidenav" class="leftsidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeLeftNav()">&times;</a>
             <a href="#">About</a>
@@ -13,24 +12,20 @@
             <a href="#">Clients</a>
             <a href="#">Contact</a>
         </div>
-
-        <span id="buttonLeft" style="font-size:30px;cursor:pointer" onclick="openLeftNav()">&#9776; Open Left Nav Bar</span>
-
+        <span id="buttonLeft" style="font-size:60px;cursor:pointer" onclick="openLeftNav()">&#9776;</span>
         <script>
             function openLeftNav() {
                 document.getElementById("myLeftSidenav").style.width = "250px";
                 document.getElementById("main").style.marginLeft = "250px";
-                document.getElementById("buttonLeft").style.marginLeft = "250px"
+                document.getElementById("buttonLeft").style.marginLeft = "250px";
             }
-
             /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
             function closeLeftNav() {
                 document.getElementById("myLeftSidenav").style.width = "0";
                 document.getElementById("main").style.marginLeft = "0";
-                document.getElementById("buttonLeft").style.marginLeft = "0"
+                document.getElementById("buttonLeft").style.marginLeft = "0";
             }
         </script>
-        <!----------------------------------------------------------------------------------------------------------------->
         <!----------------------------------------------------------------------------------------------------------------->
         <div id="myRightSidenav" class="righttsidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeRightNav()">&times;</a>
@@ -39,16 +34,13 @@
             <a href="#">Clients</a>
             <a href="#">Contact</a>
         </div>
-
-        <span id="buttonRight" style="font-size:30px;cursor:pointer" onclick="openRightNav()">&#9776; Open Right Nav Bar</span>
-
+        <span id="buttonRight" style="font-size:30px;cursor:pointer" onclick="openRightNav()">&#9776;</span>
         <script>
             function openRightNav() {
                 document.getElementById("myRightSidenav").style.width = "250px";
                 document.getElementById("main").style.marginRight = "250px";
                 document.getElementById("buttonRight").style.marginRight = "250px"
             }
-
             /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
             function closeRightNav() {
                 document.getElementById("myRightSidenav").style.width = "0";
@@ -56,14 +48,10 @@
                 document.getElementById("buttonRight").style.marginRight = "0"
             }
         </script>
-        <!----------------------------------------------------------------------------------------------------------------->
-        <!-- Add all page content inside this div if you want the side nav to push page content to the
-            right (not used if you only want the sidenav to sit on top of the page -->
         <div id="main">
             <div class="background">
-                <h3>This needs to be floating</h3>
+                <h3>This needs to be floatingThis needs to be floatingThis needs to be floatingThis needs to be floating</h3>
             </div>
         </div>
-
     </body>
 </html>

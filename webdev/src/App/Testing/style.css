@@ -89,7 +89,10 @@
     transition: margin-left .5s;
     padding: 16px;
 }
-
+#buttonLeft {
+    background-image: linear-gradient(to bottom, #9DC754 0%, #5B8A3B 30%);
+    left: 63%;
+}
 .background {
     background-color: #37adea;
     height: 100%;
