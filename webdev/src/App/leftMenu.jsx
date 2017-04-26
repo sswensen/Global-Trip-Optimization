@@ -13,20 +13,13 @@ class LeftMenu extends React.Component {
     render() {
         var mySidenavStylz = {
             complete: {
-                width: "250px",
+                width: "33%",
             },
             nope: {
                 width: "0px",
             },
         };
-        var mainStylz = {
-            complete: {
-                marginLeft: "250px",
-            },
-            nope: {
-                marginLeft: "0",
-            },
-        };
+
 
         let left = this.props.leftMenu;
         console.log("Rendering LeftMenu now...");

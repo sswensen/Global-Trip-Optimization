@@ -21,27 +21,36 @@ class App extends React.Component {
             sortedLocationIds: [],
             leftMenu: false,
             rightMenu: false,
+
         }
     }
 
     render() {
+        var mainStylz = {
+            complete: {
+                marginLeft: "33%",
+            },
+            nope: {
+                marginLeft: "0",
+            },
+        };
         return <div>
-            <div id="main" className="planning-stuff">
-                <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}/>
+            <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}/>
+            <div id="main" className="planning-stuff" style={ (this.state.leftMenu) ? mainStylz.complete : mainStylz.nope }>
                 <TripPlanner setLocations={Object.values(this.state.selectedLocations)}
                              removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                              clear={this.clearSelectedLocations.bind(this)}
                              tripDistance={this.state.tripDistance}
                 />
+                <TripMap ref={instance => {
+                    this.child = instance;
+                }}
+                         selectedLocations={Object.values(this.state.selectedLocations)}
+                         sortedLocationIds={this.state.sortedLocationIds}
+                />
+                <button className="testing" onClick={this.test.bind(this)}>test</button>
+                <span className="left-menu-button" onClick={(this.state.leftMenu) ? this.closeNav.bind(this) : this.openNav.bind(this)}>&#9776; open</span>
             </div>
-            <TripMap ref={instance => {
-                this.child = instance;
-            }}
-                     selectedLocations={Object.values(this.state.selectedLocations)}
-                     sortedLocationIds={this.state.sortedLocationIds}
-            />
-            <button className="testing" onClick={this.test.bind(this)}>test</button>
-            <span className="left-menu-button" onClick={this.openNav.bind(this)}>&#9776; open</span>
         </div>
     }
 
