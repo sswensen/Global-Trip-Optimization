@@ -6,7 +6,7 @@
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 10; /* Stay on top */
     top: 0;
     left: 0;
     background-color: #111; /* Black*/
@@ -78,7 +78,7 @@
 }
 
 #buttonRight {
-    float: right; /*<-change to left */
+    float: right;
     position: relative;
     background-color: #111;
     margin-top: 20px;
@@ -97,13 +97,12 @@
     transition: .5s;
 }
 #main {
-    transition: margin-left .5s;
-    transition: margin-right .5s;
-    padding: 16px;
+    transition: margin .5s;
+    background-color: #37adea;
 }
 
-.background {
-    background-color: #37adea;
+html, body {
     height: 100%;
     width: 100%;
+    margin: 0px;
 }
