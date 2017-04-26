@@ -99,6 +99,7 @@ export default class GettingStartedExample extends Component {
             handleMapClick: this.handleMapClick.bind(this),
             handleMarkerClick: this.handleMarkerClick(this),
             handleMarkerRightClick: this.handleMarkerRightClick.bind(this),
+            resetInfoWindows: this.resetInfoWindows.bind(this),
             selectedLocations: {},
             sortedLocationIds: {},
             showWindows: {},
@@ -138,8 +139,8 @@ export default class GettingStartedExample extends Component {
     }
 
     handleMarkerClick(targetMarker) {
-        //TODO make shit popup using InfoWindow
-        console.log("Came in with", targetMarker);
+        //TODOdone make shit popup using InfoWindow
+        //console.log("Came in with", targetMarker);
         //this.showWindow(targetMarker.key);
         //Probably need to make a new data set that holds all the info window data
     }
@@ -166,7 +167,16 @@ export default class GettingStartedExample extends Component {
         this.setState({
             showWindows: newMap
         });
-        console.log("Id:", id, "now true");
+        //console.log("Id:", id, "now true");
+        console.log(this.state.showWindows)
+    }
+
+    hideWindow(id) {
+        console.log("Hiding window");
+        let newMap = Object.assign({}, this.state.showWindows, {[id]: false});
+        this.setState({
+            showWindows: newMap
+        });
     }
 
     generateMarkers() {
@@ -177,6 +187,7 @@ export default class GettingStartedExample extends Component {
             };
             return <Marker
                 onClick={this.showWindow.bind(this, location.id)}
+                onCloseClick={this.state.resetInfoWindows}
                 position={position}>
                 {this.infoFor(location)}
             </Marker>
@@ -184,7 +195,7 @@ export default class GettingStartedExample extends Component {
     }
 
     infoFor(location) {
-        console.log(location);
+        //console.log(location);
         if(this.state.showWindows[location.id]) {
             return <InfoWindow>
                 <div>
@@ -195,21 +206,30 @@ export default class GettingStartedExample extends Component {
         else return "";
     }
 
+    resetInfoWindows() {
+        console.log("Resetting windows");
+        this.setState({
+            showWindows: {}
+        })
+    }
+
     generatePolyline() {
         let path = this.props.locations.map(({lat, lon}) =>({lat: lat, lng: lon}));
         if(Object.values(this.props.locations).length > 0) {
-            console.log("Pushing",{lat: this.props.locations[0].lat, lng: this.props.locations[0].lon})
+            //console.log("Pushing",{lat: this.props.locations[0].lat, lng: this.props.locations[0].lon})
             path.push({lat: this.props.locations[0].lat, lng: this.props.locations[0].lon});
         }
-        console.log("size is", Object.values(this.props.locations).length,"path",path);
+        //console.log("size is", Object.values(this.props.locations).length,"path",path);
         return <Polyline
             path={path}
-            strokeColor="black" />;
+            strokeColor="red"
+            strokeOpacity="0.5"
+        />;
     }
 
     render() {
-        console.log(this.state);
-        console.log(this.props);
+        //console.log(this.state);
+        //console.log(this.props);
         return (
             <div style={{height: '100%'}}>
                 <GettingStartedGoogleMap
