@@ -49,7 +49,7 @@ class App extends React.Component {
                        removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                        clear={this.clearSelectedLocations.bind(this)}
                        tripDistance={this.state.tripDistance}
-                       toggleTwoOpt={this.toggleTwoOpt.bind(this)}
+                       toggleTwoOpt={this.toggleTwoOpt.bind(this)} //TODO Jesse
             />
             <div className="left-menu-button-div"
                  style={(this.state.leftMenu) ? main.left : main.nope}
@@ -259,7 +259,7 @@ class App extends React.Component {
     }
 
     toggleTwoOpt() {
-        console.log("Toggling 2-opt");
+        console.log("Toggling 2-opt"); //TODO Jesse
     }
 
     test() {
