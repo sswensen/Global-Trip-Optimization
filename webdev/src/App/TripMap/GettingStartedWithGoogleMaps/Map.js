@@ -64,7 +64,8 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         ref={props.onMapLoad}
         defaultZoom={2}
         defaultCenter={{lat: 30, lng: 0}}
-        onClick={props.onMapClick}>
+        //onClick={props.onMapClick}
+    >
         {props.children}
     </GoogleMap>
 ));
@@ -187,8 +188,8 @@ export default class GettingStartedExample extends Component {
             };
             return <Marker
                 onClick={this.showWindow.bind(this, location.id)}
-                onCloseClick={this.state.resetInfoWindows}
-                position={position}>
+                position={position}
+            >
                 {this.infoFor(location)}
             </Marker>
         });
@@ -197,7 +198,9 @@ export default class GettingStartedExample extends Component {
     infoFor(location) {
         //console.log(location);
         if(this.state.showWindows[location.id]) {
-            return <InfoWindow>
+            return <InfoWindow
+                onCloseClick={this.resetInfoWindows.bind(this)}
+                >
                 <div>
                     {location.name}
                 </div>
@@ -207,7 +210,6 @@ export default class GettingStartedExample extends Component {
     }
 
     resetInfoWindows() {
-        console.log("Resetting windows");
         this.setState({
             showWindows: {}
         })
