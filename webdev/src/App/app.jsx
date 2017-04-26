@@ -1,8 +1,7 @@
 import React from 'react';
-import LocationSearch from './LocationSearch/location_search.jsx';
 import TripMap from './TripMap/trip_map.jsx';
-import TripPlanner from "./TripPlanner/trip_planner.jsx";
 import LeftMenu from './leftMenu.jsx';
+import RightMenu from './rightMenu.jsx';
 
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}
@@ -26,7 +25,7 @@ class App extends React.Component {
     }
 
     render() {
-        var mainStylz = {
+        var mainLeft = {
             complete: {
                 marginLeft: "33%",
             },
@@ -34,14 +33,41 @@ class App extends React.Component {
                 marginLeft: "0",
             },
         };
+        var mainRight = {
+            complete: {
+                marginRight: "33%",
+            },
+            nope: {
+                marginRight: "0",
+            },
+        };
+        var main = {
+            both: {
+                marginLeft: "33%",
+                marginRight: "33%",
+            },
+            right: {
+                marginRight: "33%",
+            },
+            left: {
+                marginLeft: "33%",
+            },
+            nope: {
+                marginLeft: "0%",
+                marginRight: "0%",
+            }
+        };
+        //TODO function that gets
+        console.log(((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
             <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}/>
-            <div id="main" className="planning-stuff" style={ (this.state.leftMenu) ? mainStylz.complete : mainStylz.nope }>
-                <TripPlanner setLocations={Object.values(this.state.selectedLocations)}
-                             removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
-                             clear={this.clearSelectedLocations.bind(this)}
-                             tripDistance={this.state.tripDistance}
-                />
+            <RightMenu rightMenu={this.state.rightMenu}
+                       setLocations={Object.values(this.state.selectedLocations)}
+                       removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
+                       clear={this.clearSelectedLocations.bind(this)}
+                       tripDistance={this.state.tripDistance}
+            />
+            <div id="main" className="planning-stuff" style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
                 <TripMap ref={instance => {
                     this.child = instance;
                 }}
@@ -49,7 +75,8 @@ class App extends React.Component {
                          sortedLocationIds={this.state.sortedLocationIds}
                 />
                 <button className="testing" onClick={this.test.bind(this)}>test</button>
-                <span className="left-menu-button" onClick={(this.state.leftMenu) ? this.closeNav.bind(this) : this.openNav.bind(this)}>&#9776; open</span>
+                <span className="left-menu-button" onClick={(this.state.leftMenu) ? this.closeLeftNav.bind(this) : this.openLeftNav.bind(this)}>&#9776; open</span>
+                <span className="right-menu-button" onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>&#9776; open</span>
             </div>
         </div>
     }
@@ -211,21 +238,31 @@ class App extends React.Component {
         return deg * (Math.PI / 180)
     }
 
-    openNav() {
-        //document.getElementById("mySidenav").style.width = "250px";
-        //document.getElementById("main").style.marginLeft = "250px";
+    openLeftNav() {
         console.log("Left now true");
         this.setState({
             leftMenu: true,
         });
     }
 
-    closeNav() {
-        //document.getElementById("mySidenav").style.width = "0";
-        //document.getElementById("main").style.marginLeft = "0";
+    closeLeftNav() {
         console.log("Left now false");
         this.setState({
             leftMenu: false,
+        });
+    }
+
+    openRightNav() {
+        console.log("Right now true");
+        this.setState({
+            rightMenu: true,
+        });
+    }
+
+    closeRightNav() {
+        console.log("Right now false");
+        this.setState({
+            rightMenu: false,
         });
     }
 

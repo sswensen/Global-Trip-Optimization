@@ -1,0 +1,71 @@
+.sidenav-left {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #80d4ff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 1px;
+}
+
+.sidenav-right { //TODO update this
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #80d4ff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 1px;
+}
+
+/*.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover, .offcanvas a:focus {
+  color: #f1f1f1;
+}*/
+
+.sidenav-left .closebtn-left {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.sidenav-right .closebtn-right { //TODO update this
+  position: absolute;
+  top: 100%;
+  left: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+
+.leftSideChick .rightSideChick {
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav-left .sidenav-right {
+    padding-top: 15px;
+  }
+  .sidenav-left .sidenav-right a {
+    font-size: 18px;
+  }
+}

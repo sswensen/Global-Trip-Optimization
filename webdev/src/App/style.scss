@@ -2,7 +2,7 @@
 @import "LocationSearch/location_search";
 @import "TripPlanner/trip_planner";
 @import "TripPlanner/SelectedLocation/selected_location.scss";
-@import "leftMenu";
+@import "./Menus.scss";
 *,
 *::after,
 *::before {
@@ -34,7 +34,7 @@ body {
   tab-index: 0;
 }
 
-.left-menu-button {
+.left-menu-button .right-menu-button {
   font-size:30px;
   cursor:pointer;
 }

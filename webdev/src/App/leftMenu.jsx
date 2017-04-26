@@ -4,6 +4,7 @@
 import React from 'react';
 import LocationSearch from './LocationSearch/location_search.jsx';
 
+
 class LeftMenu extends React.Component {
     constructor(props) {
         super(props); // this is required
@@ -29,8 +30,8 @@ class LeftMenu extends React.Component {
             mySideNavStyle = "width:250px";
             sideNavStyle = "margin-left:250px";
         }
-        return <div>
-            <div id="mySidenav" className="sidenav" style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
+        return <div className="leftSideChick">
+            <div id="mySidenav-left" className="sidenav-left" style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
                 <LocationSearch selectLocation={this.props.selectLocation}/>
             </div>
         </div>
