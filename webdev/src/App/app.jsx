@@ -50,6 +50,7 @@ class App extends React.Component {
                        clear={this.clearSelectedLocations.bind(this)}
                        tripDistance={this.state.tripDistance}
                        toggleTwoOpt={this.toggleTwoOpt.bind(this)} //TODO Jesse
+                       toggleThreeOpt={this.toggleThreeOpt.bind(this)}
             />
             <div className="left-menu-button-div"
                  style={(this.state.leftMenu) ? main.left : main.nope}
@@ -261,6 +262,11 @@ class App extends React.Component {
     toggleTwoOpt() {
         console.log("Toggling 2-opt"); //TODO Jesse
     }
+
+    toggleThreeOpt() {
+        console.log("Toggling 3-opt");
+    }
+
 
     test() {
         console.log("leftMenu:", this.state.leftMenu);
