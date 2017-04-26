@@ -4,8 +4,7 @@ class TripMap extends Component {
     constructor(props) {
         super(props); // this is required
         this.state = {
-            name: "",
-            locations: {}
+            name: ""
         }
     }
 
@@ -16,10 +15,6 @@ class TripMap extends Component {
                  sortedLocationIds={this.props.sortedLocationIds}
             />
         </div>
-    }
-
-    updateMarkers(locs, sorted) {
-        this.child.updateMarkers(locs, sorted);
     }
 }
 

@@ -124,7 +124,7 @@ class App extends React.Component {
                 let dist2 = this.distanceBetweenCoords(loc.lat, loc.lon, loc2.lat, loc2.lon);
                 let dist = dist1 + dist2;
                 totalDist += originalDist;
-                console.log("Distance added between", loc1.name, "and", loc2.name, "is", dist);
+                //console.log("Distance added between", loc1.name, "and", loc2.name, "is", dist);
                 if (dist < bestDist) {
                     whereToInsert = i;
                     bestDist = dist;
@@ -176,7 +176,6 @@ class App extends React.Component {
         this.setState({
             selectedLocations: newMap,
         });
-        this.updateMarkers(newMap, newSortedLocationIds);
     }
 
     searchSelectedLocationsWithId(id) {
@@ -224,12 +223,10 @@ class App extends React.Component {
             selectedLocations: {},
             tripDistance: 0,
         });
-        this.updateMarkers({}, []);
+
     }
 
-    updateMarkers(map, sorted) {
-        this.child.updateMarkers(map, sorted); //double comp callback
-    }
+
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
         let R = 6371; // Radius of the earth in km
