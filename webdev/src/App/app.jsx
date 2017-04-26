@@ -22,6 +22,7 @@ class App extends React.Component {
     }
 
     render() {
+        console.log(this.state);
         return <div>
             <div className="planning-stuff">
                 <LocationSearch selectLocation={this.selectLocation.bind(this)}/>
@@ -31,9 +32,8 @@ class App extends React.Component {
                              tripDistance={this.state.tripDistance}
                 />
             </div>
-            <TripMap ref={instance => {
-                this.child = instance;
-            }}
+            <TripMap locations={this.state.selectedLocations}
+                     trip={this.state.sortedLocationIds}
                      selectedLocations={Object.values(this.state.selectedLocations)}
                      sortedLocationIds={this.state.sortedLocationIds}
             />
@@ -125,7 +125,6 @@ class App extends React.Component {
         this.setState({
             selectedLocations: newMap,
         });
-        this.updateMarkers(newMap, newSortedLocationIds);
     }
 
     searchSelectedLocationsWithId(id) {
@@ -153,8 +152,7 @@ class App extends React.Component {
         }
         this.setState({
             sortedLocationIds: tempSortedLocations,
-        })
-        this.updateMarkers(newMap, tempSortedLocations);
+        });
     }
 
     saveTrip(trip) {
@@ -173,12 +171,10 @@ class App extends React.Component {
             selectedLocations: {},
             tripDistance: 0,
         });
-        this.updateMarkers({}, []);
+
     }
 
-    updateMarkers(map, sorted) {
-        this.child.updateMarkers(map, sorted); //double comp callback
-    }
+
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
         var R = 6371; // Radius of the earth in km
