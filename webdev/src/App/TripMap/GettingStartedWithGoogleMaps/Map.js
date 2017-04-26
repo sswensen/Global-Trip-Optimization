@@ -14,8 +14,6 @@ import {
     InfoWindow,
 } from "react-google-maps";
 
-import GMap from './GoogleMap.jsx';
-
 /*
  * This is the modify version of:
  * https://developers.google.com/maps/documentation/javascript/examples/event-arguments
