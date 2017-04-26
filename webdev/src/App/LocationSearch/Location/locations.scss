@@ -6,11 +6,12 @@
   border: 1px solid #1e62ea;
   border-radius: 8px;
   background-color: #80d4ff;
+  overflow: hidden;
 
   h5 {
     font-weight: normal;
     margin: 0;
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .location-info {
@@ -26,6 +27,7 @@
 
   .other-info {
     color: grey;
+    font-size: 12px;
     font-weight: lighter;
     a {
       text-decoration: none;
@@ -35,22 +37,22 @@
 
   .add-button-div {
     display: inline-block;
+    height: 36px;
   }
 
   .add-button {
     background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 5px;
+    padding: 4px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
     float: left;
     height: 40px;
     position: relative;
-    width: 60px;
   }
 
   .add-button:hover {

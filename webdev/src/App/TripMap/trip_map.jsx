@@ -12,10 +12,9 @@ class TripMap extends Component {
         console.log(this.state);
         console.log({props: this.props});
         let locs = this.props.trip.map(id => this.props.locations[id]);
-        return <div style={{height: "55%"}}>
+        return <div style={{height: "100%"}}>
             <Map
                 locations={locs}
-
             />
         </div>
     }
