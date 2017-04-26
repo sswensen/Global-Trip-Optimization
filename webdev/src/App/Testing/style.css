@@ -78,21 +78,30 @@
 }
 
 #buttonRight {
-    float: right;
+    float: right; /*<-change to left */
+    position: relative;
+    background-color: #111;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-right: -10px;
     transition: .5s;
 }
 
 #buttonLeft {
+    float: left;
+    position: relative;
+    background-color: #111;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: -10px;
     transition: .5s;
 }
 #main {
     transition: margin-left .5s;
+    transition: margin-right .5s;
     padding: 16px;
 }
-#buttonLeft {
-    background-image: linear-gradient(to bottom, #9DC754 0%, #5B8A3B 30%);
-    left: 63%;
-}
+
 .background {
     background-color: #37adea;
     height: 100%;

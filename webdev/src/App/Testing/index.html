@@ -12,18 +12,18 @@
             <a href="#">Clients</a>
             <a href="#">Contact</a>
         </div>
-        <span id="buttonLeft" style="font-size:60px;cursor:pointer" onclick="openLeftNav()">&#9776;</span>
+        <span id="buttonLeft" style="font-size:30px;cursor:pointer" onclick="openLeftNav()">&#9776;</span>
         <script>
             function openLeftNav() {
                 document.getElementById("myLeftSidenav").style.width = "250px";
                 document.getElementById("main").style.marginLeft = "250px";
-                document.getElementById("buttonLeft").style.marginLeft = "250px";
+                document.getElementById("buttonLeft").style.marginLeft = "240px";
             }
             /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
             function closeLeftNav() {
                 document.getElementById("myLeftSidenav").style.width = "0";
                 document.getElementById("main").style.marginLeft = "0";
-                document.getElementById("buttonLeft").style.marginLeft = "0";
+                document.getElementById("buttonLeft").style.marginLeft = "-10px";
             }
         </script>
         <!----------------------------------------------------------------------------------------------------------------->
@@ -39,13 +39,13 @@
             function openRightNav() {
                 document.getElementById("myRightSidenav").style.width = "250px";
                 document.getElementById("main").style.marginRight = "250px";
-                document.getElementById("buttonRight").style.marginRight = "250px"
+                document.getElementById("buttonRight").style.marginRight = "240px"
             }
             /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
             function closeRightNav() {
                 document.getElementById("myRightSidenav").style.width = "0";
                 document.getElementById("main").style.marginRight = "0"
-                document.getElementById("buttonRight").style.marginRight = "0"
+                document.getElementById("buttonRight").style.marginRight = "-10px"
             }
         </script>
         <div id="main">
