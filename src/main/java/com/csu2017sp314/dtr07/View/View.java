@@ -170,6 +170,23 @@ public class View {
 
     public void addLine(double x1, double y1, double x2, double y2, String id, boolean wraparound) {
         if(wraparound) {
+//            double x11;
+//            double x12;
+//            double x21;
+//            double x22;
+//            if(x1 > x2) {
+//                x11 = x1;
+//                x12 = x2 + 360;
+//                x21 = x1 - 360;
+//                x22 = x2;
+//            } else {
+//                x11 = x1;
+//                x12 = x2 - 360;
+//                x21 = x1 + 360;
+//                x22 = x2;
+//            }
+//            svg.addLine(x11, y1, x12, y2, id);
+//            svg.addLine(x21, y1, x22, y2, id);
             double originalX1 = x1;
             double originalY1 = y1;
             double originalX2 = x2;

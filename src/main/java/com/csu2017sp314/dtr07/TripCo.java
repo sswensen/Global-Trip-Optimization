@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import org.xml.sax.SAXException;
 
-
 public class TripCo {
     private static ArrayList<String> arguments = new ArrayList<>();
 
@@ -45,6 +44,8 @@ public class TripCo {
     }
 
     public static void main(String[] args) throws Exception {
+        //StopWatch stopwatch = new StopWatch();
+        //stopwatch.start();
         String xmlFile = "";
         String csvFile = "";
         String svgFile = "";

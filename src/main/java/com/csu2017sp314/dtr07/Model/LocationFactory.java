@@ -1,6 +1,7 @@
 package com.csu2017sp314.dtr07.Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by SummitDrift on 2/13/17.
@@ -44,28 +45,43 @@ class LocationFactory {
     }
 
     boolean thirdTry() {
+        Location[] locArray = locations.toArray(new Location[locations.size()]);
+        generateDistanceTable(locArray);
+        //Pair[] pairArrray = pairs.toArray(new Pair[pairs.size()]);
         int bestDistance = 999999999;
-        int sizer = locations.size();
-        ArrayList<Location> originalLocations;
+        //int sizer = locations.size();
+        int sizer = locArray.length;
+        //ArrayList<Location> originalLocations;
+        Location[] originalLocations;
         for(int i = 0; i < sizer; i++) {
-            originalLocations = new ArrayList<>(locations);
+            //originalLocations = new ArrayList<>(locations);
+            originalLocations = Arrays.copyOf(locArray, locArray.length);
             for(int x = 0; x < locations.size() - 1; x++) {
                 double distance = 999999999;
                 int index = -1;
                 for(int y = x + 1; y < locations.size(); y++) {
-                    double temp = locations.get(x).distance(locations.get(y), unit);
+                    //double temp = locations.get(x).distance(locations.get(y), unit);
+                    //double temp = locArray[x].distance(locArray[y], unit);
+                    double temp = dist(locArray[x], locArray[y]);
                     if(distance > temp) {
                         distance = temp;
                         index = y;
                     }
                 }
-                Location temploc = locations.get(x + 1);
-                locations.set(x + 1, locations.get(index));
-                locations.set(index, temploc);
-                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1), unit)));
+                //Location temploc = locations.get(x + 1);
+                Location temploc = locArray[x+1];
+                //locations.set(x + 1, locations.get(index));
+                locArray[x+1] = locArray[index];
+                //locations.set(index, temploc);
+                locArray[index] = temploc;
+                //pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1), unit)));
+                //pairs.add(new Pair(Integer.toString(x), locArray[x], locArray[x + 1], locArray[x].distance(locArray[x+1], unit)));
+                pairs.add(new Pair(Integer.toString(x), locArray[x], locArray[x + 1], dist(locArray[x], locArray[x+1])));
             }
 
-            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0), unit)));
+            //pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0), unit)));
+            //pairs.add(new Pair(Integer.toString(locArray.length - 1), locArray[locArray.length - 1], locArray[0], locArray[locations.size() - 1].distance(locArray[0], unit)));
+            pairs.add(new Pair(Integer.toString(locArray.length - 1), locArray[locArray.length - 1], locArray[0], dist(locArray[locArray.length-1], locArray[0])));
             if(twoOpt) {
                 if(threeOpt) {
                     threeOpt();
@@ -86,12 +102,24 @@ class LocationFactory {
                 bestPairs = new ArrayList<>(pairs);
             }
             pairs.clear();
-            locations = new ArrayList<>(originalLocations);
-            Location temp = locations.remove(0);
-            locations.add(temp);
+            //locations = new ArrayList<>(originalLocations);
+            locArray = Arrays.copyOf(originalLocations, originalLocations.length);
+            //Location temp = locations.remove(0);
+            //locations.add(temp);
+            locArray = shift(locArray);
         }
+        locations = new ArrayList<>(Arrays.asList(locArray));
         pairs = new ArrayList<>(bestPairs);
         return true;
+    }
+
+    private Location[] shift(Location[] array) {
+        Location first = array[0];
+        for(int i=0;i<array.length-1;i++) {
+            array[i] = array[i+1];
+        }
+        array[array.length-1] = first;
+        return array;
     }
 
     ArrayList<Location> setSelectedAirports(ArrayList<String> selectedAirportIds, String idOrName, boolean useDB) {
@@ -137,7 +165,8 @@ class LocationFactory {
 
     private ArrayList<Pair> generatePairs(Location[] route, ArrayList<Pair> newPairs) {
         for(int a = 0; a < route.length - 1; a++) {
-            newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1], unit)));
+            //newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], route[a].distance(route[a + 1], unit)));
+            newPairs.add(new Pair(Integer.toString(a), route[a], route[a + 1], dist(route[a], route[a+1])));
         }
         return newPairs;
     }
@@ -215,7 +244,7 @@ class LocationFactory {
 
     protected int twoOpt() {
         Location[] route = generateRoute();
-        generateDistanceTable(route);
+        //generateDistanceTable(route);
         int totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
@@ -306,7 +335,7 @@ class LocationFactory {
 
     protected int threeOpt() {
         Location[] route = generateRoute();
-        generateDistanceTable(route);
+        //generateDistanceTable(route);
         int totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
