@@ -30,8 +30,8 @@ function withGoogleMaps(WrappedComponent) {
         render() {
             return <GoogleMap
                 ref={this.props.onMapLoad}
-                defaultZoom={2}
-                defaultCenter={{lat: 0, lng: 0}}
+                defaultZoom={10}
+                defaultCenter={{lat: 39.7392, lng: -104.9903}}
                 onClick={this.props.onMapClick}
             >
                 {this.props.update}
@@ -60,8 +60,8 @@ const GettingStartedGoogleMap1 = withGoogleMaps(); //TODO update this
 const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
-        defaultZoom={2}
-        defaultCenter={{lat: 0, lng: 0}}
+        defaultZoom={10}
+        defaultCenter={{lat: 39.7392, lng: -104.9903}}
         //onClick={props.onMapClick}
     >
         {props.children}
