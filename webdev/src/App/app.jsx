@@ -40,8 +40,8 @@ class App extends React.Component {
                 marginRight: "0%",
             }
         };
-        //TODO function that gets
-        console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
+        //TODOdone function that gets
+        //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
             <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}/>
             <RightMenu rightMenu={this.state.rightMenu}
@@ -210,8 +210,6 @@ class App extends React.Component {
         });
 
     }
-
-
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
         let R = 6371; // Radius of the earth in km
