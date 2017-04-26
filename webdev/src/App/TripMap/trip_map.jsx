@@ -4,22 +4,20 @@ class TripMap extends Component {
     constructor(props) {
         super(props); // this is required
         this.state = {
-            name: "",
-            locations: {}
+            name: ""
         }
     }
 
     render() {
+        console.log(this.state);
+        console.log({props: this.props});
+        let locs = this.props.trip.map(id => this.props.locations[id]);
         return <div style={{height: "55%"}}>
-            <Map ref={instance => { this.child = instance; }}
-                 selectedLocations={this.props.selectedLocations}
-                 sortedLocationIds={this.props.sortedLocationIds}
+            <Map
+                locations={locs}
+
             />
         </div>
-    }
-
-    updateMarkers(locs, sorted) {
-        this.child.updateMarkers(locs, sorted);
     }
 }
 

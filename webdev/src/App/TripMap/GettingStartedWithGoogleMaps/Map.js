@@ -14,8 +14,6 @@ import {
     InfoWindow,
 } from "react-google-maps";
 
-import GMap from './GoogleMap.jsx';
-
 /*
  * This is the modify version of:
  * https://developers.google.com/maps/documentation/javascript/examples/event-arguments
@@ -64,23 +62,9 @@ const GettingStartedGoogleMap = withGoogleMap(props => (
         ref={props.onMapLoad}
         defaultZoom={2}
         defaultCenter={{lat: 30, lng: 0}}
-        onClick={props.onMapClick}
+        //onClick={props.onMapClick}
     >
-        {props.update}
-        {props.markers.map(marker => (
-            <Marker
-                {...marker}
-                onClick={() => props.onMarkerClick(marker)}
-                onRightClick={() => props.onMarkerRightClick(marker)}
-            >
-            </Marker>
-        ))}
-        {props.polylines.map(polyline => (
-            <Polyline
-                {...polyline}
-                onHover={() => props.onPolylineHover(polyline)}
-            />
-        ))}
+        {props.children}
     </GoogleMap>
 ));
 
@@ -114,6 +98,7 @@ export default class GettingStartedExample extends Component {
             handleMapClick: this.handleMapClick.bind(this),
             handleMarkerClick: this.handleMarkerClick(this),
             handleMarkerRightClick: this.handleMarkerRightClick.bind(this),
+            resetInfoWindows: this.resetInfoWindows.bind(this),
             selectedLocations: {},
             sortedLocationIds: {},
             showWindows: {},
@@ -153,8 +138,8 @@ export default class GettingStartedExample extends Component {
     }
 
     handleMarkerClick(targetMarker) {
-        //TODO make shit popup using InfoWindow
-        console.log("Came in with", targetMarker);
+        //TODOdone make shit popup using InfoWindow
+        //console.log("Came in with", targetMarker);
         //this.showWindow(targetMarker.key);
         //Probably need to make a new data set that holds all the info window data
     }
@@ -175,112 +160,88 @@ export default class GettingStartedExample extends Component {
         //TODO popup on polyline that displays distance and other info
     }
 
-    updateMarkers(locs, sorted) {
-        console.log("Making new markers...");
-        let locations = Object.values(locs);
-        let newMarkers = [];
-        for (let i = 0; i < locations.length; i++) {
-            let currentLoc = this.searchSelectedLocationsWithId(locs, sorted[i]);
-            console.log("Marker at", i, "is", currentLoc);
-            let ps = {
-                lat: currentLoc.lat,
-                lng: currentLoc.lon,
-            };
-            let obj = {
-                position: ps,
-                key: currentLoc.id,
-                defaultAnimation: 2.
-            };
-            newMarkers.push(obj);
-            console.log("New marker created:", Object.values(obj));
-        }
-        this.setState({
-            markers: newMarkers
-        });
-        this.updatePolyLines(locs, sorted); //Updates polylines
-        this.updateInfoWindows(sorted); //Updates all windows to false
-    }
-
-    updatePolyLines(locs, sorted) {
-        console.log("Making new polylines...");
-        let locations = Object.values(locs);
-        let ps = [];
-        for (let i = 0; i < locations.length; i++) {
-            let currentLoc = this.searchSelectedLocationsWithId(locs, sorted[i]);
-            let lCoords = {
-                lat: currentLoc.lat,
-                lng: currentLoc.lon,
-            };
-            ps.push(lCoords);
-        }
-        let currentLoc = this.searchSelectedLocationsWithId(locs, sorted[0]);
-        ps.push({ //This accounts for returning to first
-            lat: currentLoc.lat,
-            lng: currentLoc.lon,
-        });
-
-        let newPolylines = [{
-            path: ps,
-            geodesic: true,
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.5,
-            strokeWeight: 2
-        }];
-        this.setState({
-            polylines: newPolylines
-        });
-        console.log("New polylines created:", Object.values(newPolylines));
-    }
-
-    updateInfoWindows(sorted) {
-        let newMap = {};
-        for (let i = 0; i < sorted.length; i++) {
-            newMap[sorted[i]] = false;
-        }
-        this.setState({
-            showWindows: newMap,
-        });
-    }
 
     showWindow(id) {
-        map[id] = true;
+        let newMap = Object.assign({}, this.state.showWindows, {[id]: true});
         this.setState({
-            showWindows: map,
+            showWindows: newMap
         });
-        console.log("Id:", id, "now true");
+        //console.log("Id:", id, "now true");
+        console.log(this.state.showWindows)
     }
 
-    searchSelectedLocationsWithId(locs, id) {
-        let locations = Object.values(locs);
-        for (let i = 0; i < locations.length; i++) {
-            if (id === locations[i].id) {
-                return locations[i];
-            }
+    hideWindow(id) {
+        console.log("Hiding window");
+        let newMap = Object.assign({}, this.state.showWindows, {[id]: false});
+        this.setState({
+            showWindows: newMap
+        });
+    }
+
+    generateMarkers() {
+        return this.props.locations.map(location => {
+            let position = {
+                lat: location.lat,
+                lng: location.lon
+            };
+            return <Marker
+                onClick={this.showWindow.bind(this, location.id)}
+                position={position}
+            >
+                {this.infoFor(location)}
+            </Marker>
+        });
+    }
+
+    infoFor(location) {
+        //console.log(location);
+        if(this.state.showWindows[location.id]) {
+            return <InfoWindow
+                onCloseClick={this.resetInfoWindows.bind(this)}
+                >
+                <div>
+                    {location.name}
+                </div>
+            </InfoWindow>
         }
-        return undefined;
+        else return "";
+    }
+
+    resetInfoWindows() {
+        this.setState({
+            showWindows: {}
+        })
+    }
+
+    generatePolyline() {
+        let path = this.props.locations.map(({lat, lon}) =>({lat: lat, lng: lon}));
+        if(Object.values(this.props.locations).length > 0) {
+            //console.log("Pushing",{lat: this.props.locations[0].lat, lng: this.props.locations[0].lon})
+            path.push({lat: this.props.locations[0].lat, lng: this.props.locations[0].lon});
+        }
+        //console.log("size is", Object.values(this.props.locations).length,"path",path);
+        return <Polyline
+            path={path}
+            strokeColor="red"
+            strokeOpacity="0.5"
+        />;
     }
 
     render() {
-        let updateMe = this.updateMarkers.bind(this);
-        let popup;
+        //console.log(this.state);
+        //console.log(this.props);
         return (
             <div style={{height: '100%'}}>
                 <GettingStartedGoogleMap
-                    update={updateMe}
                     containerElement={
                         <div style={{height: '100%'}}/>
                     }
                     mapElement={
                         <div style={{height: '100%'}}/>
-                    }
-                    onMapLoad={this.handleMapLoad}
-                    onMapClick={this.handleMapClick}
-                    markers={this.state.markers}
-                    polylines={this.state.polylines}
-                    onMarkerClick={this.handleMarkerClick}
-                    onMarkerRightClick={this.handleMarkerRightClick}
-                    infoWindowBools={this.state.showWindows}
-                />
+                    }>
+                    {this.generateMarkers()}
+                    {this.generatePolyline()}
+                </GettingStartedGoogleMap>
             </div>
         );
     }
