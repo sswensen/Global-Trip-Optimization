@@ -13,7 +13,7 @@ class RightMenu extends React.Component {
     render() {
         var mySidenavStylz = {
             complete: {
-                width: "33%",
+                width: "29%",
             },
             nope: {
                 width: "0px",

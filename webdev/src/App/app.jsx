@@ -24,32 +24,16 @@ class App extends React.Component {
     }
 
     render() {
-        var mainLeft = {
-            complete: {
-                marginLeft: "33%",
-            },
-            nope: {
-                marginLeft: "0",
-            },
-        };
-        var mainRight = {
-            complete: {
-                marginRight: "33%",
-            },
-            nope: {
-                marginRight: "0",
-            },
-        };
-        var main = {
+        let main = {
             both: {
-                marginLeft: "33%",
-                marginRight: "33%",
+                marginLeft: "29%",
+                marginRight: "29%",
             },
             right: {
-                marginRight: "33%",
+                marginRight: "29%",
             },
             left: {
-                marginLeft: "33%",
+                marginLeft: "29%",
             },
             nope: {
                 marginLeft: "0%",
@@ -57,7 +41,7 @@ class App extends React.Component {
             }
         };
         //TODO function that gets
-        console.log("dix",this.state.leftMenu,(this.state.leftMenu) ? main.left : main.nope);
+        console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
             <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}/>
             <RightMenu rightMenu={this.state.rightMenu}
