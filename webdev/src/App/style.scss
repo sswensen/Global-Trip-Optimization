@@ -29,11 +29,18 @@ body {
 .planning-stuff {
   height: 100%;
   width: 100%;
+}
+
+.inner {
   position: static;
 }
 
 .testing {
   tab-index: 0;
+}
+.left-menu-button-div {
+  float: left;
+  z-index: 1;
 }
 
 .left-menu-button  {
@@ -42,6 +49,13 @@ body {
   position: absolute;
   z-index: 1;
 }
+
+.right-menu-button-div {
+  float: right;
+  padding-right: 200px;
+  z-index: 1;
+}
+
 .right-menu-button {
   font-size:30px;
   cursor:pointer;

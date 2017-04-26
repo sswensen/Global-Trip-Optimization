@@ -67,16 +67,27 @@ class App extends React.Component {
                        clear={this.clearSelectedLocations.bind(this)}
                        tripDistance={this.state.tripDistance}
             />
-            <span className="left-menu-button" onClick={(this.state.leftMenu) ? this.closeLeftNav.bind(this) : this.openLeftNav.bind(this)}>&#9776; open</span>
-            <span className="right-menu-button" onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>&#9776; open</span>
-            <div id="main" className="planning-stuff" style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
-                <TripMap ref={instance => {
-                    this.child = instance;
-                }}
-                         selectedLocations={Object.values(this.state.selectedLocations)}
-                         sortedLocationIds={this.state.sortedLocationIds}
-                />
-                <button className="testing" onClick={this.test.bind(this)}>test</button>
+            <div id="main" className="planning-stuff"
+                 style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
+                <div className="left-menu-button-div">
+                <span className="left-menu-button"
+                      onClick={(this.state.leftMenu) ? this.closeLeftNav.bind(this) : this.openLeftNav.bind(this)}>&#9776;
+                    open</span>
+                </div>
+                <div className="right-menu-button-div">
+                <span className="right-menu-button"
+                      onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>&#9776;
+                    open</span>
+                </div>
+                <div className="inner">
+                    <TripMap ref={instance => {
+                        this.child = instance;
+                    }}
+                             selectedLocations={Object.values(this.state.selectedLocations)}
+                             sortedLocationIds={this.state.sortedLocationIds}
+                    />
+                    <button className="testing" onClick={this.test.bind(this)}>test</button>
+                </div>
             </div>
         </div>
     }
