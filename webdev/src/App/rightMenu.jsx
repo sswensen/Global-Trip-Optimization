@@ -36,6 +36,7 @@ class RightMenu extends React.Component {
                              clear={this.props.clear}
                              tripDistance={this.props.tripDistance}
                              toggleTwoOpt={this.props.toggleTwoOpt} //TODO Jesse
+                             toggleThreeOpt={this.props.toggleThreeOpt}
                 />
             </div>
         </div>
