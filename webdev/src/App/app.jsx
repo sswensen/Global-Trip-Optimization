@@ -95,7 +95,7 @@ class App extends React.Component {
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
         let totalDist = 0;
-        console.log("Number of locations currently:",numLocs);
+        console.log("Number of locations currently:", numLocs);
         if (numLocs > 0) {
             let bestDist = 9999999;
             let minusDist = 0;
@@ -263,21 +263,25 @@ class App extends React.Component {
     }
 
     toggleTwoOpt() { //TODO make sure there is more than 4 locations before sending
-        console.log("Running 2-opt");
-        this.optimize("2", JSON.stringify(Object.values(this.state.selectedLocations)));
+        if (Object.values(this.state.selectedLocations).length > 3) {
+            console.log("Running 2-opt");
+            this.optimize("2", JSON.stringify(Object.values(this.state.selectedLocations)));
+        }
     }
 
     toggleThreeOpt() { //TODO make sure there is more than 4 locations before sending
-        console.log("Running 3-opt");
-        this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));
+        if (Object.values(this.state.selectedLocations).length > 3) {
+            console.log("Running 3-opt");
+            this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));
+        }
     }
 
     async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
-        console.log("Opt is:",opt);
+        console.log("Opt is:", opt);
         try {
             console.log("Sending locs...");
             let stuff = await fetch(`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
-            console.log("Url:",`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
+            console.log("Url:", `http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
             console.log("Locs sent");
             let json = await stuff.json();
             let obj = {};
@@ -288,7 +292,7 @@ class App extends React.Component {
                 selectedLocations: obj,
                 sortedLocationIds: sorted,
             });
-            console.log("Received Locations",obj);
+            console.log("Received Locations", obj);
         }
         catch (e) {
             console.error(e);
