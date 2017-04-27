@@ -23,15 +23,16 @@ class RightMenu extends React.Component {
 
         let right = this.props.rightMenu;
         console.log("Rendering RightMenu now...");
-        let mySideNavStyle = "width:0";
-        let sideNavStyle = "margin-right:0";
-        if (right === true) {
-            mySideNavStyle = "width:250px";
-            sideNavStyle = "margin-right:250px";
-        }
+        let numSel = Object.values(this.props.setLocations).length;
+        let tripDist = Math.round(this.props.tripDistance);
+        let twoOpt = this.props.toggleTwoOpt.bind(this); //TODO Jesse
+        let threeOpt = this.props.toggleThreeOpt.bind(this);
         return <div className="rightSideChick">
             <div id="mySidenav-right" className="sidenav-right" style={ (right) ? mySidenavStylz.complete : mySidenavStylz.nope }>
-
+                <button className="clear-selected-locations" onClick={twoOpt}>2-opt</button>
+                <button className="clear-selected-locations" onClick={threeOpt}>3-opt</button>
+                <span className="selected-location-counter">Selected:{numSel}</span>
+                <span className="total-trip-distancer">Distance:{tripDist}</span>
             </div>
         </div>
     }
