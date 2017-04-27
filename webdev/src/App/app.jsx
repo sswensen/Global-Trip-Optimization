@@ -260,13 +260,30 @@ class App extends React.Component {
     }
 
     toggleTwoOpt() {
-        console.log("Toggling 2-opt"); //TODO Jesse
+        console.log(JSON.stringify(Object.values(this.state.selectedLocations)));
+        this.optimize(JSON.stringify(Object.values(this.state.selectedLocations)));
     }
 
     toggleThreeOpt() {
         console.log("Toggling 3-opt");
     }
 
+    async optimize(query) {
+        try {
+            console.log("Sending locs...");
+            let stuff = await fetch(`http://localhost:4567/toOptimize?locs=${query}`);
+            console.log("Locs sent");
+            let json = await stuff.json();
+            let obj = {};
+            json.forEach(elem => obj[elem.id] = elem);
+            this.setState({
+                selectedLocations: obj
+            });
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
 
     test() {
         console.log("leftMenu:", this.state.leftMenu);
