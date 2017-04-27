@@ -20,6 +20,7 @@ class App extends React.Component {
             sortedLocationIds: [],
             leftMenu: false,
             rightMenu: false,
+
         }
     }
 
