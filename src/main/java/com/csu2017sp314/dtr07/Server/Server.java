@@ -75,6 +75,7 @@ public class Server {
         System.out.println(locations.get(2).getCountryUrl());
         System.out.println(locations.get(2).getNearest());
         System.out.println(locations.get(2).getNearestDistance());
+        System.out.println(locations.get(2).getTableIndex());
         System.out.println(locations.get(2).isPairUsesWraparound());
         return null;
     }

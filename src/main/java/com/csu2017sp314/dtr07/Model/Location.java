@@ -300,13 +300,39 @@ public class Location {
 
     @Override
     public String toString() {
+        /*
+        private String id;
+        private String name;
+        private double lat;
+        private double lon;
+        private String municipality;
+        private String region;
+        private String country;
+        private String continent;
+        private String airportUrl;
+        private String regionUrl;
+        private String countryUrl;
+        private int nearest = -1;
+        private int nearestDistance = 9999999;
+        private int tableIndex;
+        private boolean pairUsesWraparound = false;
+        */
+
         return "Location{"
                 + "id=" + id
                 + ", name='" + name + '\''
                 + ", lat=" + lat
-                + ", lon=" + lon
+                + ", municipality=" + municipality
+                + ", region=" + region
+                + ", country=" + country
+                + ", continent=" + continent
+                + ", airportUrl=" + airportUrl
+                + ", regionUrl=" + regionUrl
+                + ", countryUrl=" + countryUrl
                 + ", nearest=" + nearest
                 + ", nearestDistance=" + nearestDistance
+                + ", tableIndex=" + tableIndex
+                + ", pairUsesWraparound=" + pairUsesWraparound
                 + '}';
     }
 }
