@@ -25,22 +25,27 @@ class LeftMenu extends React.Component {
 
         let left = this.props.leftMenu;
         console.log("Rendering LeftMenu now...");
-        let mySideNavStyle = "width:0";
-        let sideNavStyle = "margin-left:0";
-        if (left === true) {
-            mySideNavStyle = "width:250px";
-            sideNavStyle = "margin-left:250px";
-        }
+        let numSel = Object.values(this.props.setLocations).length;
+        let tripDist = Math.round(this.props.tripDistance);
+        let twoOpt = this.props.toggleTwoOpt.bind(this); //TODO Jesse
+        let threeOpt = this.props.toggleThreeOpt.bind(this);
+
         return <div className="leftSideChick">
-            <div id="mySidenav-left" className="sidenav-left" style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
-                <LocationSearch selectLocation={this.props.selectLocation}/>
-                <TripPlanner setLocations={this.props.setLocations}
-                             removeLocation={this.props.removeLocation} saveTrip={this.props.saveTrip}
-                             clear={this.props.clear}
-                             tripDistance={this.props.tripDistance}
-                             toggleTwoOpt={this.props.toggleTwoOpt} //TODO Jesse
-                             toggleThreeOpt={this.props.toggleThreeOpt}
-                />
+            <div id="mySidenav-left" className="sidenav-left"
+                 style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
+                <div className="notButtons">
+                    <LocationSearch selectLocation={this.props.selectLocation}/>
+                    <TripPlanner setLocations={this.props.setLocations}
+                                 removeLocation={this.props.removeLocation} saveTrip={this.props.saveTrip}
+                                 clear={this.props.clear}
+                    />
+                </div>
+                <div className="buttons">
+                    <button className="clear-selected-locations" onClick={twoOpt}>2-opt</button>
+                    <button className="clear-selected-locations" onClick={threeOpt}>3-opt</button>
+                    <span className="selected-location-counter">Selected:{numSel}</span>
+                    <span className="total-trip-distancer">Distance:{tripDist}</span>
+                </div>
             </div>
         </div>
     }

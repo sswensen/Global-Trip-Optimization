@@ -9,6 +9,7 @@
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 1px;
+  display: flex;
 }
 
 .sidenav-right { //TODO update this
@@ -69,3 +70,13 @@
     font-size: 18px;
   }
 }*/
+
+.notButtons {
+  width: 84%;
+}
+
+.buttons {
+  //width: 16%;
+  position: relative;
+  flex: 1;
+}
