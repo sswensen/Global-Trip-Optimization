@@ -101,8 +101,50 @@
     background-color: #37adea;
 }
 
+.globalTab {
+    height: 140px;
+    line-height: 35px;
+    position: fixed;
+    display: block;
+    bottom: -50px;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    border-top: 1px solid #000;
+    border-radius: 10px 10px 0px 0px;
+    text-align: center;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    font-size: 32px;
+    cursor: pointer;
+    transition: .5s;
+}
+.globalBody {
+    width: 100%;
+    height: 300px;
+    position: fixed;
+    left: 0px;
+    bottom: -250px;
+    z-index: 10;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 36px;
+    line-height: 100%;
+    text-align: center;
+    transition: .5s;
+}
+
+#brownTab {
+    background-image: linear-gradient(to bottom, #fff 0%, #000 30%);
+    left: 43%;
+}
+
+#brownBody {
+    background-image: linear-gradient(to bottom, #fff 0%, #000 100%);
+}
+
 html, body {
     height: 100%;
     width: 100%;
     margin: 0px;
+    background: #1a55cb;
 }

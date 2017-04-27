@@ -24,6 +24,18 @@
   padding-top: 1px;
 }
 
+.sidenav {
+  height: 0;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  background-color: #80d4ff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 1px;
+}
+
 /*.sidenav a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
@@ -53,12 +65,24 @@
   margin-left: 50px;
 }
 
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 36px;
+  margin-top: 50px;
+}
+
 #main {
   transition: margin .5s;
   padding: 0px;
 }
 
 .leftSideChick .rightSideChick {
+}
+
+.topSideChick {
+
 }
 
 /*@media screen and (max-height: 450px) {
