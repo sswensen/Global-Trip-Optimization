@@ -15,7 +15,7 @@ class LeftMenu extends React.Component {
     render() {
         var mySidenavStylz = {
             complete: {
-                width: "29%",
+                width: "33%",
             },
             nope: {
                 width: "0px",
@@ -25,7 +25,6 @@ class LeftMenu extends React.Component {
 
         let left = this.props.leftMenu;
         console.log("Rendering LeftMenu now...");
-        let numSel = Object.values(this.props.setLocations).length;
         let tripDist = Math.round(this.props.tripDistance);
         let twoOpt = this.props.toggleTwoOpt.bind(this); //TODO Jesse
         let threeOpt = this.props.toggleThreeOpt.bind(this);
@@ -43,7 +42,6 @@ class LeftMenu extends React.Component {
                 <div className="buttons">
                     <button className="clear-selected-locations" onClick={twoOpt}>2-opt</button>
                     <button className="clear-selected-locations" onClick={threeOpt}>3-opt</button>
-                    <span className="selected-location-counter">Selected:{numSel}</span>
                     <span className="total-trip-distancer">Distance:{tripDist}</span>
                 </div>
             </div>

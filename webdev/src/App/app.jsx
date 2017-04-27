@@ -26,14 +26,14 @@ class App extends React.Component {
     render() {
         let main = {
             both: {
-                marginLeft: "29%",
-                marginRight: "29%",
+                marginLeft: "33%",
+                marginRight: "33%",
             },
             right: {
-                marginRight: "29%",
+                marginRight: "33%",
             },
             left: {
-                marginLeft: "29%",
+                marginLeft: "33%",
             },
             nope: {
                 marginLeft: "0%",

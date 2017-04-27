@@ -72,11 +72,29 @@
 }*/
 
 .notButtons {
-  width: 84%;
 }
 
 .buttons {
-  //width: 16%;
   position: relative;
   flex: 1;
+
+  button {
+    padding: 10px 10px;
+    margin: 10px 5px 10px 5px;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #1a55cb;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #80d4ff;
+  }
+
+  button:hover {
+    background-color: deepskyblue;
+  }
+
+  button:active {
+    background-color: #0099cd;
+
+  }
 }
