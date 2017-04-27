@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import LocationSearch from './LocationSearch/location_search.jsx';
+import TripPlanner from "./TripPlanner/trip_planner.jsx";
 
 
 class LeftMenu extends React.Component {
@@ -33,6 +34,13 @@ class LeftMenu extends React.Component {
         return <div className="leftSideChick">
             <div id="mySidenav-left" className="sidenav-left" style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
                 <LocationSearch selectLocation={this.props.selectLocation}/>
+                <TripPlanner setLocations={this.props.setLocations}
+                             removeLocation={this.props.removeLocation} saveTrip={this.props.saveTrip}
+                             clear={this.props.clear}
+                             tripDistance={this.props.tripDistance}
+                             toggleTwoOpt={this.props.toggleTwoOpt} //TODO Jesse
+                             toggleThreeOpt={this.props.toggleThreeOpt}
+                />
             </div>
         </div>
     }

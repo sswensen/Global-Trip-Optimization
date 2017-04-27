@@ -53,14 +53,16 @@ class App extends React.Component {
         //TODOdone function that gets
         //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
-            <Menu menu={this.state.menu}
-                  selectLocation={this.selectLocation.bind(this)}
-                  setLocations={Object.values(this.state.selectedLocations)}
-                  removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
-                  clear={this.clearSelectedLocations.bind(this)}
-                  tripDistance={this.state.tripDistance}
-                  toggleTwoOpt={this.toggleTwoOpt.bind(this)} //TODO Jesse
-                  toggleThreeOpt={this.toggleThreeOpt.bind(this)}
+            <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}
+                      rightMenu={this.state.rightMenu}
+                      setLocations={Object.values(this.state.selectedLocations)}
+                      removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
+                      clear={this.clearSelectedLocations.bind(this)}
+                      tripDistance={this.state.tripDistance}
+                      toggleTwoOpt={this.toggleTwoOpt.bind(this)} //TODO Jesse
+                      toggleThreeOpt={this.toggleThreeOpt.bind(this)}
+            />
+            <RightMenu
             />
             <div className="top-menu-button-div"
                  style={(this.state.menu) ? topMain.yep : topMain.nope}
