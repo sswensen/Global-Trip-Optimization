@@ -2,7 +2,6 @@ import React from 'react';
 import TripMap from './TripMap/trip_map.jsx';
 import LeftMenu from './leftMenu.jsx';
 import RightMenu from './rightMenu.jsx';
-import Menu from './Menu.jsx';
 
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}
@@ -21,7 +20,6 @@ class App extends React.Component {
             sortedLocationIds: [],
             leftMenu: false,
             rightMenu: false,
-            menu: false,
         }
     }
 
@@ -42,14 +40,6 @@ class App extends React.Component {
                 marginRight: "0%",
             }
         };
-        let topMain = {
-            yep: {
-                marginTop: "66%",
-            },
-            nope: {
-                marginTop: "0%",
-            }
-        };
         //TODOdone function that gets
         //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
@@ -64,15 +54,22 @@ class App extends React.Component {
             />
             <RightMenu
             />
-            <div className="top-menu-button-div"
-                 style={(this.state.menu) ? topMain.yep : topMain.nope}
+            <div className="left-menu-button-div"
+                 style={(this.state.leftMenu) ? main.left : main.nope}
             >
-                <span className="top-menu-button"
-                      onClick={(this.state.menu) ? this.closeNav.bind(this) : this.openNav.bind(this)}>{this.state.menu ? "u" : "d"}
+                <span className="left-menu-button"
+                      onClick={(this.state.leftMenu) ? this.closeLeftNav.bind(this) : this.openLeftNav.bind(this)}>{this.state.leftMenu ? "ᗉ" : "ᗆ"}
+                </span>
+            </div>
+            <div className="right-menu-button-div"
+                 style={(this.state.rightMenu) ? main.right : main.nope}
+            >
+                <span className="right-menu-button"
+                      onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
             <div id="main" className="planning-stuff"
-                style={(this.state.menu) ? topMain.yep : topMain.nope}>
+                 style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
                 <div className="inner">
                     <TripMap locations={this.state.selectedLocations}
                              trip={this.state.sortedLocationIds}
@@ -261,20 +258,6 @@ class App extends React.Component {
         console.log("Right now false");
         this.setState({
             rightMenu: false,
-        });
-    }
-
-    openNav() {
-        console.log("Menu now true");
-        this.setState({
-            menu: true,
-        });
-    }
-
-    closeNav() {
-        console.log("Menu now false");
-        this.setState({
-            menu: false,
         });
     }
 
