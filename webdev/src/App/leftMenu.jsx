@@ -15,22 +15,17 @@ class LeftMenu extends React.Component {
     render() {
         var mySidenavStylz = {
             complete: {
-                width: "50%",
+                height: "50%",
             },
             nope: {
-                width: "0px",
+                height: "0px",
             },
         };
 
 
         let left = this.props.leftMenu;
-        console.log("Rendering LeftMenu now...");
-        let mySideNavStyle = "width:0";
-        let sideNavStyle = "margin-left:0";
-        if (left === true) {
-            mySideNavStyle = "width:250px";
-            sideNavStyle = "margin-left:250px";
-        }
+        console.log("Rendering TopMenu now...");
+
         return <div className="leftSideChick">
             <div id="mySidenav-left" className="sidenav-left" style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
                 <LocationSearch selectLocation={this.props.selectLocation}/>

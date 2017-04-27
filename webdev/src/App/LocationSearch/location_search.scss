@@ -6,7 +6,7 @@
 
   .locations-list-div {
     position: relative;
-    height: 93%;
+    height: 88%;
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -15,6 +15,7 @@
     border: 1px solid #329dd4;
   }
   .search-div {
+    height: 12%;
     input {
       padding: 12px 20px;
       margin: 10px 10px;

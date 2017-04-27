@@ -29,6 +29,7 @@ body {
 .planning-stuff {
   transition: margin .5s;
   position: relative;
+  width: 100%;
 }
 
 .inner {
@@ -40,12 +41,11 @@ body {
 }
 .left-menu-button-div {
   position: absolute;
-  left: 0;
-  margin-top: 3%;
+  left: 50%;
   transition: .5s;
   z-index: 1;
   background: rgba(0, 0, 0, 0.20);
-  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
 }
 
@@ -58,7 +58,6 @@ body {
 }
 
 .left-menu-button  {
-  float: left;
   font-size:30px;
   cursor:pointer;
   position: relative;
@@ -70,7 +69,6 @@ body {
 
 .right-menu-button-div {
   position: absolute;
-  right: 0;
   margin-top: 3%;
   transition: .5s;
   z-index: 1;

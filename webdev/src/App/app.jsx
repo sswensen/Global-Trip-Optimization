@@ -26,7 +26,7 @@ class App extends React.Component {
     render() {
         let main = {
             left: {
-                merginTop: "50%",
+                marginTop: "50%",
             },
             nope: {
                 marginTop: "0%",
@@ -44,14 +44,14 @@ class App extends React.Component {
             />
 
             <div className="left-menu-button-div"
-                 style={(this.state.leftMenu) ? main.left : main.nope}
+
             >
                 <span className="left-menu-button"
                       onClick={(this.state.leftMenu) ? this.closeLeftNav.bind(this) : this.openLeftNav.bind(this)}>{this.state.leftMenu ? "ᗉ" : "ᗆ"}
                 </span>
             </div>
             <div id="main" className="planning-stuff"
-                 style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
+                 style={(this.state.leftMenu) ? main.left : main.nope}>
                 <div className="inner">
                     <TripMap locations={this.state.selectedLocations}
                              trip={this.state.sortedLocationIds}

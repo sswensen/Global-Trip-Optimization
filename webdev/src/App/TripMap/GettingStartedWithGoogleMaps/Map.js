@@ -231,13 +231,13 @@ export default class GettingStartedExample extends Component {
         //console.log(this.state);
         //console.log(this.props);
         return (
-            <div style={{height: '100%'}}>
+            <div style={{width: '100%'}}>
                 <GettingStartedGoogleMap
                     containerElement={
-                        <div style={{height: '100%'}}/>
+                        <div style={{width: '100%'}}/>
                     }
                     mapElement={
-                        <div style={{height: '100%'}}/>
+                        <div style={{height: "100%"}}/>
                     }>
                     {this.generateMarkers()}
                     {this.generatePolyline()}
