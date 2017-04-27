@@ -193,7 +193,6 @@ class App extends React.Component {
         this.setState({
             sortedLocationIds: tempSortedLocations,
         });
-        this.updateMarkers(newMap, tempSortedLocations);
     }
 
     saveTrip(trip) {
@@ -210,9 +209,9 @@ class App extends React.Component {
     clearSelectedLocations() {
         this.setState({
             selectedLocations: {},
+            sortedLocationIds: [],
             tripDistance: 0,
         });
-
     }
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
