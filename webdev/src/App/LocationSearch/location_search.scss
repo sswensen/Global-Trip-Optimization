@@ -1,18 +1,17 @@
 .location_search {
   float: left;
-  width: 100%;
+  width: 30%;
   height: 100%;
   border: 1px solid #37adea;
-  min-width: 100%;
 
   .locations-list-div {
     position: relative;
     height: 93%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .locations-list {
-    overflow-y: auto;
-    overflow-x: hidden;
     border: 1px solid #329dd4;
   }
   .search-div {

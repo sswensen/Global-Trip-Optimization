@@ -31,13 +31,7 @@ class RightMenu extends React.Component {
         }
         return <div className="rightSideChick">
             <div id="mySidenav-right" className="sidenav-right" style={ (right) ? mySidenavStylz.complete : mySidenavStylz.nope }>
-                <TripPlanner setLocations={this.props.setLocations}
-                             removeLocation={this.props.removeLocation} saveTrip={this.props.saveTrip}
-                             clear={this.props.clear}
-                             tripDistance={this.props.tripDistance}
-                             toggleTwoOpt={this.props.toggleTwoOpt} //TODO Jesse
-                             toggleThreeOpt={this.props.toggleThreeOpt}
-                />
+
             </div>
         </div>
     }

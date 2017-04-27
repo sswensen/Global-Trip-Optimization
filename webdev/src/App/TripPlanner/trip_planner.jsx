@@ -53,8 +53,6 @@ class TripPlanner extends Component {
                        type="text" placeholder="Enter Trip Name" />
                 <button className="save-button" onClick={save}>Save</button>
                 <button className="clear-selected-locations" onClick={clear}>Clear</button>
-                <button className="clear-selected-locations" onClick={twoOpt}>2-opt</button>
-                <button className="clear-selected-locations" onClick={threeOpt}>3-opt</button>
                 <span className="selected-location-counter">Selected:{numSel}</span>
                 <span className="total-trip-distancer">Distance:{tripDist}</span>
             </div>
