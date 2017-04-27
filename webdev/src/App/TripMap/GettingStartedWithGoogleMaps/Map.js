@@ -55,7 +55,7 @@ function withGoogleMaps(WrappedComponent) {
     }
 }
 
-const GettingStartedGoogleMap1 = withGoogleMaps(); //TODO update this
+const GettingStartedGoogleMap1 = withGoogleMaps();
 
 const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap

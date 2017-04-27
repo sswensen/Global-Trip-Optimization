@@ -32,7 +32,7 @@ class Menu extends React.Component {
                              removeLocation={this.props.removeLocation} saveTrip={this.props.saveTrip}
                              clear={this.props.clear}
                              tripDistance={this.props.tripDistance}
-                             toggleTwoOpt={this.props.toggleTwoOpt} //TODO Jesse
+                             toggleTwoOpt={this.props.toggleTwoOpt}
                              toggleThreeOpt={this.props.toggleThreeOpt}
                 />
             </div>

@@ -23,7 +23,7 @@ class TripPlanner extends Component {
         let clear = this.props.clear.bind(undefined);
         let numSel = Object.values(this.props.setLocations).length;
         let tripDist = Math.round(this.props.tripDistance);
-        let twoOpt = this.props.toggleTwoOpt.bind(this); //TODO Jesse
+        let twoOpt = this.props.toggleTwoOpt.bind(this);
         let threeOpt = this.props.toggleThreeOpt.bind(this);
 
         let items = locations.map((loc) => {

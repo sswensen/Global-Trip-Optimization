@@ -49,7 +49,7 @@ class App extends React.Component {
                       removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                       clear={this.clearSelectedLocations.bind(this)}
                       tripDistance={this.state.tripDistance}
-                      toggleTwoOpt={this.toggleTwoOpt.bind(this)} //TODO Jesse
+                      toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                       toggleThreeOpt={this.toggleThreeOpt.bind(this)}
             />
             <RightMenu
@@ -94,7 +94,8 @@ class App extends React.Component {
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
         let totalDist = 0;
-        if (numLocs > 1) {
+        console.log("Number of locations currently:",numLocs);
+        if (numLocs > 0) {
             let bestDist = 9999999;
             let minusDist = 0;
             let plusDist = 0;
@@ -137,14 +138,13 @@ class App extends React.Component {
          for (let i = 0; i < numLocs; i++) {
          //console.log(currentLocations[i].name);
          //console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
-         //TODO
          //Figure out where the best place to put the location is
          //Need to also measure between the first and the last locations
          //This will account for nearestNeighbor
          let loc1 = currentLocations[i];
          let loc2 = currentLocations[(i + 1) % (numLocs)];
          let dist = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon);
-         totalTripDistance += dist; //TODO this doesnt work because we are not calculating the entire trip yet
+         totalTripDistance += dist; //TODOdone this doesnt work because we are not calculating the entire trip yet
          console.log("Distance between", loc1.name, "and", loc2.name, "is", dist);
          if (dist < bestDist) {
          whereToInsert = i;
@@ -193,6 +193,7 @@ class App extends React.Component {
         this.setState({
             sortedLocationIds: tempSortedLocations,
         });
+        //TODO add handling for only one location being selected. Update tripDistance to 0
     }
 
     saveTrip(trip) {
