@@ -275,13 +275,15 @@ class App extends React.Component {
         try {
             console.log("Sending locs...");
             let stuff = await fetch(`http://localhost:4567/toOptimize?locs=${query}`);
+            console.log(`http://localhost:4567/toOptimize?locs=${query}`);
             console.log("Locs sent");
             let json = await stuff.json();
             let obj = {};
-            json.forEach(elem => obj[elem.id] = elem);
+            json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
             this.setState({
                 selectedLocations: obj
             });
+            console.log("Received Locations",obj);
         }
         catch (e) {
             console.error(e);
