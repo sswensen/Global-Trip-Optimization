@@ -262,26 +262,31 @@ class App extends React.Component {
         });
     }
 
-    toggleTwoOpt() {
-        console.log(JSON.stringify(Object.values(this.state.selectedLocations)));
-        this.optimize(JSON.stringify(Object.values(this.state.selectedLocations)));
+    toggleTwoOpt() { //TODO make sure there is more than 4 locations before sending
+        console.log("Running 2-opt");
+        this.optimize("2", JSON.stringify(Object.values(this.state.selectedLocations)));
     }
 
-    toggleThreeOpt() {
-        console.log("Toggling 3-opt");
+    toggleThreeOpt() { //TODO make sure there is more than 4 locations before sending
+        console.log("Running 3-opt");
+        this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));
     }
 
-    async optimize(query) {
+    async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
+        console.log("Opt is:",opt);
         try {
             console.log("Sending locs...");
-            let stuff = await fetch(`http://localhost:4567/toOptimize?locs=${query}`);
-            console.log(`http://localhost:4567/toOptimize?locs=${query}`);
+            let stuff = await fetch(`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
+            console.log("Url:",`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
             console.log("Locs sent");
             let json = await stuff.json();
             let obj = {};
+            let sorted = [];
+            json.forEach(elem => sorted.push(elem.id));
             json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
             this.setState({
-                selectedLocations: obj
+                selectedLocations: obj,
+                sortedLocationIds: sorted,
             });
             console.log("Received Locations",obj);
         }

@@ -42,6 +42,8 @@ public class Server {
         setHeaders(res);
         Gson gson = new Gson();
         String i = rec.queryParams("locs");
+        String opt = rec.queryParams("opt");
+        System.out.println("Opt is " + opt + "\n");
         i = i.replace("[", "");
         i = i.replace("]", "");
         String[] jsonStrings = i.split("}");
@@ -58,7 +60,9 @@ public class Server {
             locations.add(loc);
             System.out.println("Location " + k + " " + loc.toString());
         }
-        return null;
+        /*Location temp = locations.remove(0);
+        locations.add(temp);*/
+        return locations;
     }
 
     private void setHeaders(Response res) {
