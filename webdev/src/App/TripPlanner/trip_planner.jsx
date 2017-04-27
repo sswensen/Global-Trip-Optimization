@@ -25,7 +25,7 @@ class TripPlanner extends Component {
 
         let items = locations.map((loc) => {
             let remove = this.props.removeLocation.bind(undefined, loc);
-            //console.log({loc});
+            //console.log({loc}); //TODO maybe add onClick that centers map on marker
             return <SelectedLocation {...loc} key={loc.id} remove={remove}/>; //Calls to location.jsx
         });
 
