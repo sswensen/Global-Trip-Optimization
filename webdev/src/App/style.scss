@@ -38,6 +38,7 @@ body {
 .testing {
   tab-index: 0;
 }
+
 .left-menu-button-div {
   position: absolute;
   left: 0;
@@ -96,4 +97,33 @@ body {
   margin-right: 0;
   padding: 5px;
   padding-right: 0;
+}
+
+.top-menu-button-div {
+  position: absolute;
+  transition: .5s;
+  top: 0;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.20);
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  margin-left: 50%;
+}
+
+.top-menu-button-div:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.top-menu-button-div:active {
+  background: rgba(0, 0, 0, 0.50);
+}
+
+.top-menu-button  {
+  font-size:30px;
+  cursor:pointer;
+  position: relative;
+  z-index: 10;
+  margin-left: 0;
+  padding: 5px;
+  padding-left: 0;
 }

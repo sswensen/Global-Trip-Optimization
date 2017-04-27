@@ -1,10 +1,9 @@
 .trip-planner {
   display: inline-block;
   position: relative;
-  border: 1px solid #37adea;
-  width: 100%;
+  //border: 1px solid #37adea;
+  width: 60%;
   height: 100%;
-  min-width: 100%;
 
   .map-options {
     min-width: 100%;
@@ -78,7 +77,7 @@
   }
 
   .selectedLocations-list {
-    height: inherit;
+    height: 93%;
     overflow-y: auto;
     overflow-x: hidden;
     border: 1px solid #329dd4;
