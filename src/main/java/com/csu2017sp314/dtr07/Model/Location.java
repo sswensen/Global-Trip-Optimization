@@ -200,7 +200,7 @@ public class Location {
         this.id = id;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -208,11 +208,11 @@ public class Location {
         this.name = name;
     }
 
-    double getLat() {
+    public double getLat() {
         return lat;
     }
 
-    double getLon() {
+    public double getLon() {
         return lon;
     }
 
@@ -244,7 +244,7 @@ public class Location {
         return countryUrl;
     }
 
-    int getNearest() {
+    public int getNearest() {
         return nearest;
     }
 
@@ -252,7 +252,7 @@ public class Location {
         this.nearest = nearest;
     }
 
-    int getNearestDistance() {
+    public int getNearestDistance() {
         return nearestDistance;
     }
 
