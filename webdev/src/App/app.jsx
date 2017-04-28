@@ -139,6 +139,7 @@ class App extends React.Component {
                 tripDistance={this.state.tripDistance}
                 toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                 toggleThreeOpt={this.toggleThreeOpt.bind(this)}
+                browseFile={this.browseFile.bind(this)}
             />
             <div className="left-menu-button-div"
                  style={(this.state.leftMenu) ? main.left : main.nope}
@@ -336,7 +337,7 @@ class App extends React.Component {
         let locations = trip.locations;
         let newMap = {};
         let numLocs = Object.values(trip.locations).length;
-        for(let i = 0; i < numLocs; i++) {
+        for (let i = 0; i < numLocs; i++) {
             sorted.push(locations[i].id);
             newMap[locations[i].id] = locations[i];
         }
@@ -350,7 +351,7 @@ class App extends React.Component {
 
     deleteTrip(trip) {
         let name = trip.name;
-        console.log("Deleting trip with name:",name);
+        console.log("Deleting trip with name:", name);
         let newMap = this.state.savedTrips;
         delete newMap[name];
         this.setState({
@@ -425,7 +426,7 @@ class App extends React.Component {
             this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));
         }
     }
-  
+
     openItinNav() {
         //console.log("Menu now true");
         this.setState({
@@ -464,6 +465,10 @@ class App extends React.Component {
     }
 
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
+
+    browseFile(filename) {
+        console.log("Got file with name:",filename);
+    }
 
     test() {
         console.log("leftMenu:", this.state.leftMenu);

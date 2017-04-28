@@ -40,6 +40,7 @@ class RightMenu extends React.Component {
                 <div className="options">
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
+                    <input type="file" className="load-file-button" onChange={this.handleDocumentUploadChange.bind(this)} />
                     <span className="total-trip-distance">Distance:{tripDist}</span>
                 </div>
                 <div className="saved-trips">
@@ -51,6 +52,12 @@ class RightMenu extends React.Component {
                 </div>
             </div>
         </div>
+    }
+
+    handleDocumentUploadChange(e) {
+        let fname = e.target.value;
+        console.log("Event is:",e);
+        this.props.browseFile(fname);
     }
 }
 
