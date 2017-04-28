@@ -14,7 +14,7 @@ let Sel = ({locations}) => <div>
 class App extends React.Component {
     constructor(props) {
         super(props); // this is required
-        //this.getTripsFromServer();
+        this.getTripsFromServer();
         this.state = {
             name: "",
             selectedLocations: {},
