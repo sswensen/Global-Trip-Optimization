@@ -4,7 +4,7 @@ let SelectedLocation = ({name, municipality, region, country, airportUrl, countr
     className="selected-location">
     <div>
         <div className="remove-button-div">
-            <button className="remove-button" onClick={remove}>Remove</button>
+            <button className="remove-button" onClick={remove}>X</button>
         </div>
         <div className="location-info">
             <a target="_blank" href={"" + airportUrl + ""}>

@@ -1,8 +1,7 @@
 import React from 'react';
 import TripMap from './TripMap/trip_map.jsx';
-import LeftMenu from './leftMenu.jsx';
-import RightMenu from './rightMenu.jsx';
-import Menu from './Menu.jsx';
+import LeftMenu from './Menu/LeftMenu/leftMenu.jsx';
+import RightMenu from './Menu/RightMenu/rightMenu.jsx';
 import Itinerary from './Itinerary/Itinerary.jsx';
 
 let Sel = ({locations}) => <div>
@@ -16,6 +15,7 @@ class App extends React.Component {
     constructor(props) {
         super(props); // this is required
         this.state = {
+            name: "",
             selectedLocations: {},
             savedTrips: {},
             tripDistance: 0,
@@ -62,24 +62,36 @@ class App extends React.Component {
                 marginBottom: "0%",
             }
         };
-
         //TODOdone function that gets
         //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
-            <Menu menu={this.state.menu}
-                  selectLocation={this.selectLocation.bind(this)}
-                  setLocations={Object.values(this.state.selectedLocations)}
-                  removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
-                  clear={this.clearSelectedLocations.bind(this)}
-                  tripDistance={this.state.tripDistance}
-                  toggleTwoOpt={this.toggleTwoOpt.bind(this)} //TODO Jesse
-                  toggleThreeOpt={this.toggleThreeOpt.bind(this)}
+            <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}
+                      setLocations={Object.values(this.state.selectedLocations)}
+                      removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
+                      clear={this.clearSelectedLocations.bind(this)}
+                      tripDistance={this.state.tripDistance}
             />
-            <div className="top-menu-button-div"
-                 style={(this.state.menu) ? topMain.yep : topMain.nope}
+            <RightMenu
+                rightMenu={this.state.rightMenu}
+                setLocations={Object.values(this.state.selectedLocations)}
+                savedTrips={this.state.savedTrips}
+                selectTrip={this.selectTrip.bind(this)}
+                tripDistance={this.state.tripDistance}
+                toggleTwoOpt={this.toggleTwoOpt.bind(this)}
+                toggleThreeOpt={this.toggleThreeOpt.bind(this)}
+            />
+            <div className="left-menu-button-div"
+                 style={(this.state.leftMenu) ? main.left : main.nope}
             >
-                <span className="top-menu-button"
-                      onClick={(this.state.menu) ? this.closeNav.bind(this) : this.openNav.bind(this)}>{this.state.menu ? "u" : "d"}
+                <span className="left-menu-button"
+                      onClick={(this.state.leftMenu) ? this.closeLeftNav.bind(this) : this.openLeftNav.bind(this)}>{this.state.leftMenu ? "ᗉ" : "ᗆ"}
+                </span>
+            </div>
+            <div className="right-menu-button-div"
+                 style={(this.state.rightMenu) ? main.right : main.nope}
+            >
+                <span className="right-menu-button"
+                      onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
 
@@ -99,7 +111,7 @@ class App extends React.Component {
 
 
             <div id="main" className="planning-stuff"
-                style={(this.state.menu) ? topMain.yep : topMain.nope}>
+                 style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
                 <div className="inner">
                     <TripMap locations={this.state.selectedLocations}
                              trip={this.state.sortedLocationIds}
@@ -124,7 +136,8 @@ class App extends React.Component {
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
         let totalDist = 0;
-        if (numLocs > 1) {
+        console.log("Number of locations currently:", numLocs);
+        if (numLocs > 0) {
             let bestDist = 9999999;
             let minusDist = 0;
             let plusDist = 0;
@@ -167,14 +180,13 @@ class App extends React.Component {
          for (let i = 0; i < numLocs; i++) {
          //console.log(currentLocations[i].name);
          //console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
-         //TODO
          //Figure out where the best place to put the location is
          //Need to also measure between the first and the last locations
          //This will account for nearestNeighbor
          let loc1 = currentLocations[i];
          let loc2 = currentLocations[(i + 1) % (numLocs)];
          let dist = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon);
-         totalTripDistance += dist; //TODO this doesnt work because we are not calculating the entire trip yet
+         totalTripDistance += dist; //TODOdone this doesnt work because we are not calculating the entire trip yet
          console.log("Distance between", loc1.name, "and", loc2.name, "is", dist);
          if (dist < bestDist) {
          whereToInsert = i;
@@ -223,7 +235,7 @@ class App extends React.Component {
         this.setState({
             sortedLocationIds: tempSortedLocations,
         });
-        this.updateMarkers(newMap, tempSortedLocations);
+        //TODO add handling for only one location being selected. Update tripDistance to 0
     }
 
     saveTrip(trip) {
@@ -237,12 +249,18 @@ class App extends React.Component {
         })
     }
 
+    selectTrip(trip) {
+        let obj = {};
+        obj[trip.name] = trip;
+        //TODO
+    }
+
     clearSelectedLocations() {
         this.setState({
             selectedLocations: {},
+            sortedLocationIds: [],
             tripDistance: 0,
         });
-
     }
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
@@ -264,47 +282,47 @@ class App extends React.Component {
     }
 
     openLeftNav() {
-        console.log("Left now true");
+        //console.log("Left now true");
         this.setState({
             leftMenu: true,
         });
     }
 
     closeLeftNav() {
-        console.log("Left now false");
+        //console.log("Left now false");
         this.setState({
             leftMenu: false,
         });
     }
 
     openRightNav() {
-        console.log("Right now true");
+        //console.log("Right now true");
         this.setState({
             rightMenu: true,
         });
     }
 
     closeRightNav() {
-        console.log("Right now false");
+        //console.log("Right now false");
         this.setState({
             rightMenu: false,
         });
     }
 
-    openNav() {
-        console.log("Menu now true");
-        this.setState({
-            menu: true,
-        });
+    toggleTwoOpt() { //TODO make sure there is more than 4 locations before sending
+        if (Object.values(this.state.selectedLocations).length > 3) {
+            console.log("Running 2-opt");
+            this.optimize("2", JSON.stringify(Object.values(this.state.selectedLocations)));
+        }
     }
 
-    closeNav() {
-        console.log("Menu now false");
-        this.setState({
-            menu: false,
-        });
+    toggleThreeOpt() { //TODO make sure there is more than 4 locations before sending
+        if (Object.values(this.state.selectedLocations).length > 3) {
+            console.log("Running 3-opt");
+            this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));
+        }
     }
-
+  
     openItinNav() {
         //console.log("Menu now true");
         this.setState({
@@ -323,10 +341,28 @@ class App extends React.Component {
         console.log("Toggling 2-opt"); //TODO Jesse
     }
 
-    toggleThreeOpt() {
-        console.log("Toggling 3-opt");
+    async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
+        console.log("Opt is:", opt);
+        try {
+            console.log("Sending locs...");
+            let stuff = await fetch(`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
+            console.log("Url:", `http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
+            console.log("Locs sent");
+            let json = await stuff.json();
+            let obj = {};
+            let sorted = [];
+            json.forEach(elem => sorted.push(elem.id));
+            json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
+            this.setState({
+                selectedLocations: obj,
+                sortedLocationIds: sorted,
+            });
+            console.log("Received Locations", obj);
+        }
+        catch (e) {
+            console.error(e);
+        }
     }
-
 
     test() {
         console.log("leftMenu:", this.state.leftMenu);
