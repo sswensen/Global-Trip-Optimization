@@ -48,6 +48,7 @@ class App extends React.Component {
                       setLocations={Object.values(this.state.selectedLocations)}
                       removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                       clear={this.clearSelectedLocations.bind(this)}
+                      tripDistance={this.state.tripDistance}
             />
             <RightMenu
                 rightMenu={this.state.rightMenu}

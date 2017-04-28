@@ -42,7 +42,11 @@ class RightMenu extends React.Component {
                     <span className="total-trip-distance">Distance:{tripDist}</span>
                 </div>
                 <div className="saved-trips">
-                    {items}
+                    <div className="saved-trips-list-div">
+                        <ul className="saved-trips-list">
+                            {items}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

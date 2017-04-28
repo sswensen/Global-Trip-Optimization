@@ -37,6 +37,7 @@ class LeftMenu extends React.Component {
                 <TripPlanner setLocations={this.props.setLocations}
                              removeLocation={this.props.removeLocation} saveTrip={this.props.saveTrip}
                              clear={this.props.clear}
+                             tripDistance={this.props.tripDistance}
                 />
             </div>
         </div>

@@ -113,6 +113,18 @@
 
 }
 
+.saved-trips {
+  .saved-trips-list-div {
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #329dd4;
+  }
+
+  .saved-trips-list {
+    height: 88%;
+  }
+}
+
 /*@media screen and (max-height: 450px) {
   .sidenav-left .sidenav-right {
     padding-top: 15px;
