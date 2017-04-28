@@ -29,8 +29,5 @@ module.exports = {
     },
     devServer: {
         overlay: true
-        applicationConnectors:
-            - type: http
-            maxRequestHeaderSize: "100M"
     },
 };
