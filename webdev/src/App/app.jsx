@@ -2,6 +2,7 @@ import React from 'react';
 import TripMap from './TripMap/trip_map.jsx';
 import LeftMenu from './Menu/LeftMenu/leftMenu.jsx';
 import RightMenu from './Menu/RightMenu/rightMenu.jsx';
+import Itinerary from './Itinerary/Itinerary.jsx';
 
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}
@@ -79,6 +80,8 @@ class App extends React.Component {
             sortedLocationIds: [],
             leftMenu: false,
             rightMenu: false,
+            menu: false,
+            itinerary: false,
         }
     }
 
@@ -97,6 +100,24 @@ class App extends React.Component {
             nope: {
                 marginLeft: "0%",
                 marginRight: "0%",
+            }
+
+        };
+        let topMain = {
+            yep: {
+                marginTop: "66%",
+            },
+            nope: {
+                marginTop: "0%",
+            }
+        };
+
+        let bottomMain = {
+            openItin: {
+                marginBottom: "66%",
+            },
+            closeItin: {
+                marginBottom: "0%",
             }
         };
         //TODOdone function that gets
@@ -131,6 +152,22 @@ class App extends React.Component {
                       onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
+
+            <div clas sName="Itinerary-div">
+                <Itinerary
+                    selectedLocations={this.state.selectedLocations}
+                    sortedLocationIds={this.state.sortedLocationIds}
+                />
+            </div>
+            <div className="bottom-menu-button-div"
+                 style={(this.state.itinerary) ? bottomMain.openItin : bottomMain.closeItin}
+            >
+                <span className="bottom-menu-button"
+                      onClick={(this.state.itinerary) ? this.closeItinNav.bind(this) : this.openItinNav.bind(this)}>{this.state.itinerary ? "u" : "d"}
+                </span>
+            </div>
+
+
             <div id="main" className="planning-stuff"
                  style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
                 <div className="inner">
@@ -356,6 +393,24 @@ class App extends React.Component {
             console.log("Running 3-opt");
             this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));
         }
+    }
+  
+    openItinNav() {
+        //console.log("Menu now true");
+        this.setState({
+            itinerary: true,
+        });
+    }
+
+    closeItinNav() {
+        //console.log("Menu now false");
+        this.setState({
+            itinerary: false,
+        });
+    }
+
+    toggleTwoOpt() {
+        console.log("Toggling 2-opt"); //TODO Jesse
     }
 
     async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
