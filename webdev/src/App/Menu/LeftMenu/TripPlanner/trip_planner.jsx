@@ -68,8 +68,8 @@ class TripPlanner extends Component {
         });
         let trip = new Object();
         trip.name = event.target.value;
-        trip.locations = locations;
         trip.totalDistance = distance;
+        trip.locations = locations;
         console.log(trip);
         this.setState({
             trip: trip,

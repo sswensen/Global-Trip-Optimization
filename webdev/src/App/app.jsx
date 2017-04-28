@@ -19,6 +19,8 @@ class App extends React.Component {
             selectedLocations: {},
             savedTrips: {
                 co: {
+                    name: "co",
+                    totalDistance: 50.78670229169772,
                     locations: [
                         {
                             airportUrl: "",
@@ -72,10 +74,9 @@ class App extends React.Component {
                             tableIndex: 0,
                         },
                     ],
-                    name: "co",
-                    totalDistance: 50.78670229169772,
                 }
             },
+            allTrip: this.getTripsFromServer(),
             tripDistance: 0,
             sortedLocationIds: [],
             leftMenu: false,
@@ -290,8 +291,43 @@ class App extends React.Component {
             obj);
         this.setState({
             savedTrips: newMap
-        })
+        });
+        this.saveTripsToServer("pull", JSON.stringify(Object.values(this.state.savedTrips)));
     }
+
+    async saveTripsToServer(opt, query) {
+        console.log("Opt is:", opt);
+        try {
+            console.log("Sending trips...");
+            let stuff = await fetch(`http://localhost:4567/saveTrips?trips=${query}`);
+            console.log("Url:", `http://localhost:4567/saveTrips?trips=${query}`);
+            console.log("trips sent");
+            let json = await stuff.json();
+            console.log("Trips sent.");
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getTripsFromServer() {
+        try {
+            console.log("Asking for trips...");
+            let stuff = await fetch(`http://localhost:4567/getTrips?num=all`);
+            console.log("Url:", `http://localhost:4567/getTrips?num=all`);
+            let json = await stuff.json();
+            let obj = {};
+            json.forEach(elem => obj[elem.name] = elem);
+            this.setState({
+                savedTrips: obj,
+            });
+            console.log("Received trips", obj);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
 
     selectTrip(trip) {
         let obj = {};
