@@ -73,7 +73,7 @@ class App extends React.Component {
                         },
                     ],
                     name: "co",
-                    distance: 50.78670229169772,
+                    totalDistance: 50.78670229169772,
                 }
             },
             tripDistance: 0,
@@ -152,21 +152,6 @@ class App extends React.Component {
                       onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
-
-            <div clas sName="Itinerary-div">
-                <Itinerary
-                    selectedLocations={this.state.selectedLocations}
-                    sortedLocationIds={this.state.sortedLocationIds}
-                />
-            </div>
-            <div className="bottom-menu-button-div"
-                 style={(this.state.itinerary) ? bottomMain.openItin : bottomMain.closeItin}
-            >
-                <span className="bottom-menu-button"
-                      onClick={(this.state.itinerary) ? this.closeItinNav.bind(this) : this.openItinNav.bind(this)}>{this.state.itinerary ? "u" : "d"}
-                </span>
-            </div>
-
 
             <div id="main" className="planning-stuff"
                  style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
