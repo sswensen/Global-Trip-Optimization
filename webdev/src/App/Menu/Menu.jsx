@@ -3,8 +3,8 @@
  */
 
 import React from 'react';
-import LocationSearch from './LocationSearch/location_search.jsx';
-import TripPlanner from "./TripPlanner/trip_planner.jsx";
+import LocationSearch from './LeftMenu/LocationSearch/location_search.jsx';
+import TripPlanner from "./LeftMenu/TripPlanner/trip_planner.jsx";
 
 class Menu extends React.Component {
     constructor(props) {

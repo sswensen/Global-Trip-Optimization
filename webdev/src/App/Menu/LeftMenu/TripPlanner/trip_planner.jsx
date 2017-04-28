@@ -61,7 +61,6 @@ class TripPlanner extends Component {
     }
 
     saveTrip(event) {
-        let tName = event.target.value;
         let locations = Object.values(this.props.setLocations);
         this.setState({
             name: event.target.value,
@@ -70,6 +69,7 @@ class TripPlanner extends Component {
         trip.name = event.target.value;
         trip.locations = locations;
         trip.totalDistance = this.props.tripDistance;
+        console.log(trip);
         this.setState({
             trip: trip,
         });

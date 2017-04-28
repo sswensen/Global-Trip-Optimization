@@ -24,7 +24,7 @@ class LeftMenu extends React.Component {
 
 
         let left = this.props.leftMenu;
-        console.log("Rendering LeftMenu now...");
+        //console.log("Rendering LeftMenu now...");
         let mySideNavStyle = "width:0";
         let sideNavStyle = "margin-left:0";
         if (left === true) {

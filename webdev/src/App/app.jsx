@@ -1,7 +1,7 @@
 import React from 'react';
 import TripMap from './TripMap/trip_map.jsx';
-import LeftMenu from './leftMenu.jsx';
-import RightMenu from './rightMenu.jsx';
+import LeftMenu from './Menu/LeftMenu/leftMenu.jsx';
+import RightMenu from './Menu/RightMenu/rightMenu.jsx';
 
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}
@@ -14,6 +14,7 @@ class App extends React.Component {
     constructor(props) {
         super(props); // this is required
         this.state = {
+            name: "",
             selectedLocations: {},
             savedTrips: {},
             tripDistance: 0,
@@ -51,6 +52,8 @@ class App extends React.Component {
             <RightMenu
                 rightMenu={this.state.rightMenu}
                 setLocations={Object.values(this.state.selectedLocations)}
+                savedTrips={this.state.savedTrips}
+                selectTrip={this.selectTrip.bind(this)}
                 tripDistance={this.state.tripDistance}
                 toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                 toggleThreeOpt={this.toggleThreeOpt.bind(this)}
@@ -208,6 +211,12 @@ class App extends React.Component {
         })
     }
 
+    selectTrip(trip) {
+        let obj = {};
+        obj[trip.name] = trip;
+        //TODO
+    }
+
     clearSelectedLocations() {
         this.setState({
             selectedLocations: {},
@@ -235,28 +244,28 @@ class App extends React.Component {
     }
 
     openLeftNav() {
-        console.log("Left now true");
+        //console.log("Left now true");
         this.setState({
             leftMenu: true,
         });
     }
 
     closeLeftNav() {
-        console.log("Left now false");
+        //console.log("Left now false");
         this.setState({
             leftMenu: false,
         });
     }
 
     openRightNav() {
-        console.log("Right now true");
+        //console.log("Right now true");
         this.setState({
             rightMenu: true,
         });
     }
 
     closeRightNav() {
-        console.log("Right now false");
+        //console.log("Right now false");
         this.setState({
             rightMenu: false,
         });

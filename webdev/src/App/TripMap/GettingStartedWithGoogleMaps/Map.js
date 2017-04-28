@@ -167,7 +167,7 @@ export default class GettingStartedExample extends Component {
             showWindows: newMap
         });
         //console.log("Id:", id, "now true");
-        console.log(this.state.showWindows)
+        //console.log(this.state.showWindows)
     }
 
     hideWindow(id) {
