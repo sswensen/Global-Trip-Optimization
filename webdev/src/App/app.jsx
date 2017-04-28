@@ -14,6 +14,7 @@ let Sel = ({locations}) => <div>
 class App extends React.Component {
     constructor(props) {
         super(props); // this is required
+        //this.getTripsFromServer();
         this.state = {
             name: "",
             selectedLocations: {},
@@ -76,7 +77,6 @@ class App extends React.Component {
                     ],
                 }
             },
-            allTrip: this.getTripsFromServer(),
             tripDistance: 0,
             sortedLocationIds: [],
             leftMenu: false,
@@ -292,7 +292,7 @@ class App extends React.Component {
         this.setState({
             savedTrips: newMap
         });
-        this.saveTripsToServer("pull", JSON.stringify(Object.values(this.state.savedTrips)));
+        this.saveTripsToServer("pull", JSON.stringify(Object.values(newMap)));
     }
 
     async saveTripsToServer(opt, query) {
@@ -340,7 +340,6 @@ class App extends React.Component {
             sorted.push(locations[i].id);
             newMap[locations[i].id] = locations[i];
         }
-        //TODO
         this.setState({
             name: trip.name,
             selectedLocations: newMap,
@@ -463,6 +462,8 @@ class App extends React.Component {
             console.error(e);
         }
     }
+
+    //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
 
     test() {
         console.log("leftMenu:", this.state.leftMenu);

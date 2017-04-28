@@ -7,8 +7,9 @@ class TripPlanner extends Component {
         this.state = {
             setLocations: {},
             name: "",
-            trip: {}
-        }
+            trip: {},
+            currentName: ""
+        };
     }
 
     render() {
@@ -46,9 +47,9 @@ class TripPlanner extends Component {
 
         return <div className="trip-planner">
             <div className="map-options">
-                <input className="trip-name-input" onKeyUp={this.keyUp.bind(this)}
-                       type="text" placeholder="Name" />
-                <button className="save-button" onClick={save}>Save</button>
+                <input className="trip-name-input" onChange={this.updateCurrentName.bind(this)} onKeyUp={this.keyUp.bind(this)}
+                       type="text" placeholder="Name"/>
+                <button className="save-button" onClick={this.saveTrip.bind(this)}>Save</button>
                 <button className="clear-selected-locations" onClick={clear}>Clear</button>
 
             </div>
@@ -60,7 +61,32 @@ class TripPlanner extends Component {
         </div>;
     }
 
-    saveTrip(event) {
+    updateCurrentName(evt) {
+        this.setState({
+            currentName: evt.target.value
+        });
+        console.log("These should:",evt.target.value)
+    }
+
+    saveTrip() {
+        let locations = Object.values(this.props.setLocations);
+        let distance = this.props.tripDistance;
+        let tempName = this.state.currentName;
+        this.setState({
+            name: tempName
+        });
+        let trip = new Object();
+        trip.name = tempName;
+        trip.totalDistance = distance;
+        trip.locations = locations;
+        console.log(trip);
+        this.setState({
+            trip: trip,
+        });
+        this.props.saveTrip(trip);
+    }
+
+    saveTripFromEnter(event) {
         let locations = Object.values(this.props.setLocations);
         let distance = this.props.tripDistance;
         this.setState({
@@ -78,7 +104,7 @@ class TripPlanner extends Component {
 
     keyUp(event) {
         if (event.which == 13) {
-            this.saveTrip(event);
+            this.saveTripFromEnter(event);
         }
     }
 
@@ -97,7 +123,7 @@ class TripPlanner extends Component {
     }
 
     testing() {
-        console.log("[trip_planner]: Data in trip_planner is",this.state.name,"with trip as",this.state.trip);
+        console.log("[trip_planner]: Data in trip_planner is", this.state.name, "with trip as", this.state.trip);
     }
 }
 
