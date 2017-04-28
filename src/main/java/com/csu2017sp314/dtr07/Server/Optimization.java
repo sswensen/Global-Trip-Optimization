@@ -15,9 +15,10 @@ public class Optimization {
     private double[][] distTable;
     private Location[] route;
     private Location[] locations;
+    private Location[] bestRoute;
 
     public Optimization(Location[] route, String opt) {
-        this.route = route;
+        this.route = generateRoute(route);
         if(opt.equals("two")) {
             setTwoOpt(true);
         } else {
@@ -36,31 +37,32 @@ public class Optimization {
     }
 
     private boolean nearestNeighbor() {
-        ArrayList<Location> newRoute = new ArrayList<>();
-        Location[] locArray = Arrays.copyOf(route, route.length); //locations.toArray(new Location[locations.size()]);
-        generateDistanceTable(locArray);
+        route = new Location[locations.length];
         int bestDistance = 999999999;
-        int sizer = locArray.length;
+        int sizer = locations.length;
         Location[] originalLocations;
+        int addIndex = 0;
         for(int i = 0; i < sizer; i++) {
-            originalLocations = Arrays.copyOf(locArray, locArray.length);
-            for(int x = 0; x < locArray.length - 1; x++) {
+            originalLocations = Arrays.copyOf(locations, locations.length);
+            for(int x = 0; x < locations.length - 1; x++) {
                 double distance = 999999999;
                 int index = -1;
-                for(int y = x + 1; y < locArray.length; y++) {
-                    double temp = dist(locArray[x], locArray[y]);
+                for(int y = x + 1; y < locations.length; y++) {
+                    double temp = dist(locations[x], locations[y]);
                     if(distance > temp) {
                         distance = temp;
                         index = y;
                     }
                 }
-                Location temploc = locArray[x+1];
-                locArray[x+1] = locArray[index];
-                locArray[index] = temploc;
-                newRoute.add(locArray[x]);
+                Location temploc = locations[x+1];
+                locations[x+1] = locations[index];
+                locations[index] = temploc;
+                route[addIndex] = locations[x];
+                addIndex++;
             }
 
-            newRoute.add(locArray[locArray.length - 1]);
+            route[addIndex] = locations[locations.length-1];
+            route[addIndex+1] = locations[0]; //???
             if(twoOpt) {
                 if(threeOpt) {
                     threeOpt();
@@ -71,20 +73,16 @@ public class Optimization {
             if(threeOpt) {
                 threeOpt();
             }
-            double total = 0;
-            for(Pair p : pairs) {
-                total += p.getDistance();
-            }
+            double total = getTripDistance();
             if(total < bestDistance) {
                 bestDistance = (int) Math.round(total);
-                bestPairs = new ArrayList<>(pairs);
+                bestRoute = Arrays.copyOf(route, route.length);
             }
-            pairs.clear();
-            locArray = Arrays.copyOf(originalLocations, originalLocations.length);
-            locArray = shift(locArray);
+            route = new Location[route.length];
+            locations = Arrays.copyOf(originalLocations, originalLocations.length);
+            locations = shift(locations);
         }
-        locations = new ArrayList<>(Arrays.asList(locArray));
-        pairs = new ArrayList<>(bestPairs);
+        route = Arrays.copyOf(bestRoute, bestRoute.length);
         return true;
     }
 
@@ -102,6 +100,23 @@ public class Optimization {
 
     public void setThreeOpt(boolean threeOpt) {
         this.threeOpt = threeOpt;
+    }
+
+    private double getTripDistance() {
+        double total = 0;
+        for(int i=0; i<route.length-1; i++) {
+            total += dist(route[i], route[i+1]);
+        }
+        return total;
+    }
+
+    private Location[] generateRoute(Location[] locations) {
+        Location[] newLocs = new Location[locations.length+1];
+        for(int i=0; i<locations.length; i++) {
+            newLocs[i] = locations[i];
+        }
+        newLocs[newLocs.length-1] = locations[0];
+        return newLocs;
     }
 
     private double[][] generateDistanceTable(Location[] route) {
