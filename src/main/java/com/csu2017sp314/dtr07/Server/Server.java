@@ -20,6 +20,7 @@ import static spark.Spark.*;
 
 public class Server {
     private ArrayList<Trip> trips = new ArrayList<>();
+    private double tripDistance;
 
     public static void main(String[] args) {
         Server s = new Server();
@@ -32,6 +33,7 @@ public class Server {
         get("/toOptimize", this::optimize, g::toJson);
         get("/saveTrips", this::saveTrip, g::toJson);
         get("/getTrips", this::getTrip, g::toJson);
+        get("/getDistance", this::getDistance, g::toJson);
     }
 
     public Object hello(Request rec, Response res) {
@@ -64,10 +66,15 @@ public class Server {
             Location loc = gson.fromJson(jsonStrings[k], Location.class);
             //locations.add(loc);
             locations2[k] = loc;
-            System.out.println("Location " + k + " " + loc.toString());
+            //System.out.println("Location " + k + " " + loc.toString());
         }
         /*Location temp = locations.remove(0);
         locations.add(temp);*/
+        System.out.println("running 2 opt now");
+        Optimization optimiziation = new Optimization(locations2, opt);
+        locations2 = optimiziation.getOptimizedRoute();
+        System.out.println("complete");
+        tripDistance = optimiziation.getTripDistance();
         return locations2;
     }
 
@@ -114,6 +121,14 @@ public class Server {
         String locs = rec.queryParams("num");
         //trips.add(new Trip("e", 666.666, new ArrayList<>()));
         return trips;
+    }
+
+    public Object getDistance(Request rec, Response res) {
+        setHeaders(res);
+        String tf = rec.queryParams("dist");
+        ArrayList<Double> temp = new ArrayList<>();
+        temp.add(tripDistance);
+        return temp;
     }
 
     /*
