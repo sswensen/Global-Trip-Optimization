@@ -8,6 +8,10 @@
   background-color: #80d4ff;
   overflow: hidden;
 
+  .container {
+    display: inline-block;
+  }
+
   h5 {
     font-weight: normal;
     margin: 0;
@@ -35,34 +39,68 @@
     }
   }
 
-  .load-trip-button-div {
+  .buttons {
     display: inline-block;
-    height: 36px;
-  }
+    .load-trip-button-div {
+      display: inline-block;
+      height: 36px;
 
-  .load-trip-button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 4px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    border-radius: 8px;
-    font-size: 14px;
-    float: left;
-    height: 40px;
-    position: relative;
-  }
+      .load-trip-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 4px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 8px;
+        font-size: 14px;
+        float: left;
+        height: 40px;
+        position: relative;
+      }
 
-  .load-trip-button:hover {
-    background-color: #3bdf47;
-    cursor: pointer;
-  }
+      .load-trip-button:hover {
+        background-color: #3bdf47;
+        cursor: pointer;
+      }
 
-  .load-trip-button:active {
-    content: "Added";
-    background-color: #43ff51;
+      .load-trip-button:active {
+        content: "Added";
+        background-color: #43ff51;
+      }
+    }
+
+    .delete-trip-button-div {
+      display: inline-block;
+      height: 36px;
+      margin-right: 5px;
+
+      .delete-trip-button {
+        background-color: #af2a30;
+        border: none;
+        color: white;
+        padding: 12px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 8px;
+        font-size: 14px;
+        float: left;
+        height: 40px;
+        position: relative;
+      }
+
+      .delete-trip-button:hover {
+        background-color: #f43b43;
+        cursor: pointer;
+      }
+
+      .delete-trip-button:active {
+        content: "Added";
+        background-color: #8d2326;
+      }
+    }
   }
 }
 

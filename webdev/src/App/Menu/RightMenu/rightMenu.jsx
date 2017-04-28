@@ -27,9 +27,10 @@ class RightMenu extends React.Component {
         let savedTrips = Object.values(this.props.savedTrips);
         let items = savedTrips.map((trip) => {
             let select = this.props.selectTrip.bind(undefined, trip);
+            let die = this.props.deleteTrip.bind(undefined, trip);
             //console.log({loc});
             let locs = trip.locations;
-            return <SavedTrip {...trip} key={trip.id} select={select}/>; //Calls to location.jsx
+            return <SavedTrip {...trip} key={trip.id} select={select} die={die}/>; //Calls to location.jsx
         });
         let twoOpt = this.props.toggleTwoOpt.bind(this);
         let threeOpt = this.props.toggleThreeOpt.bind(this);

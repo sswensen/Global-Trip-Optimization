@@ -134,6 +134,7 @@ class App extends React.Component {
                 setLocations={Object.values(this.state.selectedLocations)}
                 savedTrips={this.state.savedTrips}
                 selectTrip={this.selectTrip.bind(this)}
+                deleteTrip={this.deleteTrip.bind(this)}
                 tripDistance={this.state.tripDistance}
                 toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                 toggleThreeOpt={this.toggleThreeOpt.bind(this)}
@@ -308,8 +309,18 @@ class App extends React.Component {
             name: trip.name,
             selectedLocations: newMap,
             sortedLocationIds: sorted,
-            tripDistance: trip.distance,
+            tripDistance: trip.totalDistance,
         })
+    }
+
+    deleteTrip(trip) {
+        let name = trip.name;
+        console.log("Deleting trip with name:",name);
+        let newMap = this.state.savedTrips;
+        delete newMap[name];
+        this.setState({
+            savedTrips: newMap
+        });
     }
 
     clearSelectedLocations() {
@@ -392,10 +403,6 @@ class App extends React.Component {
         this.setState({
             itinerary: false,
         });
-    }
-
-    toggleTwoOpt() {
-        console.log("Toggling 2-opt"); //TODO Jesse
     }
 
     async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
