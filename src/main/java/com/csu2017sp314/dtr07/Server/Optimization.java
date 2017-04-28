@@ -36,17 +36,18 @@ public class Optimization {
     }
 
     private boolean nearestNeighbor() {
-        Location[] locArray = locations.toArray(new Location[locations.size()]);
+        ArrayList<Location> newRoute = new ArrayList<>();
+        Location[] locArray = Arrays.copyOf(route, route.length); //locations.toArray(new Location[locations.size()]);
         generateDistanceTable(locArray);
         int bestDistance = 999999999;
         int sizer = locArray.length;
         Location[] originalLocations;
         for(int i = 0; i < sizer; i++) {
             originalLocations = Arrays.copyOf(locArray, locArray.length);
-            for(int x = 0; x < locations.size() - 1; x++) {
+            for(int x = 0; x < locArray.length - 1; x++) {
                 double distance = 999999999;
                 int index = -1;
-                for(int y = x + 1; y < locations.size(); y++) {
+                for(int y = x + 1; y < locArray.length; y++) {
                     double temp = dist(locArray[x], locArray[y]);
                     if(distance > temp) {
                         distance = temp;
@@ -56,10 +57,10 @@ public class Optimization {
                 Location temploc = locArray[x+1];
                 locArray[x+1] = locArray[index];
                 locArray[index] = temploc;
-                pairs.add(new Pair(Integer.toString(x), locArray[x], locArray[x + 1], dist(locArray[x], locArray[x+1])));
+                newRoute.add(locArray[x]);
             }
 
-            pairs.add(new Pair(Integer.toString(locArray.length - 1), locArray[locArray.length - 1], locArray[0], dist(locArray[locArray.length-1], locArray[0])));
+            newRoute.add(locArray[locArray.length - 1]);
             if(twoOpt) {
                 if(threeOpt) {
                     threeOpt();
