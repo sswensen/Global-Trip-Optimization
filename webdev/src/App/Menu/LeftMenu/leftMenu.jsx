@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import LocationSearch from './LocationSearch/location_search.jsx';
+import TripPlanner from "./TripPlanner/trip_planner.jsx";
 
 
 class LeftMenu extends React.Component {
@@ -23,7 +24,7 @@ class LeftMenu extends React.Component {
 
 
         let left = this.props.leftMenu;
-        console.log("Rendering LeftMenu now...");
+        //console.log("Rendering LeftMenu now...");
         let mySideNavStyle = "width:0";
         let sideNavStyle = "margin-left:0";
         if (left === true) {
@@ -33,6 +34,11 @@ class LeftMenu extends React.Component {
         return <div className="leftSideChick">
             <div id="mySidenav-left" className="sidenav-left" style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
                 <LocationSearch selectLocation={this.props.selectLocation}/>
+                <TripPlanner setLocations={this.props.setLocations}
+                             removeLocation={this.props.removeLocation} saveTrip={this.props.saveTrip}
+                             clear={this.props.clear}
+                             tripDistance={this.props.tripDistance}
+                />
             </div>
         </div>
     }

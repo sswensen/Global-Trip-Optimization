@@ -21,10 +21,7 @@ class TripPlanner extends Component {
         let trip = this.state.trip;
         let save = this.props.saveTrip.bind(undefined, trip);
         let clear = this.props.clear.bind(undefined);
-        let numSel = Object.values(this.props.setLocations).length;
-        let tripDist = Math.round(this.props.tripDistance);
-        let twoOpt = this.props.toggleTwoOpt.bind(this); //TODO Jesse
-        let threeOpt = this.props.toggleThreeOpt.bind(this);
+
 
         let items = locations.map((loc) => {
             let remove = this.props.removeLocation.bind(undefined, loc);
@@ -50,13 +47,10 @@ class TripPlanner extends Component {
         return <div className="trip-planner">
             <div className="map-options">
                 <input className="trip-name-input" onKeyUp={this.keyUp.bind(this)}
-                       type="text" placeholder="Enter Trip Name" />
+                       type="text" placeholder="Name" />
                 <button className="save-button" onClick={save}>Save</button>
                 <button className="clear-selected-locations" onClick={clear}>Clear</button>
-                <button className="clear-selected-locations" onClick={twoOpt}>2-opt</button>
-                <button className="clear-selected-locations" onClick={threeOpt}>3-opt</button>
-                <span className="selected-location-counter">Selected:{numSel}</span>
-                <span className="total-trip-distancer">Distance:{tripDist}</span>
+
             </div>
             <div className="selectedLocations-list-div">
                 <ul className="selectedLocations-list">
@@ -67,15 +61,16 @@ class TripPlanner extends Component {
     }
 
     saveTrip(event) {
-        let tName = event.target.value;
         let locations = Object.values(this.props.setLocations);
+        let distance = this.props.tripDistance;
         this.setState({
             name: event.target.value,
         });
         let trip = new Object();
         trip.name = event.target.value;
+        trip.totalDistance = distance;
         trip.locations = locations;
-        trip.totalDistance = this.props.tripDistance;
+        console.log(trip);
         this.setState({
             trip: trip,
         });

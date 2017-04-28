@@ -3,7 +3,7 @@
   position: relative;
   border: 1px solid #37adea;
   width: 100%;
-  height: 100%;
+  height: 50.5%;
   min-width: 100%;
 
   .map-options {
@@ -73,14 +73,12 @@
   }*/
 
   .selectedLocations-list-div {
-    height: 93%;
-
-  }
-
-  .selectedLocations-list {
-    height: inherit;
     overflow-y: auto;
     overflow-x: hidden;
     border: 1px solid #329dd4;
+  }
+
+  .selectedLocations-list {
+    height: 88%;
   }
 }

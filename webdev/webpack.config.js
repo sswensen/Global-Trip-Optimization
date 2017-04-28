@@ -1,6 +1,6 @@
 
 module.exports = {
-    entry: ["babel-polyfill", './index.js'],
+    entry: ["babel-polyfill", './index.js',],
     module: {
         rules: [{
             test: /\.(js|jsx)/,

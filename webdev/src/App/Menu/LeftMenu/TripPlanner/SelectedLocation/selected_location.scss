@@ -6,6 +6,7 @@
   border: 1px solid #1e62ea;
   border-radius: 8px;
   background-color: #80d4ff;
+  overflow: hidden;
 
   h5 {
     font-weight: normal;
@@ -41,7 +42,7 @@
     background-color: #af2a30;
     border: none;
     color: white;
-    padding: 5px;
+    padding: 12px;
     text-align: center;
     text-decoration: none;
     display: inline-block;

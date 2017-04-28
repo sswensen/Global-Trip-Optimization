@@ -11,13 +11,25 @@
   padding-top: 1px;
 }
 
-.sidenav-right { //TODO update this
+.sidenav-right {
   height: 100%;
   width: 0;
   position: fixed;
   z-index: 1;
   top: 0;
   right: 0;
+  background-color: #80d4ff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 1px;
+}
+
+.sidenav {
+  height: 0;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
   background-color: #80d4ff;
   overflow-x: hidden;
   transition: 0.5s;
@@ -45,7 +57,7 @@
   margin-left: 50px;
 }
 
-.sidenav-right .closebtn-right { //TODO update this
+.sidenav-right .closebtn-right {
   position: absolute;
   top: 0;
   left: 25px;
@@ -53,12 +65,64 @@
   margin-left: 50px;
 }
 
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 36px;
+  margin-top: 50px;
+}
+
 #main {
   transition: margin .5s;
   padding: 0px;
 }
 
+.options {
+  padding: 5px;
+
+  button {
+    padding: 12px 12px;
+    margin: 5px 5px 5px 5px;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #1a55cb;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #80d4ff;
+  }
+
+  button:hover {
+    background-color: deepskyblue;
+  }
+
+  button:active {
+    background-color: #0099cd;
+
+  }
+
+  .total-trip-distance {
+    padding: 5px 5px;
+  }
+}
+
 .leftSideChick .rightSideChick {
+}
+
+.topSideChick {
+
+}
+
+.saved-trips {
+  .saved-trips-list-div {
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #329dd4;
+  }
+
+  .saved-trips-list {
+    height: 88%;
+  }
 }
 
 /*@media screen and (max-height: 450px) {

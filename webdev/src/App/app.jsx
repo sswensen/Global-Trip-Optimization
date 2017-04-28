@@ -1,7 +1,8 @@
 import React from 'react';
 import TripMap from './TripMap/trip_map.jsx';
-import LeftMenu from './leftMenu.jsx';
-import RightMenu from './rightMenu.jsx';
+import LeftMenu from './Menu/LeftMenu/leftMenu.jsx';
+import RightMenu from './Menu/RightMenu/rightMenu.jsx';
+import Itinerary from './Itinerary/Itinerary.jsx';
 
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}
@@ -14,12 +15,74 @@ class App extends React.Component {
     constructor(props) {
         super(props); // this is required
         this.state = {
+            name: "",
             selectedLocations: {},
-            savedTrips: {},
+            savedTrips: {
+                co: {
+                    name: "co",
+                    totalDistance: 50.78670229169772,
+                    locations: [
+                        {
+                            airportUrl: "",
+                            continent: "North America",
+                            country: "United States",
+                            countryUrl: "http://en.wikipedia.org/wiki/United_States",
+                            id: "CO35",
+                            lat: 39.727500915527344,
+                            lon: -104.99099731445312,
+                            municipality: "Denver",
+                            name: "Denver Health Heliport",
+                            nearest: -1,
+                            nearestDistance: 9999999,
+                            pairUsesWraparound: false,
+                            region: "Colorado",
+                            regionUrl: "http://en.wikipedia.org/wiki/Colorado",
+                            tableIndex: 0,
+                        },
+                        {
+                            airportUrl: "",
+                            continent: "North America",
+                            country: "United States",
+                            countryUrl: "http://en.wikipedia.org/wiki/United_States",
+                            id: "CO39",
+                            lat: 39.72330093383789,
+                            lon: -105.11100006103516,
+                            municipality: "Denver",
+                            name: "Denver Federal Center Helistop",
+                            nearest: -1,
+                            nearestDistance: 9999999,
+                            pairUsesWraparound: false,
+                            region: "Colorado",
+                            regionUrl: "http://en.wikipedia.org/wiki/Colorado",
+                            tableIndex: 0,
+                        },
+                        {
+                            airportUrl: "http://en.wikipedia.org/wiki/Denver_International_Airport",
+                            continent: "North America",
+                            country: "United States",
+                            countryUrl: "http://en.wikipedia.org/wiki/United_States",
+                            id: "KDEN",
+                            lat: 39.861698150635,
+                            lon: -104.672996521,
+                            municipality: "Denver",
+                            name: "Denver International Airport",
+                            nearest: -1,
+                            nearestDistance: 9999999,
+                            pairUsesWraparound: false,
+                            region: "Colorado",
+                            regionUrl: "http://en.wikipedia.org/wiki/Colorado",
+                            tableIndex: 0,
+                        },
+                    ],
+                }
+            },
+            allTrip: this.getTripsFromServer(),
             tripDistance: 0,
             sortedLocationIds: [],
             leftMenu: false,
             rightMenu: false,
+            menu: false,
+            itinerary: false,
         }
     }
 
@@ -39,18 +102,43 @@ class App extends React.Component {
                 marginLeft: "0%",
                 marginRight: "0%",
             }
+
+        };
+        let topMain = {
+            yep: {
+                marginTop: "66%",
+            },
+            nope: {
+                marginTop: "0%",
+            }
+        };
+
+        let bottomMain = {
+            openItin: {
+                marginBottom: "66%",
+            },
+            closeItin: {
+                marginBottom: "0%",
+            }
         };
         //TODOdone function that gets
         //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
-            <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}/>
-            <RightMenu rightMenu={this.state.rightMenu}
-                       setLocations={Object.values(this.state.selectedLocations)}
-                       removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
-                       clear={this.clearSelectedLocations.bind(this)}
-                       tripDistance={this.state.tripDistance}
-                       toggleTwoOpt={this.toggleTwoOpt.bind(this)} //TODO Jesse
-                       toggleThreeOpt={this.toggleThreeOpt.bind(this)}
+            <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}
+                      setLocations={Object.values(this.state.selectedLocations)}
+                      removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
+                      clear={this.clearSelectedLocations.bind(this)}
+                      tripDistance={this.state.tripDistance}
+            />
+            <RightMenu
+                rightMenu={this.state.rightMenu}
+                setLocations={Object.values(this.state.selectedLocations)}
+                savedTrips={this.state.savedTrips}
+                selectTrip={this.selectTrip.bind(this)}
+                deleteTrip={this.deleteTrip.bind(this)}
+                tripDistance={this.state.tripDistance}
+                toggleTwoOpt={this.toggleTwoOpt.bind(this)}
+                toggleThreeOpt={this.toggleThreeOpt.bind(this)}
             />
             <div className="left-menu-button-div"
                  style={(this.state.leftMenu) ? main.left : main.nope}
@@ -66,6 +154,7 @@ class App extends React.Component {
                       onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
+
             <div id="main" className="planning-stuff"
                  style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
                 <div className="inner">
@@ -92,7 +181,8 @@ class App extends React.Component {
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
         let totalDist = 0;
-        if (numLocs > 1) {
+        console.log("Number of locations currently:", numLocs);
+        if (numLocs > 0) {
             let bestDist = 9999999;
             let minusDist = 0;
             let plusDist = 0;
@@ -135,14 +225,13 @@ class App extends React.Component {
          for (let i = 0; i < numLocs; i++) {
          //console.log(currentLocations[i].name);
          //console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
-         //TODO
          //Figure out where the best place to put the location is
          //Need to also measure between the first and the last locations
          //This will account for nearestNeighbor
          let loc1 = currentLocations[i];
          let loc2 = currentLocations[(i + 1) % (numLocs)];
          let dist = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon);
-         totalTripDistance += dist; //TODO this doesnt work because we are not calculating the entire trip yet
+         totalTripDistance += dist; //TODOdone this doesnt work because we are not calculating the entire trip yet
          console.log("Distance between", loc1.name, "and", loc2.name, "is", dist);
          if (dist < bestDist) {
          whereToInsert = i;
@@ -191,7 +280,7 @@ class App extends React.Component {
         this.setState({
             sortedLocationIds: tempSortedLocations,
         });
-        this.updateMarkers(newMap, tempSortedLocations);
+        //TODO add handling for only one location being selected. Update tripDistance to 0
     }
 
     saveTrip(trip) {
@@ -202,15 +291,80 @@ class App extends React.Component {
             obj);
         this.setState({
             savedTrips: newMap
+        });
+        this.saveTripsToServer("pull", JSON.stringify(Object.values(this.state.savedTrips)));
+    }
+
+    async saveTripsToServer(opt, query) {
+        console.log("Opt is:", opt);
+        try {
+            console.log("Sending trips...");
+            let stuff = await fetch(`http://localhost:4567/saveTrips?trips=${query}`);
+            console.log("Url:", `http://localhost:4567/saveTrips?trips=${query}`);
+            console.log("trips sent");
+            let json = await stuff.json();
+            console.log("Trips sent.");
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
+    async getTripsFromServer() {
+        try {
+            console.log("Asking for trips...");
+            let stuff = await fetch(`http://localhost:4567/getTrips?num=all`);
+            console.log("Url:", `http://localhost:4567/getTrips?num=all`);
+            let json = await stuff.json();
+            let obj = {};
+            json.forEach(elem => obj[elem.name] = elem);
+            this.setState({
+                savedTrips: obj,
+            });
+            console.log("Received trips", obj);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
+
+    selectTrip(trip) {
+        let obj = {};
+        obj[trip.name] = trip;
+        let sorted = [];
+        let locations = trip.locations;
+        let newMap = {};
+        let numLocs = Object.values(trip.locations).length;
+        for(let i = 0; i < numLocs; i++) {
+            sorted.push(locations[i].id);
+            newMap[locations[i].id] = locations[i];
+        }
+        //TODO
+        this.setState({
+            name: trip.name,
+            selectedLocations: newMap,
+            sortedLocationIds: sorted,
+            tripDistance: trip.totalDistance,
         })
+    }
+
+    deleteTrip(trip) {
+        let name = trip.name;
+        console.log("Deleting trip with name:",name);
+        let newMap = this.state.savedTrips;
+        delete newMap[name];
+        this.setState({
+            savedTrips: newMap
+        });
     }
 
     clearSelectedLocations() {
         this.setState({
             selectedLocations: {},
+            sortedLocationIds: [],
             tripDistance: 0,
         });
-
     }
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
@@ -232,53 +386,78 @@ class App extends React.Component {
     }
 
     openLeftNav() {
-        console.log("Left now true");
+        //console.log("Left now true");
         this.setState({
             leftMenu: true,
         });
     }
 
     closeLeftNav() {
-        console.log("Left now false");
+        //console.log("Left now false");
         this.setState({
             leftMenu: false,
         });
     }
 
     openRightNav() {
-        console.log("Right now true");
+        //console.log("Right now true");
         this.setState({
             rightMenu: true,
         });
     }
 
     closeRightNav() {
-        console.log("Right now false");
+        //console.log("Right now false");
         this.setState({
             rightMenu: false,
         });
     }
 
-    toggleTwoOpt() {
-        console.log(JSON.stringify(Object.values(this.state.selectedLocations)));
-        this.optimize(JSON.stringify(Object.values(this.state.selectedLocations)));
+    toggleTwoOpt() { //TODO make sure there is more than 4 locations before sending
+        if (Object.values(this.state.selectedLocations).length > 3) {
+            console.log("Running 2-opt");
+            this.optimize("2", JSON.stringify(Object.values(this.state.selectedLocations)));
+        }
     }
 
-    toggleThreeOpt() {
-        console.log("Toggling 3-opt");
+    toggleThreeOpt() { //TODO make sure there is more than 4 locations before sending
+        if (Object.values(this.state.selectedLocations).length > 3) {
+            console.log("Running 3-opt");
+            this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));
+        }
+    }
+  
+    openItinNav() {
+        //console.log("Menu now true");
+        this.setState({
+            itinerary: true,
+        });
     }
 
-    async optimize(query) {
+    closeItinNav() {
+        //console.log("Menu now false");
+        this.setState({
+            itinerary: false,
+        });
+    }
+
+    async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
+        console.log("Opt is:", opt);
         try {
             console.log("Sending locs...");
-            let stuff = await fetch(`http://localhost:4567/toOptimize?locs=${query}`);
+            let stuff = await fetch(`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
+            console.log("Url:", `http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
             console.log("Locs sent");
             let json = await stuff.json();
             let obj = {};
-            json.forEach(elem => obj[elem.id] = elem);
+            let sorted = [];
+            json.forEach(elem => sorted.push(elem.id));
+            json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
             this.setState({
-                selectedLocations: obj
+                selectedLocations: obj,
+                sortedLocationIds: sorted,
             });
+            console.log("Received Locations", obj);
         }
         catch (e) {
             console.error(e);
