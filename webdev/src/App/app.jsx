@@ -95,7 +95,7 @@ class App extends React.Component {
                 </span>
             </div>
 
-            <div clas sName="Itinerary-div">
+            <div className="itinerary-div">
                 <Itinerary
                     selectedLocations={this.state.selectedLocations}
                     sortedLocationIds={this.state.sortedLocationIds}
