@@ -19,10 +19,8 @@ public class Location {
     private String airportUrl;
     private String regionUrl;
     private String countryUrl;
-    private int nearest = -1;
-    private int nearestDistance = 9999999;
     private int tableIndex;
-    private boolean pairUsesWraparound = false;
+
 
     Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent, String aUrl, String rUrl, String cUrl) {
         this.id = id;
@@ -155,13 +153,7 @@ public class Location {
         System.out.println("hdist: " + hdist);
         System.out.println("fdist: " + fdist);*/
         //if(wdist > dist) {
-        if(wlon1 - wlon2 > 180) {
-            this.pairUsesWraparound = true;
-            //System.out.println("Using wraparound");
-        } else {
-            this.pairUsesWraparound = false;
-            //dist = wdist; //Should be equal here
-        }
+
         //------------End Checking for wraparound-----------//
 
 
@@ -248,25 +240,6 @@ public class Location {
         return countryUrl;
     }
 
-    public int getNearest() {
-        return nearest;
-    }
-
-    void setNearest(int nearest) {
-        this.nearest = nearest;
-    }
-
-    public int getNearestDistance() {
-        return nearestDistance;
-    }
-
-    void setNearestDistance(int nearestDistance) {
-        this.nearestDistance = nearestDistance;
-    }
-
-    public boolean isPairUsesWraparound() {
-        return pairUsesWraparound;
-    }
 
     @Override
     public boolean equals(final Object o) {
@@ -283,12 +256,6 @@ public class Location {
             return false;
         }
         if(Double.compare(location.lon, lon) != 0) {
-            return false;
-        }
-        if(nearest != location.nearest) {
-            return false;
-        }
-        if(nearestDistance != location.nearestDistance) {
             return false;
         }
         if(id != null ? !id.equals(location.id) : location.id != null) {
@@ -333,10 +300,6 @@ public class Location {
                 + ", airportUrl=" + airportUrl
                 + ", regionUrl=" + regionUrl
                 + ", countryUrl=" + countryUrl
-                + ", nearest=" + nearest
-                + ", nearestDistance=" + nearestDistance
-                + ", tableIndex=" + tableIndex
-                + ", pairUsesWraparound=" + pairUsesWraparound
                 + '}';
     }
 }
