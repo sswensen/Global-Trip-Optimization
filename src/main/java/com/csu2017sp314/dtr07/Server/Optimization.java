@@ -108,7 +108,7 @@ public class Optimization {
         this.threeOpt = threeOpt;
     }
 
-    private double getTripDistance() {
+    double getTripDistance() {
         double total = 0;
         for(int i=0; i<route.length-1; i++) {
             total += dist(route[i], route[i+1]);
