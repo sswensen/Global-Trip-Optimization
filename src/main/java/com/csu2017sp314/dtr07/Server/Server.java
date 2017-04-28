@@ -16,6 +16,7 @@ import static spark.Spark.*;
 
 public class Server {
     private ArrayList<Trip> trips = new ArrayList<>();
+    private int tripDistance;
 
     public static void main(String[] args) {
         Server s = new Server();
