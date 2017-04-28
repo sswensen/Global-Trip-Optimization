@@ -54,15 +54,17 @@ public class Server {
             sb.append("}");
             jsonStrings[j] = sb.toString();
         }
-        ArrayList<Location> locations = new ArrayList<>();
+        Location[] locations2 = new Location[jsonStrings.length];
+        //ArrayList<Location> locations = new ArrayList<>();
         for(int k = 0; k < jsonStrings.length; k++) {
             Location loc = gson.fromJson(jsonStrings[k], Location.class);
-            locations.add(loc);
+            //locations.add(loc);
+            locations2[k] = loc;
             System.out.println("Location " + k + " " + loc.toString());
         }
         /*Location temp = locations.remove(0);
         locations.add(temp);*/
-        return locations;
+        return locations2;
     }
 
     public Object saveTrip(Request rec, Response res) {
