@@ -292,7 +292,7 @@ class App extends React.Component {
         this.setState({
             savedTrips: newMap
         });
-        this.saveTripsToServer("pull", JSON.stringify(Object.values(this.state.savedTrips)));
+        this.saveTripsToServer("pull", JSON.stringify(Object.values(newMap)));
     }
 
     async saveTripsToServer(opt, query) {

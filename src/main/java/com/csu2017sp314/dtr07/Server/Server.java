@@ -3,11 +3,15 @@ package com.csu2017sp314.dtr07.Server;
 import com.csu2017sp314.dtr07.Model.Location;
 import com.csu2017sp314.dtr07.Model.QueryBuilder;
 import com.google.gson.Gson;
+import org.eclipse.jetty.util.ArrayUtil;
 import spark.Request;
 import spark.Response;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import static spark.Spark.*;
 
 /**
@@ -71,15 +75,26 @@ public class Server {
         setHeaders(res);
         Gson gson = new Gson();
         String locs = rec.queryParams("trips");
-        locs = locs.replace("[", "");
-        locs = locs.replace("]", "");
-        String[] jsonStrings = locs.split("}");
-        jsonStrings[0] += "}";
-        for(int j = 1; j < jsonStrings.length; j++) {
-            StringBuilder sb = new StringBuilder(jsonStrings[j]);
+        //System.out.println("we are here " + locs);
+        locs = locs.substring(1, locs.length() - 1); // --> "ello World"
+        System.out.println(locs);
+        String index = ",\\{\"name";
+        //int splitIndex = locs.indexOf(index);
+        //System.out.println(locs.indexOf(index));
+        //System.out.println(locs.substring(0,splitIndex));
+        //System.out.println(locs.substring(splitIndex));
+        String[] jsonStrings = locs.split(index);
+        System.out.println(jsonStrings.length);
+        for(int i = 1; i < jsonStrings.length;i++){
+            jsonStrings[i] = index + jsonStrings[i];
+            StringBuilder sb = new StringBuilder(jsonStrings[i]);
             sb.deleteCharAt(0);
-            sb.append("}");
-            jsonStrings[j] = sb.toString();
+            sb.deleteCharAt(0);
+            jsonStrings[i]= sb.toString();
+        }
+        for(int i = 0; i < jsonStrings.length;i++){
+
+            System.out.println(jsonStrings[i]);
         }
         ArrayList<Trip> newTrips = new ArrayList<>();
         for(int k = 0; k < jsonStrings.length; k++) {
@@ -87,6 +102,7 @@ public class Server {
             newTrips.add(trip);
             System.out.println("Trip " + k + " " + trip.toString());
         }
+
         trips = newTrips;
         /*Location temp = locations.remove(0);
         locations.add(temp);*/
@@ -96,7 +112,7 @@ public class Server {
     public Object getTrip(Request rec, Response res) {
         setHeaders(res);
         String locs = rec.queryParams("num");
-        trips.add(new Trip("e", 666.666, new ArrayList<>()));
+        //trips.add(new Trip("e", 666.666, new ArrayList<>()));
         return trips;
     }
 
