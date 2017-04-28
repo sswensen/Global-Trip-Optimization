@@ -129,3 +129,17 @@ body {
   padding: 5px;
   padding-left: 0;
 }
+
+.bottom-menu-button-div {
+  font-size:30px;
+  cursor:pointer;
+  position: absolute;
+  z-index: 10;
+  padding: 5px;
+  bottom: 0;
+  left: 50%;
+}
+
+.bottom-menu-button {
+  position: relative;
+}

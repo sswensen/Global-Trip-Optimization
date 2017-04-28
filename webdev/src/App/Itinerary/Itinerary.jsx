@@ -13,12 +13,13 @@ class Itinerary extends React.Component {
     render(){
         var myItinerary = {
             openItin: {
-                marginBottom: "66%",
+                marginBottom: "29%",
             },
             closeItin: {
                 marginBottom: "0%",
             }
         };
+        let bottom = this.props.bottom;
         let locations=this.props.sortedLocationIds.map(id => this.props.selectedLocations[id]);
         //For loop that goes through all locations,
         let pairs = [];
@@ -33,8 +34,8 @@ class Itinerary extends React.Component {
             return <Pair {...pp} />; //Calls to Pair.jsx
         });
         console.log("Pairs:",(pairs));
-        return <div>
-
+        return <div className="itinerary"  style={ (bottom) ? myItinerary.openItin : myItinerary.closeItin }>
+            <h2>YAY</h2>
         </div>
     }
 }

@@ -39,6 +39,7 @@ class RightMenu extends React.Component {
                 <div className="options">
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
+                    <button className="file-explorer" onClick={this.props.browseFile.bind(undefined,"")}>Browse for File</button>
                     <span className="total-trip-distance">Distance:{tripDist}</span>
                 </div>
                 <div className="saved-trips">

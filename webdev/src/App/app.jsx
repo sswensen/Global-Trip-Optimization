@@ -29,6 +29,19 @@ class App extends React.Component {
 
     render() {
         let main = {
+            triple: {
+                marginLeft: "29%",
+                marginRight: "29%",
+                marginBottom: "29%",
+            },
+            leftAndBottom: {
+                marginLeft: "29%",
+                marginBottom: "29%",
+            },
+            rightAndBottom: {
+                marginRight: "29%",
+                marginBottom: "29%",
+            },
             both: {
                 marginLeft: "29%",
                 marginRight: "29%",
@@ -39,9 +52,13 @@ class App extends React.Component {
             left: {
                 marginLeft: "29%",
             },
+            itinerary: {
+                marginBottom: "29%",
+            },
             nope: {
                 marginLeft: "0%",
                 marginRight: "0%",
+                marginBottom: "0%",
             }
 
         };
@@ -56,7 +73,7 @@ class App extends React.Component {
 
         let bottomMain = {
             openItin: {
-                marginBottom: "66%",
+                marginBottom: "29%",
             },
             closeItin: {
                 marginBottom: "0%",
@@ -79,6 +96,7 @@ class App extends React.Component {
                 tripDistance={this.state.tripDistance}
                 toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                 toggleThreeOpt={this.toggleThreeOpt.bind(this)}
+                browseFile={this.browseFile.bind(this)}
             />
             <div className="left-menu-button-div"
                  style={(this.state.leftMenu) ? main.left : main.nope}
@@ -97,6 +115,7 @@ class App extends React.Component {
 
             <div className="itinerary-div">
                 <Itinerary
+                    bottom={this.state.itinerary}
                     selectedLocations={this.state.selectedLocations}
                     sortedLocationIds={this.state.sortedLocationIds}
                 />
@@ -111,7 +130,7 @@ class App extends React.Component {
 
 
             <div id="main" className="planning-stuff"
-                 style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
+                 style={ ((this.state.leftMenu && this.state.rightMenu && this.state.itinerary) ? main.triple : (this.state.leftMenu && this.state.itinerary) ? main.leftAndBottom : (this.state.rightMenu && this.state.itinerary) ? main.rightAndBottom : (this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : (this.state.itinerary) ? main.itinerary : main.nope)}>
                 <div className="inner">
                     <TripMap locations={this.state.selectedLocations}
                              trip={this.state.sortedLocationIds}
@@ -364,6 +383,9 @@ class App extends React.Component {
         }
     }
 
+    browseFile(filename) {
+        console.log("File name is:",filename);
+    }
     test() {
         console.log("leftMenu:", this.state.leftMenu);
         console.log("[app]: selectedLocations:", this.state.selectedLocations, " \n[app]: savedTrips:", this.state.savedTrips, " \n[app]: tripDistance:", this.state.tripDistance, " \n[app]: sortedLocationIds:", this.state.sortedLocationIds);
