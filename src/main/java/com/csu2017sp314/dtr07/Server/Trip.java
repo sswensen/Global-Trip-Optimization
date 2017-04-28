@@ -13,9 +13,14 @@ public class Trip {
     private double distance = 0.0;
     private ArrayList<Location> locations;
 
-    public Trip(String name, double distance, ArrayList<Location> locations) {
+    public Trip(String name, double distance,ArrayList<Location> locations) {
         this.name = name;
         this.distance = distance;
         this.locations = locations;
+    }
+
+    public String toString(){
+        return "Trip: " +"name " + name + " distance " + distance + " Locations " + locations.toString();
+
     }
 }
