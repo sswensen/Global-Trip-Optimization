@@ -13,6 +13,7 @@ public class Optimization {
     private boolean threeOpt;
     private double[][] distTable;
     private Location[] route;
+    private Location[] locations;
 
     public Optimization(Location[] route, String opt) {
         this.route = route;
@@ -31,6 +32,57 @@ public class Optimization {
             threeOpt();
         }
         return route;
+    }
+
+    boolean thirdTry() {
+        int bestDistance = 999999999;
+        int sizer = locations.size();
+        ArrayList<Location> originalLocations;
+        for(int i = 0; i < sizer; i++) {
+            originalLocations = new ArrayList<>(locations);
+            for(int x = 0; x < locations.size() - 1; x++) {
+                double distance = 999999999;
+                int index = -1;
+                for(int y = x + 1; y < locations.size(); y++) {
+                    double temp = locations.get(x).distance(locations.get(y), unit);
+                    if(distance > temp) {
+                        distance = temp;
+                        index = y;
+                    }
+                }
+                Location temploc = locations.get(x + 1);
+                locations.set(x + 1, locations.get(index));
+                locations.set(index, temploc);
+                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1), unit)));
+            }
+
+            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0), unit)));
+            if(twoOpt) {
+                if(threeOpt) {
+                    threeOpt();
+                } else {
+                    twoOpt();
+                }
+            }
+            if(threeOpt) {
+                threeOpt();
+            }
+            double total = 0;
+            for(Pair p : pairs) {
+                total += p.getDistance();
+            }
+            //System.out.println("[" + i + "]: " + total);
+            if(total < bestDistance) {
+                bestDistance = (int) Math.round(total);
+                bestPairs = new ArrayList<>(pairs);
+            }
+            pairs.clear();
+            locations = new ArrayList<>(originalLocations);
+            Location temp = locations.remove(0);
+            locations.add(temp);
+        }
+        pairs = new ArrayList<>(bestPairs);
+        return true;
     }
 
     public boolean getTwoOpt() {
