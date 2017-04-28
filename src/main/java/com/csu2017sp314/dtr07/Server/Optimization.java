@@ -4,6 +4,7 @@ import com.csu2017sp314.dtr07.Model.Location;
 import com.csu2017sp314.dtr07.Model.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by jesseL1on on 4/28/2017.
@@ -34,29 +35,31 @@ public class Optimization {
         return route;
     }
 
-    boolean thirdTry() {
+    private boolean nearestNeighbor() {
+        Location[] locArray = locations.toArray(new Location[locations.size()]);
+        generateDistanceTable(locArray);
         int bestDistance = 999999999;
-        int sizer = locations.size();
-        ArrayList<Location> originalLocations;
+        int sizer = locArray.length;
+        Location[] originalLocations;
         for(int i = 0; i < sizer; i++) {
-            originalLocations = new ArrayList<>(locations);
+            originalLocations = Arrays.copyOf(locArray, locArray.length);
             for(int x = 0; x < locations.size() - 1; x++) {
                 double distance = 999999999;
                 int index = -1;
                 for(int y = x + 1; y < locations.size(); y++) {
-                    double temp = locations.get(x).distance(locations.get(y), unit);
+                    double temp = dist(locArray[x], locArray[y]);
                     if(distance > temp) {
                         distance = temp;
                         index = y;
                     }
                 }
-                Location temploc = locations.get(x + 1);
-                locations.set(x + 1, locations.get(index));
-                locations.set(index, temploc);
-                pairs.add(new Pair(Integer.toString(x), locations.get(x), locations.get(x + 1), locations.get(x).distance(locations.get(x + 1), unit)));
+                Location temploc = locArray[x+1];
+                locArray[x+1] = locArray[index];
+                locArray[index] = temploc;
+                pairs.add(new Pair(Integer.toString(x), locArray[x], locArray[x + 1], dist(locArray[x], locArray[x+1])));
             }
 
-            pairs.add(new Pair(Integer.toString(locations.size() - 1), locations.get(locations.size() - 1), locations.get(0), locations.get(locations.size() - 1).distance(locations.get(0), unit)));
+            pairs.add(new Pair(Integer.toString(locArray.length - 1), locArray[locArray.length - 1], locArray[0], dist(locArray[locArray.length-1], locArray[0])));
             if(twoOpt) {
                 if(threeOpt) {
                     threeOpt();
@@ -71,16 +74,15 @@ public class Optimization {
             for(Pair p : pairs) {
                 total += p.getDistance();
             }
-            //System.out.println("[" + i + "]: " + total);
             if(total < bestDistance) {
                 bestDistance = (int) Math.round(total);
                 bestPairs = new ArrayList<>(pairs);
             }
             pairs.clear();
-            locations = new ArrayList<>(originalLocations);
-            Location temp = locations.remove(0);
-            locations.add(temp);
+            locArray = Arrays.copyOf(originalLocations, originalLocations.length);
+            locArray = shift(locArray);
         }
+        locations = new ArrayList<>(Arrays.asList(locArray));
         pairs = new ArrayList<>(bestPairs);
         return true;
     }
@@ -161,7 +163,7 @@ public class Optimization {
         return newRoute;
     }
 
-    protected int twoOpt() {
+    private int twoOpt() {
         int totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
@@ -249,7 +251,7 @@ public class Optimization {
         }
     }
 
-    protected int threeOpt() {
+    private int threeOpt() {
         generateDistanceTable(route);
         int totalImprovements = 0;
         int improvements = 1;
