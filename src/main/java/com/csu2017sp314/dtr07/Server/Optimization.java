@@ -17,32 +17,35 @@ public class Optimization {
     private Location[] locations;
     private Location[] bestRoute;
 
-    public Optimization(Location[] route, String opt) {
-        this.route = generateRoute(route);
+    public Optimization(Location[] locations, String opt) {
+        this.locations = locations;
         if(opt.equals("two")) {
             setTwoOpt(true);
         } else {
             setThreeOpt(true);
         }
-        distTable = generateDistanceTable(this.route);
+        Location[] routeForTable = generateLocs(locations);
+        distTable = generateDistanceTable(routeForTable);
     }
 
     public Location[] getOptimizedRoute() {
-        if(twoOpt) {
-            twoOpt();
-        } else {
-            threeOpt();
-        }
+//        if(twoOpt) {
+//            twoOpt();
+//        } else {
+//            threeOpt();
+//        }
+        nearestNeighbor();
         return route;
     }
 
-    private boolean nearestNeighbor() {
-        route = new Location[locations.length];
+    private void nearestNeighbor() {
+        route = new Location[locations.length+1];
         int bestDistance = 999999999;
         int sizer = locations.length;
         Location[] originalLocations;
-        int addIndex = 0;
+        int addIndex;
         for(int i = 0; i < sizer; i++) {
+            addIndex = 0;
             originalLocations = Arrays.copyOf(locations, locations.length);
             for(int x = 0; x < locations.length - 1; x++) {
                 double distance = 999999999;
@@ -61,16 +64,11 @@ public class Optimization {
                 addIndex++;
             }
 
-            route[addIndex] = locations[locations.length-1];
-            route[addIndex+1] = locations[0]; //???
+            route[route.length-2] = locations[locations.length-1];
+            route[route.length-1] = locations[0]; //???
             if(twoOpt) {
-                if(threeOpt) {
-                    threeOpt();
-                } else {
-                    twoOpt();
-                }
-            }
-            if(threeOpt) {
+                twoOpt();
+            } else {
                 threeOpt();
             }
             double total = getTripDistance();
@@ -83,7 +81,15 @@ public class Optimization {
             locations = shift(locations);
         }
         route = Arrays.copyOf(bestRoute, bestRoute.length);
-        return true;
+    }
+
+    private Location[] shift(Location[] array) {
+        Location first = array[0];
+        for(int i=0;i<array.length-1;i++) {
+            array[i] = array[i+1];
+        }
+        array[array.length-1] = first;
+        return array;
     }
 
     public boolean getTwoOpt() {
@@ -110,7 +116,7 @@ public class Optimization {
         return total;
     }
 
-    private Location[] generateRoute(Location[] locations) {
+    private Location[] generateLocs(Location[] locations) {
         Location[] newLocs = new Location[locations.length+1];
         for(int i=0; i<locations.length; i++) {
             newLocs[i] = locations[i];
