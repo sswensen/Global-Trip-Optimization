@@ -6,9 +6,20 @@ import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import static spark.Spark.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import static spark.Spark.get;
+import static spark.Spark.halt;
 
 /**
  * Created by SummitDrift on 4/20/17.
@@ -28,6 +39,7 @@ public class Server {
         get("/toOptimize", this::optimize, g::toJson);
         get("/saveTrips", this::saveTrip, g::toJson);
         get("/getTrips", this::getTrip, g::toJson);
+        get("/download", (request, responce) -> getFile(request, responce));
     }
 
     public Object hello(Request rec, Response res) {
@@ -98,6 +110,31 @@ public class Server {
         String locs = rec.queryParams("num");
         //trips.add(new Trip("e", 666.666, new ArrayList<>()));
         return trips;
+    }
+
+    private static Object getFile(Request request, Response response) {
+        String filename = request.queryParams("name");
+        Path path = Paths.get(filename);
+        byte[] data = null;
+        try {
+            data = Files.readAllBytes(path);
+        } catch (Exception e1) {
+
+            e1.printStackTrace();
+        }
+
+        HttpServletResponse raw = response.raw();
+        response.header("Content-Disposition", "attachment; filename="+filename+".xml");
+        response.type("application/force-download");
+        try {
+            raw.getOutputStream().write(data);
+            raw.getOutputStream().flush();
+            raw.getOutputStream().close();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return raw;
     }
 
     /*
