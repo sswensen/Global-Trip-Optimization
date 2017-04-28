@@ -13,7 +13,7 @@ public class Pair {
     private String id;
     private boolean useWraparound = false;
 
-    Pair(String id, Location one, Location two, double distance) {
+    public Pair(String id, Location one, Location two, double distance) {
         this.id = id;
         this.one = one;
         this.two = two;

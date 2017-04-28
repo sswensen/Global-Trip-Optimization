@@ -107,7 +107,11 @@ public class Location {
         return Math.sqrt(distance) / 1609.34;
     }
 
-    double distance(Location in, String unit) {
+    public double distance(Location in) {
+        return distance(in, "");
+    }
+
+    public double distance(Location in, String unit) {
         double lat1 = this.lat;
         double lon1 = this.lon;
         double lat2 = in.getLat();
