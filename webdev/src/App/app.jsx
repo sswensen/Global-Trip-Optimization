@@ -3,6 +3,7 @@ import TripMap from './TripMap/trip_map.jsx';
 import LeftMenu from './leftMenu.jsx';
 import RightMenu from './rightMenu.jsx';
 import Menu from './Menu.jsx';
+import Itinerary from './Itinerary/Itinerary.jsx';
 
 let Sel = ({locations}) => <div>
     {locations.map(l => <li key={l.id}>{l.name}</li>)}
@@ -22,6 +23,7 @@ class App extends React.Component {
             leftMenu: false,
             rightMenu: false,
             menu: false,
+            itinerary: false,
         }
     }
 
@@ -41,6 +43,7 @@ class App extends React.Component {
                 marginLeft: "0%",
                 marginRight: "0%",
             }
+
         };
         let topMain = {
             yep: {
@@ -50,6 +53,16 @@ class App extends React.Component {
                 marginTop: "0%",
             }
         };
+
+        let bottomMain = {
+            openItin: {
+                marginBottom: "66%",
+            },
+            closeItin: {
+                marginBottom: "0%",
+            }
+        };
+
         //TODOdone function that gets
         //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
@@ -69,6 +82,22 @@ class App extends React.Component {
                       onClick={(this.state.menu) ? this.closeNav.bind(this) : this.openNav.bind(this)}>{this.state.menu ? "u" : "d"}
                 </span>
             </div>
+
+            <div clas sName="Itinerary-div">
+                <Itinerary
+                    selectedLocations={this.state.selectedLocations}
+                    sortedLocationIds={this.state.sortedLocationIds}
+                />
+            </div>
+            <div className="bottom-menu-button-div"
+                 style={(this.state.itinerary) ? bottomMain.openItin : bottomMain.closeItin}
+            >
+                <span className="bottom-menu-button"
+                      onClick={(this.state.itinerary) ? this.closeItinNav.bind(this) : this.openItinNav.bind(this)}>{this.state.itinerary ? "u" : "d"}
+                </span>
+            </div>
+
+
             <div id="main" className="planning-stuff"
                 style={(this.state.menu) ? topMain.yep : topMain.nope}>
                 <div className="inner">
@@ -273,6 +302,20 @@ class App extends React.Component {
         console.log("Menu now false");
         this.setState({
             menu: false,
+        });
+    }
+
+    openItinNav() {
+        //console.log("Menu now true");
+        this.setState({
+            itinerary: true,
+        });
+    }
+
+    closeItinNav() {
+        //console.log("Menu now false");
+        this.setState({
+            itinerary: false,
         });
     }
 
