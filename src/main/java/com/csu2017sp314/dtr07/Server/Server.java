@@ -29,7 +29,7 @@ public class Server {
     public void serve() {
         Gson g = new Gson();
         get("/locations", this::hello, g::toJson);
-        get("/toOptimize", this::optimize, g::toJson);
+        post("/toOptimize", this::optimize, g::toJson);
         get("/saveTrips", this::saveTrip, g::toJson);
         get("/getTrips", this::getTrip, g::toJson);
     }
