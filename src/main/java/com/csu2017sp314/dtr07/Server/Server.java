@@ -6,6 +6,8 @@ import spark.Request;
 import spark.Response;
 import com.google.gson.Gson;
 
+import java.util.Arrays;
+
 import static spark.Spark.*;
 
 /**
@@ -35,9 +37,74 @@ public class Server {
 
     public Object optimize(Request rec, Response res) {
         setHeaders(res);
-        System.out.println(rec.queryParams("locs"));
+        String str = rec.queryParams("locs");
+        //System.out.println(str);
+        //Location[] locArray = locParser(str);
         return null;
     }
+
+    /*
+    public Location[] locParser(String str) {
+        str = str.substring(1);
+        System.out.println(str);
+        while(true) {
+            String id;
+            String name;
+            double lat;
+            double lon;
+            String municipality;
+            String region;
+            String country;
+            String continent;
+            String airportUrl;
+            String regionUrl;
+            String countryUrl;
+            int nearest;
+            int nearestDistance;
+            int tableIndex;
+            boolean pairUsesWraparound;
+            String[] variables = parseVariables(str);
+            System.out.println(Arrays.toString(variables));
+            //TODO remove } from end
+            break;
+        }
+
+        return null;
+    }
+
+    public String parseVariable(String str) {
+        int quote = str.indexOf("\"");
+        int comma = str.indexOf(",");
+        int end = Math.min(quote, comma);
+        return str.substring(0, end);
+    }
+
+    public String[] parseVariables(String str) {
+        String[] variables = new String[15];
+        for(int i=0; i<variables.length; i++) {
+            if(i!=2 && i!=3 && i!=12 && i!=13 && i!=14) {
+                str = str.substring(str.indexOf(":"));
+                if(str.charAt(1)!='"') {
+                    str = str.substring(nthIndexOf(str,":", 2)+2);
+                } else {
+                    str = str.substring(2);
+                }
+            } else {
+                str = str.substring(str.indexOf(":")+1);
+            }
+            variables[i] = parseVariable(str);
+        }
+        return variables;
+    }
+
+    //Finds index of nth occurrence
+    public static int nthIndexOf(String str, String character, int n) {
+        int index = str.indexOf(character);
+        while (--n > 0 && index != -1)
+            index = str.indexOf(character, index+1);
+        return index;
+    }
+    */
 
     private void setHeaders(Response res) {
         res.header("Content-Type", "application/json"); //Says we are returning a json
