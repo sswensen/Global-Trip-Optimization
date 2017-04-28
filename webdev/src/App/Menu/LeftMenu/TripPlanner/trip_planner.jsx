@@ -47,7 +47,7 @@ class TripPlanner extends Component {
         return <div className="trip-planner">
             <div className="map-options">
                 <input className="trip-name-input" onKeyUp={this.keyUp.bind(this)}
-                       type="text" placeholder="Enter Trip Name" />
+                       type="text" placeholder="Name" />
                 <button className="save-button" onClick={save}>Save</button>
                 <button className="clear-selected-locations" onClick={clear}>Clear</button>
 
@@ -62,13 +62,14 @@ class TripPlanner extends Component {
 
     saveTrip(event) {
         let locations = Object.values(this.props.setLocations);
+        let distance = this.props.tripDistance;
         this.setState({
             name: event.target.value,
         });
         let trip = new Object();
         trip.name = event.target.value;
         trip.locations = locations;
-        trip.totalDistance = this.props.tripDistance;
+        trip.totalDistance = distance;
         console.log(trip);
         this.setState({
             trip: trip,

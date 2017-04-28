@@ -16,7 +16,65 @@ class App extends React.Component {
         this.state = {
             name: "",
             selectedLocations: {},
-            savedTrips: {},
+            savedTrips: {
+                co: {
+                    locations: [
+                        {
+                            airportUrl: "",
+                            continent: "North America",
+                            country: "United States",
+                            countryUrl: "http://en.wikipedia.org/wiki/United_States",
+                            id: "CO35",
+                            lat: 39.727500915527344,
+                            lon: -104.99099731445312,
+                            municipality: "Denver",
+                            name: "Denver Health Heliport",
+                            nearest: -1,
+                            nearestDistance: 9999999,
+                            pairUsesWraparound: false,
+                            region: "Colorado",
+                            regionUrl: "http://en.wikipedia.org/wiki/Colorado",
+                            tableIndex: 0,
+                        },
+                        {
+                            airportUrl: "",
+                            continent: "North America",
+                            country: "United States",
+                            countryUrl: "http://en.wikipedia.org/wiki/United_States",
+                            id: "CO39",
+                            lat: 39.72330093383789,
+                            lon: -105.11100006103516,
+                            municipality: "Denver",
+                            name: "Denver Federal Center Helistop",
+                            nearest: -1,
+                            nearestDistance: 9999999,
+                            pairUsesWraparound: false,
+                            region: "Colorado",
+                            regionUrl: "http://en.wikipedia.org/wiki/Colorado",
+                            tableIndex: 0,
+                        },
+                        {
+                            airportUrl: "http://en.wikipedia.org/wiki/Denver_International_Airport",
+                            continent: "North America",
+                            country: "United States",
+                            countryUrl: "http://en.wikipedia.org/wiki/United_States",
+                            id: "KDEN",
+                            lat: 39.861698150635,
+                            lon: -104.672996521,
+                            municipality: "Denver",
+                            name: "Denver International Airport",
+                            nearest: -1,
+                            nearestDistance: 9999999,
+                            pairUsesWraparound: false,
+                            region: "Colorado",
+                            regionUrl: "http://en.wikipedia.org/wiki/Colorado",
+                            tableIndex: 0,
+                        },
+                    ],
+                    name: "co",
+                    distance: 50.78670229169772,
+                }
+            },
             tripDistance: 0,
             sortedLocationIds: [],
             leftMenu: false,
@@ -215,7 +273,21 @@ class App extends React.Component {
     selectTrip(trip) {
         let obj = {};
         obj[trip.name] = trip;
+        let sorted = [];
+        let locations = trip.locations;
+        let newMap = {};
+        let numLocs = Object.values(trip.locations).length;
+        for(let i = 0; i < numLocs; i++) {
+            sorted.push(locations[i].id);
+            newMap[locations[i].id] = locations[i];
+        }
         //TODO
+        this.setState({
+            name: trip.name,
+            selectedLocations: newMap,
+            sortedLocationIds: sorted,
+            tripDistance: trip.distance,
+        })
     }
 
     clearSelectedLocations() {
