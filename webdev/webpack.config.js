@@ -1,6 +1,6 @@
 
 module.exports = {
-    entry: ["babel-polyfill", './index.js', 'webpack-dev-server/client?http://0.0.0.0:7777',],
+    entry: ["babel-polyfill", './index.js',],
     module: {
         rules: [{
             test: /\.(js|jsx)/,
