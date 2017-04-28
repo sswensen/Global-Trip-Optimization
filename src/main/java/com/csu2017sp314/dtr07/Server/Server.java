@@ -7,8 +7,8 @@ import spark.Request;
 import spark.Response;
 
 import java.util.ArrayList;
-
-import static spark.Spark.get;
+import java.util.Arrays;
+import static spark.Spark.*;
 
 /**
  * Created by SummitDrift on 4/20/17.
@@ -97,6 +97,68 @@ public class Server {
         trips.add(new Trip("e", 666.666, new ArrayList<>()));
         return trips;
     }
+
+    /*
+    public Location[] locParser(String str) {
+        str = str.substring(1);
+        System.out.println(str);
+        while(true) {
+            String id;
+            String name;
+            double lat;
+            double lon;
+            String municipality;
+            String region;
+            String country;
+            String continent;
+            String airportUrl;
+            String regionUrl;
+            String countryUrl;
+            int nearest;
+            int nearestDistance;
+            int tableIndex;
+            boolean pairUsesWraparound;
+            String[] variables = parseVariables(str);
+            System.out.println(Arrays.toString(variables));
+            //TODO remove } from end
+            break;
+        }
+        return null;
+    }
+
+    public String parseVariable(String str) {
+        int quote = str.indexOf("\"");
+        int comma = str.indexOf(",");
+        int end = Math.min(quote, comma);
+        return str.substring(0, end);
+    }
+
+    public String[] parseVariables(String str) {
+        String[] variables = new String[15];
+        for(int i=0; i<variables.length; i++) {
+            if(i!=2 && i!=3 && i!=12 && i!=13 && i!=14) {
+                str = str.substring(str.indexOf(":"));
+                if(str.charAt(1)!='"') {
+                    str = str.substring(nthIndexOf(str,":", 2)+2);
+                } else {
+                    str = str.substring(2);
+                }
+            } else {
+                str = str.substring(str.indexOf(":")+1);
+            }
+            variables[i] = parseVariable(str);
+        }
+        return variables;
+    }
+
+    //Finds index of nth occurrence
+    public static int nthIndexOf(String str, String character, int n) {
+        int index = str.indexOf(character);
+        while (--n > 0 && index != -1)
+            index = str.indexOf(character, index+1);
+        return index;
+    }
+    */
 
     private void setHeaders(Response res) {
         res.header("Content-Type", "application/json"); //Says we are returning a json
