@@ -76,7 +76,7 @@ public class Optimization {
                 bestDistance = (int) Math.round(total);
                 bestRoute = Arrays.copyOf(route, route.length);
             }
-            route = new Location[route.length];
+            route = new Location[locations.length+1];
             locations = Arrays.copyOf(originalLocations, originalLocations.length);
             locations = shift(locations);
         }

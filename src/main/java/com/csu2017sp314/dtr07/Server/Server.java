@@ -43,7 +43,7 @@ public class Server {
         Gson gson = new Gson();
         String i = rec.queryParams("locs");
         String opt = rec.queryParams("opt");
-        //System.out.println("Opt is " + opt + "\n");
+        System.out.println("Opt is " + opt + "\n");
         i = i.replace("[", "");
         i = i.replace("]", "");
         String[] jsonStrings = i.split("}");
@@ -64,9 +64,10 @@ public class Server {
         }
         /*Location temp = locations.remove(0);
         locations.add(temp);*/
-
+        System.out.println("running 2 opt now");
         Optimization optimiziation = new Optimization(locations2, opt);
         locations2 = optimiziation.getOptimizedRoute();
+        System.out.println("complete");
         return locations2;
     }
 
