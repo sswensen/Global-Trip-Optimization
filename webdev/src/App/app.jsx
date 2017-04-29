@@ -126,6 +126,7 @@ class App extends React.Component {
         return <div>
             <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}
                       setLocations={Object.values(this.state.selectedLocations)}
+                      sortedLocationIds={this.state.sortedLocationIds}
                       removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                       clear={this.clearSelectedLocations.bind(this)}
                       tripDistance={this.state.tripDistance}
@@ -350,18 +351,18 @@ class App extends React.Component {
         obj[trip.name] = trip;
         let sorted = [];
         let numIds = trip.selectedIds.length;
-        let locations = trip.locations;
-        if(locations === undefined) {
-            let obj = {};
+        //let locations = trip.locations;
+        //if(locations === undefined) {
+            let temp = {};
             let ids = trip.selectedIds;
             for(let i = 0; i < numIds; i++) {
                 let e = await fetch(`http://localhost:4567/database?id=${ids[i]}`);
                 let json = await e.json();
-                json.forEach(elem => obj[elem.id] = elem);
+                json.forEach(elem => temp[elem.id] = elem);
             }
-            trip.locations = obj;
-            console.log("New locations",obj);
-        } else {
+            trip.locations = temp;
+            console.log("New locations",temp);
+        /*} else {
             let newMap = {};
             let numLocs = Object.values(trip.locations).length;
             for (let i = 0; i < numLocs; i++) {
@@ -369,7 +370,7 @@ class App extends React.Component {
                 newMap[locations[i].id] = locations[i];
             }
             trip.locations = newMap;
-        }
+        }*/
         this.setState({
             name: trip.name,
             selectedLocations: trip.locations,
@@ -386,6 +387,7 @@ class App extends React.Component {
         this.setState({
             savedTrips: newMap
         });
+        //TODO could add deleting savedTrip from database but I dont want to
     }
 
     clearSelectedLocations() {

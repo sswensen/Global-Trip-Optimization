@@ -30,6 +30,11 @@ public class Server {
     }
 
     public void serve() {
+        ArrayList<String> temp = new ArrayList<>();
+        temp.add("KCOS");
+        temp.add("MRBC");
+        temp.add("0CD1");
+        trips.add(new Trip("Colorado", 50, temp));
         Gson g = new Gson();
         get("/locations", this::hello, g::toJson);
         get("/toOptimize", this::optimize, g::toJson);
@@ -157,16 +162,20 @@ public class Server {
 
             System.out.println(jsonStrings[i]);
         }
-        ArrayList<Trip> newTrips = new ArrayList<>();
+        //ArrayList<Trip> newTrips = new ArrayList<>();
         for(int k = 0; k < jsonStrings.length; k++) {
             Trip trip = gson.fromJson(jsonStrings[k], Trip.class);
-            newTrips.add(trip);
+            int ret = searchSavedTrips(trip.getName());
+            if(ret < 0) {
+                //newTrips.add(trip); //Dont need this
+                trips.add(trip);
+            } else {
+                trips.remove(ret);
+                trips.add(ret, trip);
+            }
             System.out.println("Trip " + k + " " + trip.toString());
         }
 
-        trips = newTrips;
-        /*Location temp = locations.remove(0);
-        locations.add(temp);*/
         return trips;
     }
 
@@ -246,6 +255,15 @@ public class Server {
         return index;
     }
     */
+
+    private int searchSavedTrips(String name) {
+        for(int i = 0; i < trips.size(); i++) {
+            if(name.equals(trips.get(i).getName())) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     private void setHeaders(Response res) {
         res.header("Content-Type", "application/json"); //Says we are returning a json
