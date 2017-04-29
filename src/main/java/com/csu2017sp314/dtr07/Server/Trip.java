@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public class Trip {
     private String name = "";
-    private double distance = 0.0;
+    private double totalDistance = 0.0;
     private ArrayList<String> selectedIds;
 
-    public Trip(String name, double distance, ArrayList<String> locations) {
+    public Trip(String name, double totalDistance, ArrayList<String> locations) {
         this.name = name;
-        this.distance = distance;
+        this.totalDistance = totalDistance;
         this.selectedIds = locations;
     }
 
@@ -24,7 +24,7 @@ public class Trip {
     }
 
     public String toString(){
-        return "Trip: " +"name " + name + " distance " + distance + " Locations " + selectedIds.toString();
+        return "Trip: " +"name " + name + " totalDistance " + totalDistance + " Locations " + selectedIds.toString();
 
     }
 }
