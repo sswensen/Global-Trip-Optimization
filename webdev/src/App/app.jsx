@@ -447,7 +447,7 @@ class App extends React.Component {
             console.log("Sending locs...");
             //let stuff = await fetch(`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
             let stuff = await fetch('http://localhost:4567/optimize/', {
-                mode: 'no-cors',
+                //mode: 'no-cors',
                 method: 'POST',
                 headers: {
                     'Access-Control-Allow-Origin': '*',

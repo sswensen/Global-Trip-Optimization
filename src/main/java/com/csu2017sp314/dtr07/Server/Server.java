@@ -34,7 +34,9 @@ public class Server {
         post("/tooptimize", this::optimize, g::toJson);
         post("/optimize", (request, response) -> {
             System.out.println(request.queryMap());
-            return new ArrayList<>();
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add("eee");
+            return temp;
         });
     }
 
