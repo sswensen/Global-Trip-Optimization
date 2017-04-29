@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.util.ArrayUtil;
 import spark.Request;
 import spark.Response;
+import sun.util.resources.cldr.id.LocaleNames_id;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import static spark.Spark.*;
 public class Server {
     private ArrayList<Trip> trips = new ArrayList<>();
     private double tripDistance;
+    private ArrayList<Location> selectedLocations = new ArrayList<>();
 
     public static void main(String[] args) {
         Server s = new Server();
@@ -34,6 +36,45 @@ public class Server {
         get("/saveTrips", this::saveTrip, g::toJson);
         get("/getTrips", this::getTrip, g::toJson);
         get("/getDistance", this::getDistance, g::toJson);
+        get("/setSelectedIndividual", this::selectIndividual, g::toJson);
+        get("/fireOpt", this::fireOpt, g::toJson);
+    }
+
+    public Object selectIndividual(Request rec, Response res) {
+        setHeaders(res);
+        Gson gson = new Gson();
+        String i = rec.queryParams("locs");
+        i = i.replace("[", "");
+        i = i.replace("]", "");
+        String[] jsonStrings = i.split("}");
+        jsonStrings[0] += "}";
+        for(int j = 1; j < jsonStrings.length; j++) {
+            StringBuilder sb = new StringBuilder(jsonStrings[j]);
+            sb.deleteCharAt(0);
+            sb.append("}");
+            jsonStrings[j] = sb.toString();
+        }
+        Location[] locations2 = new Location[jsonStrings.length];
+        //ArrayList<Location> locations = new ArrayList<>();
+        for(int k = 0; k < jsonStrings.length; k++) {
+            Location loc = gson.fromJson(jsonStrings[k], Location.class);
+            //locations.add(loc);
+            locations2[k] = loc;
+            //System.out.println("Location " + k + " " + loc.toString());
+        }
+        return null;
+    }
+
+    public Object fireOpt(Request rec, Response res) {
+        setHeaders(res);
+        String opt = rec.queryParams("opt");
+        Location[] locations2 = selectedLocations.toArray(new Location[selectedLocations.size()]);
+        System.out.println("running 2 opt now");
+        Optimization optimiziation = new Optimization(locations2, opt);
+        locations2 = optimiziation.getOptimizedRoute();
+        System.out.println("complete");
+        tripDistance = optimiziation.getTripDistance();
+        return locations2;
     }
 
     public Object hello(Request rec, Response res) {
