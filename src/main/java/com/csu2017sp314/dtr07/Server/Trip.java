@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class Trip {
     private String name = "";
     private double distance = 0.0;
-    private ArrayList<Location> locations;
+    private ArrayList<String> locations;
 
-    public Trip(String name, double distance,ArrayList<Location> locations) {
+    public Trip(String name, double distance,ArrayList<String> locations) {
         this.name = name;
         this.distance = distance;
         this.locations = locations;

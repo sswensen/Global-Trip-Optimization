@@ -71,6 +71,10 @@ class TripPlanner extends Component {
     saveTrip() {
         let locations = Object.values(this.props.setLocations);
         let distance = this.props.tripDistance;
+        let tempIds = [];
+        for(let i = 0; i < locations.length; i++) {
+            tempIds.push(locations[i].id)
+        }
         let tempName = this.state.currentName;
         this.setState({
             name: tempName
@@ -79,6 +83,7 @@ class TripPlanner extends Component {
         trip.name = tempName;
         trip.totalDistance = distance;
         trip.locations = locations;
+        trip.ids = tempIds;
         console.log(trip);
         this.setState({
             trip: trip,
@@ -89,6 +94,10 @@ class TripPlanner extends Component {
     saveTripFromEnter(event) {
         let locations = Object.values(this.props.setLocations);
         let distance = this.props.tripDistance;
+        let tempIds = [];
+        for(let i = 0; i < locations.length; i++) {
+            tempIds.push(locations[i].id)
+        }
         this.setState({
             name: event.target.value,
         });
@@ -96,6 +105,7 @@ class TripPlanner extends Component {
         trip.name = event.target.value;
         trip.totalDistance = distance;
         trip.locations = locations;
+        trip.ids = tempIds;
         console.log(trip);
         this.setState({
             trip: trip,
