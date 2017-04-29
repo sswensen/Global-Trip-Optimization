@@ -62,7 +62,7 @@ class LocationSearch extends Component {
         }
     }
 
-    remove(id) {
+    /*remove(id) {
         let newObj = Object.assign(this.state.locations);
         delete newObj[id];
         this.setState({
@@ -74,7 +74,7 @@ class LocationSearch extends Component {
         this.setState({
             locations: {}
         })
-    }
+    }*/
 }
 
 // let our other modules use this

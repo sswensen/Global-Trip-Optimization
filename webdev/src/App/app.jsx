@@ -122,7 +122,8 @@ class App extends React.Component {
             }
         };
         //TODOdone function that gets
-        //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
+        //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both :
+        // (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
             <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}
                       setLocations={Object.values(this.state.selectedLocations)}
@@ -171,6 +172,7 @@ class App extends React.Component {
     }
 
     selectLocation(loc) {
+        let ret = false;
         console.log("Adding location with name", loc.name);
         let currentLocations = Object.values(this.state.selectedLocations);
         let numLocs = currentLocations.length;
@@ -215,7 +217,8 @@ class App extends React.Component {
         }
         let newSortedLocationIds = this.state.sortedLocationIds;
         if (!newSortedLocationIds.includes(loc.id)) {
-        newSortedLocationIds.splice(whereToInsert + 1, 0, loc.id);
+            newSortedLocationIds.splice(whereToInsert + 1, 0, loc.id);
+            ret = true;
         } else {
             console.log("ID already in sorted location ids!");
         }
@@ -258,6 +261,7 @@ class App extends React.Component {
         this.setState({
             selectedLocations: newMap,
         });
+        return ret;
     }
 
     searchSelectedLocationsWithId(id) {
@@ -314,7 +318,7 @@ class App extends React.Component {
         };
 
         map = newNewMap;
-        console.log("MAP IS:",map);
+        console.log("MAP IS:", map);
 
         let query = JSON.stringify(Object.values(map));
         try {
@@ -350,31 +354,32 @@ class App extends React.Component {
 
 
     async selectTrip(trip) {
-        console.log("Trip is currently",trip);
+        console.log("Trip is currently", trip);
         let obj = {};
         obj[trip.name] = trip;
         let sorted = [];
         let numIds = trip.selectedIds.length;
         let locations = trip.locations; //TODOdone this is slow af
-        if(locations === undefined) { //TODOdone check if locations are populated, else, search database for them
+        if (locations === undefined) { //TODOdone check if locations are populated, else, search database for them
             let temp = {};
             let ids = trip.selectedIds;
-            for(let i = 0; i < numIds; i++) {
+            for (let i = 0; i < numIds; i++) {
                 let e = await fetch(`http://localhost:4567/database?id=${ids[i]}`);
                 let json = await e.json();
                 json.forEach(elem => temp[elem.id] = elem);
             }
             trip.locations = temp;
-            console.log("New locations",temp);
-        } /*else {
-            let newMap = {};
-            let numLocs = Object.values(trip.locations).length;
-            for (let i = 0; i < numLocs; i++) {
-                //sorted.push(locations[i].id);
-                newMap[locations[i].id] = locations[i];
-            }
-            trip.locations = newMap;
-        }*/
+            console.log("New locations", temp);
+        }
+        /*else {
+         let newMap = {};
+         let numLocs = Object.values(trip.locations).length;
+         for (let i = 0; i < numLocs; i++) {
+         //sorted.push(locations[i].id);
+         newMap[locations[i].id] = locations[i];
+         }
+         trip.locations = newMap;
+         }*/
         this.setState({
             name: trip.name,
             selectedLocations: trip.locations,
@@ -504,8 +509,8 @@ class App extends React.Component {
             console.log("Switching to individual...");
             let numLocs = Object.values(this.state.selectedLocations).length;
             let locations = Object.values(this.state.selectedLocations);
-            for(let i = 0; i < numLocs; i++) {
-                console.log("Sending location at index",i,locations[i]);
+            for (let i = 0; i < numLocs; i++) {
+                console.log("Sending location at index", i, locations[i]);
                 let q = JSON.stringify(locations[i]);
                 let s = await fetch(`http://localhost:4567/setSelectedIndividual?locs=${q}`);
             }
@@ -540,12 +545,21 @@ class App extends React.Component {
     }
 
     browseFile(filename) {
-        console.log("Got file with name:",filename);
+        console.log("Got file with name:", filename);
+        this.clearSelectedLocations();
+        let name = "";
+        let ids = [];
+        for(let i = 0; i < ids.length; i++) {
+            let location = this.getLocationFromDatabase(ids[i]);
+            this.selectLocation(location);
+        }
     }
 
     test() {
         console.log("leftMenu:", this.state.leftMenu);
-        console.log("[app]: selectedLocations:", this.state.selectedLocations, " \n[app]: savedTrips:", this.state.savedTrips, " \n[app]: tripDistance:", this.state.tripDistance, " \n[app]: sortedLocationIds:", this.state.sortedLocationIds);
+        console.log("[app]: selectedLocations:", this.state.selectedLocations,
+            " \n[app]: savedTrips:", this.state.savedTrips, " \n[app]: tripDistance:",
+            this.state.tripDistance, " \n[app]: sortedLocationIds:", this.state.sortedLocationIds);
     }
 
     static isDead() {
