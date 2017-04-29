@@ -351,8 +351,8 @@ class App extends React.Component {
         obj[trip.name] = trip;
         let sorted = [];
         let numIds = trip.selectedIds.length;
-        //let locations = trip.locations;
-        //if(locations === undefined) {
+        //let locations = trip.locations; //TODO this is slow af
+        //if(locations === undefined) { //TODO check if locations are populated, else, search database for them
             let temp = {};
             let ids = trip.selectedIds;
             for(let i = 0; i < numIds; i++) {
