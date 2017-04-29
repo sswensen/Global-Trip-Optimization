@@ -256,6 +256,15 @@ public class Server {
     }
     */
 
+    private ArrayList<Location> getAllLocationsFromDatabase(ArrayList<String> ids) {
+        ArrayList<Location> locs = new ArrayList<>();
+        QueryBuilder qb = new QueryBuilder(true);
+        for(String id : ids) {
+            locs.add(qb.fireSearchQuery(id).get(0));
+        }
+        return locs;
+    }
+
     private int searchSavedTrips(String name) {
         for(int i = 0; i < trips.size(); i++) {
             if(name.equals(trips.get(i).getName())) {
