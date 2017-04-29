@@ -83,7 +83,7 @@ class TripPlanner extends Component {
         trip.name = tempName;
         trip.totalDistance = distance;
         trip.locations = locations;
-        trip.ids = tempIds;
+        trip.selectedIds = trip.sortedLocationIds;
         console.log(trip);
         this.setState({
             trip: trip,

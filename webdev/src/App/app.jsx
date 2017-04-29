@@ -293,12 +293,25 @@ class App extends React.Component {
         this.setState({
             savedTrips: newMap
         });
-        this.saveTripsToServer("pull", newMap);
+        this.saveTripsToServer("pull", trip);
     }
 
     async saveTripsToServer(opt, map) {
+        let tripName = map.name;
+        let tripIds = map.selectedIds;
+        let newMap = {
+            name: tripName,
+            totalDistance: map.totalDistance,
+            selectedIds: tripIds,
+        };
+        let newNewMap = {
+            newMap,
+        };
+
+        map = newNewMap;
+        console.log("MAP IS:",map);
+
         let query = JSON.stringify(Object.values(map));
-        console.log("Opt is:", opt);
         try {
             console.log("Sending trips...");
             let stuff = await fetch(`http://localhost:4567/saveTrips?trips=${query}`);
@@ -331,21 +344,36 @@ class App extends React.Component {
     }
 
 
-    selectTrip(trip) {
+    async selectTrip(trip) {
+        console.log("Trip is currently",trip);
         let obj = {};
         obj[trip.name] = trip;
         let sorted = [];
+        let numIds = trip.selectedIds.length;
         let locations = trip.locations;
-        let newMap = {};
-        let numLocs = Object.values(trip.locations).length;
-        for (let i = 0; i < numLocs; i++) {
-            sorted.push(locations[i].id);
-            newMap[locations[i].id] = locations[i];
+        if(locations === undefined) {
+            let obj = {};
+            let ids = trip.selectedIds;
+            for(let i = 0; i < numIds; i++) {
+                let e = await fetch(`http://localhost:4567/database?id=${ids[i]}`);
+                let json = await e.json();
+                json.forEach(elem => obj[elem.id] = elem);
+            }
+            trip.locations = obj;
+            console.log("New locations",obj);
+        } else {
+            let newMap = {};
+            let numLocs = Object.values(trip.locations).length;
+            for (let i = 0; i < numLocs; i++) {
+                //sorted.push(locations[i].id);
+                newMap[locations[i].id] = locations[i];
+            }
+            trip.locations = newMap;
         }
         this.setState({
             name: trip.name,
-            selectedLocations: newMap,
-            sortedLocationIds: sorted,
+            selectedLocations: trip.locations,
+            sortedLocationIds: trip.selectedIds,
             tripDistance: trip.totalDistance,
         })
     }
@@ -498,7 +526,11 @@ class App extends React.Component {
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
 
     async getLocationFromDatabase(id) {
-        let dist = await fetch(`http://localhost:4567/database?id=${id}`);
+        let e = await fetch(`http://localhost:4567/database?id=${id}`);
+        let json = await e.json();
+        let obj = {};
+        json.forEach(elem => obj[elem.id] = elem);
+        return obj;
     }
 
     browseFile(filename) {
