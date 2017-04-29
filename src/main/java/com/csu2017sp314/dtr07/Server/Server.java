@@ -29,9 +29,13 @@ public class Server {
     public void serve() {
         Gson g = new Gson();
         get("/locations", this::hello, g::toJson);
-        post("/toOptimize", this::optimize, g::toJson);
         get("/saveTrips", this::saveTrip, g::toJson);
         get("/getTrips", this::getTrip, g::toJson);
+        post("/tooptimize", this::optimize, g::toJson);
+        post("/optimize", (request, response) -> {
+            System.out.println(request.queryMap());
+            return new ArrayList<>();
+        });
     }
 
     public Object hello(Request rec, Response res) {
@@ -43,6 +47,7 @@ public class Server {
     }
 
     public Object optimize(Request rec, Response res) {
+        System.out.println("Got parameters");
         setHeaders(res);
         Gson gson = new Gson();
         String i = rec.queryParams("locs");
