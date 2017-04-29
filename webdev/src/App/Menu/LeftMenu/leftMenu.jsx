@@ -32,7 +32,8 @@ class LeftMenu extends React.Component {
             sideNavStyle = "margin-left:250px";
         }
         return <div className="leftSideChick">
-            <div id="mySidenav-left" className="sidenav-left" style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
+            <div id="mySidenav-left" className="sidenav-left"
+                 style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
                 <LocationSearch selectLocation={this.props.selectLocation}/>
                 <TripPlanner setLocations={this.props.setLocations}
                              sortedLocationIds={this.props.sortedLocationIds}
@@ -42,20 +43,6 @@ class LeftMenu extends React.Component {
                 />
             </div>
         </div>
-    }
-
-    openNav() {
-        console.log("Left now true");
-        this.setState({
-            leftMenu: true,
-        });
-    }
-
-    closeNav() {
-        console.log("Left now false");
-        this.setState({
-            leftMenu: false,
-        });
     }
 }
 

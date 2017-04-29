@@ -95,7 +95,7 @@ class TripPlanner extends Component {
         this.props.saveTrip(trip);
     }
 
-    saveTripFromEnter(event) {
+    /*saveTripFromEnter(event) {
         let locations = Object.values(this.props.setLocations);
         let distance = this.props.tripDistance;
         let tempIds = [];
@@ -138,7 +138,7 @@ class TripPlanner extends Component {
 
     testing() {
         console.log("[trip_planner]: Data in trip_planner is", this.state.name, "with trip as", this.state.trip);
-    }
+    }*/
 }
 
 // let our other modules use this
