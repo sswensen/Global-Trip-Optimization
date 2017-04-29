@@ -38,6 +38,15 @@ public class Server {
         get("/getDistance", this::getDistance, g::toJson);
         get("/setSelectedIndividual", this::selectIndividual, g::toJson);
         get("/fireOpt", this::fireOpt, g::toJson);
+        get("/database", this::searchDatabase, g::toJson);
+    }
+
+    private Object searchDatabase(Request rec, Response res) {
+        setHeaders(res);
+        Gson gson = new Gson();
+        String id = rec.queryParams("id");
+        QueryBuilder qb = new QueryBuilder(true);
+        return qb.fireSearchQuery(id);
     }
 
     public Object selectIndividual(Request rec, Response res) {

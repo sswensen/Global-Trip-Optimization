@@ -293,10 +293,11 @@ class App extends React.Component {
         this.setState({
             savedTrips: newMap
         });
-        this.saveTripsToServer("pull", JSON.stringify(Object.values(newMap)));
+        this.saveTripsToServer("pull", newMap);
     }
 
-    async saveTripsToServer(opt, query) {
+    async saveTripsToServer(opt, map) {
+        let query = JSON.stringify(Object.values(map));
         console.log("Opt is:", opt);
         try {
             console.log("Sending trips...");
@@ -495,6 +496,10 @@ class App extends React.Component {
     }
 
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
+
+    async getLocationFromDatabase(id) {
+        let dist = await fetch(`http://localhost:4567/database?id=${id}`);
+    }
 
     browseFile(filename) {
         console.log("Got file with name:",filename);
