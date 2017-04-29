@@ -446,16 +446,18 @@ class App extends React.Component {
         try {
             console.log("Sending locs...");
             //let stuff = await fetch(`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
-            let stuff = await fetch('http://localhost:4567/toOptimize', {
+            let stuff = await fetch('http://localhost:4567/optimize/', {
+                mode: 'no-cors',
                 method: 'POST',
                 headers: {
+                    'Access-Control-Allow-Origin': '*',
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({query})
+                body: JSON.stringify(Object.values(this.state.selectedLocations))
             });
-            console.log("Url:", `http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
-            console.log("Locs sent");
+            //console.log("Url:", `http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
+            console.log("Locs sent",stuff);
             let json = await stuff.json();
             let obj = {};
             let sorted = [];

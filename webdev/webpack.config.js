@@ -28,6 +28,7 @@ module.exports = {
         filename: "bundle.js"
     },
     devServer: {
-        overlay: true
+        overlay: true,
+        headers: { "Access-Control-Allow-Origin": "*" }
     }
 };
