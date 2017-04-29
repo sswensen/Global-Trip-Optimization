@@ -458,7 +458,6 @@ class App extends React.Component {
             json.forEach(elem => sorted.push(elem.id));
             json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
             json1.forEach(elem => tempD = elem);
-            json1.get
             this.setState({
                 selectedLocations: obj,
                 sortedLocationIds: sorted,
@@ -469,12 +468,28 @@ class App extends React.Component {
         catch (e) {
             console.log("Switching to individual...");
             let numLocs = Object.values(this.state.selectedLocations).length;
+            let locations = Object.values(this.state.selectedLocations);
             for(let i = 0; i < numLocs; i++) {
-                console.log("Sending location at index",i,this.state.selectedLocations[i]);
-                let q = JSON.stringify(this.state.selectedLocations[i]);
-                let s = await fetch(`http://localhost:4567/toOptimize?locs=${q}`);
+                console.log("Sending location at index",i,locations[i]);
+                let q = JSON.stringify(locations[i]);
+                let s = await fetch(`http://localhost:4567/setSelectedIndividual?locs=${q}`);
             }
             let fireOpt = await fetch(`http://localhost:4567/fireOpt?opt=${opt}`);
+            let dist = await fetch(`http://localhost:4567/getDistance?dist=true`);
+            let json = await fireOpt.json();
+            let json1 = await dist.json();
+            let obj = {};
+            let sorted = [];
+            let tempD = 0;
+            json.forEach(elem => sorted.push(elem.id));
+            json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
+            json1.forEach(elem => tempD = elem);
+            this.setState({
+                selectedLocations: obj,
+                sortedLocationIds: sorted,
+                tripDistance: tempD,
+            });
+            console.log("Received Locations", obj);
             //console.error(e);
         }
     }
