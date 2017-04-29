@@ -10,17 +10,17 @@ import java.util.ArrayList;
 
 public class Trip {
     private String name = "";
-    private double distance = 0.0;
+    private double totalDistance = 0.0;
     private ArrayList<Location> locations;
 
-    public Trip(String name, double distance,ArrayList<Location> locations) {
+    public Trip(String name, double totalDistance,ArrayList<Location> locations) {
         this.name = name;
-        this.distance = distance;
+        this.totalDistance = totalDistance;
         this.locations = locations;
     }
 
     public String toString(){
-        return "Trip: " +"name " + name + " distance " + distance + " Locations " + locations.toString();
+        return "name " + name + "\ntotalDistance " + totalDistance + "\nLocations " + locations.toString();
 
     }
 }

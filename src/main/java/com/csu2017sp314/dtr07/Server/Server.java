@@ -94,13 +94,13 @@ public class Server {
         }
         for(int i = 0; i < jsonStrings.length;i++){
 
-            System.out.println(jsonStrings[i]);
+            System.out.println("the json string is " + jsonStrings[i]);
         }
         ArrayList<Trip> newTrips = new ArrayList<>();
         for(int k = 0; k < jsonStrings.length; k++) {
             Trip trip = gson.fromJson(jsonStrings[k], Trip.class);
             newTrips.add(trip);
-            System.out.println("Trip " + k + " " + trip.toString());
+            System.out.println("Trip " + k + "\n" + trip.toString());
         }
 
         trips = newTrips;
