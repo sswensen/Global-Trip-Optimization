@@ -122,10 +122,12 @@ class App extends React.Component {
             }
         };
         //TODOdone function that gets
-        //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
+        //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both :
+        // (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
             <LeftMenu leftMenu={this.state.leftMenu} selectLocation={this.selectLocation.bind(this)}
                       setLocations={Object.values(this.state.selectedLocations)}
+                      sortedLocationIds={this.state.sortedLocationIds}
                       removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                       clear={this.clearSelectedLocations.bind(this)}
                       tripDistance={this.state.tripDistance}
@@ -170,6 +172,7 @@ class App extends React.Component {
     }
 
     selectLocation(loc) {
+        let ret = false;
         console.log("Adding location with name", loc.name);
         let currentLocations = Object.values(this.state.selectedLocations);
         let numLocs = currentLocations.length;
@@ -213,7 +216,12 @@ class App extends React.Component {
             totalDist = totalDist - minusDist + plusDist;
         }
         let newSortedLocationIds = this.state.sortedLocationIds;
-        newSortedLocationIds.splice(whereToInsert + 1, 0, loc.id);
+        if (!newSortedLocationIds.includes(loc.id)) {
+            newSortedLocationIds.splice(whereToInsert + 1, 0, loc.id);
+            ret = true;
+        } else {
+            console.log("ID already in sorted location ids!");
+        }
         this.setState({
             sortedLocationIds: newSortedLocationIds,
             tripDistance: totalDist
@@ -253,6 +261,7 @@ class App extends React.Component {
         this.setState({
             selectedLocations: newMap,
         });
+        return ret;
     }
 
     searchSelectedLocationsWithId(id) {
@@ -293,11 +302,25 @@ class App extends React.Component {
         this.setState({
             savedTrips: newMap
         });
-        this.saveTripsToServer("pull", JSON.stringify(Object.values(newMap)));
+        this.saveTripsToServer("pull", trip);
     }
 
-    async saveTripsToServer(opt, query) {
-        console.log("Opt is:", opt);
+    async saveTripsToServer(opt, map) {
+        let tripName = map.name;
+        let tripIds = map.selectedIds;
+        let newMap = {
+            name: tripName,
+            totalDistance: map.totalDistance,
+            selectedIds: tripIds,
+        };
+        let newNewMap = {
+            newMap,
+        };
+
+        map = newNewMap;
+        console.log("MAP IS:", map);
+
+        let query = JSON.stringify(Object.values(map));
         try {
             console.log("Sending trips...");
             let stuff = await fetch(`http://localhost:4567/saveTrips?trips=${query}`);
@@ -330,21 +353,37 @@ class App extends React.Component {
     }
 
 
-    selectTrip(trip) {
+    async selectTrip(trip) {
+        console.log("Trip is currently", trip);
         let obj = {};
         obj[trip.name] = trip;
         let sorted = [];
-        let locations = trip.locations;
-        let newMap = {};
-        let numLocs = Object.values(trip.locations).length;
-        for (let i = 0; i < numLocs; i++) {
-            sorted.push(locations[i].id);
-            newMap[locations[i].id] = locations[i];
+        let numIds = trip.selectedIds.length;
+        let locations = trip.locations; //TODOdone this is slow af
+        if (locations === undefined) { //TODOdone check if locations are populated, else, search database for them
+            let temp = {};
+            let ids = trip.selectedIds;
+            for (let i = 0; i < numIds; i++) {
+                let e = await fetch(`http://localhost:4567/database?id=${ids[i]}`);
+                let json = await e.json();
+                json.forEach(elem => temp[elem.id] = elem);
+            }
+            trip.locations = temp;
+            console.log("New locations", temp);
         }
+        /*else {
+         let newMap = {};
+         let numLocs = Object.values(trip.locations).length;
+         for (let i = 0; i < numLocs; i++) {
+         //sorted.push(locations[i].id);
+         newMap[locations[i].id] = locations[i];
+         }
+         trip.locations = newMap;
+         }*/
         this.setState({
             name: trip.name,
-            selectedLocations: newMap,
-            sortedLocationIds: sorted,
+            selectedLocations: trip.locations,
+            sortedLocationIds: trip.selectedIds,
             tripDistance: trip.totalDistance,
         })
     }
@@ -357,6 +396,7 @@ class App extends React.Component {
         this.setState({
             savedTrips: newMap
         });
+        //TODO could add deleting savedTrip from database but I dont want to
     }
 
     clearSelectedLocations() {
@@ -458,7 +498,6 @@ class App extends React.Component {
             json.forEach(elem => sorted.push(elem.id));
             json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
             json1.forEach(elem => tempD = elem);
-            json1.get
             this.setState({
                 selectedLocations: obj,
                 sortedLocationIds: sorted,
@@ -467,19 +506,60 @@ class App extends React.Component {
             console.log("Received Locations", obj);
         }
         catch (e) {
-            console.error(e);
+            console.log("Switching to individual...");
+            let numLocs = Object.values(this.state.selectedLocations).length;
+            let locations = Object.values(this.state.selectedLocations);
+            for (let i = 0; i < numLocs; i++) {
+                console.log("Sending location at index", i, locations[i]);
+                let q = JSON.stringify(locations[i]);
+                let s = await fetch(`http://localhost:4567/setSelectedIndividual?locs=${q}`);
+            }
+            let fireOpt = await fetch(`http://localhost:4567/fireOpt?opt=${opt}`);
+            let dist = await fetch(`http://localhost:4567/getDistance?dist=true`);
+            let json = await fireOpt.json();
+            let json1 = await dist.json();
+            let obj = {};
+            let sorted = [];
+            let tempD = 0;
+            json.forEach(elem => sorted.push(elem.id));
+            json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
+            json1.forEach(elem => tempD = elem);
+            this.setState({
+                selectedLocations: obj,
+                sortedLocationIds: sorted,
+                tripDistance: tempD,
+            });
+            console.log("Received Locations", obj);
+            //console.error(e);
         }
     }
 
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
 
+    async getLocationFromDatabase(id) {
+        let e = await fetch(`http://localhost:4567/database?id=${id}`);
+        let json = await e.json();
+        let obj = {};
+        json.forEach(elem => obj[elem.id] = elem);
+        return obj;
+    }
+
     browseFile(filename) {
-        console.log("Got file with name:",filename);
+        console.log("Got file with name:", filename);
+        this.clearSelectedLocations();
+        let name = "";
+        let ids = [];
+        for(let i = 0; i < ids.length; i++) {
+            let location = this.getLocationFromDatabase(ids[i]);
+            this.selectLocation(location);
+        }
     }
 
     test() {
         console.log("leftMenu:", this.state.leftMenu);
-        console.log("[app]: selectedLocations:", this.state.selectedLocations, " \n[app]: savedTrips:", this.state.savedTrips, " \n[app]: tripDistance:", this.state.tripDistance, " \n[app]: sortedLocationIds:", this.state.sortedLocationIds);
+        console.log("[app]: selectedLocations:", this.state.selectedLocations,
+            " \n[app]: savedTrips:", this.state.savedTrips, " \n[app]: tripDistance:",
+            this.state.tripDistance, " \n[app]: sortedLocationIds:", this.state.sortedLocationIds);
     }
 
     static isDead() {

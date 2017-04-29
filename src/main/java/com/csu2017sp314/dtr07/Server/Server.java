@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.util.ArrayUtil;
 import spark.Request;
 import spark.Response;
+import sun.util.resources.cldr.id.LocaleNames_id;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import static spark.Spark.*;
 public class Server {
     private ArrayList<Trip> trips = new ArrayList<>();
     private double tripDistance;
+    private ArrayList<Location> selectedLocations = new ArrayList<>();
 
     public static void main(String[] args) {
         Server s = new Server();
@@ -28,12 +30,69 @@ public class Server {
     }
 
     public void serve() {
+        ArrayList<String> temp = new ArrayList<>();
+        temp.add("KCOS");
+        temp.add("MRBC");
+        temp.add("0CD1");
+        trips.add(new Trip("Colorado", 50, temp));
         Gson g = new Gson();
         get("/locations", this::hello, g::toJson);
         get("/toOptimize", this::optimize, g::toJson);
         get("/saveTrips", this::saveTrip, g::toJson);
         get("/getTrips", this::getTrip, g::toJson);
         get("/getDistance", this::getDistance, g::toJson);
+        get("/setSelectedIndividual", this::selectIndividual, g::toJson);
+        get("/fireOpt", this::fireOpt, g::toJson);
+        get("/database", this::searchDatabase, g::toJson);
+    }
+
+    private Object searchDatabase(Request rec, Response res) {
+        setHeaders(res);
+        Gson gson = new Gson();
+        String id = rec.queryParams("id");
+        QueryBuilder qb = new QueryBuilder(true);
+        return qb.fireSearchQuery(id);
+    }
+
+    public Object selectIndividual(Request rec, Response res) {
+        setHeaders(res);
+        Gson gson = new Gson();
+        String i = rec.queryParams("locs");
+        i = i.replace("[", "");
+        i = i.replace("]", "");
+        String[] jsonStrings = i.split("}");
+        jsonStrings[0] += "}";
+        for(int j = 1; j < jsonStrings.length; j++) {
+            StringBuilder sb = new StringBuilder(jsonStrings[j]);
+            sb.deleteCharAt(0);
+            sb.append("}");
+            jsonStrings[j] = sb.toString();
+        }
+        Location[] locations2 = new Location[jsonStrings.length];
+        //ArrayList<Location> locations = new ArrayList<>();
+        for(int k = 0; k < jsonStrings.length; k++) {
+            Location loc = gson.fromJson(jsonStrings[k], Location.class);
+            //locations.add(loc);
+            locations2[k] = loc;
+            //System.out.println("Location " + k + " " + loc.toString());
+        }
+        Location tempL = locations2[0];
+        selectedLocations.add(tempL);
+        ArrayList<String> temp = new ArrayList<>();
+        temp.add("OK!");
+        return temp;
+    }
+
+    public Object fireOpt(Request rec, Response res) {
+        setHeaders(res);
+        String opt = rec.queryParams("opt");
+        Location[] locations2 = selectedLocations.toArray(new Location[selectedLocations.size()]);
+        System.out.println("running 2 opt now");
+        Optimization optimiziation = new Optimization(locations2, opt);
+        locations2 = optimiziation.getOptimizedRoute();
+        System.out.println("complete");
+        tripDistance = optimiziation.getTripDistance();
+        return locations2;
     }
 
     public Object hello(Request rec, Response res) {
@@ -103,16 +162,20 @@ public class Server {
 
             System.out.println(jsonStrings[i]);
         }
-        ArrayList<Trip> newTrips = new ArrayList<>();
+        //ArrayList<Trip> newTrips = new ArrayList<>();
         for(int k = 0; k < jsonStrings.length; k++) {
             Trip trip = gson.fromJson(jsonStrings[k], Trip.class);
-            newTrips.add(trip);
+            int ret = searchSavedTrips(trip.getName());
+            if(ret < 0) {
+                //newTrips.add(trip); //Dont need this
+                trips.add(trip);
+            } else {
+                trips.remove(ret);
+                trips.add(ret, trip);
+            }
             System.out.println("Trip " + k + " " + trip.toString());
         }
 
-        trips = newTrips;
-        /*Location temp = locations.remove(0);
-        locations.add(temp);*/
         return trips;
     }
 
@@ -192,6 +255,15 @@ public class Server {
         return index;
     }
     */
+
+    private int searchSavedTrips(String name) {
+        for(int i = 0; i < trips.size(); i++) {
+            if(name.equals(trips.get(i).getName())) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     private void setHeaders(Response res) {
         res.header("Content-Type", "application/json"); //Says we are returning a json
