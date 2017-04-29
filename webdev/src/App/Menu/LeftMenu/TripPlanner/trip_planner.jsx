@@ -71,18 +71,22 @@ class TripPlanner extends Component {
     saveTrip() {
         let locations = Object.values(this.props.setLocations);
         let distance = this.props.tripDistance;
-        let tempIds = [];
+        /*let tempIds = [];
         for(let i = 0; i < locations.length; i++) {
             tempIds.push(locations[i].id)
-        }
+        }*/
         let tempName = this.state.currentName;
+        let newMap = {};
+        for(let i = 0; i < locations.length; i++) {
+            newMap[locations[i].id] = locations[i];
+        }
         this.setState({
             name: tempName
         });
         let trip = new Object();
         trip.name = tempName;
         trip.totalDistance = distance;
-        trip.locations = locations;
+        trip.locations = newMap;
         trip.selectedIds = this.props.sortedLocationIds;
         console.log(trip);
         this.setState({
