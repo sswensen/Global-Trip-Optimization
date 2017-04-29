@@ -467,7 +467,15 @@ class App extends React.Component {
             console.log("Received Locations", obj);
         }
         catch (e) {
-            console.error(e);
+            console.log("Switching to individual...");
+            let numLocs = Object.values(this.state.selectedLocations).length;
+            for(let i = 0; i < numLocs; i++) {
+                console.log("Sending location at index",i,this.state.selectedLocations[i]);
+                let q = JSON.stringify(this.state.selectedLocations[i]);
+                let s = await fetch(`http://localhost:4567/toOptimize?locs=${q}`);
+            }
+            let fireOpt = await fetch(`http://localhost:4567/fireOpt?opt=${opt}`);
+            //console.error(e);
         }
     }
 
