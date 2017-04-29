@@ -71,14 +71,23 @@ class TripPlanner extends Component {
     saveTrip() {
         let locations = Object.values(this.props.setLocations);
         let distance = this.props.tripDistance;
+        /*let tempIds = [];
+        for(let i = 0; i < locations.length; i++) {
+            tempIds.push(locations[i].id)
+        }*/
         let tempName = this.state.currentName;
+        let newMap = {};
+        for(let i = 0; i < locations.length; i++) {
+            newMap[locations[i].id] = locations[i];
+        }
         this.setState({
             name: tempName
         });
         let trip = new Object();
         trip.name = tempName;
         trip.totalDistance = distance;
-        trip.locations = locations;
+        trip.locations = newMap;
+        trip.selectedIds = this.props.sortedLocationIds;
         console.log(trip);
         this.setState({
             trip: trip,
@@ -86,9 +95,13 @@ class TripPlanner extends Component {
         this.props.saveTrip(trip);
     }
 
-    saveTripFromEnter(event) {
+    /*saveTripFromEnter(event) {
         let locations = Object.values(this.props.setLocations);
         let distance = this.props.tripDistance;
+        let tempIds = [];
+        for(let i = 0; i < locations.length; i++) {
+            tempIds.push(locations[i].id)
+        }
         this.setState({
             name: event.target.value,
         });
@@ -96,6 +109,7 @@ class TripPlanner extends Component {
         trip.name = event.target.value;
         trip.totalDistance = distance;
         trip.locations = locations;
+        trip.ids = tempIds;
         console.log(trip);
         this.setState({
             trip: trip,
@@ -124,7 +138,7 @@ class TripPlanner extends Component {
 
     testing() {
         console.log("[trip_planner]: Data in trip_planner is", this.state.name, "with trip as", this.state.trip);
-    }
+    }*/
 }
 
 // let our other modules use this

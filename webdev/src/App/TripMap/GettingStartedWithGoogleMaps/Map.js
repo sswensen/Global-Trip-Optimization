@@ -21,7 +21,7 @@ import {
  * Add <script src="https://maps.googleapis.com/maps/api/js"></script> to your HTML to provide google.maps reference
  */
 
-function withGoogleMaps(WrappedComponent) {
+/*function withGoogleMaps(WrappedComponent) {
     return class extends React.Component {
         componentWillReceiveProps(nextProps) {
 
@@ -55,7 +55,7 @@ function withGoogleMaps(WrappedComponent) {
     }
 }
 
-const GettingStartedGoogleMap1 = withGoogleMaps();
+const GettingStartedGoogleMap1 = withGoogleMaps();*/
 
 const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
