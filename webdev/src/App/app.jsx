@@ -214,7 +214,11 @@ class App extends React.Component {
             totalDist = totalDist - minusDist + plusDist;
         }
         let newSortedLocationIds = this.state.sortedLocationIds;
+        if (!newSortedLocationIds.includes(loc.id)) {
         newSortedLocationIds.splice(whereToInsert + 1, 0, loc.id);
+        } else {
+            console.log("ID already in sorted location ids!");
+        }
         this.setState({
             sortedLocationIds: newSortedLocationIds,
             tripDistance: totalDist

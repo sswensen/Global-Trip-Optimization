@@ -58,6 +58,8 @@ class RightMenu extends React.Component {
         let fname = e.target.value;
         console.log("Event is:",e);
         this.props.browseFile(fname);
+
+
     }
 }
 
