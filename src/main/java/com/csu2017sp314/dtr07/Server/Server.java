@@ -4,10 +4,12 @@ import com.csu2017sp314.dtr07.Model.Location;
 import com.csu2017sp314.dtr07.Model.QueryBuilder;
 import com.google.gson.Gson;
 import org.eclipse.jetty.util.ArrayUtil;
+import org.eclipse.jetty.util.IO;
 import spark.Request;
 import spark.Response;
 import sun.util.resources.cldr.id.LocaleNames_id;
 
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -162,27 +164,80 @@ public class Server {
             jsonStrings[i]= sb.toString();
         }
         for(int i = 0; i < jsonStrings.length;i++){
-
             System.out.println(jsonStrings[i]);
         }
         //ArrayList<Trip> newTrips = new ArrayList<>();
-        for(int k = 0; k < jsonStrings.length; k++) {
-            Trip trip = gson.fromJson(jsonStrings[k], Trip.class);
-            trip.setTotalDistance(Math.round(trip.getTotalDistance()));
-            int ret = searchSavedTrips(trip.getName());
-            if(ret < 0) {
-                //newTrips.add(trip); //Dont need this
-                trips.add(trip);
-            } else {
-                trips.remove(ret);
-                trips.add(ret, trip);
-            }
-            System.out.println("Trip " + k + " " + trip.toString());
+        Trip trip = gson.fromJson(jsonStrings[0], Trip.class);
+        int ret = searchSavedTrips(trip.getName());
+        if(ret < 0) {
+            //newTrips.add(trip); //Dont need this
+            trips.add(trip);
+        } else {
+            trips.remove(ret);
+            trips.add(ret, trip);
         }
+        //Make KML file here
+        ArrayList<Location> locations = getAllLocationsFromDatabase(trip.getSelectedIds());
+        createKMLFile(locations, trip.getName());
+        System.out.println("Trip " + trip.toString());
+
 
         return trips;
     }
 
+    public void createKMLFile(ArrayList<Location> locations, String tripName) {
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(tripName + ".kml");
+            bw = new BufferedWriter(fw);
+            String kmlStart =
+                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                    "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
+            String documentStart = "  <Document>\n";
+            bw.write(kmlStart);
+            bw.write(documentStart);
+            String coordinates = "";
+            for(int i = 0; i < locations.size();i++){
+                String kmlElement =
+                        "    <Placemark>\n" +
+                        "      <name>" + locations.get(i).getName() + "</name>\n" +
+                        "      <description>" + locations.get(i).getMunicipality() + "</description>\n" +
+                        "      <Point>\n" +
+                        "        <coordinates>" + locations.get(i).getLon() + "," + locations.get(i).getLat() + "," + 0 + "</coordinates>\n" +
+                        "      </Point>\n" +
+                        "    </Placemark>\n";
+                bw.write(kmlElement);
+                coordinates += locations.get(i).getLon() + ", " + locations.get(i).getLat() + ", " + 0 + ".\n" + "          ";
+            }
+            coordinates  = coordinates.trim();
+            String lineString =
+                "    <Placemark>\n" +
+                "      <LineString>\n" +
+                "        <coordinates>\n" +
+                "          " + coordinates + "\n" +
+                "        </coordinates>\n"+
+                "      </LineString>\n" +
+                "    </Placemark>\n";
+            bw.write(lineString);
+            String documentEnd = "  </Document>\n";
+            String kmlend = "</kml>";
+            bw.write(documentEnd);
+            bw.write(kmlend);
+            System.out.println("Done");
+        } catch(IOException io) {
+            io.printStackTrace();
+        } finally {
+            try {
+                if(bw != null)
+                    bw.close();
+                if(fw != null)
+                    fw.close();
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
     public Object getTrip(Request rec, Response res) {
         setHeaders(res);
         String locs = rec.queryParams("num");
