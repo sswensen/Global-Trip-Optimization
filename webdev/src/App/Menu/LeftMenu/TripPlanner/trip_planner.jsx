@@ -47,7 +47,7 @@ class TripPlanner extends Component {
 
         return <div className="trip-planner">
             <div className="map-options">
-                <input className="trip-name-input" onChange={this.updateCurrentName.bind(this)}
+                <input className="trip-name-input" onKeyPress={this.updateCurrentName.bind(this)}
                        type="text" placeholder="Name"/>
                 <button className="save-button" onClick={this.saveTrip.bind(this)}>Save</button>
                 <button className="clear-selected-locations" onClick={clear}>Clear</button>
