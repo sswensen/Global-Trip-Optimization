@@ -173,7 +173,7 @@ class App extends React.Component {
 
     selectLocation(loc) {
         let ret = false;
-        console.log("Adding location with name", loc.name);
+        console.log("Adding location", loc);
         let currentLocations = Object.values(this.state.selectedLocations);
         let numLocs = currentLocations.length;
         let tempLocationList = [];
@@ -222,10 +222,7 @@ class App extends React.Component {
         } else {
             console.log("ID already in sorted location ids!");
         }
-        this.setState({
-            sortedLocationIds: newSortedLocationIds,
-            tripDistance: totalDist
-        });
+
         console.log("Should be inserted at index:", whereToInsert + 1, this.state.sortedLocationIds);
 
         /*let totalTripDistance = 0;
@@ -260,6 +257,8 @@ class App extends React.Component {
             obj);
         this.setState({
             selectedLocations: newMap,
+            sortedLocationIds: newSortedLocationIds,
+            tripDistance: totalDist
         });
         return ret;
     }
@@ -544,14 +543,16 @@ class App extends React.Component {
         return obj;
     }
 
-    browseFile(filename) {
-        console.log("Got file with name:", filename);
+    async browseFile(file) {
+        console.log("Got file:", file);
         this.clearSelectedLocations();
-        let name = "";
-        let ids = [];
+        let name = file.name;
+        let ids = file.ids;
+        console.log(ids);
         for(let i = 0; i < ids.length; i++) {
-            let location = this.getLocationFromDatabase(ids[i]);
-            this.selectLocation(location);
+            let location = await this.getLocationFromDatabase(ids[i]);
+            console.log("Got location",location);
+            this.selectLocation(location[ids[i]]);
         }
     }
 

@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import SavedTrip from './SavedTrip/SavedTrip.jsx'
+import Dropzone from 'react-dropzone'
 
 class RightMenu extends React.Component {
     constructor(props) {
@@ -41,7 +42,8 @@ class RightMenu extends React.Component {
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
                     <input type="file" className="load-file-button"
-                           onChange={this.handleDocumentUploadChange.bind(this)} />
+                           ref="file" onChange={this.handleDocumentUploadChange.bind(this)} />
+                    <Dropzone onDrop={this.drop.bind(this)} />
                     <span className="total-trip-distance">Distance:{tripDist}</span>
                 </div>
                 <div className="saved-trips">
@@ -55,8 +57,32 @@ class RightMenu extends React.Component {
         </div>
     }
 
+    drop(acceptedFiles) {
+        console.log("Accepting drop");
+        acceptedFiles.forEach(file => {
+            console.log("Filename:",file.name,"File:",file);
+            console.log(JSON.stringify(file));
+            let fr = new FileReader();
+            fr.onload = (function(theFile) {
+                return function(e) {
+                    // Render thumbnail.
+                    let JsonObj = JSON.parse(e.target.result);
+                    console.log(JsonObj);
+                    this.props.browseFile(JsonObj)
+                };
+            })(file).bind(this);
+
+            fr.readAsText(file);
+        });
+    }
+
     handleDocumentUploadChange(e) {
+        e.preventDefault();
         let fname = e.target.value;
+        const fileUpload = this.refs.file.value;
+        let formData = new FormData();
+        formData.append('file', fileUpload);
+        console.log("Data is",formData);
         console.log("Event is:",e);
         this.props.browseFile(fname); //should take object with name and list of location ids
     }
