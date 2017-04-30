@@ -27,4 +27,8 @@ public class Trip {
         return "Trip: " +"name " + name + " totalDistance " + totalDistance + " Locations " + selectedIds.toString();
 
     }
+
+    public ArrayList<String> getSelectedIds(){
+        return selectedIds;
+    }
 }
