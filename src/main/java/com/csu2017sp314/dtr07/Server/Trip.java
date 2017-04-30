@@ -27,4 +27,12 @@ public class Trip {
         return "Trip: " +"name " + name + " totalDistance " + totalDistance + " Locations " + selectedIds.toString();
 
     }
+
+    public double getTotalDistance() {
+        return totalDistance;
+    }
+
+    public void setTotalDistance(double totalDistance) {
+        this.totalDistance = totalDistance;
+    }
 }

@@ -173,7 +173,6 @@ class App extends React.Component {
 
     selectLocation(loc) {
         let ret = false;
-        console.log("Adding location", loc);
         let currentLocations = Object.values(this.state.selectedLocations);
         let numLocs = currentLocations.length;
         let tempLocationList = [];
@@ -185,12 +184,13 @@ class App extends React.Component {
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
         let totalDist = 0;
-        console.log("Number of locations currently:", numLocs);
+        console.log(numLocs,"Adding location:", loc);
+        //console.log("Number of locations currently:", numLocs);
         if (numLocs > 0) {
             let bestDist = 9999999;
             let minusDist = 0;
             let plusDist = 0;
-            console.log("Now calculating distances for insertion");
+            //console.log("Now calculating distances for insertion");
             for (let i = 0; i < numLocs; i++) {
                 //console.log(currentLocations[i].name);
                 //console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
@@ -223,7 +223,7 @@ class App extends React.Component {
             console.log("ID already in sorted location ids!");
         }
 
-        console.log("Should be inserted at index:", whereToInsert + 1, this.state.sortedLocationIds);
+        console.log("Should be inserted at index:", whereToInsert + 1);
 
         /*let totalTripDistance = 0;
          if (numLocs > 1) {
@@ -299,7 +299,9 @@ class App extends React.Component {
             this.state.savedTrips,
             obj);
         this.setState({
-            savedTrips: newMap
+            savedTrips: newMap,
+            tripDistance: trip.totalDistance,
+            sortedLocationIds: trip.selectedIds
         });
         this.saveTripsToServer("pull", trip);
     }
@@ -551,7 +553,7 @@ class App extends React.Component {
         console.log(ids);
         for(let i = 0; i < ids.length; i++) {
             let location = await this.getLocationFromDatabase(ids[i]);
-            console.log("Got location",location);
+            //console.log("Got location",location);
             this.selectLocation(location[ids[i]]);
         }
     }

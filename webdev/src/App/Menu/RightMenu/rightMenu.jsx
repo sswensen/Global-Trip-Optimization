@@ -41,8 +41,6 @@ class RightMenu extends React.Component {
                 <div className="options">
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
-                    <input type="file" className="load-file-button"
-                           ref="file" onChange={this.handleDocumentUploadChange.bind(this)} />
                     <Dropzone onDrop={this.drop.bind(this)} />
                     <span className="total-trip-distance">Distance:{tripDist}</span>
                 </div>
@@ -74,17 +72,6 @@ class RightMenu extends React.Component {
 
             fr.readAsText(file);
         });
-    }
-
-    handleDocumentUploadChange(e) {
-        e.preventDefault();
-        let fname = e.target.value;
-        const fileUpload = this.refs.file.value;
-        let formData = new FormData();
-        formData.append('file', fileUpload);
-        console.log("Data is",formData);
-        console.log("Event is:",e);
-        this.props.browseFile(fname); //should take object with name and list of location ids
     }
 }
 
