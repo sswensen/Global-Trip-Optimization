@@ -580,8 +580,8 @@ class App extends React.Component {
     async browseFile(file) {
         console.log("Got file:", file);
         this.clearSelectedLocations();
-        let name = file.name;
-        let ids = file.ids;
+        let name = file.title;
+        let ids = file.destinations;
         console.log(ids);
         for(let i = 0; i < ids.length; i++) {
             let location = await this.getLocationFromDatabase(ids[i]);
