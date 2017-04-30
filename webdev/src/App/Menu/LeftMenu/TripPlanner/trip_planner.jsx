@@ -16,13 +16,15 @@ class TripPlanner extends Component {
         /*let TripPlanner = ({locations}) => <div>
          {locations.map(l => <li key={l.id}>{l.name}</li>)}
          </div>*/
+        let green = this.props.green;
+        let red = this.props.red;
 
         let locations = Object.values(this.props.setLocations);
         /*let items = locations.map((l) => <li key={l.id}>{l.name}</li>);*/
         let trip = this.state.trip;
         let save = this.props.saveTrip.bind(undefined, trip);
         let clear = this.props.clear.bind(undefined);
-
+        let selected = this.props.sortedLocationIds.length;
 
         let items = locations.map((loc) => {
             let remove = this.props.removeLocation.bind(undefined, loc);
@@ -47,10 +49,11 @@ class TripPlanner extends Component {
 
         return <div className="trip-planner">
             <div className="map-options">
-                <input className="trip-name-input" onKeyPress={this.updateCurrentName.bind(this)}
+                <input className="trip-name-input" onKeyUp={this.updateCurrentName.bind(this)}
                        type="text" placeholder="Name"/>
                 <button className="save-button" onClick={this.saveTrip.bind(this)}>Save</button>
                 <button className="clear-selected-locations" onClick={clear}>Clear</button>
+                <span className="number-selected">{selected}</span>
 
             </div>
             <div className="selectedLocations-list-div">

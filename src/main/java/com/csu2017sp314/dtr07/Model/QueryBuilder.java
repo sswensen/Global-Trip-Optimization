@@ -196,7 +196,7 @@ public class QueryBuilder {
                         //rs = st.executeQuery(columns + continents + join + where + limit);
 
                         //System.out.println(st);
-                        System.out.println(anotherbigassfuckingstring + id+ "\"");
+                        System.out.println("Querying individual with \"" + id + "\"");
                         rs = st.executeQuery(anotherbigassfuckingstring + id + "\"");
 
                         try { // iterate through query results and print using column numbers

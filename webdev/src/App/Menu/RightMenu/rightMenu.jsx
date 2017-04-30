@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import SavedTrip from './SavedTrip/SavedTrip.jsx'
+import Dropzone from 'react-dropzone'
 
 class RightMenu extends React.Component {
     constructor(props) {
@@ -20,7 +21,8 @@ class RightMenu extends React.Component {
             },
         };
 
-
+        let green = this.props.green;
+        let red = this.props.red;
         let right = this.props.rightMenu;
         //console.log("Rendering RightMenu now...");
         let tripDist = Math.round(this.props.tripDistance);
@@ -40,8 +42,9 @@ class RightMenu extends React.Component {
                 <div className="options">
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
-                    <input type="file" className="load-file-button"
-                           onChange={this.handleDocumentUploadChange.bind(this)} />
+                    <Dropzone onDrop={this.drop.bind(this)}>
+                        <p>drag file or click</p>
+                    </Dropzone>
                     <span className="total-trip-distance">Distance:{tripDist}</span>
                 </div>
                 <div className="saved-trips">
@@ -55,10 +58,24 @@ class RightMenu extends React.Component {
         </div>
     }
 
-    handleDocumentUploadChange(e) {
-        let fname = e.target.value;
-        console.log("Event is:",e);
-        this.props.browseFile(fname); //should take object with name and list of location ids
+    drop(acceptedFiles) {
+        console.log("Accepting drop");
+        this.props.red();
+        acceptedFiles.forEach(file => {
+            console.log("Filename:",file.name,"File:",file);
+            console.log(JSON.stringify(file));
+            let fr = new FileReader();
+            fr.onload = (function(theFile) {
+                return function(e) {
+                    // Render thumbnail.
+                    let JsonObj = JSON.parse(e.target.result);
+                    console.log(JsonObj);
+                    this.props.browseFile(JsonObj)
+                };
+            })(file).bind(this);
+
+            fr.readAsText(file);
+        });
     }
 }
 

@@ -28,7 +28,16 @@ public class Trip {
 
     }
 
+    public double getTotalDistance() {
+        return totalDistance;
+    }
+
+    public void setTotalDistance(double totalDistance) {
+        this.totalDistance = totalDistance;
+    }
+  
     public ArrayList<String> getSelectedIds(){
         return selectedIds;
+
     }
 }

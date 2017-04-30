@@ -89,11 +89,13 @@ public class Server {
         setHeaders(res);
         String opt = rec.queryParams("opt");
         Location[] locations2 = selectedLocations.toArray(new Location[selectedLocations.size()]);
-        System.out.println("running 2 opt now");
+        System.out.println("running individual opt now");
         Optimization optimiziation = new Optimization(locations2, opt);
         locations2 = optimiziation.getOptimizedRoute();
         System.out.println("complete");
         tripDistance = optimiziation.getTripDistance();
+        selectedLocations.clear();
+        //TODO remove last locations from locations2
         return locations2;
     }
 
@@ -131,11 +133,12 @@ public class Server {
         }
         /*Location temp = locations.remove(0);
         locations.add(temp);*/
-        System.out.println("running 2 opt now");
+        System.out.println("running opt now");
         Optimization optimiziation = new Optimization(locations2, opt);
         locations2 = optimiziation.getOptimizedRoute();
         System.out.println("complete");
         tripDistance = optimiziation.getTripDistance();
+        //TODO remove last locations from locations2
         return locations2;
     }
 

@@ -15,7 +15,9 @@ class App extends React.Component {
     constructor(props) {
         super(props); // this is required
         this.getTripsFromServer();
+        let status = true;
         this.state = {
+            status: true,
             name: "",
             selectedLocations: {},
             savedTrips: {
@@ -87,6 +89,14 @@ class App extends React.Component {
     }
 
     render() {
+        let statusStyle = {
+            green: {
+                backgroundColor: "#00ff20",
+            },
+            red: {
+                backgroundColor: "#ff0c00",
+            }
+        };
         let main = {
             both: {
                 marginLeft: "29%",
@@ -131,6 +141,8 @@ class App extends React.Component {
                       removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                       clear={this.clearSelectedLocations.bind(this)}
                       tripDistance={this.state.tripDistance}
+                      green={this.green.bind(this)}
+                      red={this.red.bind(this)}
             />
             <RightMenu
                 rightMenu={this.state.rightMenu}
@@ -142,6 +154,8 @@ class App extends React.Component {
                 toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                 toggleThreeOpt={this.toggleThreeOpt.bind(this)}
                 browseFile={this.browseFile.bind(this)}
+                green={this.green.bind(this)}
+                red={this.red.bind(this)}
             />
             <div className="left-menu-button-div"
                  style={(this.state.leftMenu) ? main.left : main.nope}
@@ -157,7 +171,7 @@ class App extends React.Component {
                       onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
-
+            <button className="status" style={!(this.state.status) ? statusStyle.red : statusStyle.green}> </button>
             <div id="main" className="planning-stuff"
                  style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
                 <div className="inner">
@@ -173,7 +187,6 @@ class App extends React.Component {
 
     selectLocation(loc) {
         let ret = false;
-        console.log("Adding location with name", loc.name);
         let currentLocations = Object.values(this.state.selectedLocations);
         let numLocs = currentLocations.length;
         let tempLocationList = [];
@@ -185,12 +198,13 @@ class App extends React.Component {
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
         let totalDist = 0;
-        console.log("Number of locations currently:", numLocs);
+        console.log(numLocs,"Adding location:", loc);
+        //console.log("Number of locations currently:", numLocs);
         if (numLocs > 0) {
             let bestDist = 9999999;
             let minusDist = 0;
             let plusDist = 0;
-            console.log("Now calculating distances for insertion");
+            //console.log("Now calculating distances for insertion");
             for (let i = 0; i < numLocs; i++) {
                 //console.log(currentLocations[i].name);
                 //console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
@@ -222,11 +236,8 @@ class App extends React.Component {
         } else {
             console.log("ID already in sorted location ids!");
         }
-        this.setState({
-            sortedLocationIds: newSortedLocationIds,
-            tripDistance: totalDist
-        });
-        console.log("Should be inserted at index:", whereToInsert + 1, this.state.sortedLocationIds);
+
+        console.log("Should be inserted at index:", whereToInsert + 1);
 
         /*let totalTripDistance = 0;
          if (numLocs > 1) {
@@ -260,11 +271,14 @@ class App extends React.Component {
             obj);
         this.setState({
             selectedLocations: newMap,
+            sortedLocationIds: newSortedLocationIds,
+            tripDistance: totalDist
         });
         return ret;
     }
 
     searchSelectedLocationsWithId(id) {
+        this.red();
         let locations = Object.values(this.state.selectedLocations);
         for (let i = 0; i < locations.length; i++) {
             if (id === locations[i].id) {
@@ -272,10 +286,12 @@ class App extends React.Component {
             }
         }
         console.log("[app]: searchSelectedLocationsWithId: No locations with id:", id, "in selectedLocations")
+        this.green();
         return undefined;
     }
 
     removeLocation(loc) {
+        this.red();
         console.log("Removing location with id: " + loc.id);
         let newMap = this.state.selectedLocations;
         delete newMap[loc.id];
@@ -290,22 +306,28 @@ class App extends React.Component {
         this.setState({
             sortedLocationIds: tempSortedLocations,
         });
+        this.green();
         //TODO add handling for only one location being selected. Update tripDistance to 0
     }
 
     saveTrip(trip) {
+        this.red();
         let obj = {};
         obj[trip.name] = trip;
         let newMap = Object.assign({},
             this.state.savedTrips,
             obj);
         this.setState({
-            savedTrips: newMap
+            savedTrips: newMap,
+            tripDistance: trip.totalDistance,
+            sortedLocationIds: trip.selectedIds
         });
         this.saveTripsToServer("pull", trip);
+        this.green();
     }
 
     async saveTripsToServer(opt, map) {
+        this.red();
         let tripName = map.name;
         let tripIds = map.selectedIds;
         let newMap = {
@@ -332,9 +354,11 @@ class App extends React.Component {
         catch (e) {
             console.error(e);
         }
+        this.green();
     }
 
     async getTripsFromServer() {
+        this.red();
         try {
             console.log("Asking for trips...");
             let stuff = await fetch(`http://localhost:4567/getTrips?num=all`);
@@ -350,10 +374,12 @@ class App extends React.Component {
         catch (e) {
             console.error(e);
         }
+        this.green();
     }
 
 
     async selectTrip(trip) {
+        this.red();
         console.log("Trip is currently", trip);
         let obj = {};
         obj[trip.name] = trip;
@@ -385,10 +411,12 @@ class App extends React.Component {
             selectedLocations: trip.locations,
             sortedLocationIds: trip.selectedIds,
             tripDistance: trip.totalDistance,
-        })
+        });
+        this.green();
     }
 
     deleteTrip(trip) {
+        this.red();
         let name = trip.name;
         console.log("Deleting trip with name:", name);
         let newMap = this.state.savedTrips;
@@ -397,14 +425,17 @@ class App extends React.Component {
             savedTrips: newMap
         });
         //TODO could add deleting savedTrip from database but I dont want to
+        this.green();
     }
 
     clearSelectedLocations() {
+        this.red();
         this.setState({
             selectedLocations: {},
             sortedLocationIds: [],
             tripDistance: 0,
         });
+        this.green();
     }
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
@@ -482,6 +513,7 @@ class App extends React.Component {
     }
 
     async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
+        this.red();
         console.log("Opt is:", opt);
         try {
             console.log("Sending locs...");
@@ -532,6 +564,7 @@ class App extends React.Component {
             console.log("Received Locations", obj);
             //console.error(e);
         }
+        this.green();
     }
 
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
@@ -544,15 +577,18 @@ class App extends React.Component {
         return obj;
     }
 
-    browseFile(filename) {
-        console.log("Got file with name:", filename);
+    async browseFile(file) {
+        console.log("Got file:", file);
         this.clearSelectedLocations();
-        let name = "";
-        let ids = [];
+        let name = file.name;
+        let ids = file.ids;
+        console.log(ids);
         for(let i = 0; i < ids.length; i++) {
-            let location = this.getLocationFromDatabase(ids[i]);
-            this.selectLocation(location);
+            let location = await this.getLocationFromDatabase(ids[i]);
+            //console.log("Got location",location);
+            this.selectLocation(location[ids[i]]);
         }
+        this.green();
     }
 
     test() {
@@ -564,6 +600,20 @@ class App extends React.Component {
 
     static isDead() {
         return true;
+    }
+
+    green() {
+        //this.status = true;
+        this.setState({
+            status: true
+        })
+    }
+
+    red() {
+        //this.status = false;
+        this.setState({
+            status: false
+        })
     }
 }
 
