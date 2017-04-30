@@ -15,7 +15,9 @@ class App extends React.Component {
     constructor(props) {
         super(props); // this is required
         this.getTripsFromServer();
+        let status = true;
         this.state = {
+            status: true,
             name: "",
             selectedLocations: {},
             savedTrips: {
@@ -87,6 +89,14 @@ class App extends React.Component {
     }
 
     render() {
+        let statusStyle = {
+            green: {
+                backgroundColor: "#00ff20",
+            },
+            red: {
+                backgroundColor: "#ff0c00",
+            }
+        };
         let main = {
             both: {
                 marginLeft: "29%",
@@ -131,6 +141,8 @@ class App extends React.Component {
                       removeLocation={this.removeLocation.bind(this)} saveTrip={this.saveTrip.bind(this)}
                       clear={this.clearSelectedLocations.bind(this)}
                       tripDistance={this.state.tripDistance}
+                      green={this.green.bind(this)}
+                      red={this.red.bind(this)}
             />
             <RightMenu
                 rightMenu={this.state.rightMenu}
@@ -142,6 +154,8 @@ class App extends React.Component {
                 toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                 toggleThreeOpt={this.toggleThreeOpt.bind(this)}
                 browseFile={this.browseFile.bind(this)}
+                green={this.green.bind(this)}
+                red={this.red.bind(this)}
             />
             <div className="left-menu-button-div"
                  style={(this.state.leftMenu) ? main.left : main.nope}
@@ -157,7 +171,7 @@ class App extends React.Component {
                       onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
-
+            <button className="status" style={!(this.state.status) ? statusStyle.red : statusStyle.green}> </button>
             <div id="main" className="planning-stuff"
                  style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
                 <div className="inner">
@@ -264,6 +278,7 @@ class App extends React.Component {
     }
 
     searchSelectedLocationsWithId(id) {
+        this.red();
         let locations = Object.values(this.state.selectedLocations);
         for (let i = 0; i < locations.length; i++) {
             if (id === locations[i].id) {
@@ -271,10 +286,12 @@ class App extends React.Component {
             }
         }
         console.log("[app]: searchSelectedLocationsWithId: No locations with id:", id, "in selectedLocations")
+        this.green();
         return undefined;
     }
 
     removeLocation(loc) {
+        this.red();
         console.log("Removing location with id: " + loc.id);
         let newMap = this.state.selectedLocations;
         delete newMap[loc.id];
@@ -289,10 +306,12 @@ class App extends React.Component {
         this.setState({
             sortedLocationIds: tempSortedLocations,
         });
+        this.green();
         //TODO add handling for only one location being selected. Update tripDistance to 0
     }
 
     saveTrip(trip) {
+        this.red();
         let obj = {};
         obj[trip.name] = trip;
         let newMap = Object.assign({},
@@ -304,9 +323,11 @@ class App extends React.Component {
             sortedLocationIds: trip.selectedIds
         });
         this.saveTripsToServer("pull", trip);
+        this.green();
     }
 
     async saveTripsToServer(opt, map) {
+        this.red();
         let tripName = map.name;
         let tripIds = map.selectedIds;
         let newMap = {
@@ -333,9 +354,11 @@ class App extends React.Component {
         catch (e) {
             console.error(e);
         }
+        this.green();
     }
 
     async getTripsFromServer() {
+        this.red();
         try {
             console.log("Asking for trips...");
             let stuff = await fetch(`http://localhost:4567/getTrips?num=all`);
@@ -351,10 +374,12 @@ class App extends React.Component {
         catch (e) {
             console.error(e);
         }
+        this.green();
     }
 
 
     async selectTrip(trip) {
+        this.red();
         console.log("Trip is currently", trip);
         let obj = {};
         obj[trip.name] = trip;
@@ -386,10 +411,12 @@ class App extends React.Component {
             selectedLocations: trip.locations,
             sortedLocationIds: trip.selectedIds,
             tripDistance: trip.totalDistance,
-        })
+        });
+        this.green();
     }
 
     deleteTrip(trip) {
+        this.red();
         let name = trip.name;
         console.log("Deleting trip with name:", name);
         let newMap = this.state.savedTrips;
@@ -398,14 +425,17 @@ class App extends React.Component {
             savedTrips: newMap
         });
         //TODO could add deleting savedTrip from database but I dont want to
+        this.green();
     }
 
     clearSelectedLocations() {
+        this.red();
         this.setState({
             selectedLocations: {},
             sortedLocationIds: [],
             tripDistance: 0,
         });
+        this.green();
     }
 
     distanceBetweenCoords(lat1, lon1, lat2, lon2) {
@@ -483,6 +513,7 @@ class App extends React.Component {
     }
 
     async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
+        this.red();
         console.log("Opt is:", opt);
         try {
             console.log("Sending locs...");
@@ -533,6 +564,7 @@ class App extends React.Component {
             console.log("Received Locations", obj);
             //console.error(e);
         }
+        this.green();
     }
 
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
@@ -556,6 +588,7 @@ class App extends React.Component {
             //console.log("Got location",location);
             this.selectLocation(location[ids[i]]);
         }
+        this.green();
     }
 
     test() {
@@ -567,6 +600,20 @@ class App extends React.Component {
 
     static isDead() {
         return true;
+    }
+
+    green() {
+        //this.status = true;
+        this.setState({
+            status: true
+        })
+    }
+
+    red() {
+        //this.status = false;
+        this.setState({
+            status: false
+        })
     }
 }
 

@@ -34,12 +34,17 @@ class LeftMenu extends React.Component {
         return <div className="leftSideChick">
             <div id="mySidenav-left" className="sidenav-left"
                  style={ (left) ? mySidenavStylz.complete : mySidenavStylz.nope }>
-                <LocationSearch selectLocation={this.props.selectLocation}/>
+                <LocationSearch selectLocation={this.props.selectLocation}
+                                green={this.props.green}
+                                red={this.props.red}
+                />
                 <TripPlanner setLocations={this.props.setLocations}
                              sortedLocationIds={this.props.sortedLocationIds}
                              removeLocation={this.props.removeLocation} saveTrip={this.props.saveTrip}
                              clear={this.props.clear}
                              tripDistance={this.props.tripDistance}
+                             green={this.props.green}
+                             red={this.props.red}
                 />
             </div>
         </div>

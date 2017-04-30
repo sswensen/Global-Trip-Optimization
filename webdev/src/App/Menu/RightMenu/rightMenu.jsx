@@ -21,7 +21,8 @@ class RightMenu extends React.Component {
             },
         };
 
-
+        let green = this.props.green;
+        let red = this.props.red;
         let right = this.props.rightMenu;
         //console.log("Rendering RightMenu now...");
         let tripDist = Math.round(this.props.tripDistance);
@@ -41,7 +42,9 @@ class RightMenu extends React.Component {
                 <div className="options">
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
-                    <Dropzone onDrop={this.drop.bind(this)} />
+                    <Dropzone onDrop={this.drop.bind(this)}>
+                        <p>drag file or click</p>
+                    </Dropzone>
                     <span className="total-trip-distance">Distance:{tripDist}</span>
                 </div>
                 <div className="saved-trips">
@@ -57,6 +60,7 @@ class RightMenu extends React.Component {
 
     drop(acceptedFiles) {
         console.log("Accepting drop");
+        this.props.red();
         acceptedFiles.forEach(file => {
             console.log("Filename:",file.name,"File:",file);
             console.log(JSON.stringify(file));

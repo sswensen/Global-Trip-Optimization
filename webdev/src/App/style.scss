@@ -129,3 +129,14 @@ body {
   padding: 5px;
   padding-left: 0;
 }
+
+.status {
+  z-index: 1000;
+  padding: 5px 5px;
+  position: absolute;
+  border: 1px solid #1a55cb;
+  //border-radius: 8px;
+  height: 5px;
+  width: 5px;
+  right: 0;
+}

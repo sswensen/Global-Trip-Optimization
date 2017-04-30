@@ -16,6 +16,8 @@ class TripPlanner extends Component {
         /*let TripPlanner = ({locations}) => <div>
          {locations.map(l => <li key={l.id}>{l.name}</li>)}
          </div>*/
+        let green = this.props.green;
+        let red = this.props.red;
 
         let locations = Object.values(this.props.setLocations);
         /*let items = locations.map((l) => <li key={l.id}>{l.name}</li>);*/
