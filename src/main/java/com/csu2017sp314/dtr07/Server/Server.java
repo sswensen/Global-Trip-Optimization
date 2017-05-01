@@ -241,6 +241,7 @@ public class Server {
             }
         }
     }
+
     public Object getTrip(Request rec, Response res) {
         setHeaders(res);
         String locs = rec.queryParams("num");
@@ -256,7 +257,6 @@ public class Server {
         return temp;
     }
 
-    /*
     public Location[] locParser(String str) {
         str = str.substring(1);
         System.out.println(str);
@@ -316,7 +316,6 @@ public class Server {
             index = str.indexOf(character, index+1);
         return index;
     }
-    */
 
     private ArrayList<Location> getAllLocationsFromDatabase(ArrayList<String> ids) {
         ArrayList<Location> locs = new ArrayList<>();

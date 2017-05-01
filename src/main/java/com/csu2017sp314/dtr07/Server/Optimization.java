@@ -19,10 +19,12 @@ public class Optimization {
 
     public Optimization(Location[] locations, String opt) {
         this.locations = locations;
-        if(opt.equals("two")) {
+        if(opt.equals("2")) {
             setTwoOpt(true);
-        } else {
+        } else if(opt.equals("3")) {
             setThreeOpt(true);
+        } else {
+            System.out.println("No opt chosen!");
         }
         Location[] routeForTable = generateLocs(locations);
         distTable = generateDistanceTable(routeForTable);
