@@ -100,6 +100,19 @@ class App extends React.Component {
             }
         };
         let main = {
+            triple: {
+                marginLeft: "29%",
+                marginRight: "29%",
+                marginBottom: "29%",
+            },
+            leftAndBottom: {
+                marginLeft: "29%",
+                marginBottom: "29%",
+            },
+            rightAndBottom: {
+                marginRight: "29%",
+                marginBottom: "29%",
+            },
             both: {
                 marginLeft: "29%",
                 marginRight: "29%",
@@ -110,9 +123,13 @@ class App extends React.Component {
             left: {
                 marginLeft: "29%",
             },
+            itinerary: {
+                marginBottom: "29%",
+            },
             nope: {
                 marginLeft: "0%",
                 marginRight: "0%",
+                marginBottom: "0%",
             }
 
         };
@@ -127,10 +144,19 @@ class App extends React.Component {
 
         let bottomMain = {
             openItin: {
-                marginBottom: "66%",
+                marginBottom: "29%",
             },
             closeItin: {
                 marginBottom: "0%",
+            }
+        };
+
+        var myItinerary = {
+            openItin: {
+                height: "29%",
+            },
+            closeItin: {
+                height: "0%",
             }
         };
         //TODOdone function that gets
@@ -175,9 +201,24 @@ class App extends React.Component {
                       onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
+            <div className="itinerary-div"
+                 style={ (this.state.itinerary) ? myItinerary.openItin : myItinerary.closeItin }>
+                <Itinerary
+                    selectedLocations={this.state.selectedLocations}
+                    sortedLocationIds={this.state.sortedLocationIds}
+                />
+            </div>
+
+            <div className="bottom-menu-button-div"
+                 style={(this.state.itinerary) ? bottomMain.openItin : bottomMain.closeItin}
+            >
+                <span className="bottom-menu-button"
+                      onClick={(this.state.itinerary) ? this.closeItinNav.bind(this) : this.openItinNav.bind(this)}>{this.state.itinerary ? "u" : "d"}
+                </span>
+            </div>
             <button className="status" style={!(this.state.status) ? statusStyle.red : statusStyle.green}> </button>
             <div id="main" className="planning-stuff"
-                 style={ ((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope)}>
+                 style={ ((this.state.leftMenu && this.state.rightMenu && this.state.itinerary) ? main.triple : (this.state.leftMenu && this.state.itinerary) ? main.leftAndBottom : (this.state.rightMenu && this.state.itinerary) ? main.rightAndBottom : (this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : (this.state.itinerary) ? main.itinerary : main.nope)}>
                 <div className="inner">
                     <TripMap locations={this.state.selectedLocations}
                              trip={this.state.sortedLocationIds}
@@ -601,6 +642,9 @@ class App extends React.Component {
         this.green();
     }
 
+    browseFile(filename) {
+        console.log("File name is:",filename);
+    }
     test() {
         console.log("leftMenu:", this.state.leftMenu);
         console.log("[app]: selectedLocations:", this.state.selectedLocations,
