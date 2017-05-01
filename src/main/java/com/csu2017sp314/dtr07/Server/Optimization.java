@@ -23,7 +23,9 @@ public class Optimization {
             setThreeOpt(false);
         } else if(opt.equals("2")) {
             setTwoOpt(true);
+            setThreeOpt(false);
         } else if(opt.equals("3")) {
+            setTwoOpt(false);
             setThreeOpt(true);
         } else {
             System.out.println("No opt chosen!");
