@@ -208,7 +208,7 @@ class App extends React.Component {
                 </span>
             </div>
 
-            <button title={!(this.state.status) ? "Loading..." : "Ready"} className="status" style={!(this.state.status) ? statusStyle.red : statusStyle.green}> </button>
+            <button alt="status" title={!(this.state.status) ? "Loading..." : "Ready"} className="status" style={!(this.state.status) ? statusStyle.red : statusStyle.green}> </button>
             <div id="main" className="planning-stuff"
                  style={ ((this.state.leftMenu && this.state.rightMenu && this.state.itinerary) ? main.triple : (this.state.leftMenu && this.state.itinerary) ? main.leftAndBottom : (this.state.rightMenu && this.state.itinerary) ? main.rightAndBottom : (this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : (this.state.itinerary) ? main.itinerary : main.nope)}>
                 <div className="inner">
