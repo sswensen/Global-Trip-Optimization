@@ -33,11 +33,6 @@ public class Optimization {
     }
 
     public Location[] getOptimizedRoute() {
-//        if(twoOpt) {
-//            twoOpt();
-//        } else {
-//            threeOpt();
-//        }
         nearestNeighbor();
         return route;
     }
