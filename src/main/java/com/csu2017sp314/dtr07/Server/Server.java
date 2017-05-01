@@ -98,6 +98,7 @@ public class Server {
         tripDistance = optimiziation.getTripDistance();
         selectedLocations.clear();
         //TODO remove last locations from locations2
+        System.out.println("individual opy done");
         return locations2;
     }
 
