@@ -198,6 +198,10 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
+attr-accept@^1.0.3:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/attr-accept/-/attr-accept-1.1.0.tgz#b5cd35227f163935a8f1de10ed3eba16941f6be6"
+
 autoprefixer@^6.3.1:
   version "6.7.7"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-6.7.7.tgz#1dbd1c835658e35ce3f9984099db00585c782014"
@@ -3682,6 +3686,13 @@ react-dom@^15.5.4:
     object-assign "^4.1.0"
     prop-types "~15.5.7"
 
+react-dropzone@^3.13.1:
+  version "3.13.1"
+  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-3.13.1.tgz#5380d47585b44ad2877c0b5a9b92abe7bd2a12e5"
+  dependencies:
+    attr-accept "^1.0.3"
+    prop-types "^15.5.7"
+
 react-google-maps@^6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/react-google-maps/-/react-google-maps-6.3.0.tgz#ba7e0b3c2a3ad15ebdff55ecfe8c17a1c9cd8a6b"
@@ -3700,6 +3711,13 @@ react-google-maps@^6.3.0:
 react-prop-types-element-of-type@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/react-prop-types-element-of-type/-/react-prop-types-element-of-type-2.2.0.tgz#bcc332d3903c2259cf68c28a81c4a663faba59ac"
+
+react-test-renderer@^15.5.4:
+  version "15.5.4"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-15.5.4.tgz#d4ebb23f613d685ea8f5390109c2d20fbf7c83bc"
+  dependencies:
+    fbjs "^0.8.9"
+    object-assign "^4.1.0"
 
 react@^15.5.4:
   version "15.5.4"

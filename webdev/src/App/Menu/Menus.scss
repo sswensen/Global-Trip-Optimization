@@ -104,6 +104,21 @@
   .total-trip-distance {
     padding: 5px 5px;
   }
+
+  .dropzone-style {
+    padding: 0 12px;
+    margin: 5px 5px 5px 5px;
+    display: inline-block;
+    position: relative;
+    border: 1px dashed #1a55cb;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #80d4ff;
+
+    p {
+      font-size: 12px;
+    }
+  }
 }
 
 .leftSideChick .rightSideChick {

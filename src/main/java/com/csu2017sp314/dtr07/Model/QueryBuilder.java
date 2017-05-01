@@ -112,14 +112,28 @@ public class QueryBuilder {
             "   INNER JOIN airports ON airports.iso_region = regions.code\n" +
             " WHERE MATCH (countries.name) AGAINST (?)\n" +
             " LIMIT 50)";
-  //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
+    String anotherbigassfuckingstring = "SELECT airports.id,\n" +
+            "  airports.name,\n" +
+            "  latitude,\n" +
+            "  longitude,\n" +
+            "  municipality,\n" +
+            "  regions.name,\n" +
+            "  countries.name,\n" +
+            "  continents.name,\n" +
+            "  airports.wikipedia_link,\n" +
+            "  regions.wikipedia_link,\n" +
+            "  countries.wikipedia_link FROM continents INNER JOIN countries ON countries.continent = continents.id\n" +
+            "  INNER JOIN regions ON countries.code = regions.iso_country\n" +
+            "  INNER JOIN airports ON airports.iso_region =regions.code\n" +
+            "WHERE airports.id LIKE \"";
+    //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     public QueryBuilder(boolean useDB) {
         useDatabase = useDB;
     }
 
     public void searchDatabase(String type, String continent, String country,
-                        String region, String municipality, String name) {
+                               String region, String municipality, String name) {
         ArrayList<String> w = new ArrayList<>();
         w.add(type);
         w.add(continent);
@@ -164,6 +178,58 @@ public class QueryBuilder {
 
     private void setWhere(String where) {
         this.where = where;
+    }
+
+    public ArrayList<Location> fireSearchQuery(String id) {
+        ArrayList<Location> tempLocations = new ArrayList<>();
+        if(useDatabase) {
+            ResultSet rs = null;
+            try { // connect to the database
+                Class.forName(myDriver);
+                Connection conn = DriverManager.getConnection(myUrl, "sswensen", "830534566");
+
+                try { // create a statement
+                    Statement st = conn.createStatement();
+
+                    try { // submit a query to count the results
+                        //System.out.println(columns + continents + join + where + limit);
+                        //rs = st.executeQuery(columns + continents + join + where + limit);
+
+                        //System.out.println(st);
+                        System.out.println("Querying individual with \"" + id + "\"");
+                        rs = st.executeQuery(anotherbigassfuckingstring + id + "\"");
+
+                        try { // iterate through query results and print using column numbers
+                            //System.out.println("id,name,latitude,longitude,municipality,region,country,continent");
+                            while(rs.next()) {
+                            /*for(int i = 1; i <= 7; i++)
+                                System.out.printf("%s,", rs.getString(i));
+                            System.out.printf("%s\n", rs.getString(8));*/
+                                //System.out.println("Creating location with id [" + rs.getString(1) + "]");
+                                tempLocations.add(new Location(rs.getString(1),
+                                        rs.getString(2), rs.getString(3),
+                                        rs.getString(4), rs.getString(5),
+                                        rs.getString(6), rs.getString(7),
+                                        rs.getString(8), rs.getString(9),
+                                        rs.getString(10), rs.getString(11)));
+                            }
+                        } finally {
+                            rs.close();
+                        }
+                    } finally {
+                        st.close();
+                    }
+                } finally {
+                    conn.close();
+                }
+            } catch(Exception e) {
+                System.err.printf("Exception: ");
+                System.err.println(e.getMessage());
+                System.err.println("-------------EXITING!!!------------");
+                System.exit(33); //Something broke in the database :/
+            }
+        }
+        return tempLocations;
     }
 
     public void fireQuery() {

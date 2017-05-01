@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
+    "test:watch": "yarn run test -- --watch",
     "serve": "webpack-dev-server --hot"
   },
   "dependencies": {
@@ -20,7 +21,9 @@
     "node-sass": "^4.5.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-dropzone": "^3.13.1",
     "react-google-maps": "^6.3.0",
+    "react-test-renderer": "^15.5.4",
     "redux": "^3.6.0",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.16.1",
