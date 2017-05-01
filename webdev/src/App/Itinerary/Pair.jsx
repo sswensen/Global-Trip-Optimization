@@ -3,35 +3,38 @@
  */
 import React, {Component} from 'react';
 
-let Pair = ({one, two, distance, kilometers}) => <li
-    className="pair">
-    <div>
-        <div className="one">
-            <div className="location-info-one">
-                <a target="_blank" href={"" + one.airportUrl + ""}>
-                    <h5>{one.name}</h5>
-                </a>
-                <div className="other-info-one">
-                    {one.municipality}, <a target="_blank" href={"" + one.regionUrl + ""}>{one.region}</a>, <a
-                    target="_blank" href={"" + one.countryUrl + ""}>{one.country}</a>
+let Pair = ({one, two, distance, kilometers}) =>
+    <li id="container">
+        <div id="inner">
+            <div id="one" className="info">
+                <div className="location-info-one">
+                    <a target="_blank" href={"" + one.airportUrl + ""}>
+                        <h5>{one.name}</h5>
+                    </a>
+                    <div className="other-info-one">
+                        {one.municipality}, <a target="_blank" href={"" + one.regionUrl + ""}>{one.region}</a>, <a
+                        target="_blank" href={"" + one.countryUrl + ""}>{one.country}</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div className="distance">
-            {Math.round(distance)} {kilometers ? "Kilometers" : "Miles"}
-        </div>
-        <div className="two">
-            <div className="location-info-two">
-                <a target="_blank" href={"" + two.airportUrl + ""}>
-                    <h5>{two.name}</h5>
-                </a>
-                <div className="other-info-two">
-                    {two.municipality}, <a target="_blank" href={"" + two.regionUrl + ""}>{two.region}</a>, <a
-                    target="_blank" href={"" + two.countryUrl + ""}>{two.country}</a>
+
+            <div id="distance" className="info">
+                {Math.round(distance)} {kilometers ? "Kilometers" : "Miles"}
+            </div>
+
+            <div id="two" className="info">
+                <div className="location-info-two">
+                    <a target="_blank" href={"" + two.airportUrl + ""}>
+                        <h5>{two.name}</h5>
+                    </a>
+                    <div className="other-info-two">
+                        {two.municipality}, <a target="_blank" href={"" + two.regionUrl + ""}>{two.region}</a>, <a
+                        target="_blank" href={"" + two.countryUrl + ""}>{two.country}</a>
+                    </div>
                 </div>
             </div>
+
         </div>
-    </div>
-</li>;
+    </li>;
 
 export default Pair;

@@ -1,14 +1,17 @@
-.pair {
+#container {
   margin: 2px 10px;
+  overflow: hidden;
+  width: 100%;
+}
 
+* {margin: 0; padding: 0;}
   h5 {
     font-weight: normal;
     margin: 0;
     font-size: 15px;
   }
 
-  .location-info-one,
-  .location-info-two {
+  .location-info-one, .location-info-two {
     display: inline-block;
     position: relative;
     margin-left: 10px;
@@ -18,8 +21,7 @@
     }
   }
 
-  .other-info-one,
-  .other-info-two {
+  .other-info-one, .other-info-two {
     color: grey;
     font-size: 12px;
     font-weight: lighter;
@@ -29,37 +31,43 @@
     }
   }
 
-  .one {
+  #one, #two, #distance {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+  }
+  #one {
+
+    width: 35%;
     height: 50px;
-    width: 33%;
     border: 1px solid #1e62ea;
     border-radius: 8px;
     background-color: #79c9f2;
     padding: 5px;
-    margin: 2px 8px;
-    display: inline-block;
+    margin: 1%;
     position: relative;
     .location-info-one {
       display: inline-block;
     }
   }
 
-  .two {
+  #two {
+    width: 35%;
     height: 50px;
-    width: 33%;
     border: 1px solid #1e62ea;
     border-radius: 8px;
     background-color: #79c9f2;
     padding: 5px;
     margin: 2px 8px;
-    display: inline-block;
     position: relative;
     .location-info-two {
       display: inline-block;
     }
-
-    .distance {
-      display: inline-block;
-    }
   }
-}
+
+  #distance {
+    width: 20%;
+  }
+
+
+
