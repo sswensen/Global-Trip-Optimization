@@ -607,7 +607,9 @@ class App extends React.Component {
 
     toggleKilometers() {
         if(this.state.kilometers) {
-
+            this.setState({
+                kilometers: false
+            });
         } else {
             this.setState({
                 kilometers: true
