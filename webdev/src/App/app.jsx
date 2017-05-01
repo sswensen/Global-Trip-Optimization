@@ -79,6 +79,15 @@ class App extends React.Component {
                 marginBottom: "0%",
             }
         };
+
+        var myItinerary = {
+            openItin: {
+                marginBottom: "29%",
+            },
+            closeItin: {
+                marginBottom: "0%",
+            }
+        };
         //TODOdone function that gets
         //console.log("dix",((this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : main.nope));
         return <div>
@@ -113,13 +122,14 @@ class App extends React.Component {
                 </span>
             </div>
 
-            <div className="itinerary-div">
+            <div className="itinerary-div"
+                 style={ (this.state.itinerary) ? myItinerary.openItin : myItinerary.closeItin }>
                 <Itinerary
-                    bottom={this.state.itinerary}
                     selectedLocations={this.state.selectedLocations}
                     sortedLocationIds={this.state.sortedLocationIds}
                 />
             </div>
+
             <div className="bottom-menu-button-div"
                  style={(this.state.itinerary) ? bottomMain.openItin : bottomMain.closeItin}
             >
