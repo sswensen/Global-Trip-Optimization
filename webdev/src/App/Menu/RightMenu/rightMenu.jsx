@@ -35,7 +35,7 @@ class RightMenu extends React.Component {
             let die = this.props.deleteTrip.bind(undefined, trip);
             //console.log({loc});
             let locs = trip.locations;
-            return <SavedTrip {...trip} key={trip.id} select={select} die={die}/>; //Calls to location.jsx
+            return <SavedTrip {...trip} key={trip.id} select={select} kilometers={kilometers} die={die}/>; //Calls to location.jsx
         });
         let twoOpt = this.props.toggleTwoOpt.bind(this);
         let threeOpt = this.props.toggleThreeOpt.bind(this);

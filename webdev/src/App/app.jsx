@@ -621,6 +621,7 @@ class App extends React.Component {
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
 
     async getLocationFromDatabase(id) {
+        console.log(`http://localhost:4567/database?id=${id}`);
         let e = await fetch(`http://localhost:4567/database?id=${id}`);
         let json = await e.json();
         let obj = {};
@@ -634,12 +635,41 @@ class App extends React.Component {
         this.clearSelectedLocations();
         let name = file.title;
         let ids = file.destinations;
-        console.log(ids);
-        for(let i = 0; i < ids.length; i++) {
-            let location = await this.getLocationFromDatabase(ids[i]);
-            //console.log("Got location",location);
-            this.selectLocation(location[ids[i]]);
+        //console.log(ids);
+        let num = 0;
+        if(ids.length < 50) {
+            num = 1;
+        } else if(ids.length < 250) {
+            num = 10
+        } else if(ids.length < 400) {
+            num = 100;
         }
+        if(true) { //This is for querying with multiple
+            for (let i = 0; i < ids.length; i += num) {
+                let tenIds = [];
+                for (let j = i; j < i + num; j++) {
+                    if (j < ids.length) {
+                        tenIds.push(ids[j]);
+                    } else {
+                        break;
+                    }
+                }
+                //console.log("First 10 are",tenIds);
+                let location = await this.getLocationFromDatabase(tenIds);
+                //console.log("Got location",location);
+                for (let j = 0; j < Object.values(location).length; j++) {
+                    //console.log("Selecting",location[tenIds[j]]);
+                    this.selectLocation(location[tenIds[j]]);
+                }
+            }
+        } else { //This is for querying with one
+            for (let i = 0; i < ids.length; i++) {
+                let location = await this.getLocationFromDatabase(ids[i]);
+                //console.log("Got location",location);
+                this.selectLocation(location[ids[i]]);
+            }
+        }
+
         this.setState({
             original: true,
         });

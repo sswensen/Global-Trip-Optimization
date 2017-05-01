@@ -53,6 +53,7 @@ public class Server {
         Gson gson = new Gson();
         String id = rec.queryParams("id");
         QueryBuilder qb = new QueryBuilder(true);
+        id = id.replace(",", "\",\"");
         return qb.fireSearchQuery(id);
     }
 
