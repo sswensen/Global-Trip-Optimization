@@ -18,6 +18,7 @@ class App extends React.Component {
         let status = true;
         this.state = {
             status: true,
+            original: true,
             name: "",
             selectedLocations: {},
             savedTrips: {
@@ -189,6 +190,7 @@ class App extends React.Component {
     }
 
     selectLocation(loc) {
+        this.red(this.state.status);
         let ret = false;
         let currentLocations = Object.values(this.state.selectedLocations);
         let numLocs = currentLocations.length;
@@ -277,11 +279,12 @@ class App extends React.Component {
             sortedLocationIds: newSortedLocationIds,
             tripDistance: totalDist
         });
+        this.green(this.state.status);
         return ret;
     }
 
     searchSelectedLocationsWithId(id) {
-        this.red();
+        this.red(this.state.status);
         let locations = Object.values(this.state.selectedLocations);
         for (let i = 0; i < locations.length; i++) {
             if (id === locations[i].id) {
@@ -294,7 +297,7 @@ class App extends React.Component {
     }
 
     removeLocation(loc) {
-        this.red();
+        this.red(this.state.status);
         console.log("Removing location with id: " + loc.id);
         let newMap = this.state.selectedLocations;
         delete newMap[loc.id];
@@ -314,7 +317,7 @@ class App extends React.Component {
     }
 
     saveTrip(trip) {
-        this.red();
+        this.red(this.state.status);
         let obj = {};
         obj[trip.name] = trip;
         let newMap = Object.assign({},
@@ -330,7 +333,7 @@ class App extends React.Component {
     }
 
     async saveTripsToServer(opt, map) {
-        this.red();
+        this.red(this.state.status);
         let tripName = map.name;
         let tripIds = map.selectedIds;
         let newMap = {
@@ -361,7 +364,7 @@ class App extends React.Component {
     }
 
     async getTripsFromServer() {
-        this.red();
+        this.red(this.state.status);
         try {
             console.log("Asking for trips...");
             let stuff = await fetch(`http://localhost:4567/getTrips?num=all`);
@@ -382,7 +385,7 @@ class App extends React.Component {
 
 
     async selectTrip(trip) {
-        this.red();
+        this.red(this.state.status);
         console.log("Trip is currently", trip);
         let obj = {};
         obj[trip.name] = trip;
@@ -419,7 +422,7 @@ class App extends React.Component {
     }
 
     deleteTrip(trip) {
-        this.red();
+        this.red(this.state.status);
         let name = trip.name;
         console.log("Deleting trip with name:", name);
         let newMap = this.state.savedTrips;
@@ -432,7 +435,7 @@ class App extends React.Component {
     }
 
     clearSelectedLocations() {
-        this.red();
+        this.red(this.state.status);
         this.setState({
             selectedLocations: {},
             sortedLocationIds: [],
@@ -516,7 +519,7 @@ class App extends React.Component {
     }
 
     async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
-        this.red();
+        this.red(this.state.status);
         console.log("Opt is:", opt);
         try {
             console.log("Sending locs...");
@@ -581,7 +584,7 @@ class App extends React.Component {
     }
 
     async browseFile(file) {
-        this.red();
+        this.red(this.state.status);
         console.log("Got file:", file);
         this.clearSelectedLocations();
         let name = file.title;
@@ -592,6 +595,9 @@ class App extends React.Component {
             //console.log("Got location",location);
             this.selectLocation(location[ids[i]]);
         }
+        this.setState({
+            original: true,
+        });
         this.green();
     }
 
@@ -620,14 +626,16 @@ class App extends React.Component {
 
     green() {
         //this.status = true;
+        let orig = this.state.original;
         this.setState({
-            status: true
+            status: orig
         })
     }
 
-    red() {
+    red(original) {
         //this.status = false;
         this.setState({
+            original: original,
             status: false
         })
     }

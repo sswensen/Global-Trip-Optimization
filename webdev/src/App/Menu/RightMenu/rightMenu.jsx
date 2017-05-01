@@ -78,7 +78,8 @@ class RightMenu extends React.Component {
                     // Render thumbnail.
                     let JsonObj = JSON.parse(e.target.result);
                     console.log(JsonObj);
-                    this.props.browseFile(JsonObj)
+                    this.props.browseFile(JsonObj);
+                    this.props.green();
                 };
             })(file).bind(this);
 
