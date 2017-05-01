@@ -144,7 +144,7 @@ class App extends React.Component {
 
         let bottomMain = {
             openItin: {
-                marginBottom: "29%",
+                marginBottom: "39%",
             },
             closeItin: {
                 marginBottom: "0%",
