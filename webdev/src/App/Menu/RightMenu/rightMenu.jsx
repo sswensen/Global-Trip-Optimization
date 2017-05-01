@@ -45,10 +45,11 @@ class RightMenu extends React.Component {
                 <div className="options">
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
-                    <Dropzone onDrop={this.drop.bind(this)}>
-                        <p>drag file or click</p>
+                    <button className="three-opt-button" onClick={toggleKilometers}>Units</button>
+                    <Dropzone className="dropzone-style" onDrop={this.drop.bind(this)}>
+                        <p>drag in file or click</p>
                     </Dropzone>
-                    <span className="total-trip-distance">Distance:{kilometers ? tripDistKilo : tripDist}</span>
+                    <span className="total-trip-distance">Distance: {kilometers ? tripDistKilo : tripDist} {kilometers ? " km" : " miles"}</span>
                 </div>
                 <div className="saved-trips">
                     <div className="saved-trips-list-div">

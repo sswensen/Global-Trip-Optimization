@@ -581,6 +581,7 @@ class App extends React.Component {
     }
 
     async browseFile(file) {
+        this.red();
         console.log("Got file:", file);
         this.clearSelectedLocations();
         let name = file.title;
