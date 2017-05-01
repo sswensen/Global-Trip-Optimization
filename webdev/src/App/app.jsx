@@ -16,6 +16,7 @@ class App extends React.Component {
         super(props); // this is required
         this.getTripsFromServer();
         let status = true;
+        let name = "";
         let selectedLocationsO = {};
         let tripDistanceO = 0;
         let sortedLocationIdsO = [];
@@ -187,6 +188,7 @@ class App extends React.Component {
                 browseFile={this.browseFile.bind(this)}
                 kilometers={this.state.kilometers}
                 toggleKilometers={this.toggleKilometers.bind(this)}
+                tripName={this.state.name}
                 green={this.green.bind(this)}
                 red={this.red.bind(this)}
             />
@@ -437,6 +439,7 @@ class App extends React.Component {
             this.state.savedTrips,
             obj);
         this.setState({
+            name: trip.name,
             savedTrips: newMap,
             tripDistance: trip.totalDistance,
             sortedLocationIds: trip.selectedIds
@@ -459,14 +462,14 @@ class App extends React.Component {
         };
 
         map = newNewMap;
-        console.log("MAP IS:", map);
+        //console.log("MAP IS:", map);
 
         let query = JSON.stringify(Object.values(map));
         try {
             console.log("Sending trips...");
             let stuff = await fetch(`http://localhost:4567/saveTrips?trips=${query}`);
-            console.log("Url:", `http://localhost:4567/saveTrips?trips=${query}`);
-            console.log("trips sent");
+            //console.log("Url:", `http://localhost:4567/saveTrips?trips=${query}`);
+            //console.log("trips sent");
             let json = await stuff.json();
             console.log("Trips sent.");
         }
@@ -481,7 +484,7 @@ class App extends React.Component {
         try {
             console.log("Asking for trips...");
             let stuff = await fetch(`http://localhost:4567/getTrips?num=all`);
-            console.log("Url:", `http://localhost:4567/getTrips?num=all`);
+            //console.log("Url:", `http://localhost:4567/getTrips?num=all`);
             let json = await stuff.json();
             let obj = {};
             json.forEach(elem => obj[elem.name] = elem);
@@ -499,7 +502,7 @@ class App extends React.Component {
 
     async selectTrip(trip) {
         this.red(this.state.status);
-        console.log("Trip is currently", trip);
+        console.log("Selecting trip:", trip);
         let obj = {};
         obj[trip.name] = trip;
         let sorted = [];
@@ -514,7 +517,7 @@ class App extends React.Component {
                 json.forEach(elem => temp[elem.id] = elem);
             }
             trip.locations = temp;
-            console.log("New locations", temp);
+            //console.log("New locations", temp);
         }
         /*else {
          let newMap = {};
@@ -633,14 +636,15 @@ class App extends React.Component {
 
     async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
         this.red(this.state.status);
-        console.log("Opt is:", opt);
+        console.log("Starting",opt,"opt");
+        console.log("Sending locations...")
         try {
             console.log("Sending locs...");
             let stuff = await fetch(`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
             let dist = await fetch(`http://localhost:4567/getDistance?dist=true`);
-            console.log("Url:", `http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
-            console.log("Url:", `http://localhost:4567/getDistance?dist=true`);
-            console.log("Locs sent");
+            //console.log("Url:", `http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
+            //console.log("Url:", `http://localhost:4567/getDistance?dist=true`);
+            //console.log("Locs sent");
             let json = await stuff.json();
             let json1 = await dist.json();
             let obj = {};
@@ -661,7 +665,7 @@ class App extends React.Component {
             let numLocs = Object.values(this.state.selectedLocations).length;
             let locations = Object.values(this.state.selectedLocations);
             for (let i = 0; i < numLocs; i++) {
-                console.log("Sending location at index", i, locations[i]);
+                //console.log("Sending location at index", i, locations[i]);
                 let q = JSON.stringify(locations[i]);
                 let s = await fetch(`http://localhost:4567/setSelectedIndividual?locs=${q}`);
             }
@@ -683,13 +687,14 @@ class App extends React.Component {
             console.log("Received Locations", obj);
             //console.error(e);
         }
+        console.log("Finished",opt,"opt");
         this.green();
     }
 
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
 
     async getLocationFromDatabase(id) {
-        console.log(`http://localhost:4567/database?id=${id}`);
+        //console.log(`http://localhost:4567/database?id=${id}`);
         let e = await fetch(`http://localhost:4567/database?id=${id}`);
         let json = await e.json();
         let obj = {};
@@ -746,6 +751,7 @@ class App extends React.Component {
         }
 
         this.setState({
+            name: name,
             original: true,
         });
         this.green();
@@ -753,6 +759,7 @@ class App extends React.Component {
 
     updateMap() {
         this.setState({
+            name: this.name,
             selectedLocations: this.selectedLocationsO,
             sortedLocationIds: this.sortedLocationIdsO,
             tripDistance: this.tripDistanceO,

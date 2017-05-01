@@ -26,6 +26,7 @@ class RightMenu extends React.Component {
         let kilometers = this.props.kilometers;
         let toggleKilometers = this.props.toggleKilometers;
         let right = this.props.rightMenu;
+        let tripName = this.props.tripName;
         //console.log("Rendering RightMenu now...");
         let tripDist = Math.round(this.props.tripDistance);
         let tripDistKilo = Math.round(this.milesToKilometers(this.props.tripDistance));
@@ -50,7 +51,7 @@ class RightMenu extends React.Component {
                         <p>drag in file or click</p>
                     </Dropzone>
                     <span className="total-trip-distance">Distance: {kilometers ? tripDistKilo : tripDist} {kilometers ? " km" : " miles"}</span>
-                    <span className="total-trip-distance"></span>
+                    <span className="total-trip-distance">Name: {tripName}</span>
                 </div>
                 <div className="saved-trips">
                     <div className="saved-trips-list-div">
@@ -72,13 +73,13 @@ class RightMenu extends React.Component {
         this.props.red();
         acceptedFiles.forEach(file => {
             console.log("Filename:",file.name,"File:",file);
-            console.log(JSON.stringify(file));
+            //console.log(JSON.stringify(file));
             let fr = new FileReader();
             fr.onload = (function(theFile) {
                 return function(e) {
                     // Render thumbnail.
                     let JsonObj = JSON.parse(e.target.result);
-                    console.log(JsonObj);
+                    //console.log(JsonObj);
                     this.props.browseFile(JsonObj);
                     this.props.green();
                 };

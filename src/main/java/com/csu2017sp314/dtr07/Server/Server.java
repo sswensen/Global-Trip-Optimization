@@ -98,7 +98,7 @@ public class Server {
         tripDistance = optimiziation.getTripDistance();
         selectedLocations.clear();
         //TODO remove last locations from locations2
-        System.out.println("individual opy done");
+        System.out.println("individual opt done returning " + locations2.length + " locations");
         return locations2;
     }
 
@@ -257,6 +257,7 @@ public class Server {
         return temp;
     }
 
+    //TODO remove this shit
     public Location[] locParser(String str) {
         str = str.substring(1);
         System.out.println(str);
