@@ -11,6 +11,7 @@ class TripMap extends Component {
     render() {
         //console.log(this.state);
         //console.log({props: this.props});
+        console.log(this.props.locations);
         let locs = this.props.trip.map(id => this.props.locations[id]);
         return <div style={{height: "100%"}}>
             <Map
