@@ -248,7 +248,8 @@ class App extends React.Component {
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
         let totalDist = 0;
-        console.log(numLocs,"Adding location:", loc);
+        console.log(numLocs);
+        //console.log(numLocs,"Adding location:", loc);
         //console.log("Number of locations currently:", numLocs);
         if (numLocs > 0) {
             let bestDist = 9999999;
@@ -287,7 +288,7 @@ class App extends React.Component {
             console.log("ID already in sorted location ids!");
         }
 
-        console.log("Should be inserted at index:", whereToInsert + 1);
+        //console.log("Should be inserted at index:", whereToInsert + 1);
 
         /*let totalTripDistance = 0;
          if (numLocs > 1) {
@@ -637,14 +638,16 @@ class App extends React.Component {
         let ids = file.destinations;
         //console.log(ids);
         let num = 0;
-        if(ids.length < 50) {
+        let toggle = true;
+        if(ids.length < 60) {
             num = 1;
+            toggle = false
         } else if(ids.length < 250) {
             num = 10
         } else if(ids.length < 400) {
             num = 100;
         }
-        if(true) { //This is for querying with multiple
+        if(toggle) { //This is for querying with multiple
             for (let i = 0; i < ids.length; i += num) {
                 let tenIds = [];
                 for (let j = i; j < i + num; j++) {
