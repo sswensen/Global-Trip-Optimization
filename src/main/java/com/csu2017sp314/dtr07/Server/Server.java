@@ -99,7 +99,8 @@ public class Server {
         selectedLocations.clear();
         //TODO remove last locations from locations2
         System.out.println("individual opt done returning " + locations2.length + " locations");
-        return locations2;
+        Location[] newLocations = ArrayUtil.removeFromArray(locations2, locations2[locations2.length - 1]);
+        return newLocations;
     }
 
     public Object hello(Request rec, Response res) {
@@ -142,7 +143,8 @@ public class Server {
         System.out.println("complete");
         tripDistance = optimiziation.getTripDistance();
         //TODO remove last locations from locations2
-        return locations2;
+        Location[] newLocations = ArrayUtil.removeFromArray(locations2, locations2[locations2.length - 1]);
+        return newLocations;
     }
 
     public Object saveTrip(Request rec, Response res) {
