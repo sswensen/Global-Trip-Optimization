@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 
-let Pair = ({one, two}) => <li
+let Pair = ({one, two, distance}) => <li
     className="pair">
     <div>
         <div className="one">
@@ -16,6 +16,9 @@ let Pair = ({one, two}) => <li
                     target="_blank" href={"" + one.countryUrl + ""}>{one.country}</a>
                 </div>
             </div>
+        </div>
+        <div className="distance">
+            {Math.round(distance)}
         </div>
         <div className="two">
             <div className="location-info-two">
