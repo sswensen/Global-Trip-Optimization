@@ -219,6 +219,7 @@ class App extends React.Component {
                 <Itinerary
                     selectedLocations={this.state.selectedLocations}
                     sortedLocationIds={this.state.sortedLocationIds}
+                    kilometers={this.state.kilometers}
                 />
             </div>
 

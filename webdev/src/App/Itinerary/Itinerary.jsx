@@ -12,22 +12,26 @@ class Itinerary extends React.Component {
     }
 
     render() {
-
+        let kilometers = this.props.kilometers;
         let locations = this.props.sortedLocationIds.map(id => this.props.selectedLocations[id]);
         //For loop that goes through all locations,
         let pairs = [];
         for (let i = 0; i < Object.values(locations).length; i++) {
             let loc1 = locations[i];
             let loc2 = locations[(i + 1) % (Object.values(locations).length)];
+            let dist = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon);
+            if(kilometers) {
+                dist = dist * 1.6;
+            }
             let p = {
                 one: loc1,
                 two: loc2,
-                distance: this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon)
+                distance: dist
             };
             pairs.push(p);
         }
         let ps = pairs.map((pp) => {
-            return <Pair {...pp} />; //Calls to Pair.jsx
+            return <Pair {...pp} kilometers={kilometers}/>; //Calls to Pair.jsx
         });
         //console.log("Pairs:", (pairs));
         return <div className="itinerary">

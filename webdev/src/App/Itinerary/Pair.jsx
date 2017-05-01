@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 
-let Pair = ({one, two, distance}) => <li
+let Pair = ({one, two, distance, kilometers}) => <li
     className="pair">
     <div>
         <div className="one">
@@ -18,7 +18,7 @@ let Pair = ({one, two, distance}) => <li
             </div>
         </div>
         <div className="distance">
-            {Math.round(distance)}
+            {Math.round(distance)} {kilometers ? "Kilometers" : "Miles"}
         </div>
         <div className="two">
             <div className="location-info-two">
