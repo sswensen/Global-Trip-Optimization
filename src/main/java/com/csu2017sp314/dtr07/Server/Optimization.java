@@ -18,7 +18,10 @@ public class Optimization {
 
     public Optimization(Location[] locations, String opt) {
         this.locations = locations;
-        if(opt.equals("2")) {
+        if(opt.equals("0")) {
+            setTwoOpt(false);
+            setThreeOpt(false);
+        } else if(opt.equals("2")) {
             setTwoOpt(true);
         } else if(opt.equals("3")) {
             setThreeOpt(true);
@@ -69,7 +72,7 @@ public class Optimization {
             route[route.length-1] = locations[0]; //???
             if(twoOpt) {
                 twoOpt();
-            } else {
+            } else if(threeOpt) {
                 threeOpt();
             }
             double total = getTripDistance();
