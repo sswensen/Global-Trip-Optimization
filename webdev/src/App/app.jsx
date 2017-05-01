@@ -183,6 +183,7 @@ class App extends React.Component {
                 selectTrip={this.selectTrip.bind(this)}
                 deleteTrip={this.deleteTrip.bind(this)}
                 tripDistance={this.state.tripDistance}
+                toggleZeroOpt={this.toggleZeroOpt.bind(this)}
                 toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                 toggleThreeOpt={this.toggleThreeOpt.bind(this)}
                 browseFile={this.browseFile.bind(this)}
@@ -606,14 +607,21 @@ class App extends React.Component {
         });
     }
 
-    toggleTwoOpt() { //TODO make sure there is more than 4 locations before sending
+    toggleZeroOpt() { //TODOdone make sure there is more than 4 locations before sending
+        if (Object.values(this.state.selectedLocations).length > 3) {
+            console.log("Running Nearest Neighbor");
+            this.optimize("0", JSON.stringify(Object.values(this.state.selectedLocations)));
+        }
+    }
+
+    toggleTwoOpt() { //TODOdone make sure there is more than 4 locations before sending
         if (Object.values(this.state.selectedLocations).length > 3) {
             console.log("Running 2-opt");
             this.optimize("2", JSON.stringify(Object.values(this.state.selectedLocations)));
         }
     }
 
-    toggleThreeOpt() { //TODO make sure there is more than 4 locations before sending
+    toggleThreeOpt() { //TODOdone make sure there is more than 4 locations before sending
         if (Object.values(this.state.selectedLocations).length > 3) {
             console.log("Running 3-opt");
             this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));

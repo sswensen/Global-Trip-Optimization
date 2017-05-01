@@ -38,12 +38,14 @@ class RightMenu extends React.Component {
             let locs = trip.locations;
             return <SavedTrip {...trip} key={trip.id} select={select} kilometers={kilometers} die={die}/>; //Calls to location.jsx
         });
+        let zeroOpt = this.props.toggleZeroOpt.bind(this);
         let twoOpt = this.props.toggleTwoOpt.bind(this);
         let threeOpt = this.props.toggleThreeOpt.bind(this);
         return <div className="rightSideChick">
             <div id="mySidenav-right" className="sidenav-right"
                  style={ (right) ? mySidenavStylz.complete : mySidenavStylz.nope }>
                 <div className="options">
+                    <button className="two-opt-button" onClick={zeroOpt}>NN</button>
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
                     <button className="three-opt-button" onClick={toggleKilometers}>Units</button>
