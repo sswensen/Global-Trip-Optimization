@@ -85,6 +85,7 @@ class App extends React.Component {
             rightMenu: false,
             menu: false,
             itinerary: false,
+            kilometers: false,
         }
     }
 
@@ -154,6 +155,8 @@ class App extends React.Component {
                 toggleTwoOpt={this.toggleTwoOpt.bind(this)}
                 toggleThreeOpt={this.toggleThreeOpt.bind(this)}
                 browseFile={this.browseFile.bind(this)}
+                kilometers={this.state.kilometers}
+                toggleKilometers={this.toggleKilometers.bind(this)}
                 green={this.green.bind(this)}
                 red={this.red.bind(this)}
             />
@@ -600,6 +603,16 @@ class App extends React.Component {
 
     static isDead() {
         return true;
+    }
+
+    toggleKilometers() {
+        if(this.state.kilometers) {
+
+        } else {
+            this.setState({
+                kilometers: true
+            });
+        }
     }
 
     green() {
