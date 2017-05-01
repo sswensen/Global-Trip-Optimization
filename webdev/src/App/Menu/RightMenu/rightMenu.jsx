@@ -35,7 +35,7 @@ class RightMenu extends React.Component {
             let die = this.props.deleteTrip.bind(undefined, trip);
             //console.log({loc});
             let locs = trip.locations;
-            return <SavedTrip {...trip} key={trip.id} select={select} die={die}/>; //Calls to location.jsx
+            return <SavedTrip {...trip} key={trip.id} select={select} kilometers={kilometers} die={die}/>; //Calls to location.jsx
         });
         let twoOpt = this.props.toggleTwoOpt.bind(this);
         let threeOpt = this.props.toggleThreeOpt.bind(this);
@@ -50,6 +50,7 @@ class RightMenu extends React.Component {
                         <p>drag in file or click</p>
                     </Dropzone>
                     <span className="total-trip-distance">Distance: {kilometers ? tripDistKilo : tripDist} {kilometers ? " km" : " miles"}</span>
+                    <span className="total-trip-distance"></span>
                 </div>
                 <div className="saved-trips">
                     <div className="saved-trips-list-div">

@@ -16,6 +16,9 @@ class App extends React.Component {
         super(props); // this is required
         this.getTripsFromServer();
         let status = true;
+        let selectedLocationsO = {};
+        let tripDistanceO = 0;
+        let sortedLocationIdsO = [];
         this.state = {
             status: true,
             original: true,
@@ -248,7 +251,8 @@ class App extends React.Component {
         //Find where to insert into tempLocationList
         let whereToInsert = 0;
         let totalDist = 0;
-        console.log(numLocs,"Adding location:", loc);
+        console.log(numLocs);
+        //console.log(numLocs,"Adding location:", loc);
         //console.log("Number of locations currently:", numLocs);
         if (numLocs > 0) {
             let bestDist = 9999999;
@@ -287,7 +291,7 @@ class App extends React.Component {
             console.log("ID already in sorted location ids!");
         }
 
-        console.log("Should be inserted at index:", whereToInsert + 1);
+        //console.log("Should be inserted at index:", whereToInsert + 1);
 
         /*let totalTripDistance = 0;
          if (numLocs > 1) {
@@ -325,6 +329,70 @@ class App extends React.Component {
             tripDistance: totalDist
         });
         this.green(this.state.status);
+        return ret;
+    }
+
+    selectLocationO(loc) {
+        let ret = false;
+        let currentLocations = Object.values(this.state.selectedLocations);
+        let numLocs = currentLocations.length;
+        let tempLocationList = [];
+        for (let i = 0; i < numLocs; i++) {
+            let currentId = this.state.sortedLocationIds[i];
+            let currentLocation = this.searchSelectedLocationsWithId(currentId);
+            tempLocationList.push(currentLocation)
+        }
+        //Find where to insert into tempLocationList
+        let whereToInsert = 0;
+        let totalDist = 0;
+        //console.log(numLocs,"Adding location:", loc);
+        //console.log("Number of locations currently:", numLocs);
+        if (numLocs > 0) {
+            let bestDist = 9999999;
+            let minusDist = 0;
+            let plusDist = 0;
+            //console.log("Now calculating distances for insertion");
+            for (let i = 0; i < numLocs; i++) {
+                //console.log(currentLocations[i].name);
+                //console.log(currentLocations[(i + 1) % (numLocs - 1)].name);
+                //TODOdone
+                //Figure out where the best place to put the location is
+                //Need to also measure between the first and the last locations
+                //This will account for nearestNeighbor
+                let loc1 = tempLocationList[i];
+                let loc2 = tempLocationList[(i + 1) % (numLocs)];
+                let originalDist = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon);
+                let dist1 = this.distanceBetweenCoords(loc1.lat, loc1.lon, loc.lat, loc.lon);
+                let dist2 = this.distanceBetweenCoords(loc.lat, loc.lon, loc2.lat, loc2.lon);
+                let dist = dist1 + dist2;
+                totalDist += originalDist;
+                //console.log("Distance added between", loc1.name, "and", loc2.name, "is", dist);
+                if (dist < bestDist) {
+                    whereToInsert = i;
+                    bestDist = dist;
+                    minusDist = originalDist;
+                    plusDist = dist;
+                }
+            }
+            totalDist = totalDist - minusDist + plusDist;
+        }
+        let newSortedLocationIds = this.state.sortedLocationIds;
+        if (!newSortedLocationIds.includes(loc.id)) {
+            newSortedLocationIds.splice(whereToInsert + 1, 0, loc.id);
+            ret = true;
+        } else {
+            console.log("ID already in sorted location ids!");
+        }
+
+        let obj = {};
+        obj[loc.id] = loc;
+        let newMap = Object.assign({},
+            this.selectedLocationsO,
+            obj);
+
+        this.selectedLocationsO = newMap;
+        this.sortedLocationIdsO = newSortedLocationIds;
+        this.tripDistanceO = totalDist;
         return ret;
     }
 
@@ -621,6 +689,7 @@ class App extends React.Component {
     //TODO Function that reads json using json.forEach(elem => obj[elem.id] = elem)
 
     async getLocationFromDatabase(id) {
+        console.log(`http://localhost:4567/database?id=${id}`);
         let e = await fetch(`http://localhost:4567/database?id=${id}`);
         let json = await e.json();
         let obj = {};
@@ -634,16 +703,78 @@ class App extends React.Component {
         this.clearSelectedLocations();
         let name = file.title;
         let ids = file.destinations;
-        console.log(ids);
-        for(let i = 0; i < ids.length; i++) {
-            let location = await this.getLocationFromDatabase(ids[i]);
-            //console.log("Got location",location);
-            this.selectLocation(location[ids[i]]);
+        //console.log(ids);
+        let num = 0;
+        let toggle = true;
+        if(ids.length < 40) {
+            num = 1;
+            toggle = false
+        } else if(ids.length < 250) {
+            num = 10
+        } else {
+            num = 15
         }
+        if(toggle) { //This is for querying with multiple
+            console.log("Using multiple");
+            for (let i = 0; i < ids.length; i += num) {
+                let tenIds = [];
+                for (let j = i; j < i + num; j++) {
+                    if (j < ids.length) {
+                        tenIds.push(ids[j]);
+                    } else {
+                        break;
+                    }
+                }
+                //console.log("First 10 are",tenIds);
+                let location = await this.getLocationFromDatabase(tenIds);
+                //console.log("Got location",location);
+                for (let j = 0; j < Object.values(location).length; j++) {
+                    //console.log("Selecting",location[tenIds[j]]);
+                    this.selectLocationO(location[tenIds[j]]);
+                }
+            }
+            this.updateMap();
+            this.calculateDistance();
+
+        } else { //This is for querying with one
+            console.log("Using Individual");
+            for (let i = 0; i < ids.length; i++) {
+                let location = await this.getLocationFromDatabase(ids[i]);
+                //console.log("Got location",location);
+                this.selectLocation(location[ids[i]]);
+            }
+        }
+
         this.setState({
             original: true,
         });
         this.green();
+    }
+
+    updateMap() {
+        this.setState({
+            selectedLocations: this.selectedLocationsO,
+            sortedLocationIds: this.sortedLocationIdsO,
+            tripDistance: this.tripDistanceO,
+        })
+    }
+
+    calculateDistance() {
+        let locations = this.state.sortedLocationIds.map(id => this.state.selectedLocations[id]);
+        //let locations = this.state.selectedLocations;
+        //console.log("Length is",Object.values(locations).length);
+
+        let numLocs = Object.values(locations).length;
+        let distance = 0;
+        for(let i = 0; i < numLocs; i++) {
+            //calculate distances
+            let loc1 = locations[i];
+            let loc2 = locations[(i + 1) % (numLocs)];
+            distance += this.distanceBetweenCoords(loc1.lat, loc1.lon, loc2.lat, loc2.lon);
+        }
+        this.setState({
+            tripDistance: distance,
+        });
     }
 
     test() {

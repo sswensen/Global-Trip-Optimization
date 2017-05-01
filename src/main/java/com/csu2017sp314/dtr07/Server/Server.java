@@ -53,6 +53,7 @@ public class Server {
         Gson gson = new Gson();
         String id = rec.queryParams("id");
         QueryBuilder qb = new QueryBuilder(true);
+        id = id.replace(",", "\",\"");
         return qb.fireSearchQuery(id);
     }
 
@@ -97,6 +98,7 @@ public class Server {
         tripDistance = optimiziation.getTripDistance();
         selectedLocations.clear();
         //TODO remove last locations from locations2
+        System.out.println("individual opy done");
         return locations2;
     }
 

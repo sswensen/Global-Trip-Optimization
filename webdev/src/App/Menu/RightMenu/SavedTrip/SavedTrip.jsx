@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 
-let SavedTrip = ({name, totalDistance, select, die}) => <li
+let SavedTrip = ({name, totalDistance, select, kilometers, die}) => <li
     className="saved-trip">
     <div className="container">
         <div className="buttons">
@@ -17,7 +17,7 @@ let SavedTrip = ({name, totalDistance, select, die}) => <li
         <div className="trip-info">
             <h5>{name}</h5>
             <div className="other-info">
-                {totalDistance}
+                {kilometers ? Math.round(1.6*totalDistance) : Math.round(totalDistance)}
             </div>
         </div>
     </div>

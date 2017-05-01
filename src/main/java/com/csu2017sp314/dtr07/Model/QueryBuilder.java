@@ -125,7 +125,7 @@ public class QueryBuilder {
             "  countries.wikipedia_link FROM continents INNER JOIN countries ON countries.continent = continents.id\n" +
             "  INNER JOIN regions ON countries.code = regions.iso_country\n" +
             "  INNER JOIN airports ON airports.iso_region =regions.code\n" +
-            "WHERE airports.id LIKE \"";
+            "WHERE airports.id IN ";
     //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     public QueryBuilder(boolean useDB) {
@@ -197,7 +197,8 @@ public class QueryBuilder {
 
                         //System.out.println(st);
                         System.out.println("Querying individual with \"" + id + "\"");
-                        rs = st.executeQuery(anotherbigassfuckingstring + id + "\"");
+                        //System.out.println(anotherbigassfuckingstring + "(\"" + id + "\")");
+                        rs = st.executeQuery(anotherbigassfuckingstring + "(\"" + id + "\")");
 
                         try { // iterate through query results and print using column numbers
                             //System.out.println("id,name,latitude,longitude,municipality,region,country,continent");
