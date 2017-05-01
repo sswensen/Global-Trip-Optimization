@@ -6,10 +6,7 @@ import React, {Component} from 'react';
 let Pair = ({one, two}) => <li
     className="pair">
     <div>
-        <div clsssName="one">
-            <div className="location-one">
-                <button className="add-button" onClick={one.select}>1</button>
-            </div>
+        <div className="one">
             <div className="location-info-one">
                 <a target="_blank" href={"" + one.airportUrl + ""}>
                     <h5>{one.name}</h5>
@@ -21,9 +18,6 @@ let Pair = ({one, two}) => <li
             </div>
         </div>
         <div className="two">
-            <div className="location-two">
-                <button className="add-button" onClick={two.select}>2</button>
-            </div>
             <div className="location-info-two">
                 <a target="_blank" href={"" + two.airportUrl + ""}>
                     <h5>{two.name}</h5>
