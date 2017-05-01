@@ -103,15 +103,15 @@ class App extends React.Component {
             triple: {
                 marginLeft: "29%",
                 marginRight: "29%",
-                marginBottom: "29%",
+                height: "61%",
             },
             leftAndBottom: {
                 marginLeft: "29%",
-                marginBottom: "29%",
+                height: "61%",
             },
             rightAndBottom: {
                 marginRight: "29%",
-                marginBottom: "29%",
+                height: "61%",
             },
             both: {
                 marginLeft: "29%",
@@ -124,7 +124,7 @@ class App extends React.Component {
                 marginLeft: "29%",
             },
             itinerary: {
-                marginBottom: "29%",
+                height: "61%",
             },
             nope: {
                 marginLeft: "0%",
@@ -153,7 +153,7 @@ class App extends React.Component {
 
         var myItinerary = {
             openItin: {
-                height: "29%",
+                height: "39%",
             },
             closeItin: {
                 height: "0%",
@@ -201,6 +201,19 @@ class App extends React.Component {
                       onClick={(this.state.rightMenu) ? this.closeRightNav.bind(this) : this.openRightNav.bind(this)}>{this.state.rightMenu ? "ᗆ" : "ᗉ"}
                 </span>
             </div>
+
+            <button className="status" style={!(this.state.status) ? statusStyle.red : statusStyle.green}> </button>
+            <div id="main" className="planning-stuff"
+                 style={ ((this.state.leftMenu && this.state.rightMenu && this.state.itinerary) ? main.triple : (this.state.leftMenu && this.state.itinerary) ? main.leftAndBottom : (this.state.rightMenu && this.state.itinerary) ? main.rightAndBottom : (this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : (this.state.itinerary) ? main.itinerary : main.nope)}>
+                <div className="inner">
+                    <TripMap locations={this.state.selectedLocations}
+                             trip={this.state.sortedLocationIds}
+                             selectedLocations={Object.values(this.state.selectedLocations)}
+                             sortedLocationIds={this.state.sortedLocationIds}
+                    />
+                </div>
+            </div>
+
             <div className="itinerary-div"
                  style={ (this.state.itinerary) ? myItinerary.openItin : myItinerary.closeItin }>
                 <Itinerary
@@ -213,19 +226,8 @@ class App extends React.Component {
                  style={(this.state.itinerary) ? bottomMain.openItin : bottomMain.closeItin}
             >
                 <span className="bottom-menu-button"
-                      onClick={(this.state.itinerary) ? this.closeItinNav.bind(this) : this.openItinNav.bind(this)}>{this.state.itinerary ? "u" : "d"}
+                      onClick={(this.state.itinerary) ? this.closeItinNav.bind(this) : this.openItinNav.bind(this)}>{this.state.itinerary ? "∨" : "∧"}
                 </span>
-            </div>
-            <button className="status" style={!(this.state.status) ? statusStyle.red : statusStyle.green}> </button>
-            <div id="main" className="planning-stuff"
-                 style={ ((this.state.leftMenu && this.state.rightMenu && this.state.itinerary) ? main.triple : (this.state.leftMenu && this.state.itinerary) ? main.leftAndBottom : (this.state.rightMenu && this.state.itinerary) ? main.rightAndBottom : (this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : (this.state.itinerary) ? main.itinerary : main.nope)}>
-                <div className="inner">
-                    <TripMap locations={this.state.selectedLocations}
-                             trip={this.state.sortedLocationIds}
-                             selectedLocations={Object.values(this.state.selectedLocations)}
-                             sortedLocationIds={this.state.sortedLocationIds}
-                    />
-                </div>
             </div>
         </div>
     }
@@ -642,9 +644,6 @@ class App extends React.Component {
         this.green();
     }
 
-    browseFile(filename) {
-        console.log("File name is:",filename);
-    }
     test() {
         console.log("leftMenu:", this.state.leftMenu);
         console.log("[app]: selectedLocations:", this.state.selectedLocations,

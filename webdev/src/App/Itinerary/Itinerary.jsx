@@ -26,8 +26,9 @@ class Itinerary extends React.Component {
         let ps = pairs.map((pp) => {
             return <Pair {...pp} />; //Calls to Pair.jsx
         });
-        console.log("Pairs:", (pairs));
+        //console.log("Pairs:", (pairs));
         return <div className="itinerary">
+            <h3>Itinerary</h3>
             <ul>
                 {ps}
             </ul>
