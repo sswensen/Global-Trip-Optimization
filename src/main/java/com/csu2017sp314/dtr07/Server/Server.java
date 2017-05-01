@@ -77,11 +77,12 @@ public class Server {
             //locations.add(loc);
             locations2[k] = loc;
             //System.out.println("Location " + k + " " + loc.toString());
+            Location tempL = locations2[k];
+            selectedLocations.add(tempL);
         }
-        Location tempL = locations2[0];
-        selectedLocations.add(tempL);
-        ArrayList<String> temp = new ArrayList<>();
-        temp.add("OK!");
+
+        ArrayList<Integer> temp = new ArrayList<>();
+        temp.add(jsonStrings.length);
         return temp;
     }
 
