@@ -82,10 +82,10 @@ class App extends React.Component {
 
         var myItinerary = {
             openItin: {
-                marginBottom: "29%",
+                height: "29%",
             },
             closeItin: {
-                marginBottom: "0%",
+                height: "0%",
             }
         };
         //TODOdone function that gets
