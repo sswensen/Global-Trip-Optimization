@@ -1,7 +1,6 @@
 package com.csu2017sp314.dtr07.Server;
 
 import com.csu2017sp314.dtr07.Model.Location;
-import com.csu2017sp314.dtr07.Model.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -191,7 +190,6 @@ public class Optimization {
         int totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
-        ArrayList<Pair> newPairs = new ArrayList<>();
         while(improvements > 0) {
             improvements = 0;
             for(int i=0; i<=n-3; i++) {
@@ -280,7 +278,6 @@ public class Optimization {
         int totalImprovements = 0;
         int improvements = 1;
         int n = route.length - 1;
-        ArrayList<Pair> newPairs = new ArrayList<>();
         while(improvements > 0) {
             improvements = 0;
             for(int i = 0; i <= n - 5; i++) {
