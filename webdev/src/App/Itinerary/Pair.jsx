@@ -6,7 +6,7 @@ import React, {Component} from 'react';
 let Pair = ({one, two, distance, kilometers}) => <li
     className="pair">
     <div>
-        <div className="one">
+        <div id="left" className="one">
             <div className="location-info-one">
                 <a target="_blank" href={"" + one.airportUrl + ""}>
                     <h5>{one.name}</h5>
@@ -17,10 +17,10 @@ let Pair = ({one, two, distance, kilometers}) => <li
                 </div>
             </div>
         </div>
-        <div className="distance">
+        <div id="middle" className="distance">
             {Math.round(distance)} {kilometers ? "Kilometers" : "Miles"}
         </div>
-        <div className="two">
+        <div id="right" className="two">
             <div className="location-info-two">
                 <a target="_blank" href={"" + two.airportUrl + ""}>
                     <h5>{two.name}</h5>
