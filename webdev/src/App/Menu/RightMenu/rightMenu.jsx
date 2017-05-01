@@ -50,6 +50,7 @@ class RightMenu extends React.Component {
                         <p>drag in file or click</p>
                     </Dropzone>
                     <span className="total-trip-distance">Distance: {kilometers ? tripDistKilo : tripDist} {kilometers ? " km" : " miles"}</span>
+                    <span className="total-trip-distance"></span>
                 </div>
                 <div className="saved-trips">
                     <div className="saved-trips-list-div">
