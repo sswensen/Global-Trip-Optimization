@@ -144,7 +144,7 @@ class App extends React.Component {
 
         let bottomMain = {
             openItin: {
-                marginBottom: "39%",
+                marginBottom: "22.1%",
             },
             closeItin: {
                 marginBottom: "0%",
@@ -225,9 +225,10 @@ class App extends React.Component {
 
             <div className="bottom-menu-button-div"
                  style={(this.state.itinerary) ? bottomMain.openItin : bottomMain.closeItin}
+                 onClick={(this.state.itinerary) ? this.closeItinNav.bind(this) : this.openItinNav.bind(this)}
             >
-                <span className="bottom-menu-button"
-                      onClick={(this.state.itinerary) ? this.closeItinNav.bind(this) : this.openItinNav.bind(this)}>{this.state.itinerary ? "∨" : "∧"}
+                <span className="bottom-menu-button">
+                    {this.state.itinerary ? "∨" : "∧"}
                 </span>
             </div>
         </div>
