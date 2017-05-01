@@ -23,9 +23,12 @@ class RightMenu extends React.Component {
 
         let green = this.props.green;
         let red = this.props.red;
+        let kilometers = this.props.kilometers;
+        let toggleKilometers = this.props.toggleKilometers;
         let right = this.props.rightMenu;
         //console.log("Rendering RightMenu now...");
         let tripDist = Math.round(this.props.tripDistance);
+        let tripDistKilo = Math.round(this.milesToKilometers(this.props.tripDistance));
         let savedTrips = Object.values(this.props.savedTrips);
         let items = savedTrips.map((trip) => {
             let select = this.props.selectTrip.bind(undefined, trip);
@@ -42,10 +45,11 @@ class RightMenu extends React.Component {
                 <div className="options">
                     <button className="two-opt-button" onClick={twoOpt}>2-opt</button>
                     <button className="three-opt-button" onClick={threeOpt}>3-opt</button>
-                    <Dropzone onDrop={this.drop.bind(this)}>
-                        <p>drag file or click</p>
+                    <button className="three-opt-button" onClick={toggleKilometers}>Units</button>
+                    <Dropzone className="dropzone-style" onDrop={this.drop.bind(this)}>
+                        <p>drag in file or click</p>
                     </Dropzone>
-                    <span className="total-trip-distance">Distance:{tripDist}</span>
+                    <span className="total-trip-distance">Distance: {kilometers ? tripDistKilo : tripDist} {kilometers ? " km" : " miles"}</span>
                 </div>
                 <div className="saved-trips">
                     <div className="saved-trips-list-div">
@@ -56,6 +60,10 @@ class RightMenu extends React.Component {
                 </div>
             </div>
         </div>
+    }
+
+    milesToKilometers(miles) {
+        return miles * 1.6;
     }
 
     drop(acceptedFiles) {
@@ -70,7 +78,8 @@ class RightMenu extends React.Component {
                     // Render thumbnail.
                     let JsonObj = JSON.parse(e.target.result);
                     console.log(JsonObj);
-                    this.props.browseFile(JsonObj)
+                    this.props.browseFile(JsonObj);
+                    this.props.green();
                 };
             })(file).bind(this);
 
