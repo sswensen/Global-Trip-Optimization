@@ -11,7 +11,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static spark.Spark.get;
 
@@ -30,7 +29,7 @@ public class Server {
     }
 
     //Finds index of nth occurrence
-    public static int nthIndexOf(String str, String character, int n) {
+    private static int nthIndexOf(String str, String character, int n) {
         int index = str.indexOf(character);
         while(--n > 0 && index != -1) {
             index = str.indexOf(character, index + 1);
@@ -64,7 +63,7 @@ public class Server {
         return qb.fireSearchQuery(id);
     }
 
-    public Object selectIndividual(Request rec, Response res) {
+    private Object selectIndividual(Request rec, Response res) {
         setHeaders(res);
         Gson gson = new Gson();
         String i = rec.queryParams("locs");
@@ -94,7 +93,7 @@ public class Server {
         return temp;
     }
 
-    public Object fireOpt(Request rec, Response res) {
+    private Object fireOpt(Request rec, Response res) {
         setHeaders(res);
         String opt = rec.queryParams("opt");
         Location[] locations2 =
@@ -113,7 +112,7 @@ public class Server {
         return newLocations;
     }
 
-    public Object hello(Request rec, Response res) {
+    private Object hello(Request rec, Response res) {
         setHeaders(res);
         QueryBuilder q = new QueryBuilder(true);
         //System.out.println(rec.queryParams("q"));
@@ -121,7 +120,7 @@ public class Server {
         return q.getLocations();
     }
 
-    public Object optimize(Request rec, Response res) {
+    private Object optimize(Request rec, Response res) {
         setHeaders(res);
         Gson gson = new Gson();
         String i = rec.queryParams("locs");
@@ -158,7 +157,7 @@ public class Server {
         return newLocations;
     }
 
-    public Object saveTrip(Request rec, Response res) {
+    private Object saveTrip(Request rec, Response res) {
         setHeaders(res);
         Gson gson = new Gson();
         String locs = rec.queryParams("trips");
@@ -201,7 +200,7 @@ public class Server {
         return trips;
     }
 
-    public void createKMLFile(ArrayList<Location> locations, String tripName) {
+    private void createKMLFile(ArrayList<Location> locations, String tripName) {
         BufferedWriter bw = null;
         FileWriter fw = null;
         try {
@@ -260,7 +259,7 @@ public class Server {
         }
     }
 
-    public Object getTrip(Request rec, Response res) {
+    private Object getTrip(Request rec, Response res) {
         setHeaders(res);
         System.out.println("Returning saved trips");
         String locs = rec.queryParams("num");
@@ -268,65 +267,12 @@ public class Server {
         return trips;
     }
 
-    public Object getDistance(Request rec, Response res) {
+    private Object getDistance(Request rec, Response res) {
         setHeaders(res);
         String tf = rec.queryParams("dist");
         ArrayList<Double> temp = new ArrayList<>();
         temp.add(tripDistance);
         return temp;
-    }
-
-    //TODO remove this shit
-    public Location[] locParser(String str) {
-        str = str.substring(1);
-        System.out.println(str);
-        while(true) {
-            String id;
-            String name;
-            double lat;
-            double lon;
-            String municipality;
-            String region;
-            String country;
-            String continent;
-            String airportUrl;
-            String regionUrl;
-            String countryUrl;
-            int nearest;
-            int nearestDistance;
-            int tableIndex;
-            boolean pairUsesWraparound;
-            String[] variables = parseVariables(str);
-            System.out.println(Arrays.toString(variables));
-            //TODO remove } from end
-            break;
-        }
-        return null;
-    }
-
-    public String parseVariable(String str) {
-        int quote = str.indexOf("\"");
-        int comma = str.indexOf(",");
-        int end = Math.min(quote, comma);
-        return str.substring(0, end);
-    }
-
-    public String[] parseVariables(String str) {
-        String[] variables = new String[15];
-        for(int i = 0; i < variables.length; i++) {
-            if(i != 2 && i != 3 && i != 12 && i != 13 && i != 14) {
-                str = str.substring(str.indexOf(":"));
-                if(str.charAt(1) != '"') {
-                    str = str.substring(nthIndexOf(str, ":", 2) + 2);
-                } else {
-                    str = str.substring(2);
-                }
-            } else {
-                str = str.substring(str.indexOf(":") + 1);
-            }
-            variables[i] = parseVariable(str);
-        }
-        return variables;
     }
 
     private ArrayList<Location> getAllLocationsFromDatabase(ArrayList<String> ids) {

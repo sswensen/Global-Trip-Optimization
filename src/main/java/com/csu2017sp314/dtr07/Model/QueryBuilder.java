@@ -132,51 +132,6 @@ public class QueryBuilder {
         useDatabase = useDB;
     }
 
-    public void searchDatabase(String type, String continent, String country,
-                               String region, String municipality, String name) {
-        ArrayList<String> w = new ArrayList<>();
-        w.add(type);
-        w.add(continent);
-        w.add(country);
-        w.add(region);
-        w.add(municipality);
-        w.add(name);
-        //setWhere(w);
-    }
-
-    public void search4IDinDatabase(ArrayList<String> ids, String idOrName) {
-        if(!ids.isEmpty()) {
-            String w = "WHERE airports." + idOrName + " in (";
-            for(int i = 0; i < ids.size() - 1; i++) {
-                /*if(!ids.get(i).contains("'")) {
-                    w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
-                } else {
-                    String[] splitonsinglequote = ids.get(i).split("'");
-                    w += "'";
-                    for(int j = 0; j < splitonsinglequote.length; j++) {
-                        if(j != 0) {
-                            w += "'" + splitonsinglequote[j];
-                        } else {
-                            w += splitonsinglequote[j];
-                        }
-                    }
-                    w += "', ";
-                }*/
-                w += "\"" + ids.get(i) + "\", ";
-            }
-            w += "\"" + ids.get(ids.size() - 1) + "\")";
-            where = w;
-        } else {
-            where = "";
-        }
-    }
-
-    // by calling the size function on the ids returned to the db selection window
-
-    private void setWhere(String where) {
-        this.where = where;
-    }
-
     public ArrayList<Location> fireSearchQuery(String id) {
         ArrayList<Location> tempLocations = new ArrayList<>();
         if(useDatabase) {
@@ -304,23 +259,7 @@ public class QueryBuilder {
         }
     }
 
-    public void setLimit(String limit) {
-        this.limit = limit;
-    }
-
-    public int getNumberReturnedFromDatabase() {
-        return numberReturnedFromDatabase;
-    }
-
     public ArrayList<Location> getLocations() {
         return locations;
-    }
-
-    public ArrayList<String> getLocationNames() { //Highly ineffient, see beginning of fireQuery
-        ArrayList<String> ret = new ArrayList<>();
-        for(Location loc : locations) {
-            ret.add(loc.getName());
-        }
-        return ret;
     }
 }
