@@ -1,16 +1,16 @@
 package com.csu2017sp314.dtr07.Server;
 
-import com.csu2017sp314.dtr07.Model.Location;
-import org.junit.Test;
-
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
+import org.junit.Test;
+
 /**
  * Created by Sandeep on 5/1/2017.
  */
-public class testTrip {
+
+public class TestTrip {
     @Test
     public void getName() throws Exception {
         String name = "fuc";
