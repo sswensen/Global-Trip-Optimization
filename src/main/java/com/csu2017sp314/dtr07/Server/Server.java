@@ -69,12 +69,9 @@ public class Server {
             jsonStrings[j] = sb.toString();
         }
         Location[] locations2 = new Location[jsonStrings.length];
-        //ArrayList<Location> locations = new ArrayList<>();
         for(int k = 0; k < jsonStrings.length; k++) {
             Location loc = gson.fromJson(jsonStrings[k], Location.class);
-            //locations.add(loc);
             locations2[k] = loc;
-            //System.out.println("Location " + k + " " + loc.toString());
             Location tempL = locations2[k];
             selectedLocations.add(tempL);
         }
@@ -106,7 +103,6 @@ public class Server {
     private Object hello(Request rec, Response res) {
         setHeaders(res);
         QueryBuilder q = new QueryBuilder(true);
-        //System.out.println(rec.queryParams("q"));
         q.fireQuery(rec.queryParams("q"));
         return q.getLocations();
     }
@@ -128,15 +124,10 @@ public class Server {
             jsonStrings[j] = sb.toString();
         }
         Location[] locations2 = new Location[jsonStrings.length];
-        //ArrayList<Location> locations = new ArrayList<>();
         for(int k = 0; k < jsonStrings.length; k++) {
             Location loc = gson.fromJson(jsonStrings[k], Location.class);
-            //locations.add(loc);
             locations2[k] = loc;
-            //System.out.println("Location " + k + " " + loc.toString());
         }
-        /*Location temp = locations.remove(0);
-        locations.add(temp);*/
         System.out.println("running opt now");
         Optimization optimiziation = new Optimization(locations2, opt);
         locations2 = optimiziation.getOptimizedRoute();
@@ -152,14 +143,9 @@ public class Server {
         setHeaders(res);
         Gson gson = new Gson();
         String locs = rec.queryParams("trips");
-        //System.out.println("we are here " + locs);
         locs = locs.substring(1, locs.length() - 1); // --> "ello World"
         System.out.println(locs);
         String index = ",\\{\"name";
-        //int splitIndex = locs.indexOf(index);
-        //System.out.println(locs.indexOf(index));
-        //System.out.println(locs.substring(0,splitIndex));
-        //System.out.println(locs.substring(splitIndex));
         String[] jsonStrings = locs.split(index);
         System.out.println(jsonStrings.length);
         for(int i = 1; i < jsonStrings.length; i++) {
@@ -172,11 +158,9 @@ public class Server {
         for(int i = 0; i < jsonStrings.length; i++) {
             System.out.println(jsonStrings[i]);
         }
-        //ArrayList<Trip> newTrips = new ArrayList<>();
         Trip trip = gson.fromJson(jsonStrings[0], Trip.class);
         int ret = searchSavedTrips(trip.getName());
         if(ret < 0) {
-            //newTrips.add(trip); //Dont need this
             trips.add(trip);
         } else {
             trips.remove(ret);
@@ -254,7 +238,6 @@ public class Server {
         setHeaders(res);
         System.out.println("Returning saved trips");
         String locs = rec.queryParams("num");
-        //trips.add(new Trip("e", 666.666, new ArrayList<>()));
         return trips;
     }
 
