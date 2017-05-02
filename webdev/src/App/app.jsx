@@ -467,6 +467,7 @@ class App extends React.Component {
 
         let query = JSON.stringify(Object.values(map));
         try {
+            this.red(this.state.status);
             console.log("Sending trips...");
             let stuff = await fetch(`http://localhost:4567/saveTrips?trips=${query}`);
             //console.log("Url:", `http://localhost:4567/saveTrips?trips=${query}`);
@@ -481,7 +482,7 @@ class App extends React.Component {
     }
 
     async getTripsFromServer() {
-        this.red(this.state.status);
+        //this.red(this.state.status);
         try {
             console.log("Asking for trips...");
             let stuff = await fetch(`http://localhost:4567/getTrips?num=all`);
@@ -497,7 +498,7 @@ class App extends React.Component {
         catch (e) {
             console.error(e);
         }
-        this.green();
+        //this.green();
     }
 
 

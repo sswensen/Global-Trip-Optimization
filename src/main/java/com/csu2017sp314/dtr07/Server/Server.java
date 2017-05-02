@@ -246,6 +246,7 @@ public class Server {
 
     public Object getTrip(Request rec, Response res) {
         setHeaders(res);
+        System.out.println("Returning saved trips");
         String locs = rec.queryParams("num");
         //trips.add(new Trip("e", 666.666, new ArrayList<>()));
         return trips;
