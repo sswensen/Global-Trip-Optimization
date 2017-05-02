@@ -1,8 +1,8 @@
 package com.csu2017sp314.dtr07.Model;
 
-import org.junit.Test;
-
 import java.util.ArrayList;
+
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
