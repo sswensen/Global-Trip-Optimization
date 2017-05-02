@@ -19,10 +19,8 @@ public class Location {
     private String airportUrl;
     private String regionUrl;
     private String countryUrl;
-    private int nearest = -1;
-    private int nearestDistance = 9999999;
     private int tableIndex;
-    private boolean pairUsesWraparound = false;
+
 
     Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent, String aUrl, String rUrl, String cUrl) {
         this.id = id;
@@ -107,7 +105,7 @@ public class Location {
         return Math.sqrt(distance) / 1609.34;
     }
 
-    double distance(Location in, String unit) {
+    public double distance(Location in) {
         double lat1 = this.lat;
         double lon1 = this.lon;
         double lat2 = in.getLat();
@@ -118,9 +116,6 @@ public class Location {
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515; //Default is miles ("M")
-
-        //double hdist = haversine(lat1, lon1, lat2, lon2);
-        //double fdist = distance4(lat1, lat2, lon1, lon2, 0, 0);
 
         //--------------Checking for wraparound-------------//
         double wlat1 = this.lat;
@@ -135,38 +130,8 @@ public class Location {
             wlat2 = wlattemp;
             wlon2 = wlontemp;
         }
-        //wlon1 -= 180; //TODOdone currently dist is the distance with wraparound, wdist is just using pathagorean theorem. dist is somehow always smaller. It seems like the algorithm used is not getting the same distance, maybe it has to do with the curvature of the earth but the map is flat so that doesnt make sense.
-        //wlon2 += 180;
-        /*double wtheta = wlon1 - wlon2;
-        double wdist = Math.sin(deg2rad(wlat1)) * Math.sin(deg2rad(wlat2))
-                + Math.cos(deg2rad(wlat1)) * Math.cos(deg2rad(wlat2)) * Math.cos(deg2rad(wtheta));
-        wdist = Math.acos(wdist);
-        wdist = rad2deg(wdist); //Here the value is still in longitude/latitude*/
-        /*double wdist = Math.sqrt(Math.pow((wlat1-wlat2), 2) + Math.pow((wlon1 -wlon2), 2));
-        wdist = wdist * 60 * 1.1515; //Default is miles ("M") //We can move this line, as well as the one above to after both checks. Not done yet because of debugging purposes
-        dist = Math.round(dist);
-        wdist = Math.round(wdist);
-        System.out.println("dist: " + dist);
-        System.out.println("wdist: " + wdist);
-        System.out.println("hdist: " + hdist);
-        System.out.println("fdist: " + fdist);*/
-        //if(wdist > dist) {
-        if(wlon1 - wlon2 > 180) {
-            this.pairUsesWraparound = true;
-            //System.out.println("Using wraparound");
-        } else {
-            this.pairUsesWraparound = false;
-            //dist = wdist; //Should be equal here
-        }
         //------------End Checking for wraparound-----------//
 
-
-        if(unit.equals("K")) { //Kilometers
-            dist = dist * 1.609344;
-        } else if(unit.equals("N")) { //Nautical miles
-            dist = dist * 0.8684;
-        }
-        //Add Math.round
         return Math.round(dist);
     }
 
@@ -200,7 +165,7 @@ public class Location {
         this.id = id;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -208,11 +173,11 @@ public class Location {
         this.name = name;
     }
 
-    double getLat() {
+    public double getLat() {
         return lat;
     }
 
-    double getLon() {
+    public double getLon() {
         return lon;
     }
 
@@ -244,25 +209,6 @@ public class Location {
         return countryUrl;
     }
 
-    int getNearest() {
-        return nearest;
-    }
-
-    void setNearest(int nearest) {
-        this.nearest = nearest;
-    }
-
-    int getNearestDistance() {
-        return nearestDistance;
-    }
-
-    void setNearestDistance(int nearestDistance) {
-        this.nearestDistance = nearestDistance;
-    }
-
-    public boolean isPairUsesWraparound() {
-        return pairUsesWraparound;
-    }
 
     @Override
     public boolean equals(final Object o) {
@@ -281,12 +227,6 @@ public class Location {
         if(Double.compare(location.lon, lon) != 0) {
             return false;
         }
-        if(nearest != location.nearest) {
-            return false;
-        }
-        if(nearestDistance != location.nearestDistance) {
-            return false;
-        }
         if(id != null ? !id.equals(location.id) : location.id != null) {
             return false;
         }
@@ -300,13 +240,35 @@ public class Location {
 
     @Override
     public String toString() {
+        /*
+        private String id;
+        private String name;
+        private double lat;
+        private double lon;
+        private String municipality;
+        private String region;
+        private String country;
+        private String continent;
+        private String airportUrl;
+        private String regionUrl;
+        private String countryUrl;
+        private int nearest = -1;
+        private int nearestDistance = 9999999;
+        private int tableIndex;
+        private boolean pairUsesWraparound = false;
+        */
+
         return "Location{"
                 + "id=" + id
                 + ", name='" + name + '\''
                 + ", lat=" + lat
-                + ", lon=" + lon
-                + ", nearest=" + nearest
-                + ", nearestDistance=" + nearestDistance
+                + ", municipality=" + municipality
+                + ", region=" + region
+                + ", country=" + country
+                + ", continent=" + continent
+                + ", airportUrl=" + airportUrl
+                + ", regionUrl=" + regionUrl
+                + ", countryUrl=" + countryUrl
                 + '}';
     }
 }

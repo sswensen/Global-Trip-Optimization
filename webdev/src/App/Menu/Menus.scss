@@ -1,0 +1,151 @@
+.sidenav-left {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #80d4ff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 1px;
+}
+
+.sidenav-right {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  right: 0;
+  background-color: #80d4ff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 1px;
+}
+
+.sidenav {
+  height: 0;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  background-color: #80d4ff;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 1px;
+}
+
+/*.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover, .offcanvas a:focus {
+  color: #f1f1f1;
+}*/
+
+.sidenav-left .closebtn-left {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.sidenav-right .closebtn-right {
+  position: absolute;
+  top: 0;
+  left: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 36px;
+  margin-top: 50px;
+}
+
+#main {
+  transition: margin .5s;
+  padding: 0px;
+}
+
+.options {
+  padding: 5px;
+
+  button {
+    padding: 12px 12px;
+    margin: 5px 5px 5px 5px;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #1a55cb;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #80d4ff;
+  }
+
+  button:hover {
+    background-color: deepskyblue;
+  }
+
+  button:active {
+    background-color: #0099cd;
+
+  }
+
+  .total-trip-distance {
+    padding: 5px 5px;
+    display: inline-block;
+  }
+
+  .dropzone-style {
+    padding: 0 12px;
+    margin: 5px 5px 5px 5px;
+    display: inline-block;
+    position: relative;
+    border: 1px dashed #1a55cb;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background-color: #80d4ff;
+
+    p {
+      font-size: 12px;
+    }
+  }
+}
+
+.leftSideChick .rightSideChick {
+}
+
+.topSideChick {
+
+}
+
+.saved-trips {
+  .saved-trips-list-div {
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #329dd4;
+  }
+
+  .saved-trips-list {
+    height: 88%;
+  }
+}
+
+/*@media screen and (max-height: 450px) {
+  .sidenav-left .sidenav-right {
+    padding-top: 15px;
+  }
+  .sidenav-left .sidenav-right a {
+    font-size: 18px;
+  }
+}*/

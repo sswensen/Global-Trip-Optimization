@@ -8,6 +8,8 @@
 
 [![BCH compliance](https://bettercodehub.com/edge/badge/csu2017sp314/DTR-07)](https://bettercodehub.com/)
 
+[![SummitDrift](http://summitdrift.com/img/assets/cs314/mwt.svg)](http://summitdrift.com/dtr-07/)
+
 Scott
 Jesse
 Sandeep

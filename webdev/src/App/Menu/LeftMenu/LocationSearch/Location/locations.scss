@@ -1,0 +1,71 @@
+.location {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  margin: 2px 10px;
+  border: 1px solid #1e62ea;
+  border-radius: 8px;
+  background-color: #80d4ff;
+  overflow: hidden;
+
+  h5 {
+    font-weight: normal;
+    margin: 0;
+    font-size: 15px;
+  }
+
+  .location-info {
+    display: inline-block;
+    position: relative;
+    height: 40px;
+    margin-left: 10px;
+    a {
+      text-decoration: none;
+      color: black;
+    }
+  }
+
+  .other-info {
+    color: grey;
+    font-size: 12px;
+    font-weight: lighter;
+    a {
+      text-decoration: none;
+      color: grey;
+    }
+  }
+
+  .add-button-div {
+    display: inline-block;
+    height: 36px;
+  }
+
+  .add-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 4px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 8px;
+    font-size: 14px;
+    float: left;
+    height: 40px;
+    position: relative;
+  }
+
+  .add-button:hover {
+    background-color: #3bdf47;
+    cursor: pointer;
+  }
+
+  .add-button:active {
+    content: "Added";
+    background-color: #43ff51;
+  }
+}
+
+.location:hover {
+  background-color: #78d8ff;
+}
