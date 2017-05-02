@@ -32,7 +32,7 @@ public class QueryBuilder {
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
-    String anotherbigassfuckingstring = "SELECT airports.id,\n" +
+    String anotherbigstring = "SELECT airports.id,\n" +
             "  airports.name,\n" +
             "  latitude,\n" +
             "  longitude,\n" +
@@ -51,7 +51,7 @@ public class QueryBuilder {
     private String where = "";
     private int numberReturnedFromDatabase = 0;
     private ArrayList<Location> locations = new ArrayList<>();
-    private String bigassfuckingstring = "(SELECT\n" +
+    private String bigstring = "(SELECT\n" +
             "  airports.id,\n" +
             "  airports.name,\n" +
             "  latitude,\n" +
@@ -132,51 +132,6 @@ public class QueryBuilder {
         useDatabase = useDB;
     }
 
-    public void searchDatabase(String type, String continent, String country,
-                               String region, String municipality, String name) {
-        ArrayList<String> w = new ArrayList<>();
-        w.add(type);
-        w.add(continent);
-        w.add(country);
-        w.add(region);
-        w.add(municipality);
-        w.add(name);
-        //setWhere(w);
-    }
-
-    public void search4IDinDatabase(ArrayList<String> ids, String idOrName) {
-        if(!ids.isEmpty()) {
-            String w = "WHERE airports." + idOrName + " in (";
-            for(int i = 0; i < ids.size() - 1; i++) {
-                /*if(!ids.get(i).contains("'")) {
-                    w += "'" + ids.get(i) + "', "; //TODO replace this with StringBuilder.append
-                } else {
-                    String[] splitonsinglequote = ids.get(i).split("'");
-                    w += "'";
-                    for(int j = 0; j < splitonsinglequote.length; j++) {
-                        if(j != 0) {
-                            w += "'" + splitonsinglequote[j];
-                        } else {
-                            w += splitonsinglequote[j];
-                        }
-                    }
-                    w += "', ";
-                }*/
-                w += "\"" + ids.get(i) + "\", ";
-            }
-            w += "\"" + ids.get(ids.size() - 1) + "\")";
-            where = w;
-        } else {
-            where = "";
-        }
-    }
-
-    // by calling the size function on the ids returned to the db selection window
-
-    private void setWhere(String where) {
-        this.where = where;
-    }
-
     public ArrayList<Location> fireSearchQuery(String id) {
         ArrayList<Location> tempLocations = new ArrayList<>();
         if(useDatabase) {
@@ -194,8 +149,8 @@ public class QueryBuilder {
 
                         //System.out.println(st);
                         System.out.println("Querying individual with \"" + id + "\"");
-                        //System.out.println(anotherbigassfuckingstring + "(\"" + id + "\")");
-                        rs = st.executeQuery(anotherbigassfuckingstring + "(\"" + id + "\")");
+                        //System.out.println(anotherbigstring + "(\"" + id + "\")");
+                        rs = st.executeQuery(anotherbigstring + "(\"" + id + "\")");
 
                         try { // iterate through query results and print using column numbers
                             //System.out.println("id,name,latitude,longitude,municipality,region,country,continent");
@@ -226,12 +181,22 @@ public class QueryBuilder {
                 System.err.println("-------------EXITING!!!------------");
                 System.exit(33); //Something broke in the database :/
             }
+        } else {
+            tempLocations.add(new Location("KBKF", "Buckley Air Force Base",
+                    "39.701698303200004", "-104.751998901", "Aurora",
+                    "Colorado", "United States", "North America",
+                    "http://en.wikipedia.org/wiki/Buckley_Air_Force_Base",
+                    "http://en.wikipedia.org/wiki/Colorado",
+                    "http://en.wikipedia.org/wiki/United_States"));
+            tempLocations.add(new Location("KEGE", "Eagle County Regional Airport",
+                    "39.64260101", "-106.9179993", "Eagle",
+                    "Colorado", "United States", "North America",
+                    "http://en.wikipedia.org/wiki/Eagle_County_Regional_Airport",
+                    "http://en.wikipedia.org/wiki/Colorado",
+                    "http://en.wikipedia.org/wiki/United_States"));
         }
-        return tempLocations;
-    }
 
-    public void fireQuery() {
-        this.fireQuery("Denver");
+        return tempLocations;
     }
 
     public void fireQuery(String query) { //String whatDoYouWantBack) {
@@ -246,7 +211,7 @@ public class QueryBuilder {
                 Connection conn = DriverManager.getConnection(myUrl, "sswensen", "830534566");
 
                 try { // create a statement
-                    PreparedStatement st = conn.prepareStatement(bigassfuckingstring);
+                    PreparedStatement st = conn.prepareStatement(bigstring);
                     for(int i = 1; i < 5; i++) {
                         st.setString(i, query);
                     }
@@ -304,23 +269,7 @@ public class QueryBuilder {
         }
     }
 
-    public void setLimit(String limit) {
-        this.limit = limit;
-    }
-
-    public int getNumberReturnedFromDatabase() {
-        return numberReturnedFromDatabase;
-    }
-
     public ArrayList<Location> getLocations() {
         return locations;
-    }
-
-    public ArrayList<String> getLocationNames() { //Highly ineffient, see beginning of fireQuery
-        ArrayList<String> ret = new ArrayList<>();
-        for(Location loc : locations) {
-            ret.add(loc.getName());
-        }
-        return ret;
     }
 }
