@@ -75,4 +75,41 @@ previous trips.
 
 Notes:
 
+Sprint 4
+DTR-07
+
+Overview:
+A web-based GUI interface that uses Google Maps to display a zoomable, pan-able background for a trip and contains a number of options via buttons and drop-down menus.
+Right Menu:
+    Function:
+        Create/Edit Trips
+    Buttons:
+        Search database
+        Save/Clear Trip
+        Add/Remove Location
+Bottom Menu:
+    Function: Itinerary
+Left Menu:
+    Function:
+        Change things about a given trip (optimization and units)
+        Load/Remove a saved trip
+        Load/Remove a JSON trip
+        Display trip distance
+        Display file/trip info
+    Buttons:
+        Apply Nearest Neighbor to a trip
+        Apply 2-opt to a trip
+        Apply 3-opt to a trip
+        Change units of a trip
+A kml file of a trip is created whenever you save a trip in the GUI.
+
+Purpose:
+Allows a user to select locations from a trip of provided file.
+The user will be presented a GUI in which they will be able to select desired locations. The user will be able to choose
+locations after searching the database for them. Once the trip is drawn, the user will be able to then modify the trip
+by selecting whether to modify their trip using twoOpt or threeOpt optimizations. Finally the user will be able to save,
+modify, and select previous trips.
+
+Notes:
+
 
