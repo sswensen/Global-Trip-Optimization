@@ -1,5 +1,6 @@
 package com.csu2017sp314.dtr07.Model;
 
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by SummitDrift on 5/1/17.
  */
+
 public class TestQueryBuilder {
     @Test
     public void fireSearchQuery() throws Exception {
