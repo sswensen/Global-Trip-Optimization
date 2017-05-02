@@ -1,8 +1,7 @@
 package com.csu2017sp314.dtr07.Server;
 
-import static org.junit.Assert.*;
-
 import com.csu2017sp314.dtr07.Model.Location;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
