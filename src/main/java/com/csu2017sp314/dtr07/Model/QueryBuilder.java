@@ -144,15 +144,10 @@ public class QueryBuilder {
                     Statement st = conn.createStatement();
 
                     try { // submit a query to count the results
-                        //System.out.println(columns + continents + join + where + limit);
-                        //rs = st.executeQuery(columns + continents + join + where + limit);
-
-                        //System.out.println(st);
                         System.out.println("Querying individual with \"" + id + "\"");
                         rs = st.executeQuery(anotherbigstring + "(\"" + id + "\")");
 
                         try { // iterate through query results and print using column numbers
-                            //System.out.println("id,name,latitude,longitude,municipality,region,country,continent");
                             while(rs.next()) {
                                 tempLocations.add(new Location(rs.getString(1),
                                         rs.getString(2), rs.getString(3),
@@ -208,15 +203,10 @@ public class QueryBuilder {
                     }
 
                     try { // submit a query to count the results
-                        //System.out.println(columns + continents + join + where + limit);
-                        //rs = st.executeQuery(columns + continents + join + where + limit);
-
-                        //System.out.println(st);
                         System.out.println("Querying with \"" + query + "\"");
                         rs = st.executeQuery();
 
                         try { // iterate through query results and print using column numbers
-                            //System.out.println("id,name,latitude,longitude,municipality,region,country,continent");
                             while(rs.next()) {
                                 locations.add(new Location(rs.getString(1),
                                         rs.getString(2), rs.getString(3),
