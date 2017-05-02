@@ -192,13 +192,13 @@ public class Optimization {
         int improvements = 1;
         int n = route.length - 1;
         while(improvements > 0) {
-            improvements = 0;
-            improvements = findImprovementsTwoOpt(n, improvements, totalImprovements);
+            improvements = findImprovementsTwoOpt(n, totalImprovements);
         }
         return totalImprovements;
     }
 
-    private int findImprovementsTwoOpt(int n, int improvements, int totalImprovements) {
+    private int findImprovementsTwoOpt(int n, int totalImprovements) {
+        int improvements = 0;
         for(int i = 0; i <= n - 3; i++) {
             for(int j = i + 2; j <= n - 1; j++) {
                 if((dist(route[i], route[i + 1]) + dist(route[j], route[j + 1]))
