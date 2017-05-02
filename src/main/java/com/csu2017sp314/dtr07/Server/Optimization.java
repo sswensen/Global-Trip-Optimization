@@ -193,18 +193,23 @@ public class Optimization {
         int n = route.length - 1;
         while(improvements > 0) {
             improvements = 0;
-            for(int i = 0; i <= n - 3; i++) {
-                for(int j = i + 2; j <= n - 1; j++) {
-                    if((dist(route[i], route[i + 1]) + dist(route[j], route[j + 1]))
-                            > (dist(route[i], route[j]) + dist(route[i + 1], route[j + 1]))) {
-                        reverseSegment(route, i + 1, j);
-                        improvements++;
-                        totalImprovements++;
-                    }
+            improvements = findImprovementsTwoOpt(n, improvements, totalImprovements);
+        }
+        return totalImprovements;
+    }
+
+    private int findImprovementsTwoOpt(int n, int improvements, int totalImprovements) {
+        for(int i = 0; i <= n - 3; i++) {
+            for(int j = i + 2; j <= n - 1; j++) {
+                if((dist(route[i], route[i + 1]) + dist(route[j], route[j + 1]))
+                        > (dist(route[i], route[j]) + dist(route[i + 1], route[j + 1]))) {
+                    reverseSegment(route, i + 1, j);
+                    improvements++;
+                    totalImprovements++;
                 }
             }
         }
-        return totalImprovements;
+        return improvements;
     }
 
     private Location[] improve(Location[] route, int num, int i, int j, int k) {
