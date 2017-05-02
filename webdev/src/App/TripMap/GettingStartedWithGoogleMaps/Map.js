@@ -21,48 +21,11 @@ import {
  * Add <script src="https://maps.googleapis.com/maps/api/js"></script> to your HTML to provide google.maps reference
  */
 
-/*function withGoogleMaps(WrappedComponent) {
-    return class extends React.Component {
-        componentWillReceiveProps(nextProps) {
-
-        }
-
-        render() {
-            return <GoogleMap
-                ref={this.props.onMapLoad}
-                defaultZoom={10}
-                defaultCenter={{lat: 39.7392, lng: -104.9903}}
-                onClick={this.props.onMapClick}
-            >
-                {this.props.update}
-                {this.props.markers.map(marker => (
-                    <Marker
-                        {...marker}
-                        onClick={() => this.props.onMarkerClick(marker)}
-                        onRightClick={() => this.props.onMarkerRightClick(marker)}
-                    >
-                        <InfoWindow />
-                    </Marker>
-                ))}
-                {this.props.polylines.map(polyline => (
-                    <Polyline
-                        {...polyline}
-                        onHover={() => this.props.onPolylineHover(polyline)}
-                    />
-                ))}
-            </GoogleMap>;
-        }
-    }
-}
-
-const GettingStartedGoogleMap1 = withGoogleMaps();*/
-
 const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
         defaultZoom={10}
         defaultCenter={{lat: 39.7392, lng: -104.9903}}
-        //onClick={props.onMapClick}
     >
         {props.children}
     </GoogleMap>
@@ -194,7 +157,6 @@ export default class GettingStartedExample extends Component {
     }
 
     infoFor(location) {
-        //console.log(location);
         if(this.state.showWindows[location.id]) {
             return <InfoWindow
                 onCloseClick={this.resetInfoWindows.bind(this)}
@@ -216,10 +178,8 @@ export default class GettingStartedExample extends Component {
     generatePolyline() {
         let path = this.props.locations.map(({lat, lon}) =>({lat: lat, lng: lon}));
         if(Object.values(this.props.locations).length > 0) {
-            //console.log("Pushing",{lat: this.props.locations[0].lat, lng: this.props.locations[0].lon})
             path.push({lat: this.props.locations[0].lat, lng: this.props.locations[0].lon});
         }
-        //console.log("size is", Object.values(this.props.locations).length,"path",path);
         return <Polyline
             path={path}
             strokeColor="red"
@@ -228,8 +188,6 @@ export default class GettingStartedExample extends Component {
     }
 
     render() {
-        //console.log(this.state);
-        //console.log(this.props);
         return (
             <div style={{height: '100%'}}>
                 <GettingStartedGoogleMap
