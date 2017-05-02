@@ -79,7 +79,8 @@ Sprint 4
 DTR-07
 
 Overview:
-A web-based GUI interface that uses Google Maps to display a zoomable, pan-able background for a trip and contains a number of options via buttons and drop-down menus.
+A web-based GUI interface that uses Google Maps to display a zoomable, pan-able background for a trip and contains a
+number of options via buttons and drop-down menus.
 Right Menu:
     Function:
         Create/Edit Trips
