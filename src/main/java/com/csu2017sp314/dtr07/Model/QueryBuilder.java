@@ -149,16 +149,11 @@ public class QueryBuilder {
 
                         //System.out.println(st);
                         System.out.println("Querying individual with \"" + id + "\"");
-                        //System.out.println(anotherbigstring + "(\"" + id + "\")");
                         rs = st.executeQuery(anotherbigstring + "(\"" + id + "\")");
 
                         try { // iterate through query results and print using column numbers
                             //System.out.println("id,name,latitude,longitude,municipality,region,country,continent");
                             while(rs.next()) {
-                            /*for(int i = 1; i <= 7; i++)
-                                System.out.printf("%s,", rs.getString(i));
-                            System.out.printf("%s\n", rs.getString(8));*/
-                                //System.out.println("Creating location with id [" + rs.getString(1) + "]");
                                 tempLocations.add(new Location(rs.getString(1),
                                         rs.getString(2), rs.getString(3),
                                         rs.getString(4), rs.getString(5),
@@ -199,11 +194,7 @@ public class QueryBuilder {
         return tempLocations;
     }
 
-    public void fireQuery(String query) { //String whatDoYouWantBack) {
-        /*boolean makeLocationsQuestionMark = false;
-        if(whatDoYouWantBack.equals("locations")) {
-            makeLocationsQuestionMark = true;
-        }*/
+    public void fireQuery(String query) {
         if(useDatabase) {
             ResultSet rs = null;
             try { // connect to the database
@@ -227,10 +218,6 @@ public class QueryBuilder {
                         try { // iterate through query results and print using column numbers
                             //System.out.println("id,name,latitude,longitude,municipality,region,country,continent");
                             while(rs.next()) {
-                            /*for(int i = 1; i <= 7; i++)
-                                System.out.printf("%s,", rs.getString(i));
-                            System.out.printf("%s\n", rs.getString(8));*/
-                                //System.out.println("Creating location with id [" + rs.getString(1) + "]");
                                 locations.add(new Location(rs.getString(1),
                                         rs.getString(2), rs.getString(3),
                                         rs.getString(4), rs.getString(5),
