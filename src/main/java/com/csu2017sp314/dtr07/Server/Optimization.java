@@ -286,6 +286,7 @@ public class Optimization {
         int n = route.length - 1;
         while(improvements > 0) {
             improvements = findImprovementsThreeOpt(n, totalImprovements);
+            totalImprovements += improvements;
         }
         return totalImprovements;
     }
@@ -299,7 +300,6 @@ public class Optimization {
                     if(improved > 0) {
                         route = improve(route, improved, i, j, k);
                         improvements++;
-                        totalImprovements++;
                     }
                 }
             }
