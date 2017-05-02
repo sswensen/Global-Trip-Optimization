@@ -32,8 +32,9 @@ public class Server {
     //Finds index of nth occurrence
     public static int nthIndexOf(String str, String character, int n) {
         int index = str.indexOf(character);
-        while(--n > 0 && index != -1)
+        while(--n > 0 && index != -1) {
             index = str.indexOf(character, index + 1);
+        }
         return index;
     }
 
@@ -96,7 +97,8 @@ public class Server {
     public Object fireOpt(Request rec, Response res) {
         setHeaders(res);
         String opt = rec.queryParams("opt");
-        Location[] locations2 = selectedLocations.toArray(new Location[selectedLocations.size()]);
+        Location[] locations2 =
+                selectedLocations.toArray(new Location[selectedLocations.size()]);
         System.out.println("running individual opt now");
         Optimization optimiziation = new Optimization(locations2, opt);
         locations2 = optimiziation.getOptimizedRoute();
@@ -104,8 +106,10 @@ public class Server {
         tripDistance = optimiziation.getTripDistance();
         selectedLocations.clear();
         //TODO remove last locations from locations2
-        System.out.println("individual opt done returning " + locations2.length + " locations");
-        Location[] newLocations = ArrayUtil.removeFromArray(locations2, locations2[locations2.length - 1]);
+        System.out.println("individual opt done returning " +
+                locations2.length + " locations");
+        Location[] newLocations = ArrayUtil.removeFromArray(locations2,
+                locations2[locations2.length - 1]);
         return newLocations;
     }
 
@@ -149,7 +153,8 @@ public class Server {
         System.out.println("complete");
         tripDistance = optimiziation.getTripDistance();
         //TODO remove last locations from locations2
-        Location[] newLocations = ArrayUtil.removeFromArray(locations2, locations2[locations2.length - 1]);
+        Location[] newLocations = ArrayUtil.removeFromArray(locations2,
+                locations2[locations2.length - 1]);
         return newLocations;
     }
 
@@ -212,14 +217,19 @@ public class Server {
             for(int i = 0; i < locations.size(); i++) {
                 String kmlElement =
                         "    <Placemark>\n" +
-                                "      <name>" + locations.get(i).getName() + "</name>\n" +
-                                "      <description>" + locations.get(i).getMunicipality() + "</description>\n" +
+                                "      <name>" +
+                                locations.get(i).getName() + "</name>\n" +
+                                "      <description>" +
+                                locations.get(i).getMunicipality() + "</description>\n" +
                                 "      <Point>\n" +
-                                "        <coordinates>" + locations.get(i).getLon() + "," + locations.get(i).getLat() + "," + 0 + "</coordinates>\n" +
+                                "        <coordinates>" +
+                                locations.get(i).getLon() + "," +
+                                locations.get(i).getLat() + "," + 0 + "</coordinates>\n" +
                                 "      </Point>\n" +
                                 "    </Placemark>\n";
                 bw.write(kmlElement);
-                coordinates += locations.get(i).getLon() + ", " + locations.get(i).getLat() + ", " + 0 + ".\n" + "          ";
+                coordinates += locations.get(i).getLon() + ", " +
+                        locations.get(i).getLat() + ", " + 0 + ".\n" + "          ";
             }
             coordinates = coordinates.trim();
             String lineString =
@@ -338,7 +348,9 @@ public class Server {
     }
 
     private void setHeaders(Response res) {
-        res.header("Content-Type", "application/json"); //Says we are returning a json
-        res.header("Access-Control-Allow-Origin", "*"); //Says its ok for browser to call even if diff host
+        res.header("Content-Type", "application/json");
+        //Says we are returning a json
+        res.header("Access-Control-Allow-Origin", "*");
+        //Says its ok for browser to call even if diff host
     }
 }
