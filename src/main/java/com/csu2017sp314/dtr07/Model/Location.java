@@ -22,7 +22,7 @@ public class Location {
     private int tableIndex;
 
 
-    Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent, String aUrl, String rUrl, String cUrl) {
+    public Location(String id, String name, String lat, String lon, String municipality, String region, String country, String continent, String aUrl, String rUrl, String cUrl) {
         this.id = id;
         this.name = name;
         this.lat = convertCoordinates(lat);
