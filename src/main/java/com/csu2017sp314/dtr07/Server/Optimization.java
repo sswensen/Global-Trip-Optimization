@@ -285,20 +285,25 @@ public class Optimization {
         int improvements = 1;
         int n = route.length - 1;
         while(improvements > 0) {
-            improvements = 0;
-            for(int i = 0; i <= n - 5; i++) {
-                for(int j = i + 2; j <= n - 3; j++) {
-                    for(int k = j + 2; k <= n - 1; k++) {
-                        int improved = improved(route, i, j, k);
-                        if(improved > 0) {
-                            route = improve(route, improved, i, j, k);
-                            improvements++;
-                            totalImprovements++;
-                        }
+            improvements = findImprovementsThreeOpt(n, totalImprovements);
+        }
+        return totalImprovements;
+    }
+
+    private int findImprovementsThreeOpt(int n, int totalImprovements) {
+        int improvements = 0;
+        for(int i = 0; i <= n - 5; i++) {
+            for(int j = i + 2; j <= n - 3; j++) {
+                for(int k = j + 2; k <= n - 1; k++) {
+                    int improved = improved(route, i, j, k);
+                    if(improved > 0) {
+                        route = improve(route, improved, i, j, k);
+                        improvements++;
+                        totalImprovements++;
                     }
                 }
             }
         }
-        return totalImprovements;
+        return improvements;
     }
 }
