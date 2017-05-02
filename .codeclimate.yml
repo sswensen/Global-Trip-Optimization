@@ -40,6 +40,8 @@ engines:
         enabled: true
       com.puppycrawl.tools.checkstyle.checks.naming.AbbreviationAsWordInNameCheck:
         enabled: false
+      com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck:
+        enabled: false #Disabled because + should be the last thing on the line, not the first thing. This check literally makes no sense
   csslint:
     enabled: false
 # ... CONFIG CONTENT ...
