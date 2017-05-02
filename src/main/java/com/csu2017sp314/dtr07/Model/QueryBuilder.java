@@ -32,6 +32,20 @@ public class QueryBuilder {
     private final String join = "INNER JOIN countries ON countries.continent = continents.id "
             + "INNER JOIN regions ON regions.iso_country = countries.code "
             + "INNER JOIN airports ON airports.iso_region = regions.code ";
+    String anotherbigassfuckingstring = "SELECT airports.id,\n" +
+            "  airports.name,\n" +
+            "  latitude,\n" +
+            "  longitude,\n" +
+            "  municipality,\n" +
+            "  regions.name,\n" +
+            "  countries.name,\n" +
+            "  continents.name,\n" +
+            "  airports.wikipedia_link,\n" +
+            "  regions.wikipedia_link,\n" +
+            "  countries.wikipedia_link FROM continents INNER JOIN countries ON countries.continent = continents.id\n" +
+            "  INNER JOIN regions ON countries.code = regions.iso_country\n" +
+            "  INNER JOIN airports ON airports.iso_region =regions.code\n" +
+            "WHERE airports.id IN ";
     private String limit = "";
     private boolean useDatabase;
     private String where = "";
@@ -112,20 +126,6 @@ public class QueryBuilder {
             "   INNER JOIN airports ON airports.iso_region = regions.code\n" +
             " WHERE MATCH (countries.name) AGAINST (?)\n" +
             " LIMIT 50)";
-    String anotherbigassfuckingstring = "SELECT airports.id,\n" +
-            "  airports.name,\n" +
-            "  latitude,\n" +
-            "  longitude,\n" +
-            "  municipality,\n" +
-            "  regions.name,\n" +
-            "  countries.name,\n" +
-            "  continents.name,\n" +
-            "  airports.wikipedia_link,\n" +
-            "  regions.wikipedia_link,\n" +
-            "  countries.wikipedia_link FROM continents INNER JOIN countries ON countries.continent = continents.id\n" +
-            "  INNER JOIN regions ON countries.code = regions.iso_country\n" +
-            "  INNER JOIN airports ON airports.iso_region =regions.code\n" +
-            "WHERE airports.id IN ";
     //TODO should probably be converted to an array, especially if there are hundreds of locations returning.
 
     public QueryBuilder(boolean useDB) {
@@ -171,9 +171,6 @@ public class QueryBuilder {
         }
     }
 
-    //TODO add function for changing limit, this is very optional as we will lkely limit to 500
-
-    //TODO add function that returns the number of items found, actually this can be accomplished
     // by calling the size function on the ids returned to the db selection window
 
     private void setWhere(String where) {

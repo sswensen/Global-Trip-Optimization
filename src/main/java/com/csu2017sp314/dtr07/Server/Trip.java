@@ -1,7 +1,5 @@
 package com.csu2017sp314.dtr07.Server;
 
-import com.csu2017sp314.dtr07.Model.Location;
-
 import java.util.ArrayList;
 
 /**
@@ -23,8 +21,8 @@ public class Trip {
         return name;
     }
 
-    public String toString(){
-        return "Trip: " +"name " + name + " totalDistance " + totalDistance + " Locations " + selectedIds.toString();
+    public String toString() {
+        return "Trip: " + "name " + name + " totalDistance " + totalDistance + " Locations " + selectedIds.toString();
 
     }
 
@@ -35,8 +33,8 @@ public class Trip {
     public void setTotalDistance(double totalDistance) {
         this.totalDistance = totalDistance;
     }
-  
-    public ArrayList<String> getSelectedIds(){
+
+    public ArrayList<String> getSelectedIds() {
         return selectedIds;
 
     }

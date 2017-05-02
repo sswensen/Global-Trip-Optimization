@@ -2,7 +2,6 @@ package com.csu2017sp314.dtr07.Server;
 
 import com.csu2017sp314.dtr07.Model.Location;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -40,7 +39,7 @@ public class Optimization {
     }
 
     private void nearestNeighbor() {
-        route = new Location[locations.length+1];
+        route = new Location[locations.length + 1];
         int bestDistance = 999999999;
         int sizer = locations.length;
         Location[] originalLocations;
@@ -58,15 +57,15 @@ public class Optimization {
                         index = y;
                     }
                 }
-                Location temploc = locations[x+1];
-                locations[x+1] = locations[index];
+                Location temploc = locations[x + 1];
+                locations[x + 1] = locations[index];
                 locations[index] = temploc;
                 route[addIndex] = locations[x];
                 addIndex++;
             }
 
-            route[route.length-2] = locations[locations.length-1];
-            route[route.length-1] = locations[0]; //???
+            route[route.length - 2] = locations[locations.length - 1];
+            route[route.length - 1] = locations[0]; //???
             if(twoOpt) {
                 twoOpt();
             } else if(threeOpt) {
@@ -77,7 +76,7 @@ public class Optimization {
                 bestDistance = (int) Math.round(total);
                 bestRoute = Arrays.copyOf(route, route.length);
             }
-            route = new Location[locations.length+1];
+            route = new Location[locations.length + 1];
             locations = Arrays.copyOf(originalLocations, originalLocations.length);
             locations = shift(locations);
         }
@@ -86,10 +85,10 @@ public class Optimization {
 
     private Location[] shift(Location[] array) {
         Location first = array[0];
-        for(int i=0;i<array.length-1;i++) {
-            array[i] = array[i+1];
+        for(int i = 0; i < array.length - 1; i++) {
+            array[i] = array[i + 1];
         }
-        array[array.length-1] = first;
+        array[array.length - 1] = first;
         return array;
     }
 
@@ -111,18 +110,18 @@ public class Optimization {
 
     double getTripDistance() {
         double total = 0;
-        for(int i=0; i<route.length-1; i++) {
-            total += dist(route[i], route[i+1]);
+        for(int i = 0; i < route.length - 1; i++) {
+            total += dist(route[i], route[i + 1]);
         }
         return total;
     }
 
     private Location[] generateLocs(Location[] locations) {
-        Location[] newLocs = new Location[locations.length+1];
-        for(int i=0; i<locations.length; i++) {
+        Location[] newLocs = new Location[locations.length + 1];
+        for(int i = 0; i < locations.length; i++) {
             newLocs[i] = locations[i];
         }
-        newLocs[newLocs.length-1] = locations[0];
+        newLocs[newLocs.length - 1] = locations[0];
         return newLocs;
     }
 
@@ -192,11 +191,11 @@ public class Optimization {
         int n = route.length - 1;
         while(improvements > 0) {
             improvements = 0;
-            for(int i=0; i<=n-3; i++) {
-                for(int j=i+2; j<=n-1; j++) {
-                    if((dist(route[i], route[i+1])+dist(route[j], route[j+1]))
-                            > (dist(route[i], route[j])+dist(route[i+1], route[j+1]))) {
-                        reverseSegment(route, i+1, j);
+            for(int i = 0; i <= n - 3; i++) {
+                for(int j = i + 2; j <= n - 1; j++) {
+                    if((dist(route[i], route[i + 1]) + dist(route[j], route[j + 1]))
+                            > (dist(route[i], route[j]) + dist(route[i + 1], route[j + 1]))) {
+                        reverseSegment(route, i + 1, j);
                         improvements++;
                         totalImprovements++;
                     }
@@ -238,22 +237,22 @@ public class Optimization {
     }
 
     private int improved(Location[] route, int i, int j, int k) {
-        double originalDist = dist(route[i], route[i+1]) + dist(route[j], route[j+1])
-                + dist(route[k], route[k+1]);
-        double distOne = (dist(route[i], route[i+1]) + dist(route[j], route[k])
-                + dist(route[j+1], route[k+1]));
-        double distTwo = (dist(route[i], route[j]) + dist(route[i+1], route[j+1])
-                + dist(route[k], route[k+1]));
-        double distThree = (dist(route[i], route[k]) + dist(route[j+1], route[j])
-                + dist(route[i+1], route[k+1]));
-        double distFour = (dist(route[i], route[j+1]) + dist(route[k], route[i+1])
-                + dist(route[j], route[k+1]));
-        double distFive = (dist(route[i], route[j]) + dist(route[i+1], route[k])
-                + dist(route[j+1], route[k+1]));
-        double distSix = (dist(route[i], route[k]) + dist(route[j+1], route[i+1])
-                + dist(route[j], route[k+1]));
-        double distSeven = (dist(route[i], route[j+1]) + dist(route[k], route[j])
-                + dist(route[i+1], route[k+1]));
+        double originalDist = dist(route[i], route[i + 1]) + dist(route[j], route[j + 1])
+                + dist(route[k], route[k + 1]);
+        double distOne = (dist(route[i], route[i + 1]) + dist(route[j], route[k])
+                + dist(route[j + 1], route[k + 1]));
+        double distTwo = (dist(route[i], route[j]) + dist(route[i + 1], route[j + 1])
+                + dist(route[k], route[k + 1]));
+        double distThree = (dist(route[i], route[k]) + dist(route[j + 1], route[j])
+                + dist(route[i + 1], route[k + 1]));
+        double distFour = (dist(route[i], route[j + 1]) + dist(route[k], route[i + 1])
+                + dist(route[j], route[k + 1]));
+        double distFive = (dist(route[i], route[j]) + dist(route[i + 1], route[k])
+                + dist(route[j + 1], route[k + 1]));
+        double distSix = (dist(route[i], route[k]) + dist(route[j + 1], route[i + 1])
+                + dist(route[j], route[k + 1]));
+        double distSeven = (dist(route[i], route[j + 1]) + dist(route[k], route[j])
+                + dist(route[i + 1], route[k + 1]));
         if(originalDist > distOne) {
             return 1;
         } else if(originalDist > distTwo) {

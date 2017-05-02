@@ -4,18 +4,16 @@ import com.csu2017sp314.dtr07.Model.Location;
 import com.csu2017sp314.dtr07.Model.QueryBuilder;
 import com.google.gson.Gson;
 import org.eclipse.jetty.util.ArrayUtil;
-import org.eclipse.jetty.util.IO;
 import spark.Request;
 import spark.Response;
-import sun.util.resources.cldr.id.LocaleNames_id;
 
-import java.io.*;
-import java.lang.reflect.Array;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
 
 /**
  * Created by SummitDrift on 4/20/17.
@@ -29,6 +27,14 @@ public class Server {
     public static void main(String[] args) {
         Server s = new Server();
         s.serve();
+    }
+
+    //Finds index of nth occurrence
+    public static int nthIndexOf(String str, String character, int n) {
+        int index = str.indexOf(character);
+        while(--n > 0 && index != -1)
+            index = str.indexOf(character, index + 1);
+        return index;
     }
 
     public void serve() {
@@ -161,14 +167,14 @@ public class Server {
         //System.out.println(locs.substring(splitIndex));
         String[] jsonStrings = locs.split(index);
         System.out.println(jsonStrings.length);
-        for(int i = 1; i < jsonStrings.length;i++){
+        for(int i = 1; i < jsonStrings.length; i++) {
             jsonStrings[i] = index + jsonStrings[i];
             StringBuilder sb = new StringBuilder(jsonStrings[i]);
             sb.deleteCharAt(0);
             sb.deleteCharAt(0);
-            jsonStrings[i]= sb.toString();
+            jsonStrings[i] = sb.toString();
         }
-        for(int i = 0; i < jsonStrings.length;i++){
+        for(int i = 0; i < jsonStrings.length; i++) {
             System.out.println(jsonStrings[i]);
         }
         //ArrayList<Trip> newTrips = new ArrayList<>();
@@ -198,32 +204,32 @@ public class Server {
             bw = new BufferedWriter(fw);
             String kmlStart =
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                    "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
+                            "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
             String documentStart = "  <Document>\n";
             bw.write(kmlStart);
             bw.write(documentStart);
             String coordinates = "";
-            for(int i = 0; i < locations.size();i++){
+            for(int i = 0; i < locations.size(); i++) {
                 String kmlElement =
                         "    <Placemark>\n" +
-                        "      <name>" + locations.get(i).getName() + "</name>\n" +
-                        "      <description>" + locations.get(i).getMunicipality() + "</description>\n" +
-                        "      <Point>\n" +
-                        "        <coordinates>" + locations.get(i).getLon() + "," + locations.get(i).getLat() + "," + 0 + "</coordinates>\n" +
-                        "      </Point>\n" +
-                        "    </Placemark>\n";
+                                "      <name>" + locations.get(i).getName() + "</name>\n" +
+                                "      <description>" + locations.get(i).getMunicipality() + "</description>\n" +
+                                "      <Point>\n" +
+                                "        <coordinates>" + locations.get(i).getLon() + "," + locations.get(i).getLat() + "," + 0 + "</coordinates>\n" +
+                                "      </Point>\n" +
+                                "    </Placemark>\n";
                 bw.write(kmlElement);
                 coordinates += locations.get(i).getLon() + ", " + locations.get(i).getLat() + ", " + 0 + ".\n" + "          ";
             }
-            coordinates  = coordinates.trim();
+            coordinates = coordinates.trim();
             String lineString =
-                "    <Placemark>\n" +
-                "      <LineString>\n" +
-                "        <coordinates>\n" +
-                "          " + coordinates + "\n" +
-                "        </coordinates>\n"+
-                "      </LineString>\n" +
-                "    </Placemark>\n";
+                    "    <Placemark>\n" +
+                            "      <LineString>\n" +
+                            "        <coordinates>\n" +
+                            "          " + coordinates + "\n" +
+                            "        </coordinates>\n" +
+                            "      </LineString>\n" +
+                            "    </Placemark>\n";
             bw.write(lineString);
             String documentEnd = "  </Document>\n";
             String kmlend = "</kml>";
@@ -297,28 +303,20 @@ public class Server {
 
     public String[] parseVariables(String str) {
         String[] variables = new String[15];
-        for(int i=0; i<variables.length; i++) {
-            if(i!=2 && i!=3 && i!=12 && i!=13 && i!=14) {
+        for(int i = 0; i < variables.length; i++) {
+            if(i != 2 && i != 3 && i != 12 && i != 13 && i != 14) {
                 str = str.substring(str.indexOf(":"));
-                if(str.charAt(1)!='"') {
-                    str = str.substring(nthIndexOf(str,":", 2)+2);
+                if(str.charAt(1) != '"') {
+                    str = str.substring(nthIndexOf(str, ":", 2) + 2);
                 } else {
                     str = str.substring(2);
                 }
             } else {
-                str = str.substring(str.indexOf(":")+1);
+                str = str.substring(str.indexOf(":") + 1);
             }
             variables[i] = parseVariable(str);
         }
         return variables;
-    }
-
-    //Finds index of nth occurrence
-    public static int nthIndexOf(String str, String character, int n) {
-        int index = str.indexOf(character);
-        while (--n > 0 && index != -1)
-            index = str.indexOf(character, index+1);
-        return index;
     }
 
     private ArrayList<Location> getAllLocationsFromDatabase(ArrayList<String> ids) {
