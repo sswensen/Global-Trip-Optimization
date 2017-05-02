@@ -285,13 +285,13 @@ public class Optimization {
         int improvements = 1;
         int n = route.length - 1;
         while(improvements > 0) {
-            improvements = findImprovementsThreeOpt(n, totalImprovements);
+            improvements = findImprovementsThreeOpt(n);
             totalImprovements += improvements;
         }
         return totalImprovements;
     }
 
-    private int findImprovementsThreeOpt(int n, int totalImprovements) {
+    private int findImprovementsThreeOpt(int n) {
         int improvements = 0;
         for(int i = 0; i <= n - 5; i++) {
             for(int j = i + 2; j <= n - 3; j++) {
