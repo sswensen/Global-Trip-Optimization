@@ -18,14 +18,11 @@ public class Optimization {
     public Optimization(Location[] locations, String opt) {
         this.locations = locations;
         if(opt.equals("0")) {
-            setTwoOpt(false);
-            setThreeOpt(false);
+            setOpts(false, false);
         } else if(opt.equals("2")) {
-            setTwoOpt(true);
-            setThreeOpt(false);
+            setOpts(true, false);
         } else if(opt.equals("3")) {
-            setTwoOpt(false);
-            setThreeOpt(true);
+            setOpts(false, true);
         } else {
             System.out.println("No opt chosen!");
         }
@@ -90,6 +87,11 @@ public class Optimization {
         }
         array[array.length - 1] = first;
         return array;
+    }
+
+    public void setOpts(boolean twoOpt, boolean threeOpt) {
+        setTwoOpt(twoOpt);
+        setThreeOpt(threeOpt);
     }
 
     public boolean getTwoOpt() {
