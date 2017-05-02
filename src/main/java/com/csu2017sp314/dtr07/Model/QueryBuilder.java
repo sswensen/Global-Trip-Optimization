@@ -181,12 +181,22 @@ public class QueryBuilder {
                 System.err.println("-------------EXITING!!!------------");
                 System.exit(33); //Something broke in the database :/
             }
+        } else {
+            tempLocations.add(new Location("KBKF", "Buckley Air Force Base",
+                    "39.701698303200004", "-104.751998901", "Aurora",
+                    "Colorado", "United States", "North America",
+                    "http://en.wikipedia.org/wiki/Buckley_Air_Force_Base",
+                    "http://en.wikipedia.org/wiki/Colorado",
+                    "http://en.wikipedia.org/wiki/United_States"));
+            tempLocations.add(new Location("KEGE", "Eagle County Regional Airport",
+                    "39.64260101", "-106.9179993", "Eagle",
+                    "Colorado", "United States", "North America",
+                    "http://en.wikipedia.org/wiki/Eagle_County_Regional_Airport",
+                    "http://en.wikipedia.org/wiki/Colorado",
+                    "http://en.wikipedia.org/wiki/United_States"));
         }
-        return tempLocations;
-    }
 
-    public void fireQuery() {
-        this.fireQuery("Denver");
+        return tempLocations;
     }
 
     public void fireQuery(String query) { //String whatDoYouWantBack) {
