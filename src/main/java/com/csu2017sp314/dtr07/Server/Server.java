@@ -28,15 +28,6 @@ public class Server {
         s.serve();
     }
 
-    //Finds index of nth occurrence
-    private static int nthIndexOf(String str, String character, int n) {
-        int index = str.indexOf(character);
-        while(--n > 0 && index != -1) {
-            index = str.indexOf(character, index + 1);
-        }
-        return index;
-    }
-
     public void serve() {
         ArrayList<String> temp = new ArrayList<>();
         temp.add("KCOS");
