@@ -2,9 +2,9 @@ package com.csu2017sp314.dtr07.Model;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * Created by SummitDrift on 5/1/17.
