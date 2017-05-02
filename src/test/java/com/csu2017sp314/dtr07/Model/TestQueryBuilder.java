@@ -1,6 +1,5 @@
 package com.csu2017sp314.dtr07.Model;
 
-
 import org.junit.Test;
 
 import java.util.ArrayList;
