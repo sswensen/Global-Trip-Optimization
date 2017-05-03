@@ -24,7 +24,7 @@ import {
 const GettingStartedGoogleMap = withGoogleMap(props => (
     <GoogleMap
         ref={props.onMapLoad}
-        defaultZoom={2}
+        defaultZoom={10}
         defaultCenter={{lat: 39.7392, lng: -104.9903}}
     >
         {props.children}
