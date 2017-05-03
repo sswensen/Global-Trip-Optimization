@@ -208,7 +208,8 @@ class App extends React.Component {
                 </span>
             </div>
 
-            <button alt="status" title={!(this.state.status) ? "Loading..." : "Ready"} className="status" style={!(this.state.status) ? statusStyle.red : statusStyle.green}> </button>
+            <button alt="status" title={!(this.state.status) ? "Loading..." : "Ready"} className="status"
+                    style={!(this.state.status) ? statusStyle.red : statusStyle.green}></button>
             <div id="main" className="planning-stuff"
                  style={ ((this.state.leftMenu && this.state.rightMenu && this.state.itinerary) ? main.triple : (this.state.leftMenu && this.state.itinerary) ? main.leftAndBottom : (this.state.rightMenu && this.state.itinerary) ? main.rightAndBottom : (this.state.leftMenu && this.state.rightMenu) ? main.both : (this.state.leftMenu) ? main.left : (this.state.rightMenu) ? main.right : (this.state.itinerary) ? main.itinerary : main.nope)}>
                 <div className="inner">
@@ -240,8 +241,10 @@ class App extends React.Component {
         </div>
     }
 
-    selectLocation(loc) {
-        this.red(this.state.status);
+    selectLocation(loc, update = true) {
+        if(update) {
+            this.red(this.state.status);
+        }
         let ret = false;
         let currentLocations = Object.values(this.state.selectedLocations);
         let numLocs = currentLocations.length;
@@ -326,12 +329,14 @@ class App extends React.Component {
         let newMap = Object.assign({},
             this.state.selectedLocations,
             obj);
-        this.setState({
-            selectedLocations: newMap,
-            sortedLocationIds: newSortedLocationIds,
-            tripDistance: totalDist
-        });
-        this.green(this.state.status);
+        if (update) {
+            this.setState({
+                selectedLocations: newMap,
+                sortedLocationIds: newSortedLocationIds,
+                tripDistance: totalDist
+            });
+            this.green(this.state.status);
+        }
         return ret;
     }
 
@@ -450,6 +455,7 @@ class App extends React.Component {
     }
 
     async saveTripsToServer(opt, map) {
+        console.log(map);
         this.red(this.state.status);
         let tripName = map.name;
         let tripIds = map.selectedIds;
@@ -465,13 +471,15 @@ class App extends React.Component {
         map = newNewMap;
         //console.log("MAP IS:", map);
 
-        let query = JSON.stringify(Object.values(map));
+        //let query = JSON.stringify(Object.values(map));
         try {
             this.red(this.state.status);
             console.log("Sending trips...");
-            let stuff = await fetch(`http://localhost:4567/saveTrips?trips=${query}`);
-            //console.log("Url:", `http://localhost:4567/saveTrips?trips=${query}`);
-            //console.log("trips sent");
+            let stuff = await fetch(`http://localhost:4567/saveTrip`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(newMap)
+                });
             let json = await stuff.json();
             console.log("Trips sent.");
         }
@@ -513,11 +521,18 @@ class App extends React.Component {
         if (locations === undefined) { //TODOdone check if locations are populated, else, search database for them
             let temp = {};
             let ids = trip.selectedIds;
-            for (let i = 0; i < numIds; i++) {
+            /*for (let i = 0; i < numIds; i++) {
                 let e = await fetch(`http://localhost:4567/database?id=${ids[i]}`);
                 let json = await e.json();
                 json.forEach(elem => temp[elem.id] = elem);
-            }
+            }*/
+            let e = await fetch(`http://localhost:4567/sometingdifferent`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(ids)
+                });
+            let json = await e.json();
+            json.forEach(elem => temp[elem.id] = elem);
             trip.locations = temp;
             //console.log("New locations", temp);
         }
@@ -611,21 +626,21 @@ class App extends React.Component {
     toggleZeroOpt() { //TODOdone make sure there is more than 4 locations before sending
         if (Object.values(this.state.selectedLocations).length > 3) {
             console.log("Running Nearest Neighbor");
-            this.optimize("0", JSON.stringify(Object.values(this.state.selectedLocations)));
+            this.optimize("0", (Object.values(this.state.selectedLocations)));
         }
     }
 
     toggleTwoOpt() { //TODOdone make sure there is more than 4 locations before sending
         if (Object.values(this.state.selectedLocations).length > 3) {
             console.log("Running 2-opt");
-            this.optimize("2", JSON.stringify(Object.values(this.state.selectedLocations)));
+            this.optimize("2", (Object.values(this.state.selectedLocations)));
         }
     }
 
     toggleThreeOpt() { //TODOdone make sure there is more than 4 locations before sending
         if (Object.values(this.state.selectedLocations).length > 3) {
             console.log("Running 3-opt");
-            this.optimize("3", JSON.stringify(Object.values(this.state.selectedLocations)));
+            this.optimize("3", (Object.values(this.state.selectedLocations)));
         }
     }
 
@@ -645,11 +660,18 @@ class App extends React.Component {
 
     async optimize(opt, query) { //We need to make sure that no string inside a location object has & in it
         this.red(this.state.status);
-        console.log("Starting",opt,"opt");
-        console.log("Sending locations...")
+        console.log("Starting", opt, "opt");
+        console.log("Sending locations...");
         try {
             console.log("Sending locs...");
-            let stuff = await fetch(`http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
+            let stuff = await fetch(`http://localhost:4567/optimizePost`,
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        opt: opt,
+                        locations: query
+                    })
+                });
             let dist = await fetch(`http://localhost:4567/getDistance?dist=true`);
             //console.log("Url:", `http://localhost:4567/toOptimize?opt=${opt}&locs=${query}`);
             //console.log("Url:", `http://localhost:4567/getDistance?dist=true`);
@@ -670,33 +692,9 @@ class App extends React.Component {
             console.log("Received Locations", obj);
         }
         catch (e) {
-            console.log("Switching to individual...");
-            let numLocs = Object.values(this.state.selectedLocations).length;
-            let locations = Object.values(this.state.selectedLocations);
-            for (let i = 0; i < numLocs; i++) {
-                //console.log("Sending location at index", i, locations[i]);
-                let q = JSON.stringify(locations[i]);
-                let s = await fetch(`http://localhost:4567/setSelectedIndividual?locs=${q}`);
-            }
-            let fireOpt = await fetch(`http://localhost:4567/fireOpt?opt=${opt}`);
-            let dist = await fetch(`http://localhost:4567/getDistance?dist=true`);
-            let json = await fireOpt.json();
-            let json1 = await dist.json();
-            let obj = {};
-            let sorted = [];
-            let tempD = 0;
-            json.forEach(elem => sorted.push(elem.id));
-            json.forEach(elem => obj[elem.id] = elem); //We should replace this with calling our selectLocation method so it sorts into the list correctly. We also need to make sure we call clear before we start messing around with adding
-            json1.forEach(elem => tempD = elem);
-            this.setState({
-                selectedLocations: obj,
-                sortedLocationIds: sorted,
-                tripDistance: tempD,
-            });
-            console.log("Received Locations", obj);
-            //console.error(e);
+            console.error(e)
         }
-        console.log("Finished",opt,"opt");
+        console.log("Finished", opt, "opt");
         this.green();
     }
 
@@ -711,6 +709,19 @@ class App extends React.Component {
         return obj;
     }
 
+    async getLocationsFromDatabase(ids) {
+        let resp = await fetch(`http://localhost:4567/sometingdifferent`,
+            {
+                method: "POST",
+                body: JSON.stringify(ids)
+            });
+        resp = await resp.json();
+
+        let obj = {};
+        resp.forEach(elem => obj[elem.id] = elem);
+        return obj;
+    }
+
     async browseFile(file) {
         this.red(this.state.status);
         console.log("Got file:", file);
@@ -720,45 +731,10 @@ class App extends React.Component {
         //console.log(ids);
         let num = 0;
         let toggle = true;
-        if(ids.length < 40) {
-            num = 1;
-            toggle = false
-        } else if(ids.length < 250) {
-            num = 10
-        } else {
-            num = 15
-        }
-        if(toggle) { //This is for querying with multiple
-            console.log("Using multiple");
-            for (let i = 0; i < ids.length; i += num) {
-                let tenIds = [];
-                for (let j = i; j < i + num; j++) {
-                    if (j < ids.length) {
-                        tenIds.push(ids[j]);
-                    } else {
-                        break;
-                    }
-                }
-                //console.log("First 10 are",tenIds);
-                let location = await this.getLocationFromDatabase(tenIds);
-                //console.log("Got location",location);
-                for (let j = 0; j < Object.values(location).length; j++) {
-                    //console.log("Selecting",location[tenIds[j]]);
-                    this.selectLocationO(location[tenIds[j]]);
-                }
-            }
-            this.updateMap();
-            this.calculateDistance();
-
-        } else { //This is for querying with one
-            console.log("Using Individual");
-            for (let i = 0; i < ids.length; i++) {
-                let location = await this.getLocationFromDatabase(ids[i]);
-                //console.log("Got location",location);
-                this.selectLocation(location[ids[i]]);
-            }
-        }
-
+        let dix = await this.getLocationsFromDatabase(ids);
+        Object.values(dix).forEach(e => this.selectLocationO(e));
+        this.updateMap();
+        this.calculateDistance();
         this.setState({
             name: name,
             original: true,
@@ -782,7 +758,7 @@ class App extends React.Component {
 
         let numLocs = Object.values(locations).length;
         let distance = 0;
-        for(let i = 0; i < numLocs; i++) {
+        for (let i = 0; i < numLocs; i++) {
             //calculate distances
             let loc1 = locations[i];
             let loc2 = locations[(i + 1) % (numLocs)];
@@ -805,7 +781,7 @@ class App extends React.Component {
     }
 
     toggleKilometers() {
-        if(this.state.kilometers) {
+        if (this.state.kilometers) {
             this.setState({
                 kilometers: false
             });

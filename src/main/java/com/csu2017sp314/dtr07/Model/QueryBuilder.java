@@ -132,6 +132,58 @@ public class QueryBuilder {
         useDatabase = useDB;
     }
 
+    public ArrayList<Location> fireSearchQuery(ArrayList<String> ids) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < ids.size(); i++) {
+            sb.append("\'");
+            sb.append(ids.get(i));
+            sb.append("\'");
+            if(i+1 != ids.size()) {
+                sb.append(",");
+            }
+        }
+
+        ArrayList<Location> tempLocations = new ArrayList<>();
+        if(useDatabase) {
+            ResultSet rs = null;
+            try { // connect to the database
+                Class.forName(myDriver);
+                Connection conn = DriverManager.getConnection(myUrl, "sswensen", "830534566");
+
+                try { // create a statement
+                    Statement st = conn.createStatement();
+
+                    try { // submit a query to count the results
+                        System.out.println(anotherbigstring + "(" + sb.toString() + ")");
+                        rs = st.executeQuery(anotherbigstring + "(" + sb.toString() + ")");
+
+                        try { // iterate through query results and print using column numbers
+                            while(rs.next()) {
+                                tempLocations.add(new Location(rs.getString(1),
+                                        rs.getString(2), rs.getString(3),
+                                        rs.getString(4), rs.getString(5),
+                                        rs.getString(6), rs.getString(7),
+                                        rs.getString(8), rs.getString(9),
+                                        rs.getString(10), rs.getString(11)));
+                            }
+                        } finally {
+                            rs.close();
+                        }
+                    } finally {
+                        st.close();
+                    }
+                } finally {
+                    conn.close();
+                }
+            } catch(Exception e) {
+                System.err.printf("Exception: ");
+                System.err.println(e.getMessage());
+                System.err.println("-------------EXITING!!!------------");
+                System.exit(33); //Something broke in the database :/
+            }
+        }
+        return tempLocations;
+    }
     public ArrayList<Location> fireSearchQuery(String id) {
         ArrayList<Location> tempLocations = new ArrayList<>();
         if(useDatabase) {

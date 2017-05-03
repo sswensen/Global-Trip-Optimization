@@ -3,6 +3,9 @@ package com.csu2017sp314.dtr07.Server;
 import com.csu2017sp314.dtr07.Model.Location;
 import com.csu2017sp314.dtr07.Model.QueryBuilder;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.eclipse.jetty.util.ArrayUtil;
 import spark.Request;
 import spark.Response;
@@ -13,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static spark.Spark.get;
+import static spark.Spark.post;
 
 /**
  * Created by SummitDrift on 4/20/17.
@@ -33,7 +37,7 @@ public class Server {
         temp.add("KCOS");
         temp.add("MRBC");
         temp.add("0CD1");
-        trips.add(new Trip("Colorado", 50, temp));
+        //trips.add(new Trip("Colorado", 50, temp));
         Gson g = new Gson();
         get("/locations", this::hello, g::toJson);
         get("/toOptimize", this::optimize, g::toJson);
@@ -43,6 +47,97 @@ public class Server {
         get("/setSelectedIndividual", this::selectIndividual, g::toJson);
         get("/fireOpt", this::fireOpt, g::toJson);
         get("/database", this::searchDatabase, g::toJson);
+        post("/sometingdifferent", this::fetchMany, g::toJson);
+        post("/optimizePost", this::optimizePost, g::toJson);
+        post("/saveTrip", this::saveTripPost, g::toJson);
+        post("/getTrip", this::getTripPost, g::toJson);
+
+    }
+
+    private Object fetchMany(Request rec, Response res) {
+        setHeaders(res);
+        JsonParser parser = new JsonParser();
+        JsonElement elm = parser.parse(rec.body());
+        JsonArray array = elm.getAsJsonArray(); //add error handling
+        ArrayList<String> ids = new ArrayList<>();
+        for(JsonElement e : array) {
+            ids.add(e.getAsString());
+        }
+
+        QueryBuilder qb = new QueryBuilder(true);
+        return qb.fireSearchQuery(ids);
+
+    }
+
+    private Object optimizePost(Request rec, Response res) {
+        setHeaders(res);
+        JsonParser parser = new JsonParser();
+        JsonElement elm = parser.parse(rec.body());
+        String opt = elm.getAsJsonObject().get("opt").getAsString();
+        JsonArray array = elm.getAsJsonObject().get("locations").getAsJsonArray();
+        Gson gson = new Gson();
+        Location[] locs = new Location[array.size()];
+        for(int i = 0; i < array.size(); i++) {
+            JsonElement e = array.get(i);
+            locs[i] = (gson.fromJson(e, Location.class));
+        }
+        System.out.println("running opt now");
+        Optimization optimiziation = new Optimization(locs, opt);
+        locs = optimiziation.getOptimizedRoute();
+        System.out.println("complete");
+        tripDistance = optimiziation.getTripDistance();
+        //TODO remove last locations from locations2
+        Location[] newLocations = ArrayUtil.removeFromArray(locs,
+                locs[locs.length - 1]);
+        return newLocations;
+    }
+
+    private Object saveTripPost(Request rec, Response res) {
+        setHeaders(res);
+        JsonParser parser = new JsonParser();
+        JsonElement elm = parser.parse(rec.body());
+
+        Gson gson = new Gson();
+        Trip trip = gson.fromJson(elm, Trip.class);
+        int ret = searchSavedTrips(trip.getName());
+        if(ret < 0) {
+            trips.add(trip);
+        } else {
+            trips.remove(ret);
+            trips.add(ret, trip);
+        }
+        //Make KML file here
+        ArrayList<Location> locations = getAllLocationsFromDatabase(trip.getSelectedIds());
+        createKMLFile(locations, trip.getName());
+        System.out.println("Trip " + trip.toString());
+
+
+        return trips;
+    }
+
+    private Object getTripPost(Request rec, Response res) {
+        setHeaders(res);
+        System.out.println("Returning saved trips");
+        JsonParser parser = new JsonParser();
+        JsonElement elm = parser.parse(rec.body());
+
+        Gson gson = new Gson();
+        Trip trip = gson.fromJson(elm, Trip.class);
+        int ret = searchSavedTrips(trip.getName());
+        if(ret < 0) {
+            trips.add(trip);
+        } else {
+            trips.remove(ret);
+            trips.add(ret, trip);
+        }
+        //Make KML file here
+        ArrayList<Location> locations = getAllLocationsFromDatabase(trip.getSelectedIds());
+        createKMLFile(locations, trip.getName());
+        System.out.println("Trip " + trip.toString());
+
+        setHeaders(res);
+        String locs = rec.queryParams("num");
+        return trips;
     }
 
     private Object searchDatabase(Request rec, Response res) {
@@ -252,10 +347,10 @@ public class Server {
     private ArrayList<Location> getAllLocationsFromDatabase(ArrayList<String> ids) {
         ArrayList<Location> locs = new ArrayList<>();
         QueryBuilder qb = new QueryBuilder(true);
-        for(String id : ids) {
+        /*for(String id : ids) {
             locs.add(qb.fireSearchQuery(id).get(0));
-        }
-        return locs;
+        }*/
+        return qb.fireSearchQuery(ids);
     }
 
     private int searchSavedTrips(String name) {
@@ -271,6 +366,7 @@ public class Server {
         res.header("Content-Type", "application/json");
         //Says we are returning a json
         res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "*");
         //Says its ok for browser to call even if diff host
     }
 }
